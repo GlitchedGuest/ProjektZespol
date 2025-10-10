@@ -1,3 +1,31 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:e7d146b18046acf2f8008faa8c470dd4ddc8dfa7dd69debf24601943adc5a0de
-size 709
+using System.Collections.Generic;
+using System.Linq;
+using UnityEngine;
+using Object = UnityEngine.Object;
+
+namespace UnityEditor.Timeline
+{
+    internal static class SelectionUtility
+    {
+        public static Object IdToObject(int instanceId)
+        {
+#if UNITY_6000_3_OR_NEWER
+            return EditorUtility.EntityIdToObject(instanceId);
+#else
+            return EditorUtility.InstanceIDToObject(instanceId);
+#endif
+        }
+
+        public static IEnumerable<int> selectionIds
+        {
+            get
+            {
+#if UNITY_6000_3_OR_NEWER
+                return Selection.entityIds.Select(id => (int)id);
+#else
+                return Selection.instanceIDs;
+#endif
+            }
+        }
+    }
+}

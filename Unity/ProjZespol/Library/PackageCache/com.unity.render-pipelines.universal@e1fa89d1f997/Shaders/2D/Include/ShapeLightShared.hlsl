@@ -1,3 +1,9 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:0dd8186a8091562b59dfb3758f8431f889c28a6d06277b8a52d1f47d9f6f0c97
-size 257
+#ifndef SHAPE_LIGHT_PRAGMAS
+#define SHAPE_LIGHT_PRAGMAS
+
+#pragma multi_compile USE_SHAPE_LIGHT_TYPE_0 __
+#pragma multi_compile USE_SHAPE_LIGHT_TYPE_1 __
+#pragma multi_compile USE_SHAPE_LIGHT_TYPE_2 __
+#pragma multi_compile USE_SHAPE_LIGHT_TYPE_3 __
+
+#endif

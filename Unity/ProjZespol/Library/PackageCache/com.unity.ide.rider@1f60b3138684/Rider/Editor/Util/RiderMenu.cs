@@ -1,3 +1,30 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:198372fafe5e116dd66375b0d17e709c503ba5c6bb70231a1ece7add0133dc92
-size 832
+using JetBrains.Annotations;
+using Packages.Rider.Editor;
+using Unity.CodeEditor;
+
+// ReSharper disable once CheckNamespace 
+namespace JetBrains.Rider.Unity.Editor
+{
+  /// <summary>
+  /// Is called via commandline from Rider Notification after checking out from source control.
+  /// </summary>
+  [UsedImplicitly]
+  public static class RiderMenu
+  {
+    /// <summary>
+    /// Is called via commandline from Rider Notification after checking out from source control.
+    /// </summary>
+    [UsedImplicitly]
+    public static void MenuOpenProject()
+    {
+      if (RiderScriptEditor.IsRiderOrFleetInstallation(RiderScriptEditor.CurrentEditor))
+      {
+        // Force the project files to be sync
+        CodeEditor.CurrentEditor.SyncAll();
+
+        // Load Project
+        CodeEditor.CurrentEditor.OpenProject();
+      }
+    }
+  }
+}

@@ -1,3 +1,20 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:d1d3222787f479a68569d45c63bb8486df06797ba5376d3ac097609347caa168
-size 489
+using UnityEditor.IMGUI.Controls;
+#if UNITY_6000_2_OR_NEWER
+using TreeViewItem = UnityEditor.IMGUI.Controls.TreeViewItem<int>;
+#endif
+
+namespace Unity.PlasticSCM.Editor.Views.Shelves
+{
+    class ShelveListViewItem : TreeViewItem
+    {
+        internal object ObjectInfo { get; private set; }
+
+        internal ShelveListViewItem(int id, object objectInfo)
+            : base(id, 1)
+        {
+            ObjectInfo = objectInfo;
+
+            displayName = id.ToString();
+        }
+    }
+}

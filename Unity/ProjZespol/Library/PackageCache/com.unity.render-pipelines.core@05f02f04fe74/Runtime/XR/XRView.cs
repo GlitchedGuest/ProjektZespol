@@ -1,3 +1,38 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:980fdcf049d2cd28d58f381039fe03d870e63ed82b40381bd837e8001b216789
-size 1577
+using System;
+
+namespace UnityEngine.Experimental.Rendering
+{
+    internal readonly struct XRView
+    {
+        internal readonly Matrix4x4 projMatrix;
+        internal readonly Matrix4x4 viewMatrix;
+        internal readonly Matrix4x4 prevViewMatrix;
+        internal readonly Rect viewport;
+        internal readonly Mesh occlusionMesh;
+        internal readonly int textureArraySlice;
+        internal readonly Vector2 eyeCenterUV;
+        internal readonly bool isPrevViewMatrixValid;
+
+        internal XRView(Matrix4x4 projMatrix, Matrix4x4 viewMatrix, Matrix4x4 prevViewMatrix, bool isPrevViewMatrixValid, Rect viewport, Mesh occlusionMesh, int textureArraySlice)
+        {
+            this.projMatrix = projMatrix;
+            this.viewMatrix = viewMatrix;
+            this.prevViewMatrix = prevViewMatrix;
+            this.viewport = viewport;
+            this.occlusionMesh = occlusionMesh;
+            this.textureArraySlice = textureArraySlice;
+            this.isPrevViewMatrixValid = isPrevViewMatrixValid;
+            eyeCenterUV = ComputeEyeCenterUV(projMatrix);
+        }
+
+        private static Vector2 ComputeEyeCenterUV(Matrix4x4 proj)
+        {
+            var projectionParameters = proj.decomposeProjection;
+            float left = Math.Abs(projectionParameters.left);
+            float right = Math.Abs(projectionParameters.right);
+            float top = Math.Abs(projectionParameters.top);
+            float bottom = Math.Abs(projectionParameters.bottom);
+            return new Vector2(left / (right + left), top / (top + bottom));
+        }
+    }
+}

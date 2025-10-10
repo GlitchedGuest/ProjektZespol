@@ -1,3 +1,19 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:7282829a9965d67df3b343cbd8b6787f9feb00f17036eced24986b1d08c7125a
-size 614
+using System.Collections;
+
+namespace UnityEditor.TestTools.TestRunner.TestRun.Tasks
+{
+    internal class MarkRunAsPlayModeTask : TestTaskBase
+    {
+        public MarkRunAsPlayModeTask()
+        {
+            RerunAfterResume = true;
+        }
+        public override IEnumerator Execute(TestJobData testJobData)
+        {
+            // This is a workaround to raise the signal that Playmode Launcher is running.
+            // It is used by the graphics test framework, as there is no api to provide that information yet.
+            PlaymodeLauncher.IsRunning = true;
+            yield break;
+        }
+    }
+}

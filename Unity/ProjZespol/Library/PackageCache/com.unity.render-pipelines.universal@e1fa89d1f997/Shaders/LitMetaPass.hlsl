@@ -1,3 +1,19 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:b597eede0567936de9eb2b72fe5225ce581c70b92b05c349cc2222e3210d1c9b
-size 716
+#ifndef UNIVERSAL_LIT_META_PASS_INCLUDED
+#define UNIVERSAL_LIT_META_PASS_INCLUDED
+
+#include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/UniversalMetaPass.hlsl"
+
+half4 UniversalFragmentMetaLit(Varyings input) : SV_Target
+{
+    SurfaceData surfaceData;
+    InitializeStandardLitSurfaceData(input.uv, surfaceData);
+
+    BRDFData brdfData;
+    InitializeBRDFData(surfaceData.albedo, surfaceData.metallic, surfaceData.specular, surfaceData.smoothness, surfaceData.alpha, brdfData);
+
+    MetaInput metaInput;
+    metaInput.Albedo = brdfData.diffuse + brdfData.specular * brdfData.roughness * 0.5;
+    metaInput.Emission = surfaceData.emission;
+    return UniversalFragmentMeta(input, metaInput);
+}
+#endif

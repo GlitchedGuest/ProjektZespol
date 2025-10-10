@@ -1,3 +1,23 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:3fce0c31ee82f5fb46d7a31f72b66a252eeef7a6465540cb0139801b1a2c4815
-size 859
+//
+// This file was automatically generated. Please don't edit by hand. Execute Editor command [ Edit > Rendering > Generate Shader Includes ] instead
+//
+
+#ifndef PROBEREFERENCEVOLUME_DEBUG_CS_HLSL
+#define PROBEREFERENCEVOLUME_DEBUG_CS_HLSL
+//
+// UnityEngine.Rendering.DebugProbeShadingMode:  static fields
+//
+#define DEBUGPROBESHADINGMODE_SH (0)
+#define DEBUGPROBESHADINGMODE_SHL0 (1)
+#define DEBUGPROBESHADINGMODE_SHL0L1 (2)
+#define DEBUGPROBESHADINGMODE_VALIDITY (3)
+#define DEBUGPROBESHADINGMODE_VALIDITY_OVER_DILATION_THRESHOLD (4)
+#define DEBUGPROBESHADINGMODE_RENDERING_LAYER_MASKS (5)
+#define DEBUGPROBESHADINGMODE_INVALIDATED_BY_ADJUSTMENT_VOLUMES (6)
+#define DEBUGPROBESHADINGMODE_SIZE (7)
+#define DEBUGPROBESHADINGMODE_SKY_OCCLUSION_SH (8)
+#define DEBUGPROBESHADINGMODE_SKY_DIRECTION (9)
+#define DEBUGPROBESHADINGMODE_PROBE_OCCLUSION (10)
+
+
+#endif

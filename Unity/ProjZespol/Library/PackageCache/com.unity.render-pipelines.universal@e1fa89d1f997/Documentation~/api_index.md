@@ -1,3 +1,9 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:5383030a0ade0765f3cc384a5d0bdfeddb27288124091d2de4c65cf4cda57dda
-size 416
+---
+uid: urp-api-index
+---
+
+# Universal Render Pipeline scripting API
+
+This is the documentation for the scripting APIs of the Universal Render Pipeline (URP) package.
+
+**Note**:  URP is built on the Scriptable Render Pipeline (SRP) Core package, and uses some class types that you can only find in the [SRP Core scripting API](https://docs.unity3d.com/Packages/com.unity.render-pipelines.core@17.0/api/index.html).

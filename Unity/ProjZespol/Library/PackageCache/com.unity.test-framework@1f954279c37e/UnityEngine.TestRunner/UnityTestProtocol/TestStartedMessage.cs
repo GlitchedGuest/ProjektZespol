@@ -1,3 +1,15 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:482e0af6cc1198cd2d9f5b4841c92453fde7f8e678fcd1129321d9aa7921d3aa
-size 346
+namespace UnityEngine.TestRunner.TestProtocol
+{
+    internal class TestStartedMessage : MessageForRetryRepeat
+    {
+        public string name;
+        public TestState state;
+
+        public TestStartedMessage()
+        {
+            type = "TestStatus";
+            phase = "Begin";
+            state = TestState.Inconclusive;
+        }
+    }
+}

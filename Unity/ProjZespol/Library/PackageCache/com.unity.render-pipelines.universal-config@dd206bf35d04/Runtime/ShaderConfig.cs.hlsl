@@ -1,3 +1,15 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:386f4b4362ac4b158b3b87c94d571e12ddb22d078a6016cd2eebd64df098c9a4
-size 435
+//
+// This file was automatically generated. Please don't edit by hand. Execute Editor command [ Edit > Rendering > Generate Shader Includes ] instead
+//
+
+#ifndef SHADERCONFIG_CS_HLSL
+#define SHADERCONFIG_CS_HLSL
+//
+// UnityEngine.Rendering.Universal.ShaderOptions:  static fields
+//
+#define MAX_VISIBLE_LIGHT_COUNT_LOW_END_MOBILE (16)
+#define MAX_VISIBLE_LIGHT_COUNT_MOBILE (32)
+#define MAX_VISIBLE_LIGHT_COUNT_DESKTOP (256)
+
+
+#endif

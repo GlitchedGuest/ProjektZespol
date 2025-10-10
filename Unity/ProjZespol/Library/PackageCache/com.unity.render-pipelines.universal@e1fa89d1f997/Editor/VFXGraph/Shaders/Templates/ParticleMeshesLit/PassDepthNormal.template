@@ -1,3 +1,14 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:baffa6960e788d28c6d49ec151844561cedadaabf202aa350f9f1d5d7c3d90f7
-size 265
+Pass
+{
+    Tags { "LightMode"="DepthNormals" }
+
+    ZWrite On
+    Blend Off
+    
+    HLSLPROGRAM
+    #define VFX_PASSDEPTH VFX_PASSDEPTH_ACTUAL
+    #define WRITE_NORMAL_BUFFER
+    ${VFXIncludeRP("Templates/ParticleMeshesLit/PassDepthOrMV.template")}
+
+    ENDHLSL
+}

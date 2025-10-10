@@ -1,3 +1,31 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:fcdc853ce9168a31777c38c0a95f1d5100a4e6cc6fd6bfe04ac65814d4061f88
-size 851
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using UnityEngine;
+
+namespace UnityEditor.TestRunner.UnityTestProtocol
+{
+    [Obsolete("No longer in use")]
+    public interface ITestRunDataHolder
+    {
+        IList<TestRunData> TestRunDataList { get; }
+    }
+
+    [Obsolete("No longer in use")]
+    public class TestRunDataHolder: ScriptableSingleton<TestRunDataHolder>, ISerializationCallbackReceiver, ITestRunDataHolder
+    {
+        [SerializeField]
+        private TestRunData[] TestRunData;
+        public IList<TestRunData> TestRunDataList { get; private set; } = new List<TestRunData>();
+
+        public void OnBeforeSerialize()
+        {
+            TestRunData = TestRunDataList.ToArray(); 
+        }
+
+        public void OnAfterDeserialize()
+        {
+            TestRunDataList = TestRunData.ToList();
+        }
+    }
+}

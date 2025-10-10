@@ -1,3 +1,6 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:e86385aefc50836a143f8c2d074e33b7b9466cb6928c9b0ad9e7bae225c1fd70
-size 500
+{
+	"displayName":"UGUI Shaders",
+	"interactiveImport": "false",
+	"description":"This sample is all about creating 2D UI elements using the Canvas target in HDRP or URP. It provides a set of subgraphs to speed up and simplify the process of creating buttons, widgets, backgrounds, and other UI elements. It also contains examples of how these subgraphs can be used together to create dynamic UI elements that are fast to render and don't require and texture memory.",
+	"createSeparatePackage": true
+}

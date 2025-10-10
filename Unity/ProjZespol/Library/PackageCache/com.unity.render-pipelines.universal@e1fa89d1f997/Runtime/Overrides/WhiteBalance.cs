@@ -1,3 +1,32 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:7b4cc05615df51426b4e35238e53ee9bc68557d2ddf2ee12192b45d01c0b45bf
-size 1284
+using System;
+
+namespace UnityEngine.Rendering.Universal
+{
+    /// <summary>
+    /// A volume component that holds settings for the White Balance effect.
+    /// </summary>
+    [Serializable, VolumeComponentMenu("Post-processing/White Balance")]
+    [SupportedOnRenderPipeline(typeof(UniversalRenderPipelineAsset))]
+    [URPHelpURL("Post-Processing-White-Balance")]
+    public sealed class WhiteBalance : VolumeComponent, IPostProcessComponent
+    {
+        /// <summary>
+        /// Controls the color temperature URP uses for white balancing.
+        /// </summary>
+        [Tooltip("Sets the white balance to a custom color temperature.")]
+        public ClampedFloatParameter temperature = new ClampedFloatParameter(0f, -100, 100f);
+
+        /// <summary>
+        /// Controls the white balance color to compensate for a green or magenta tint.
+        /// </summary>
+        [Tooltip("Sets the white balance to compensate for a green or magenta tint.")]
+        public ClampedFloatParameter tint = new ClampedFloatParameter(0f, -100, 100f);
+
+        /// <inheritdoc/>
+        public bool IsActive() => temperature.value != 0f || tint.value != 0f;
+
+        /// <inheritdoc/>
+        [Obsolete("Unused #from(2023.1)", false)]
+        public bool IsTileCompatible() => true;
+    }
+}

@@ -1,3 +1,42 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:4e340ef199d39ee74daa6e5f6a4ef68a13c2c0a46ae7bb3b7442d14166eff734
-size 1254
+using UnityEditor.EditorTools;
+using UnityEngine;
+
+namespace UnityEditor.Tilemaps
+{
+    /// <summary>
+    /// Tool for doing a paint with the Tile Palette
+    /// </summary>
+    public sealed class PaintTool : TilemapEditorTool
+    {
+        private static class Styles
+        {
+            public static string tooltipStringFormat = "|Paint with active brush ({0})";
+            public static string shortcutId = GridPaintPaletteWindow.ShortcutIds.k_Brush;
+            public static GUIContent toolContent = EditorGUIUtility.IconContent("Grid.PaintTool", GetTooltipText(tooltipStringFormat, shortcutId));
+        }
+
+        /// <summary>
+        /// Tooltip String Format for the PaintTool
+        /// </summary>
+        protected override string tooltipStringFormat
+        {
+            get { return Styles.tooltipStringFormat; }
+        }
+
+        /// <summary>
+        /// Shortcut Id for the PaintTool
+        /// </summary>
+        protected override string shortcutId
+        {
+            get { return Styles.shortcutId; }
+        }
+
+        /// <summary>
+        /// Toolbar Icon for the PaintTool
+        /// </summary>
+        public override GUIContent toolbarIcon
+        {
+            get { return Styles.toolContent; }
+        }
+    }
+}

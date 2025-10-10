@@ -1,3 +1,21 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:afc453ddf3584cf780a85e2d01e71024305e38bd5ab3e477a397c91d1389540e
-size 480
+using System;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityObject = UnityEngine.Object;
+
+namespace UnityEditor.Rendering.Universal.Path2D
+{
+    internal class ScriptableData<T> : ScriptableObject
+    {
+        [SerializeField]
+        private T m_Data;
+        public UnityObject owner { get; set; }
+        public int index { get; set; }
+
+        public T data
+        {
+            get { return m_Data; }
+            set { m_Data = value; }
+        }
+    }
+}

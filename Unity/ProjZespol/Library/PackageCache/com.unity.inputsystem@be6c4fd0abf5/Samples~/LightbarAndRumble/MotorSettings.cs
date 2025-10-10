@@ -1,3 +1,28 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:7c0b4ed85eb1a7ddea97b651f0a25e3503febad1c8650f2153afbf478bfd4bd7
-size 695
+using UnityEngine;
+using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.DualShock;
+
+public class MotorSettings : MonoBehaviour
+{
+    [Range(0, 1)] public float lowFrequencyMotorSpeed;
+    [Range(0, 1)] public float highFrequencyMotorSpeed;
+
+    public void SetMotorSpeeds()
+    {
+        var gamepad = Gamepad.current;
+        if (gamepad != null)
+        {
+            Debug.Log("Current gamepad: " + gamepad);
+            gamepad.SetMotorSpeeds(lowFrequencyMotorSpeed, highFrequencyMotorSpeed);
+        }
+    }
+
+    private void OnDisable()
+    {
+        var gamepad = Gamepad.current;
+        if (gamepad != null)
+        {
+            gamepad.SetMotorSpeeds(0, 0);
+        }
+    }
+}

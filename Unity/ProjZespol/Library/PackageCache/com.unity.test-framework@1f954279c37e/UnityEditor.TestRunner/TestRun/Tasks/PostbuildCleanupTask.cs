@@ -1,3 +1,20 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:c1f4e75d5715c59515ecabb93745c43d20ba0d20e0740ae6b3aa3d9688c45182
-size 520
+using System;
+using NUnit.Framework.Interfaces;
+using UnityEngine;
+using UnityEngine.TestTools;
+
+namespace UnityEditor.TestTools.TestRunner.TestRun.Tasks
+{
+    internal class PostbuildCleanupTask : BuildActionTaskBase<IPostBuildCleanup>
+    {
+        public PostbuildCleanupTask() : base(new PostbuildCleanupAttributeFinder())
+        {
+            RunOnError = ErrorRunMode.RunAlways;
+        }
+
+        protected override void Action(IPostBuildCleanup target)
+        {
+            target.Cleanup();
+        }
+    }
+}

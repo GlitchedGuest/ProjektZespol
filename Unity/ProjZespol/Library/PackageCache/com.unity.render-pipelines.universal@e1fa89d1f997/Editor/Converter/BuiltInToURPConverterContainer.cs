@@ -1,3 +1,13 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:65dce8b7690839840e7e1fcd11a878fe7bf14cf7d2e6f28546201326e7f5b280
-size 458
+using UnityEngine.Rendering.Universal;
+
+
+namespace UnityEditor.Rendering.Universal
+{
+    [URPHelpURL("features/rp-converter")]
+    internal sealed class BuiltInToURPConverterContainer : RenderPipelineConverterContainer
+    {
+        public override string name => "Built-in to URP";
+        public override string info => "This tool converts project elements from the Built-in Render Pipeline to URP.";
+        public override int priority => -9000;
+    }
+}

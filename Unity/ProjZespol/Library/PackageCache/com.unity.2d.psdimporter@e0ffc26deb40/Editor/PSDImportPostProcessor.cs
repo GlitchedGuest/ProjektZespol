@@ -1,3 +1,31 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:5ce362b3575f092763aa01ca2e91baf288519aa4d4d0c3d5685c846e0a0a2e68
-size 1037
+using UnityEngine;
+
+namespace UnityEditor.U2D.PSD
+{
+    internal class PSDImportPostProcessor : AssetPostprocessor
+    {
+        private static string s_CurrentApplyAssetPath = null;
+
+        public static string currentApplyAssetPath
+        {
+            set { s_CurrentApplyAssetPath = value; }
+        }
+        static void OnPostprocessAllAssets(string[] importedAssets, string[] deletedAssets, string[] movedAssets, string[] movedFromPath)
+        {
+            if (!string.IsNullOrEmpty(s_CurrentApplyAssetPath))
+            {
+                foreach (var asset in importedAssets)
+                {
+                    if (asset == s_CurrentApplyAssetPath)
+                    {
+                        var obj = AssetDatabase.LoadMainAssetAtPath(asset);
+                        Selection.activeObject = obj;
+                        Unsupported.SceneTrackerFlushDirty();
+                        s_CurrentApplyAssetPath = null;
+                        break;
+                    }
+                }
+            }
+        }
+    }
+}

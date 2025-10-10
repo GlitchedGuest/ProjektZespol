@@ -1,3 +1,48 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:4e312c07e1267ac8ea14c9c8492b85b8e3b90b3b9bad87427689241e23493bb0
-size 1467
+﻿using System;
+using UnityEditor.U2D.Common.Path.GUIFramework;
+using UnityEngine;
+
+namespace UnityEditor.U2D.Common.Path
+{
+    internal class CreatePointAction : ClickAction
+    {
+        private Control m_PointControl;
+
+        public Func<IGUIState, Vector2, Vector3> guiToWorld;
+        public Action<int, Vector3> onCreatePoint;
+        public CreatePointAction(Control pointControl, Control edgeControl) : base(edgeControl, 0, false)
+        {
+            m_PointControl = pointControl;
+        }
+
+        protected override void OnTrigger(IGUIState guiState)
+        {
+            base.OnTrigger(guiState);
+
+            var index = hoveredControl.layoutData.index;
+            var position = GetMousePositionWorld(guiState);
+
+            if (onCreatePoint != null)
+                onCreatePoint(index, position);
+
+            guiState.nearestControl = m_PointControl.ID;
+
+            var data = m_PointControl.layoutData;
+            data.index = index + 1;
+            data.position = position;
+            data.distance = 0f;
+
+            m_PointControl.layoutData = data;
+
+            guiState.changed = true;
+        }
+
+        private Vector3 GetMousePositionWorld(IGUIState guiState)
+        {
+            if (guiToWorld != null)
+                return guiToWorld(guiState, guiState.mousePosition);
+
+            return guiState.GUIToWorld(guiState.mousePosition, hoveredControl.layoutData.forward, hoveredControl.layoutData.position);
+        }
+    }
+}

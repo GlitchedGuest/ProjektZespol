@@ -1,3 +1,30 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:478f7b8be38dcfb224c8020300c241c1ab3117608aa8cf6f3d3aca00c03d2d3f
-size 809
+{
+    "name": "Unity.2D.Aseprite.Editor",
+    "rootNamespace": "",
+    "references": [
+        "Unity.InternalAPIEditorBridge.001",
+        "Unity.2D.Sprite.Editor",
+        "Unity.2D.Aseprite.Common",
+        "Unity.Burst",
+        "Unity.Mathematics",
+        "Unity.RenderPipelines.Universal.Runtime",
+        "Unity.RenderPipelines.Universal.2D.Runtime"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": true,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [
+        {
+            "name": "com.unity.render-pipelines.universal",
+            "expression": "1.0.0",
+            "define": "ENABLE_URP"
+        }
+    ],
+    "noEngineReferences": false
+}

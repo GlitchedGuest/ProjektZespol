@@ -1,3 +1,73 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:f09a27048c61f1b04906486f8634a36578241bf8a04288a0acf076f085e6bf23
-size 1925
+using System;
+using UnityEngine;
+
+namespace UnityEditor.U2D.Animation
+{
+    internal class DefaultPreviewBehaviour : IMeshPreviewBehaviour
+    {
+        public float GetWeightMapOpacity(SpriteCache sprite)
+        {
+            return 0f;
+        }
+
+        public bool DrawWireframe(SpriteCache sprite)
+        {
+            return false;
+        }
+
+        public bool Overlay(SpriteCache sprite)
+        {
+            return false;
+        }
+
+        public bool OverlayWireframe(SpriteCache sprite)
+        {
+            return sprite.IsVisible() && sprite.skinningCache.selectedSprite == sprite;
+        }
+    }
+
+    internal class MeshPreviewBehaviour : IMeshPreviewBehaviour
+    {
+        public bool showWeightMap { get; set; }
+        public bool drawWireframe { get; set; }
+        public bool overlaySelected { get; set; }
+
+        public float GetWeightMapOpacity(SpriteCache sprite)
+        {
+            SkinningCache skinningCache = sprite.skinningCache;
+
+            if (showWeightMap)
+            {
+                if (skinningCache.selectedSprite == sprite || skinningCache.selectedSprite == null)
+                    return VisibilityToolSettings.meshOpacity;
+            }
+
+            return 0f;
+        }
+
+        public bool DrawWireframe(SpriteCache sprite)
+        {
+            SkinningCache skinningCache = sprite.skinningCache;
+
+            if (drawWireframe)
+                return skinningCache.selectedSprite == null;
+
+            return false;
+        }
+
+        public bool Overlay(SpriteCache sprite)
+        {
+            SkinningCache skinningCache = sprite.skinningCache;
+
+            if (overlaySelected && skinningCache.selectedSprite == sprite)
+                return true;
+
+            return false;
+        }
+
+        public bool OverlayWireframe(SpriteCache sprite)
+        {
+            return sprite.IsVisible() && sprite.skinningCache.selectedSprite == sprite;
+        }
+    }
+}

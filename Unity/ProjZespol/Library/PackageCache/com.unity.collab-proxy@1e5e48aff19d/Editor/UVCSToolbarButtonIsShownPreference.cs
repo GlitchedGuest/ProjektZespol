@@ -1,3 +1,22 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:568fb3024a69292c8908571a5c3edba9e210a255ff1e4a49abef045193c4966e
-size 592
+using Unity.PlasticSCM.Editor.UI;
+
+namespace Unity.PlasticSCM.Editor
+{
+    internal static class UVCSToolbarButtonIsShownPreference
+    {
+        internal static bool IsEnabled()
+        {
+            return BoolSetting.Load(UnityConstants.SHOW_UVCS_TOOLBAR_BUTTON_KEY_NAME, true);
+        }
+
+        internal static void Enable()
+        {
+            BoolSetting.Save(true, UnityConstants.SHOW_UVCS_TOOLBAR_BUTTON_KEY_NAME);
+        }
+
+        internal static void Disable()
+        {
+            BoolSetting.Save(false, UnityConstants.SHOW_UVCS_TOOLBAR_BUTTON_KEY_NAME);
+        }
+    }
+}

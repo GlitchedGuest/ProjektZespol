@@ -1,3 +1,48 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:4c498174ffde740bc5ad2c82c1f47168ffb0515f6a17dfa367b7faf09780a38a
-size 1319
+using System.IO;
+
+using Codice.Utils;
+
+namespace Unity.PlasticSCM.Editor.Configuration
+{
+    internal static class ToolConfig
+    {
+        internal static string GetUnityPlasticLogConfigFile()
+        {
+            if (!string.IsNullOrEmpty(mLogConfigFolder))
+                return Path.Combine(mLogConfigFolder, LOG_CONFIG_FILE);
+
+            return GetConfigFilePath(LOG_CONFIG_FILE);
+        }
+
+        internal static bool EnableCloudDriveTokenExists()
+        {
+            return File.Exists(GetConfigFilePath(ENABLE_CLOUD_DRIVE_TOKEN_FILE));
+        }
+
+        internal static void InitializeLogConfigFolderForTesting(string logConfigFolder)
+        {
+            mLogConfigFolder = logConfigFolder;
+        }
+
+        internal static void Reset()
+        {
+            mLogConfigFolder = null;
+        }
+
+        static string GetConfigFilePath(string configfile)
+        {
+            string file = Path.Combine(
+                ApplicationLocation.GetAppPath(), configfile);
+
+            if (File.Exists(file))
+                return file;
+
+            return UserConfigFolder.GetConfigFile(configfile);
+        }
+
+        static string mLogConfigFolder;
+
+        const string ENABLE_CLOUD_DRIVE_TOKEN_FILE = "enableclouddrive.token";
+        const string LOG_CONFIG_FILE = "unityplastic.log.conf";
+    }
+}

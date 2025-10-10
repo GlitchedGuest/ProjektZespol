@@ -1,3 +1,12 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:1997c5f141cb403e0d03dd05ceb5617db6b7d32259e1e549f617d970d4e9d3d7
-size 447
+<UXML xmlns:ui="UnityEngine.UIElements">
+  <ui:VisualElement name="itemMainVisualContainer">
+    <Style path="Searcher"/>
+    <ui:VisualElement name="itemIndent"/>
+    <ui:VisualElement name="itemChildExpander">
+      <ui:VisualElement name="expanderIcon"/>
+    </ui:VisualElement>
+    <ui:Toggle name="itemToggle"/>
+    <ui:VisualElement name="itemIconVisualElement"/>
+    <ui:VisualElement name="labelsContainer"/>
+  </ui:VisualElement>
+</UXML>

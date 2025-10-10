@@ -1,3 +1,45 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:966dc0e9a00705ff578b9676ca088d2c9f4b5fe2ed1e30e58035902a31c1b66b
-size 1621
+using UnityEditor;
+using UnityEngine;
+
+namespace Unity.VisualScripting
+{
+    public class CustomPropertyProviderSettings
+    {
+        private const string Title = "Custom Inspector Properties";
+        private const string ButtonLabel = "Generate";
+
+        public void OnGUI()
+        {
+            GUILayout.Space(5f);
+
+            GUILayout.Label(Title, EditorStyles.boldLabel);
+
+            GUILayout.Space(5f);
+
+            string label = "Inspectors in Visual Scripting plugins can handle many custom types besides Unity primitives and objects. ";
+            label += "However, to be compatible with your custom editor drawers, some additional property provider scripts must be generated. ";
+
+            GUILayout.BeginHorizontal(EditorStyles.helpBox);
+            GUILayout.Label(EditorGUIUtility.IconContent("console.infoicon"), GUILayout.ExpandWidth(true));
+            GUILayout.Box(label, EditorStyles.wordWrappedLabel);
+            GUILayout.EndHorizontal();
+
+            if (GUILayout.Button(ButtonLabel, Styles.defaultsButton))
+            {
+                SerializedPropertyProviderProvider.instance.GenerateProviderScripts();
+                EditorUtility.DisplayDialog("Custom Inspector Generation", "Custom inspector generation has completed successfully.", "OK");
+            }
+        }
+
+        private static class Styles
+        {
+            static Styles()
+            {
+                defaultsButton = new GUIStyle("Button");
+                defaultsButton.padding = new RectOffset(10, 10, 4, 4);
+            }
+
+            public static readonly GUIStyle defaultsButton;
+        }
+    }
+}

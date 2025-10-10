@@ -1,3 +1,50 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:a3d5118e3c010f119ba33e0be745754c0096e17c211000a4543dffa9abd0144e
-size 1978
+using System;
+
+namespace UnityEngine.Rendering.Universal
+{
+    /// <summary>
+    /// A volume component that holds settings for the Vignette effect.
+    /// </summary>
+    [Serializable, VolumeComponentMenu("Post-processing/Vignette")]
+    [SupportedOnRenderPipeline(typeof(UniversalRenderPipelineAsset))]
+    [URPHelpURL("post-processing-vignette")]
+    public sealed class Vignette : VolumeComponent, IPostProcessComponent
+    {
+        /// <summary>
+        /// Specifies the color of the vignette.
+        /// </summary>
+        [Tooltip("Vignette color.")]
+        public ColorParameter color = new ColorParameter(Color.black, false, false, true);
+
+        /// <summary>
+        /// Sets the center point for the vignette.
+        /// </summary>
+        [Tooltip("Sets the vignette center point (screen center is [0.5,0.5]).")]
+        public Vector2Parameter center = new Vector2Parameter(new Vector2(0.5f, 0.5f));
+
+        /// <summary>
+        /// Controls the strength of the vignette effect.
+        /// </summary>
+        [Tooltip("Use the slider to set the strength of the Vignette effect.")]
+        public ClampedFloatParameter intensity = new ClampedFloatParameter(0f, 0f, 1f);
+
+        /// <summary>
+        /// Controls the smoothness of the vignette borders.
+        /// </summary>
+        [Tooltip("Smoothness of the vignette borders.")]
+        public ClampedFloatParameter smoothness = new ClampedFloatParameter(0.2f, 0.01f, 1f);
+
+        /// <summary>
+        /// Controls how round the vignette is, lower values result in a more square vignette.
+        /// </summary>
+        [Tooltip("Should the vignette be perfectly round or be dependent on the current aspect ratio?")]
+        public BoolParameter rounded = new BoolParameter(false);
+
+        /// <inheritdoc/>
+        public bool IsActive() => intensity.value > 0f;
+
+        /// <inheritdoc/>
+        [Obsolete("Unused #from(2023.1)", false)]
+        public bool IsTileCompatible() => true;
+    }
+}

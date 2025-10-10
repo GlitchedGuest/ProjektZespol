@@ -1,3 +1,44 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:9eae24ce72a41649ad7a5e8ab0b1f1a1813bf8a2ddea40a63de5bb767b5594fb
-size 1064
+using UnityEditor;
+
+namespace Unity.PlasticSCM.Editor
+{
+    internal static class VCSBuiltInPlugin
+    {
+        internal static bool IsEnabled()
+        {
+            return GetVersionControlMode() == "PlasticSCM";
+        }
+
+        internal static void Disable()
+        {
+            SetVersionControlMode("Visible Meta Files");
+
+            AssetDatabase.SaveAssets();
+        }
+
+        internal static bool IsAnyProviderEnabled()
+        {
+            return !IsVisibleMetaFilesMode() && !IsHiddenMetaFilesMode();
+        }
+
+        static string GetVersionControlMode()
+        {
+            return VersionControlSettings.mode;
+        }
+
+        static void SetVersionControlMode(string versionControl)
+        {
+            VersionControlSettings.mode = versionControl;
+        }
+
+        static bool IsVisibleMetaFilesMode()
+        {
+            return GetVersionControlMode() == "Visible Meta Files";
+        }
+
+        static bool IsHiddenMetaFilesMode()
+        {
+            return GetVersionControlMode() == "Hidden Meta Files";
+        }
+    }
+}

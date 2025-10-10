@@ -1,3 +1,16 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:aa6655ed2b21a17dd2d0e28d00de4c9f8e001afa962ba95141fc131258e318a8
-size 650
+namespace UnityEditor.Rendering.Universal
+{
+    /// <summary>
+    /// A structure holding the information for each Item that needs to be Converted.
+    /// Descriptor = The ConverterItemDescriptor this item contain.
+    /// Index = The index for this item in the list of converter items.
+    /// </summary>
+    internal struct ConverterItemInfo
+    {
+        /// <summary> The ConverterItemDescriptor this item contain. </summary>
+        public ConverterItemDescriptor descriptor { get; internal set; }
+
+        /// <summary> The index for this item in the list of converter items. </summary>
+        public int index { get; internal set; }
+    }
+}

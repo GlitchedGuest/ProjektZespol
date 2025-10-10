@@ -1,3 +1,30 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:7638387cb4279bd5477eb7ebb8254b520033846bbbb5efe9064d740950fbe7f2
-size 770
+using Unity.PlasticSCM.Editor.Views.Merge;
+using Unity.PlasticSCM.Editor.Views.PendingChanges;
+
+namespace Unity.PlasticSCM.Editor
+{
+    internal static class AutoRefresh
+    {
+        internal static void PendingChangesView(PendingChangesTab pendingChangesTab)
+        {
+            if (pendingChangesTab == null)
+                return;
+
+            if (!pendingChangesTab.IsVisible)
+                return;
+
+            pendingChangesTab.AutoRefresh();
+        }
+
+        internal static void IncomingChangesView(IIncomingChangesTab incomingChangesTab)
+        {
+            if (incomingChangesTab == null)
+                return;
+
+            if (!incomingChangesTab.IsVisible)
+                return;
+
+            incomingChangesTab.AutoRefresh();
+        }
+    }
+}

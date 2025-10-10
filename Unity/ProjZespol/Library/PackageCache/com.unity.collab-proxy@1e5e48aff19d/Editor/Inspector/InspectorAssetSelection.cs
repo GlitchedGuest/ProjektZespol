@@ -1,3 +1,42 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:15614fb797e0da10cfba02b3fc0ac17e8af1aff3546862ae47cd387e341ce111
-size 1149
+using UnityEditor.VersionControl;
+
+using Unity.PlasticSCM.Editor.AssetMenu;
+using Unity.PlasticSCM.Editor.AssetUtils;
+
+namespace Unity.PlasticSCM.Editor.Inspector
+{
+    internal class InspectorAssetSelection : AssetUVCSOperations.IAssetSelection
+    {
+        AssetList AssetUVCSOperations.IAssetSelection.GetSelectedAssets()
+        {
+            return GetInspectorAssets(mActiveInspector);
+        }
+
+        internal void SetActiveInspector(UnityEditor.Editor inspector)
+        {
+            mActiveInspector = inspector;
+        }
+
+        static AssetList GetInspectorAssets(UnityEditor.Editor inspector)
+        {
+            AssetList result = new AssetList();
+
+            if (inspector == null)
+                return result;
+
+            foreach (UnityEngine.Object obj in inspector.targets)
+            {
+                string assetPath = AssetsPath.GetFullPath.ForObject(obj);
+                
+                if (string.IsNullOrEmpty(assetPath))
+                    continue;
+
+                result.Add(new Asset(assetPath));
+            }
+
+            return result;
+        }
+
+        UnityEditor.Editor mActiveInspector;
+    }
+}

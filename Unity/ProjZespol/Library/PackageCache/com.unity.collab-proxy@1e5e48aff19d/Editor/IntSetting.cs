@@ -1,3 +1,27 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:0665f483d59e4b15a0adbbe596e4869d7b2e928b894288d2d4dc58cdda499bb2
-size 726
+﻿using UnityEditor;
+
+namespace Unity.PlasticSCM.Editor
+{
+    internal static class IntSetting
+    {
+        internal static int Load(string settingName, int defaultValue)
+        {
+            return EditorPrefs.GetInt(GetSettingKey(settingName), defaultValue);
+        }
+
+        internal static void Save(int value, string settingName)
+        {
+            EditorPrefs.SetInt(GetSettingKey(settingName), value);
+        }
+
+        internal static void Clear(string settingName)
+        {
+            EditorPrefs.DeleteKey(GetSettingKey(settingName));
+        }
+
+        static string GetSettingKey(string settingName)
+        {
+            return string.Format(settingName, PlayerSettings.productGUID);
+        }
+    }
+}

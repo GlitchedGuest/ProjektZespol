@@ -1,3 +1,27 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:0f26b111dd750fe74e112acf52ac9dc84f65c87931b9c47720423928fee1195a
-size 598
+#if UNITY_INPUT_SYSTEM_ENABLE_UI
+using UnityEngine.EventSystems;
+
+namespace UnityEngine.InputSystem.UI
+{
+    internal struct NavigationModel
+    {
+        public Vector2 move;
+        public int consecutiveMoveCount;
+        public MoveDirection lastMoveDirection;
+        public float lastMoveTime;
+        public AxisEventData eventData;
+        public InputDevice device;
+
+        public void Reset()
+        {
+            move = Vector2.zero;
+        }
+    }
+
+    internal struct SubmitCancelModel
+    {
+        public BaseEventData eventData;
+        public InputDevice device;
+    }
+}
+#endif

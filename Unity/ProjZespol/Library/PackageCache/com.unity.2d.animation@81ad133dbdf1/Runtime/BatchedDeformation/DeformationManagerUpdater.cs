@@ -1,3 +1,29 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:8cf0487f200cc3a915a4b9b262a853a073d79d2b6439f41da2d4d5489527d013
-size 853
+using Unity.Profiling;
+
+namespace UnityEngine.U2D.Animation
+{
+    [AddComponentMenu("")]
+    [DefaultExecutionOrder(UpdateOrder.spriteSkinUpdateOrder)]
+    [ExecuteInEditMode]
+    internal class DeformationManagerUpdater : MonoBehaviour
+    {
+        public System.Action<GameObject> onDestroyingComponent { get; set; }
+
+        ProfilerMarker m_ProfilerMarker = new ProfilerMarker("DeformationManager.LateUpdate");
+
+        void OnDestroy() => onDestroyingComponent?.Invoke(gameObject);
+
+        void LateUpdate()
+        {
+            if (DeformationManager.instance.helperGameObject != gameObject)
+            {
+                GameObject.DestroyImmediate(gameObject);
+                return;
+            }
+
+            m_ProfilerMarker.Begin();
+            DeformationManager.instance.Update();
+            m_ProfilerMarker.End();
+        }
+    }
+}

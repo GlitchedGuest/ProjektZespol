@@ -1,3 +1,30 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:a082150b032b11c7794747a176ce6b224a34e46eb882ffe023ac641e2a300e25
-size 1119
+using System;
+using UnityEngine;
+using UnityEngine.Rendering;
+using UnityEngine.Rendering.Universal;
+
+namespace UnityEditor.Rendering.Universal
+{
+    using CED = CoreEditorDrawer<UniversalRenderPipelineSerializedLight>;
+
+    partial class UniversalRenderPipelineLightUI
+    {
+        static readonly ExpandedState<Expandable, Light> k_ExpandedStatePreset = new(0, "URP-preset");
+
+        public static readonly CED.IDrawer PresetInspector = CED.Group(
+            CED.Group((serialized, owner) =>
+                EditorGUILayout.HelpBox(LightUI.Styles.unsupportedPresetPropertiesMessage, MessageType.Info)),
+            CED.Group((serialized, owner) => EditorGUILayout.Space()),
+            CED.FoldoutGroup(LightUI.Styles.generalHeader,
+                Expandable.General,
+                k_ExpandedStatePreset,
+                DrawGeneralContentPreset),
+            CED.FoldoutGroup(LightUI.Styles.emissionHeader,
+                Expandable.Emission,
+                k_ExpandedStatePreset,
+                CED.Group(
+                    LightUI.DrawColor,
+                    DrawEmissionContent))
+        );
+    }
+}

@@ -1,3 +1,37 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:08cf03bb4856e2d3a0d8b61066f3531b34d5db0a85650b767f2761bfe44c6fe3
-size 1115
+using NUnit.Framework;
+using System;
+using UnityEditor;
+using System.Runtime.InteropServices;
+using Unity.Mathematics;
+using Unity.Collections.LowLevel.Unsafe;
+using UnityEngine.Rendering.RadeonRays;
+
+namespace UnityEngine.Rendering.UnifiedRayTracing.Tests
+{
+    internal class BlockAllocatorTests
+    {
+        [Test]
+        public void GrowAndAllocate_NotEnoughSpace_ShouldFail()
+        {
+            var allocator = new BlockAllocator();
+            allocator.Initialize(500);
+            for (int i = 0; i < 50; i++)
+            {
+                var a = allocator.Allocate(2);
+                Assert.IsTrue(a.valid);
+            }
+
+            int oldCapacity;
+            int newCapacity;
+
+            var alloc = allocator.GrowAndAllocate(500, 300, out oldCapacity, out newCapacity);
+            Assert.IsFalse(alloc.valid);
+
+            alloc = allocator.GrowAndAllocate(500, 600, out oldCapacity, out newCapacity);
+            Assert.IsTrue(alloc.valid);
+
+            alloc = allocator.GrowAndAllocate(2, 600, out oldCapacity, out newCapacity);
+            Assert.IsFalse(alloc.valid);
+        }
+    }
+}

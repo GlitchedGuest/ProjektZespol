@@ -1,3 +1,31 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:d9d7d53b77739a8412d85c9ea4c837df41f6a089c92398a5de6f3e3d8a300c74
-size 1116
+using System.ComponentModel;
+using UnityEngine.InputSystem.LowLevel;
+
+namespace UnityEngine.InputSystem.Processors
+{
+    [DesignTimeVisible(false)]
+    internal class CompensateDirectionProcessor : InputProcessor<Vector3>
+    {
+        public override Vector3 Process(Vector3 value, InputControl control)
+        {
+            if (!InputSystem.settings.compensateForScreenOrientation)
+                return value;
+
+            var rotation = Quaternion.identity;
+            switch (InputRuntime.s_Instance.screenOrientation)
+            {
+                case ScreenOrientation.PortraitUpsideDown: rotation = Quaternion.Euler(0, 0, 180); break;
+                case ScreenOrientation.LandscapeLeft: rotation = Quaternion.Euler(0, 0, 90); break;
+                case ScreenOrientation.LandscapeRight: rotation = Quaternion.Euler(0, 0, 270); break;
+            }
+            return rotation * value;
+        }
+
+        public override string ToString()
+        {
+            return "CompensateDirection()";
+        }
+
+        public override CachingPolicy cachingPolicy => CachingPolicy.EvaluateOnEveryRead;
+    }
+}

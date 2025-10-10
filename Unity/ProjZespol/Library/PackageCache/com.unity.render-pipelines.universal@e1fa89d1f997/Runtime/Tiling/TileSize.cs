@@ -1,3 +1,18 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:a3747b0382f2407673a6015b157bd00bf46e7eb5279012cf1ec06dcfd13a8154
-size 410
+namespace UnityEngine.Rendering.Universal
+{
+    internal enum TileSize
+    {
+        _8 = 8,
+        _16 = 16,
+        _32 = 32,
+        _64 = 64
+    }
+
+    static class TileSizeExtensions
+    {
+        public static bool IsValid(this TileSize tileSize)
+        {
+            return tileSize == TileSize._8 || tileSize == TileSize._16 || tileSize == TileSize._32 || tileSize == TileSize._64;
+        }
+    }
+}

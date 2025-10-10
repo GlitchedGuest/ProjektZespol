@@ -1,3 +1,17 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:47ca92b8c7daa904bf7c08208cece288cfab844478a4d4a94f37c21492f428c4
-size 682
+using System;
+
+namespace UnityEditor.TestTools.TestRunner.GUI.TestAssets
+{
+    /// <summary>
+    /// Provides mapping information from folder paths to their corresponding Custom Script Assembly scope.
+    /// </summary>
+    internal interface ICustomScriptAssemblyMappingFinder
+    {
+        /// <summary>
+        /// Finds the Custom Script Assembly associated with the provided folder path.
+        /// </summary>
+        /// <param name="folderPath">The folder path to check.</param>
+        /// <returns>The associated <see cref="ICustomScriptAssembly" />; null if none.</returns>
+        ICustomScriptAssembly FindCustomScriptAssemblyFromFolderPath(string folderPath);
+    }
+}

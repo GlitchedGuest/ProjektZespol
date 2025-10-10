@@ -1,3 +1,29 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:e8ca3a9df575efee13e91095430bca8b4e40c32d7b22ecde478e2e8da2e568d8
-size 632
+using NUnit.Framework;
+
+namespace Tests_16s
+{
+    public class MyClassTests
+    {
+        [Test]
+        [FasterThan500ms]
+        public void SomethingReturnsTrue()
+        {
+            var classUnderTest = new MyClass();
+
+            var result = classUnderTest.DoSomething();
+            
+            Assert.That(result, Is.True);
+        }
+        
+        [Test]
+        [FasterThan500ms]
+        public void SomethingElseReturnsTrue()
+        {
+            var classUnderTest = new MyClass();
+
+            var result = classUnderTest.DoSomethingElse();
+            
+            Assert.That(result, Is.True);
+        }
+    }
+}

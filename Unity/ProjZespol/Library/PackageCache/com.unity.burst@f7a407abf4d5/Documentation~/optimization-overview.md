@@ -1,3 +1,17 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:cf6c3f548add03fdf31b6ebac711fced46f42899353aad53a01d0e62fa96a6dd
-size 1200
+# Optimization
+
+Debug and profile to identify problems in Burst-compiled code and configure a range of options to optimize performance.
+
+|**Topic**|**Description**|
+|---|---|
+|[Debugging and profiling tools](debugging-profiling-tools.md)|Debug and profile your Burst-compiled code in the Editor and in player builds.|
+|[Loop vectorization optimization](optimization-loop-vectorization.md)| Understand how Burst uses loop vectorization to optimize your code.|
+|[Memory aliasing](aliasing.md)| Use memory aliasing to tell Burst how your code uses data.|
+|[AssumeRange attribute](optimization-assumerange.md)| Use AssumeRange to tell Burst a given scalar-integer lies within a certain constrained range.|
+|[Hint intrinsic](optimization-hint.md)| Use the Hint intrinsic to give Burst more information about your data.|
+|[Constant intrinsic](optimization-constant.md)| Use IsConstantExpression top check if an expression is constant at run time.|
+|[SkipLocalsInit attribute](optimization-skiplocalsinit.md)|Use SkipLocalsInitAttribute to tell Burst that any stack allocations within a method don't have to be initialized to zero.|
+
+## Additional resources
+
+* [Burst intrinsics](csharp-burst-intrinsics.md)

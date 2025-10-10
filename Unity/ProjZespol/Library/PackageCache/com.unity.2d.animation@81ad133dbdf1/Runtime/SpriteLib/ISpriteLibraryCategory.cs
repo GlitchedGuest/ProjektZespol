@@ -1,3 +1,20 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:ba4e42d0217b7fc614f051716c76aed68dd00b0b7f9b40063ad6ee9fcbb2b43c
-size 468
+using System.Collections.Generic;
+
+namespace UnityEngine.U2D.Animation
+{
+    /// <summary>
+    /// Represents a Sprite Library's category.
+    /// </summary>
+    public interface ISpriteLibraryCategory
+    {
+        /// <summary>
+        /// Category's name.
+        /// </summary>
+        string name { get; }
+
+        /// <summary>
+        /// Labels contained in the Category.
+        /// </summary>
+        IEnumerable<ISpriteLibraryLabel> labels { get; }
+    }
+}

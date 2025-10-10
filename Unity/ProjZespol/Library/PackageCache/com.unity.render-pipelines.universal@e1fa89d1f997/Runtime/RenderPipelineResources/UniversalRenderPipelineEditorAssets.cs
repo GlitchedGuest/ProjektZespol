@@ -1,3 +1,24 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:af7e0824ea3ad88dd9625a93888e37a3762c9dfd7e018ad3f8cbda766bc7e3ac
-size 755
+#if UNITY_EDITOR
+using System;
+
+namespace UnityEngine.Rendering.Universal
+{
+    [Serializable]
+    [SupportedOnRenderPipeline(typeof(UniversalRenderPipelineAsset))]
+    [Categorization.CategoryInfo(Name = "R: Editor Assets", Order = 1000), HideInInspector]
+    class UniversalRenderPipelineEditorAssets : IRenderPipelineResources
+    {
+        public int version => 0;
+
+        [SerializeField]
+        [ResourcePath("Editor/Volume/DefaultVolumeProfile.asset")]
+        private VolumeProfile m_DefaultSettingsVolumeProfile;
+        
+        public VolumeProfile defaultVolumeProfile
+        {
+            get => m_DefaultSettingsVolumeProfile;
+            set => this.SetValueAndNotify(ref m_DefaultSettingsVolumeProfile, value);
+        }
+    }
+}
+#endif

@@ -1,3 +1,18 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:fd162e362aa1a6dcb492e3d08bc8f7101af3196c9c94318510e9ff738d7b91ea
-size 533
+Shader "GUI/3D Text Shader - Cull Back" {
+    Properties {
+        _MainTex ("Font Texture", 2D) = "white" {}
+        _Color ("Text Color", Color) = (1,1,1,1)
+    }
+
+    SubShader {
+        Tags { "Queue"="Transparent" "IgnoreProjector"="True" "RenderType"="Transparent" }
+        Lighting Off Cull Back ZWrite Off Fog { Mode Off }
+        Blend SrcAlpha OneMinusSrcAlpha
+        Pass {
+            Color [_Color]
+            SetTexture [_MainTex] {
+                combine primary, texture * primary
+            }
+        }
+    }
+}

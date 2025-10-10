@@ -1,3 +1,36 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:afcf406375318e66865d115ea7cfdb74124d462d551ae9b29177de378a9bba07
-size 990
+using System;
+using UnityEditor.TestTools.TestRunner.Api;
+using UnityEngine;
+
+namespace UnityEditor.TestTools.TestRunner.UnityTestProtocol
+{
+    internal class UnityTestProtocolListener : ICallbacks
+    {
+        private IUtpMessageReporter m_UtpMessageReporter;
+
+        public UnityTestProtocolListener(string projectPath)
+        {
+            m_UtpMessageReporter = new UtpMessageReporter(new UtpDebugLogger(), projectPath);
+        }
+
+        public void RunStarted(ITestAdaptor testsToRun)
+        {
+            m_UtpMessageReporter.ReportTestRunStarted(testsToRun);
+        }
+
+        public void RunFinished(ITestResultAdaptor testResults)
+        {
+            // Apparently does nothing :)
+        }
+
+        public void TestStarted(ITestAdaptor test)
+        {
+            m_UtpMessageReporter.ReportTestStarted(test);
+        }
+
+        public void TestFinished(ITestResultAdaptor result)
+        {
+            m_UtpMessageReporter.ReportTestFinished(result);
+        }
+    }
+}

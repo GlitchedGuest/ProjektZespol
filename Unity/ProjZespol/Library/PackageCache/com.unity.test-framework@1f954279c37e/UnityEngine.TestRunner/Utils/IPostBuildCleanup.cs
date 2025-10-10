@@ -1,3 +1,15 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:b70119e5f9c0d614ef72eade30e226f681463cd1b4cc9c4c706634392da083e3
-size 515
+using System;
+
+namespace UnityEngine.TestTools
+{
+    /// <summary>
+    /// Implement this interface if you want to define a set of actions to execute as a post-build step. Cleanup runs right away for a standalone test run, but only after all the tests run within the Editor.
+    /// </summary>
+    public interface IPostBuildCleanup
+    {
+        /// <summary>
+        /// Implement this method to specify actions that should run as a post-build cleanup step.
+        /// </summary>
+        void Cleanup();
+    }
+}

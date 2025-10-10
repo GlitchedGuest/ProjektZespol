@@ -1,3 +1,24 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:6ddab1d4c2d38a93c44401973b7bc4b5a182d9c2a3ee85204ccc10c6e23c4aae
-size 484
+namespace UnityEngine.Rendering.Universal
+{
+    // Should be made obsolete
+    /// <summary>
+    /// Options for Sample Count.
+    /// </summary>
+    public enum SampleCount
+    {
+        /// <summary>
+        /// Use this for 1 sample.
+        /// </summary>
+        One = 1,
+
+        /// <summary>
+        /// Use this for 2 samples.
+        /// </summary>
+        Two = 2,
+
+        /// <summary>
+        /// Use this for 4 samples.
+        /// </summary>
+        Four = 4,
+    }
+}

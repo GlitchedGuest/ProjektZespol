@@ -1,3 +1,9 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:984038666066a32df4306c824674548aada35d3fb7f470e80396b67b032f855a
-size 461
+# PSDImporter Custom Image Packer
+
+This example shows how to override the default image packing algorithm in the PSDImporter.
+
+The example utilizes the `m_Pipeline` SerializedProperty that is defined in the PSDImporter.
+
+The `m_Pipeline` is a ScriptableObject reference and in the PSDImporter it will determine what method is available in the SciptableObject and execute those methods accordingly.
+
+Refer to the `CustomPackScriptableObject.cs` for more details.

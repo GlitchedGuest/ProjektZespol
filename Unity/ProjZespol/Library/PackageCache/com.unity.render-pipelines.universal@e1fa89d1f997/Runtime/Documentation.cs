@@ -1,3 +1,28 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:ec7664b215e9cfa876099ca42d6cb66a384a478d0106514650aafc67dbfd5123
-size 899
+using System.Diagnostics;
+
+namespace UnityEngine.Rendering.Universal
+{
+    [Conditional("UNITY_EDITOR")]
+    internal class URPHelpURLAttribute : CoreRPHelpURLAttribute
+    {
+        public URPHelpURLAttribute(string pageName, string pageHash = "")
+            : base(pageName, pageHash, Documentation.packageName)
+        {
+        }
+    }
+
+    internal class Documentation : DocumentationInfo
+    {
+        /// <summary>
+        /// The name of the package
+        /// </summary>
+        public const string packageName = "com.unity.render-pipelines.universal";
+
+        /// <summary>
+        /// Generates a Universal Render Pipeline help url for the given page name
+        /// </summary>
+        /// <param name="pageName">The page name</param>
+        /// <returns>The full url</returns>
+        public static string GetPageLink(string pageName) => GetPageLink(packageName, pageName);
+    }
+}

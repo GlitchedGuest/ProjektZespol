@@ -1,3 +1,18 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:1db7de6cb97b11aa27fa1f2f1e4a566fdf1c9aebdad962f14df4ad0c29e4be95
-size 487
+using System.IO;
+
+namespace UnityEditor.U2D.Aseprite
+{
+    /// <summary>
+    /// Empty default chunk.
+    /// </summary>
+    internal class NoneChunk : BaseChunk
+    {
+        internal NoneChunk(uint chunkSize) : base(chunkSize) { }
+        
+        /// <summary>
+        /// Read and store the chunk data.
+        /// </summary>
+        /// <param name="reader">The active binary reader of the file.</param>
+        protected override void InternalRead(BinaryReader reader) { }
+    }
+}

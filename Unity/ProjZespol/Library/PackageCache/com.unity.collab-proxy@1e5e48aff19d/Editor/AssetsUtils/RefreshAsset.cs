@@ -1,3 +1,78 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:6cf66c4f8a60399394ebad798410b0a7706eaabe48949a69920e15aae228b3e9
-size 2547
+using UnityEditor;
+using UnityEditor.PackageManager;
+using Unity.PlasticSCM.Editor.AssetUtils.Processor;
+using Unity.PlasticSCM.Editor.AssetsOverlays.Cache;
+using Unity.PlasticSCM.Editor.UI;
+
+namespace Unity.PlasticSCM.Editor.AssetUtils
+{
+    internal static class RefreshAsset
+    {
+        internal static void BeforeLongAssetOperation()
+        {
+            AssetDatabase.DisallowAutoRefresh();
+        }
+
+        internal static void AfterLongAssetOperation(IAssetStatusCache assetStatusCache)
+        {
+            AfterLongAssetOperation(assetStatusCache, true);
+        }
+
+        internal static void AfterLongAssetOperation(
+            IAssetStatusCache assetStatusCache,
+            bool isPackagesReimportNeeded)
+        {
+            AssetDatabase.AllowAutoRefresh();
+
+            if (isPackagesReimportNeeded)
+            {
+                UnityAssetDatabaseAndPackageManagerAsync(assetStatusCache);
+                return;
+            }
+
+            RefreshUnityAssetDatabase(assetStatusCache);
+            }
+
+        internal static void UnityAssetDatabase(IAssetStatusCache assetStatusCache)
+        {
+            RefreshUnityAssetDatabase(assetStatusCache);
+        }
+
+        internal static void UnityAssetDatabaseAndPackageManagerAsync(
+            IAssetStatusCache assetStatusCache)
+        {
+            // Client.Resolve() will resolve any pending packages added or removed from the project
+            // VCS-1004718 - This is important so the domain gets reloaded first if needed
+            Client.Resolve();
+
+            new DelayedActionBySecondsRunner(
+                    () => RefreshUnityAssetDatabase(assetStatusCache),
+                    UnityConstants.REFRESH_ASSET_DATABASE_DELAYED_INTERVAL)
+                .Run();
+        }
+
+        internal static void VersionControlCache(IAssetStatusCache assetStatusCache)
+        {
+            ClearVersionControlCaches(assetStatusCache);
+
+            RepaintEditor.AllWindowsWithOverlays();
+        }
+
+        static void ClearVersionControlCaches(IAssetStatusCache assetStatusCache)
+        {
+            UnityEditor.VersionControl.Provider.ClearCache();
+
+            if (assetStatusCache != null)
+                assetStatusCache.Clear();
+        }
+
+        static void RefreshUnityAssetDatabase(IAssetStatusCache assetStatusCache)
+        {
+            AssetDatabase.Refresh(ImportAssetOptions.Default);
+
+            ClearVersionControlCaches(assetStatusCache);
+
+            UVCSAssetPostprocessor.SetIsRepaintNeededAfterAssetDatabaseRefresh();
+        }
+    }
+}

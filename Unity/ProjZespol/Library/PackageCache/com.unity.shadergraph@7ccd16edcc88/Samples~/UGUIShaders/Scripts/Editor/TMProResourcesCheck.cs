@@ -1,3 +1,18 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:fb8798874056bf78028a2ed3756128894674b26a55bbffdc1887bcec2231dbfa
-size 533
+using UnityEditor;
+using UnityEngine;
+using TMPro;
+
+namespace Unity.UI.Shaders.Sample.Editor
+{
+    public static class TMProResourcesCheck
+    {
+        [InitializeOnLoadMethod]
+        static void Init()
+        {
+            var tmProSettings = TMP_Settings.instance; // getting the instance should be enough
+            //var tmProStettings = Resources.Load<TMP_Settings>("TMP Settings");
+            //if (tmProStettings == null)
+            //    TMP_PackageResourceImporterWindow.ShowPackageImporterWindow();
+        }
+    }
+}

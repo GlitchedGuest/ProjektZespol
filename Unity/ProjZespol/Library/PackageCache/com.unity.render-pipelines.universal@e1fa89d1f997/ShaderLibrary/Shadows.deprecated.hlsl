@@ -1,3 +1,10 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:3294bf6448a0724a251634502ebe135e1e2b8b4e2e31e423cc2c3cd5979d82b8
-size 470
+#ifndef UNIVERSAL_SHADOWS_DEPRECATED_INCLUDED
+#define UNIVERSAL_SHADOWS_DEPRECATED_INCLUDED
+
+// Deprecated: Reduce the number of unique samplers by using inline samplers instead.
+// Some graphics APIs support only a low number of unique active samplers.
+#define sampler_ScreenSpaceShadowmapTexture sampler_PointClamp
+#define sampler_MainLightShadowmapTexture sampler_LinearClampCompare
+#define sampler_AdditionalLightsShadowmapTexture sampler_LinearClampCompare
+
+#endif

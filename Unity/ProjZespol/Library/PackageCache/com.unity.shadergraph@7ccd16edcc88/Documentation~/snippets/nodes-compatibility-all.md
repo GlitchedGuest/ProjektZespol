@@ -1,3 +1,9 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:04305a0154a1c0faf38bff1c72382c2b71175d19d52f218d4bdde1e900a108c4
-size 406
+---
+title: nodes-compatibility-all
+---
+
+node is supported on the following render pipelines:
+
+| Built-In Render Pipeline | Universal Render Pipeline (URP) | High Definition Render Pipeline (HDRP) |
+|--------------------------|---------------------------------|----------------------------------------|
+| Yes                      | Yes                             | Yes                                    |

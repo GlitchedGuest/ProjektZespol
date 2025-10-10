@@ -1,3 +1,22 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:f544df79797a4858534aed37c77f21f9699d0432177b1d607ee88e25446dd46c
-size 601
+﻿using UnityEditor.PackageManager.UI;
+using UnityEngine;
+
+namespace Unity.PlasticSCM.Editor
+{
+    internal static class LaunchPackageManager
+    {
+        internal static void Open(string packageName)
+        {
+            Window.Open(packageName);
+        }
+
+        internal static void AddByName(string packageName, string packageVersion)
+        {
+            Open(packageName);
+
+            const string upmUrl = "com.unity3d.kharma:upmpackage/";
+            string url = string.Format("{0}{1}@{2}", upmUrl, packageName, packageVersion);
+            Application.OpenURL(url);
+        }
+    }
+}

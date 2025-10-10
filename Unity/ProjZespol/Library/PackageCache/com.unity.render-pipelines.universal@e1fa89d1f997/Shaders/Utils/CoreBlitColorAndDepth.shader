@@ -1,3 +1,43 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:fd8b76d8e952fed6ea354bbf5a947ffab2e04d5cfa7920e73d6ee6ffe6540861
-size 1040
+Shader "Hidden/Universal/CoreBlitColorAndDepth"
+{
+    HLSLINCLUDE
+
+        #pragma target 2.0
+        #pragma editor_sync_compilation
+        // Core.hlsl for XR dependencies
+        #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
+        #include "Packages/com.unity.render-pipelines.core/Runtime/Utilities/BlitColorAndDepth.hlsl"
+    ENDHLSL
+
+    SubShader
+    {
+        Tags{ "RenderPipeline" = "UniversalPipeline" }
+
+        // 0: Color Only
+        Pass
+        {
+            ZWrite Off ZTest Always Blend Off Cull Off
+            Name "ColorOnly"
+
+            HLSLPROGRAM
+                #pragma vertex Vert
+                #pragma fragment FragColorOnly
+            ENDHLSL
+        }
+
+        // 1:  Color Only and Depth
+        Pass
+        {
+            ZWrite On ZTest Always Blend Off Cull Off
+            Name "ColorAndDepth"
+
+            HLSLPROGRAM
+                #pragma vertex Vert
+                #pragma fragment FragColorAndDepth
+            ENDHLSL
+        }
+
+    }
+
+    Fallback Off
+}

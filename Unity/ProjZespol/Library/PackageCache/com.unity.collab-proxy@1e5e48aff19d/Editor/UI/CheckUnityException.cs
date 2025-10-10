@@ -1,3 +1,23 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:06f3ac3f08db64c7d07841b948d3fbf01b5a18e5aa820985e666e1b6fcaed062
-size 554
+using System;
+
+using UnityEngine;
+
+namespace Unity.PlasticSCM.Editor.UI
+{
+    internal static class CheckUnityException
+    {
+        internal static bool IsExitGUIException(Exception ex)
+        {
+            return ex is ExitGUIException;
+        }
+
+        internal static bool IsIMGUIPaintException(Exception ex)
+        {
+            if (!(ex is ArgumentException))
+                return false;
+
+            return ex.Message.StartsWith("Getting control") &&
+                   ex.Message.Contains("controls when doing repaint");
+        }
+    }
+}

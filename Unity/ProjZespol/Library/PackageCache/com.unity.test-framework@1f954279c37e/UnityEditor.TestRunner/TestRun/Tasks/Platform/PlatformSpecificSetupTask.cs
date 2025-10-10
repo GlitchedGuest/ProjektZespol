@@ -1,3 +1,21 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:72c71b4c6ab5932f3348bb0589f26c94ee157af918fff84d536b6218bab4b2e9
-size 718
+using System;
+using System.Collections;
+
+namespace UnityEditor.TestTools.TestRunner.TestRun.Tasks.Platform
+{
+    internal class PlatformSpecificSetupTask : TestTaskBase
+    {
+        public override IEnumerator Execute(TestJobData testJobData)
+        {
+            if (testJobData.executionSettings.targetPlatform == null)
+            {
+                throw new Exception($"{nameof(PlatformSpecificSetupTask)} can only run on a task with a target platform.");
+            }
+
+            testJobData.PlatformSpecificSetup =
+                new PlatformSpecificSetup(testJobData.executionSettings.targetPlatform.Value);
+            testJobData.PlatformSpecificSetup.Setup();
+            yield break;
+        }
+    }
+}

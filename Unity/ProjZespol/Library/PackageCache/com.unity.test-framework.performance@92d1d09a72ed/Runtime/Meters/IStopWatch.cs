@@ -1,3 +1,19 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:17b960b91cddc03af7a56227efac8afd5ddf36365a70a31e754985e181b25ff8
-size 499
+﻿namespace Unity.PerformanceTesting.Meters
+{
+    /// <summary>
+    /// Provides stopwatch functionality for measuring time
+    /// </summary>
+    internal interface IStopWatch
+    {
+        /// <summary>
+        /// Resets and starts the stopwatch
+        /// </summary>
+        void Start();
+
+        /// <summary>
+        /// Takes a split time since start of stopwatch
+        /// </summary>
+        /// <returns>Time passed since start in milliseconds</returns>
+        double Split();
+    }
+}

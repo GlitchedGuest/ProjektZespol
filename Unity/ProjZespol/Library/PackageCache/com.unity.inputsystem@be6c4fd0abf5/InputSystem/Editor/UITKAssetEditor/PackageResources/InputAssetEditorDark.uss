@@ -1,3 +1,4 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:475c840445a4d0708d7e7dcc90eb8463b6537cfc388f473c740fd54e69850206
-size 135
+:root {
+    --input-editor-colors-properties-foldout: rgb(34, 34, 34);
+    --input-editor-colors-properties-foldout-border: #808080;
+}

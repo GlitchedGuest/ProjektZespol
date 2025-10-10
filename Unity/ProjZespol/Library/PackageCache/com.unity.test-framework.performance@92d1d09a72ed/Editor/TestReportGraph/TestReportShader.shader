@@ -1,3 +1,47 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:a5139a08d5d13522eda3d0566fcc7b339bc4c82bd184e4a5e7d0e42893401dbd
-size 738
+﻿Shader "Unlit/TestReportShader"
+{
+	Properties
+	{
+	}
+	SubShader
+	{
+		Tags { "RenderType"="Transparent" }
+		LOD 100
+
+        ZWrite Off
+        Blend SrcAlpha OneMinusSrcAlpha
+
+		Pass
+		{
+			CGPROGRAM
+			#pragma target 2.0
+			#pragma vertex vert
+			#pragma fragment frag
+			
+			#include "UnityCG.cginc"
+
+			struct appdata
+			{
+				float4 vertex : POSITION;
+                fixed4 color : COLOR;
+			};
+
+			struct v2f
+			{
+				float4 vertex : SV_POSITION;
+                fixed4 color : COLOR;
+			};
+
+            v2f vert (appdata v)
+			{
+				v2f o;
+				o.vertex = UnityObjectToClipPos(v.vertex);
+                o.color.rgba = v.color;
+				return o;
+			}
+
+            fixed4 frag (v2f i) : SV_Target { return i.color; }
+			ENDCG
+		}
+	}
+}

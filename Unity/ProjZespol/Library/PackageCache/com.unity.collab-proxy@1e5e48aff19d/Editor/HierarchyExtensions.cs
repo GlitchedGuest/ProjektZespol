@@ -1,3 +1,26 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:53b64b89ea82e2d8424703d8ff9daef5c6d677afb859289a6a5eced837b54ad8
-size 765
+﻿using Codice.CM.Common;
+using PlasticGui;
+using Unity.PlasticSCM.Editor.AssetMenu;
+using Unity.PlasticSCM.Editor.AssetsOverlays;
+using Unity.PlasticSCM.Editor.AssetsOverlays.Cache;
+
+namespace Unity.PlasticSCM.Editor
+{
+    internal static class HierarchyExtensions
+    {
+        internal static void Enable(
+            WorkspaceInfo wkInfo,
+            IPlasticAPI plasticApi,
+            IAssetStatusCache assetStatusCache)
+        {
+            DrawHierarchyOverlay.Enable(wkInfo.ClientPath, assetStatusCache);
+            HierarchyViewAssetMenu.Enable(wkInfo, plasticApi, assetStatusCache);
+        }
+
+        internal static void Disable()
+        {
+            DrawHierarchyOverlay.Disable();
+            HierarchyViewAssetMenu.Disable();
+        }
+    }
+}

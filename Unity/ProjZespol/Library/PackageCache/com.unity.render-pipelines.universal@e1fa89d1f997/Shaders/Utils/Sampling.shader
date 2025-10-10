@@ -1,3 +1,45 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:097d0523ccfe54bcd351ff5273840ed5a84dc1ee3ae9fa91bd230003b611c968
-size 1516
+Shader "Hidden/Universal Render Pipeline/Sampling"
+{
+    SubShader
+    {
+        Tags { "RenderType" = "Opaque" "RenderPipeline" = "UniversalPipeline"}
+        LOD 100
+
+        // 0 - Downsample - Box filtering
+        Pass
+        {
+            Name "BoxDownsample"
+            ZTest Always
+            ZWrite Off
+            Cull Off
+
+            HLSLPROGRAM
+            #pragma vertex Vert
+            #pragma fragment FragBoxDownsample
+
+            #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
+            #include "Packages/com.unity.render-pipelines.core/Runtime/Utilities/Blit.hlsl"
+
+            SAMPLER(sampler_BlitTexture);
+
+            float _SampleOffset;
+
+            half4 FragBoxDownsample(Varyings input) : SV_Target
+            {
+                UNITY_SETUP_STEREO_EYE_INDEX_POST_VERTEX(input);
+
+                float2 uv = UnityStereoTransformScreenSpaceTex(input.texcoord);
+                float4 d = _BlitTexture_TexelSize.xyxy * float4(-_SampleOffset, -_SampleOffset, _SampleOffset, _SampleOffset);
+
+                half4 s;
+                s =  SAMPLE_TEXTURE2D_X(_BlitTexture, sampler_BlitTexture, uv + d.xy);
+                s += SAMPLE_TEXTURE2D_X(_BlitTexture, sampler_BlitTexture, uv + d.zy);
+                s += SAMPLE_TEXTURE2D_X(_BlitTexture, sampler_BlitTexture, uv + d.xw);
+                s += SAMPLE_TEXTURE2D_X(_BlitTexture, sampler_BlitTexture, uv + d.zw);
+
+                return s * 0.25h;
+            }
+            ENDHLSL
+        }
+    }
+}

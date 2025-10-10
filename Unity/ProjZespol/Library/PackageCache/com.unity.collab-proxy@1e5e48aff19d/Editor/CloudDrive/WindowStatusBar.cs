@@ -1,3 +1,35 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:9e97358baa69e11532e3fd24f7cc845c4446af622969abe5753e4be31f5b2897
-size 937
+using UnityEditor;
+using UnityEngine;
+
+using Unity.PlasticSCM.Editor.UI;
+using Unity.PlasticSCM.Editor.UI.Progress;
+
+namespace Unity.PlasticSCM.Editor.CloudDrive
+{
+    internal static class WindowStatusBar
+    {
+        internal static void OnGUI(Rect rect, ProgressControlsForWindow.Data progressData)
+        {
+            EditorGUI.DrawRect(rect, UnityStyles.Colors.BackgroundBar);
+
+            DoContentArea(rect, progressData);
+        }
+
+        static void DoContentArea(Rect rect, ProgressControlsForWindow.Data progressData)
+        {
+            GUILayout.BeginArea(rect);
+
+            GUILayout.FlexibleSpace();
+
+            using (new EditorGUILayout.HorizontalScope())
+            {
+                if (progressData.IsOperationRunning)
+                    DrawProgressForWindow.ForIndeterminateProgress(progressData);
+            }
+
+            GUILayout.FlexibleSpace();
+
+            GUILayout.EndArea();
+        }
+    }
+}

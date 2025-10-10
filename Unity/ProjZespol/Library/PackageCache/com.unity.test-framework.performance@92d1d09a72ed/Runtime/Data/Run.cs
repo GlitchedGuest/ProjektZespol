@@ -1,3 +1,41 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:b4df5c92a3294f1d218244178498490ec132c34fa70ab89ee7444a5606051d4b
-size 1229
+using System;
+using System.Collections.Generic;
+
+namespace Unity.PerformanceTesting.Data
+{
+    /// <summary>
+    /// Represents a performance test run.
+    /// </summary>
+    [Serializable]
+    public class Run
+    {
+        /// <summary>
+        /// Test Suite.
+        /// </summary>
+        [RequiredMember] public string TestSuite;
+        /// <summary>
+        /// Test run start datetime in Unix Epoch milliseconds format.
+        /// </summary>
+        [RequiredMember] public long Date;
+        /// <summary>
+        /// Player settings.
+        /// </summary>
+        [RequiredMember] public Player Player;
+        /// <summary>
+        /// Hardware information.
+        /// </summary>
+        [RequiredMember] public Hardware Hardware;
+        /// <summary>
+        /// Editor version.
+        /// </summary>
+        [RequiredMember] public Editor Editor;
+        /// <summary>
+        /// Package dependencies.
+        /// </summary>
+        [RequiredMember] public List<string> Dependencies = new List<string>();
+        /// <summary>
+        /// List of performance test results.
+        /// </summary>
+        [RequiredMember] public List<PerformanceTestResult> Results = new List<PerformanceTestResult>();
+    }
+}

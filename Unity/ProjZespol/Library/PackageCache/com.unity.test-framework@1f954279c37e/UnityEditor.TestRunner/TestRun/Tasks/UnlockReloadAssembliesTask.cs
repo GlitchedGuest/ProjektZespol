@@ -1,3 +1,21 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:3dc46a324e5577affa1717cc78ec9bf90bbb89481186edd86ed0ad51de4680e1
-size 564
+using System;
+using System.Collections;
+
+namespace UnityEditor.TestTools.TestRunner.TestRun.Tasks
+{
+    internal class UnlockReloadAssembliesTask : TestTaskBase
+    {
+        internal Action UnlockReloadAssemblies = EditorApplication.UnlockReloadAssemblies;
+        public UnlockReloadAssembliesTask()
+        {
+            RunOnError = ErrorRunMode.RunAlways;
+            RunOnCancel = true;
+        }
+
+        public override IEnumerator Execute(TestJobData testJobData)
+        {
+            UnlockReloadAssemblies();
+            yield break;
+        }
+    }
+}

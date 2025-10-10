@@ -1,3 +1,25 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:6953688f2c9d97ee005a31dfb15312ca80aea90ad1155778ba98d60d9b706ca0
-size 629
+using UnityEditor;
+
+using Unity.PlasticSCM.Editor.CloudDrive;
+
+namespace Unity.PlasticSCM.Editor.UI
+{
+    internal static class GetWindowIfOpened
+    {
+        internal static UVCSWindow UVCS()
+        {
+            if (!EditorWindow.HasOpenInstances<UVCSWindow>())
+                return null;
+
+            return EditorWindow.GetWindow<UVCSWindow>(null, false);
+        }
+
+        internal static CloudDriveWindow CloudDrive()
+        {
+            if (!EditorWindow.HasOpenInstances<CloudDriveWindow>())
+                return null;
+
+            return EditorWindow.GetWindow<CloudDriveWindow>(null, false);
+        }
+    }
+}

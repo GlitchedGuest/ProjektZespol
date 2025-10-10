@@ -1,3 +1,29 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:e55840f93f1c945ad9aa2ad8be301a52ce7ad47530a3e2b8941f6277b35996cc
-size 703
+{
+    "name": "Unity.InternalAPIEditorBridge.001",
+    "rootNamespace": "",
+    "references": [
+        "Unity.2D.Sprite.Editor"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [
+        {
+            "name": "Unity",
+            "expression": "6000.0.6f1",
+            "define": "SPRITE_CUSTOM_DATA"
+        },
+        {
+            "name": "Unity",
+            "expression": "6000.0.13f1",
+            "define": "ENABLE_SPRITEMODULE_MODE"
+        }
+    ],
+    "noEngineReferences": false
+}

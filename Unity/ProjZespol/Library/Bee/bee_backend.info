@@ -1,3 +1,4 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:e8eb3c987e8a2c8fb4f1cb97b459c7a04507b540b912177d99eb3b7a6c5d430c
-size 127
+{
+    "UnityVersion": "6000.0.58f2",
+    "BeeBackendHash": "e169f573a62989a8de5e00e83c6de771b096cf35076608b10b6a5a3bf50e3e51"
+}

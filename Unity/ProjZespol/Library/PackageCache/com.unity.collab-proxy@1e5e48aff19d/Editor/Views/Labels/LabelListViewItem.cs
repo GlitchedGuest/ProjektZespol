@@ -1,3 +1,21 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:808bf57e3d97994f7e0e20dff9c6251b9017f01641b6c1f0dad431ed65db1153
-size 487
+using UnityEditor.IMGUI.Controls;
+
+#if UNITY_6000_2_OR_NEWER
+using TreeViewItem = UnityEditor.IMGUI.Controls.TreeViewItem<int>;
+#endif
+
+namespace Unity.PlasticSCM.Editor.Views.Labels
+{
+    class LabelListViewItem : TreeViewItem
+    {
+        internal object ObjectInfo { get; private set; }
+
+        internal LabelListViewItem(int id, object objectInfo)
+            : base(id, 1)
+        {
+            ObjectInfo = objectInfo;
+
+            displayName = id.ToString();
+        }
+    }
+}

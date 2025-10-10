@@ -1,3 +1,33 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:1ee156be617bc60f2fb2e587aec1fe6efd59a8c805951533fdb08aa3f9e074f2
-size 626
+﻿using UnityEngine;
+using UnityEngine.TestTools;
+using NUnit.Framework;
+using System.Collections;
+#if ENABLE_INPUT_SYSTEM && NEW_INPUT_SYSTEM_INSTALLED
+using UnityEngine.InputSystem;
+#endif
+
+// This package does not contain any runtim components, therefore
+// this test is only a placeholder.
+
+
+[TestFixture]
+class RuntimeExampleTest {
+
+	[SetUp]
+	public void SetUp()
+	{
+#if ENABLE_INPUT_SYSTEM && NEW_INPUT_SYSTEM_INSTALLED
+		if (Keyboard.current == null)
+		{
+			InputSystem.AddDevice<Keyboard>();
+		}
+#endif
+	}
+	
+	[Test]
+	public void PlayModeSampleTestSimplePasses() 
+	{
+		// Use the Assert class to test conditions.
+	}
+
+}

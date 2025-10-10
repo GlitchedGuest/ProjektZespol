@@ -1,3 +1,30 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:3653af1b1daecd08e18ac33d71c7bd43161b0ceb443cb6316f1661f5bb7318b8
-size 768
+using System;
+using UnityEngine;
+using UnityEngine.Scripting.APIUpdating;
+
+namespace UnityEngine.U2D.IK
+{
+    /// <summary>
+    /// Attribute to add a menu item in IKManager2D to create the Solver.
+    /// </summary>
+    [MovedFrom("UnityEngine.Experimental.U2D.IK")]
+    [AttributeUsage(AttributeTargets.Class)]
+    public sealed class Solver2DMenuAttribute : Attribute
+    {
+        string m_MenuPath;
+
+        /// <summary>
+        /// Menu path.
+        /// </summary>
+        public string menuPath => m_MenuPath;
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="_menuPath">Menu item path.</param>
+        public Solver2DMenuAttribute(string _menuPath)
+        {
+            m_MenuPath = _menuPath;
+        }
+    }
+}

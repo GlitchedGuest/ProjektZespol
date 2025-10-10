@@ -1,3 +1,9 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:aab79d445769bfecb654fa19592feab02871a314026d44a66c959681007b4434
-size 776
+# Custom Render Texture nodes
+
+Access properties and data of custom render textures, including size, slice index, cubemap face, and previous update state.
+
+| **Topic**                                              | **Description**                                                |
+|--------------------------------------------------------|----------------------------------------------------------------|
+| [Custom Render Texture Slice](Custom-Texture-Slice.md) | Access the custom render texture slice index and cubemap face. |
+| [Custom Render Texture Size](Custom-Texture-Size.md)   | Access the custom render texture size.                         |
+| [Custom Render Texture Self](Custom-Texture-Self.md)   | Access the custom render texture from the previous update.     |

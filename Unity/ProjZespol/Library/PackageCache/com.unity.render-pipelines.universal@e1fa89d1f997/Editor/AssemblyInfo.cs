@@ -1,3 +1,8 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:4b79d8bbf071b21f3704d68baebc0ac99076ecc413595e8ff965aa8bc71deabb
-size 509
+using System.Runtime.CompilerServices;
+
+[assembly: InternalsVisibleTo("DynamicProxyGenAssembly2")] // permit using internal interfaces with Moq
+[assembly: InternalsVisibleTo("UniversalGraphicsTests")]
+[assembly: InternalsVisibleTo("Unity.RenderPipelines.Universal.Editor.Tests")]
+[assembly: InternalsVisibleTo("Unity.Testing.SRP.Universal-Upgrade.Editor")]
+[assembly: InternalsVisibleTo("Unity.GraphicTests.Performance.Universal.Editor")]
+[assembly: InternalsVisibleTo("Unity.VisualEffectGraph.EditorTests")]

@@ -1,3 +1,21 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:7e28757d0e5b7594a07bb0bee9328f646e8c5f8af9f69297b46c2d29fbe03d14
-size 524
+﻿using Codice.CM.Common;
+using UnityEditor.IMGUI.Controls;
+#if UNITY_6000_2_OR_NEWER
+using TreeViewItem = UnityEditor.IMGUI.Controls.TreeViewItem<int>;
+#endif
+
+namespace Unity.PlasticSCM.Editor.Views.Locks
+{
+    internal sealed class LocksListViewItem : TreeViewItem
+    {
+        internal LockInfo LockInfo { get; private set; }
+
+        internal LocksListViewItem(int id, LockInfo lockInfo)
+            : base(id, 1)
+        {
+            LockInfo = lockInfo;
+
+            displayName = id.ToString();
+        }
+    }
+}

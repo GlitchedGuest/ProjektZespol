@@ -1,3 +1,73 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:39c40dbe701f45209fd6ae397be7a0ded1a03f8933e1507b6bc27c8ad4a89872
-size 1936
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using UnityEngine;
+using UnityObject = UnityEngine.Object;
+
+namespace Unity.VisualScripting
+{
+    [SpecialUnit]
+    public abstract class MemberUnit : Unit, IAotStubbable
+    {
+        protected MemberUnit() : base() { }
+
+        protected MemberUnit(Member member) : this()
+        {
+            this.member = member;
+        }
+
+        [Serialize]
+        [MemberFilter(Fields = true, Properties = true, Methods = true, Constructors = true)]
+        public Member member { get; set; }
+
+        /// <summary>
+        /// The target object.
+        /// </summary>
+        [DoNotSerialize]
+        [PortLabelHidden]
+        [NullMeansSelf]
+        public ValueInput target { get; private set; }
+
+        public override bool canDefine => member != null;
+
+        protected override void Definition()
+        {
+            member.EnsureReflected();
+
+            if (!IsMemberValid(member))
+            {
+                throw new NotSupportedException("The member type is not valid for this unit.");
+            }
+
+            if (member.requiresTarget)
+            {
+                target = ValueInput(member.targetType, nameof(target));
+
+                target.SetDefaultValue(member.targetType.PseudoDefault());
+
+                if (typeof(UnityObject).IsAssignableFrom(member.targetType))
+                {
+                    target.NullMeansSelf();
+                }
+            }
+        }
+
+        protected abstract bool IsMemberValid(Member member);
+
+        public override void Prewarm()
+        {
+            if (member != null && member.isReflected)
+            {
+                member.Prewarm();
+            }
+        }
+
+        public override IEnumerable<object> GetAotStubs(HashSet<object> visited)
+        {
+            if (member != null && member.isReflected)
+            {
+                yield return member.info;
+            }
+        }
+    }
+}

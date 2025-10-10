@@ -1,3 +1,20 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:3df895cb8dcb8655ba582677bb0a9375bfd3204966f376ea5d478ea5327760d8
-size 694
+using System;
+
+namespace UnityEditor.TestTools.TestRunner.GUI.TestAssets
+{
+    /// <summary>
+    /// Provides Test Script compilation context associated with project folder paths.
+    /// </summary>
+    internal interface IFolderPathTestCompilationContextProvider
+    {
+        /// <summary>
+        /// Checks if the provided folder path belongs to a Custom Test Assembly.
+        /// </summary>
+        bool FolderPathBelongsToCustomTestAssembly(string folderPath);
+
+        /// <summary>
+        /// Checks if the provided folder path belongs to an assembly capable of compiling Test Scripts.
+        /// </summary>
+        bool TestScriptWillCompileInFolderPath(string folderPath);
+    }
+}

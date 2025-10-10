@@ -1,3 +1,21 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:38a0f90ebf479b564bb71a8fa0fc7a894d149333d866968d793d8b384c67d62b
-size 598
+using UnityEditor.IMGUI.Controls;
+
+using PlasticGui.WorkspaceWindow.PendingChanges;
+using PlasticGui.WorkspaceWindow.PendingChanges.Changelists;
+#if UNITY_6000_2_OR_NEWER
+using TreeViewItem = UnityEditor.IMGUI.Controls.TreeViewItem<int>;
+#endif
+
+namespace Unity.PlasticSCM.Editor.Views.PendingChanges
+{
+    internal class ChangelistTreeViewItem : TreeViewItem
+    {
+        internal ChangelistNode Changelist { get; private set; }
+
+        internal ChangelistTreeViewItem(int id, ChangelistNode changelist)
+            : base(id, 0)
+        {
+            Changelist = changelist;
+        }
+    }
+}

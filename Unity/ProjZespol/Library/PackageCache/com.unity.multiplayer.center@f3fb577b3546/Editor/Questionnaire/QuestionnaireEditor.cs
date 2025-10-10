@@ -1,3 +1,42 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:3cf8e5c92fdab2376ff0b30ed8b1e776e7d9286addf34af8e12c007d7abb5389
-size 1750
+using UnityEngine;
+using UnityEditor;
+using UnityEditor.Callbacks;
+using UnityEditor.UIElements;
+using UnityEngine.UIElements;
+
+namespace Unity.Multiplayer.Center.Questionnaire
+{
+    /// <summary>
+    /// Because of the "questionnaire" extension, the default inspector is not shown.
+    /// Double clicking on the asset will open this custom inspector (in debug mode), which has a way to force saving
+    /// the asset.
+    /// </summary>
+    [CustomEditor(typeof(QuestionnaireObject))]
+    internal class QuestionnaireEditor : Editor
+    {
+        public override VisualElement CreateInspectorGUI()
+        {
+            var so = new SerializedObject(target);
+            var root = new VisualElement();
+            var questionnaire = (QuestionnaireObject) target;
+            root.Add(new Button(() => questionnaire.ForceReload() ){text = "Load Changes From Disk", tooltip = "Use when editing with external editor."});
+            root.Add(new Button(() => questionnaire.ForceSave() ){text = "Save local changes", tooltip = "Use when editing in inspector."});
+            var inspector = new PropertyField(so.FindProperty("Questionnaire"));
+            root.Add(inspector);
+            return root;
+        }
+        
+        [OnOpenAsset(1)]
+        public static bool OpenMyCustomAsset(int instanceID, int line)
+        {
+            if (!EditorPrefs.GetBool("DeveloperMode")) return false;
+            var asset = EditorUtility.InstanceIDToObject(instanceID);
+            var path = AssetDatabase.GetAssetPath(asset);
+            if(string.IsNullOrEmpty(path) || !path.EndsWith("questionnaire"))
+                return false;
+        
+            Selection.activeObject = QuestionnaireObject.instance;
+            return true;
+        }
+    }
+}

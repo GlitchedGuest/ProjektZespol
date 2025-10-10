@@ -1,3 +1,25 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:bc88217abc6f42cbc84d53279fd544abf1455a9f86ba3f40bfc6607985501fe1
-size 1036
+using System.Collections.Generic;
+using System.Linq;
+using UnityEditor.U2D.Common;
+
+namespace UnityEditor.U2D.PSD
+{
+    internal static class TextureImporterUtilities
+    {
+        public static TextureImporterPlatformSettings GetPlatformTextureSettings(BuildTarget buildTarget, in List<TextureImporterPlatformSettings> platformSettings)
+        {
+            var buildTargetName = TexturePlatformSettingsHelper.GetBuildTargetGroupName(buildTarget);
+            TextureImporterPlatformSettings settings = null;
+            settings = platformSettings.SingleOrDefault(x => x.name == buildTargetName && x.overridden == true);
+            settings = settings ?? platformSettings.SingleOrDefault(x => x.name == TexturePlatformSettingsHelper.defaultPlatformName);
+
+            if (settings == null)
+            {
+                settings = new TextureImporterPlatformSettings();
+                settings.name = buildTargetName;
+                settings.overridden = false;
+            }
+            return settings;
+        }        
+    }
+}

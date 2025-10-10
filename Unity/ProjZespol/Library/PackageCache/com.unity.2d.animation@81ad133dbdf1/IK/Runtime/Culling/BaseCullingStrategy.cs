@@ -1,3 +1,65 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:6123bcc6371efc1d7827099fdec1a259b55b32214d6388be91b1d28f5ba0db4e
-size 1711
+using System;
+using System.Collections.Generic;
+
+namespace UnityEngine.U2D.IK
+{
+    /// <summary>
+    /// Base class used for defining culling strategies for IKManager2D.
+    /// </summary>
+    internal abstract class BaseCullingStrategy
+    {
+        public bool enabled => m_IsCullingEnabled;
+        bool m_IsCullingEnabled;
+
+        HashSet<object> m_RequestingManagers;
+
+        /// <summary>
+        /// Used to check if bone transforms should be culled.
+        /// </summary>
+        /// <param name="transformIds">A collection of bones' transform ids.</param>
+        /// <returns>True if any bone is visible.</returns>
+        public abstract bool AreBonesVisible(IList<int> transformIds);
+
+        public void AddRequestingObject(object requestingObject)
+        {
+            if (!m_IsCullingEnabled)
+            {
+                m_IsCullingEnabled = true;
+
+                Initialize();
+            }
+
+            m_RequestingManagers.Add(requestingObject);
+        }
+
+        public void RemoveRequestingObject(object requestingObject)
+        {
+            if (m_RequestingManagers.Remove(requestingObject) && m_RequestingManagers.Count == 0)
+            {
+                m_IsCullingEnabled = false;
+
+                Disable();
+            }
+        }
+
+        public void Initialize()
+        {
+            m_RequestingManagers = new HashSet<object>();
+            OnInitialize();
+        }
+
+        public void Update()
+        {
+            OnUpdate();
+        }
+
+        public void Disable()
+        {
+            OnDisable();
+        }
+
+        protected virtual void OnInitialize() { }
+        protected virtual void OnUpdate() { }
+        protected virtual void OnDisable() { }
+    }
+}

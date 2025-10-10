@@ -1,3 +1,38 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:d00172efbecef06edd119afb0b808d1452566b188f7f3821336dcc0329268b21
-size 1523
+using System.Collections.Generic;
+using UnityEditor.U2D.Aseprite.Common;
+
+namespace UnityEditor.U2D.Aseprite
+{
+    internal static class PlatformSettingsUtilities
+    {
+        public static TextureImporterPlatformSettings GetPlatformTextureSettings(BuildTarget buildTarget, IReadOnlyList<TextureImporterPlatformSettings> platformSettings)
+        {
+            var buildTargetName = TexturePlatformSettingsHelper.GetBuildTargetGroupName(buildTarget);
+            TextureImporterPlatformSettings settings = null;
+            foreach (var platformSetting in platformSettings)
+            {
+                if (platformSetting.name == buildTargetName && platformSetting.overridden)
+                    settings = platformSetting;
+                else if (platformSetting.name == TexturePlatformSettingsHelper.defaultPlatformName)
+                    settings = platformSetting;
+            }
+
+            if (settings != null)
+                return settings;
+            return CreateDefaultSettings(buildTargetName);
+        }
+
+        public static TextureImporterPlatformSettings CreateDefaultSettings(string buildTargetName)
+        {
+            var settings = new TextureImporterPlatformSettings();
+            settings.name = buildTargetName;
+            settings.overridden = false;
+            
+            // Default settings
+            settings.textureCompression = TextureImporterCompression.Uncompressed;
+            settings.maxTextureSize = 16384;
+            
+            return settings;
+        }
+    }
+}

@@ -1,3 +1,32 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:85c116a2a94146a7292b9bf75b790a44231f77385cb0891931b4bd964d20b85d
-size 1092
+using System;
+using System.Collections;
+using UnityEditor.SceneManagement;
+using UnityEngine.SceneManagement;
+
+namespace UnityEditor.TestTools.TestRunner.TestRun.Tasks.Scene
+{
+    internal class RemoveAdditionalUntitledSceneTask : TestTaskBase
+    {
+        internal Func<int> GetSceneCount = () => SceneManager.sceneCount;
+        internal Func<int, ISceneWrapper> GetSceneAt = i => new SceneWrapper(SceneManager.GetSceneAt(i));
+        internal Func<ISceneWrapper, bool, bool> CloseScene = (scene, remove) => EditorSceneManager.CloseScene(scene.WrappedScene, remove);
+        public override IEnumerator Execute(TestJobData testJobData)
+        {
+            var sceneCount = GetSceneCount();
+            if (sceneCount <= 1)
+            {
+                yield break;
+            }
+
+            for (int i = 0; i < sceneCount; i++)
+            {
+                var scene = GetSceneAt(i);
+                if (string.IsNullOrEmpty(scene.path))
+                {
+                    CloseScene(scene, true);
+                    yield break;
+                }
+            }
+        }
+    }
+}

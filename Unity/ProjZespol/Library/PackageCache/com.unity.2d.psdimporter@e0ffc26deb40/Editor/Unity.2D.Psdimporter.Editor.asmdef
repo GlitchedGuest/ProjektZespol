@@ -1,3 +1,37 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:d3a15e4a001f205f351a2a301ac8018063f5618dc7465ac7d1078649028e184a
-size 981
+{
+    "name": "Unity.2D.Psdimporter.Editor",
+    "rootNamespace": "",
+    "references": [
+        "PsdPlugin",
+        "Unity.InternalAPIEditorBridge.001",
+        "Unity.2D.Common.Editor",
+        "Unity.2D.Animation.Editor",
+        "Unity.2D.Animation.Runtime",
+        "Unity.2D.Sprite.Editor",
+        "Unity.Mathematics",
+        "Unity.Burst",
+        "Unity.InternalAPIEngineBridge.001"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": true,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [
+        {
+            "name": "com.unity.2d.animation",
+            "expression": "0.0.1",
+            "define": "ENABLE_2D_ANIMATION"
+        },
+        {
+            "name": "Unity",
+            "expression": "2023.2.0a22",
+            "define": "USE_NEW_EDITOR_ANALYTICS"
+        }
+    ],
+    "noEngineReferences": false
+}

@@ -1,3 +1,14 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:b0e2625f9f27f175bf1909c9436374a3f28ad3eaf1a0e418e02098b85e1f1b53
-size 443
+#ifndef _SAMPLING_SAMPLINGRESOURCES_HLSL_
+#define _SAMPLING_SAMPLINGRESOURCES_HLSL_
+
+#ifdef QRNG_METHOD_SOBOL_BLUE_NOISE
+Texture2D<float>                _SobolScramblingTile;
+Texture2D<float>                _SobolRankingTile;
+Texture2D<float2>               _SobolOwenScrambledSequence;
+#endif
+#if defined(QRNG_METHOD_SOBOL) || defined(QRNG_METHOD_GLOBAL_SOBOL_BLUE_NOISE)
+StructuredBuffer<uint>          _SobolMatricesBuffer;
+#endif
+
+#endif
+

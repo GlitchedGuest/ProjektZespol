@@ -1,3 +1,38 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:e6ef37c83532c9b44e9c14e4b8a9b2dcff6273729cdbacfaccea31c711211ae2
-size 1292
+namespace UnityEngine.Rendering.Universal
+{
+    /// <summary>
+    /// Writes culling results into <see cref="DecalCulledChunk"/>.
+    /// </summary>
+    internal class DecalUpdateCulledSystem
+    {
+        private DecalEntityManager m_EntityManager;
+        private ProfilingSampler m_Sampler;
+
+        public DecalUpdateCulledSystem(DecalEntityManager entityManager)
+        {
+            m_EntityManager = entityManager;
+            m_Sampler = new ProfilingSampler("DecalUpdateCulledSystem.Execute");
+        }
+
+        public void Execute()
+        {
+            using (new ProfilingScope(m_Sampler))
+            {
+                for (int i = 0; i < m_EntityManager.chunkCount; ++i)
+                    Execute(m_EntityManager.culledChunks[i], m_EntityManager.culledChunks[i].count);
+            }
+        }
+
+        private void Execute(DecalCulledChunk culledChunk, int count)
+        {
+            if (count == 0)
+                return;
+
+            culledChunk.currentJobHandle.Complete();
+
+            CullingGroup cullingGroup = culledChunk.cullingGroups;
+            culledChunk.visibleDecalCount = cullingGroup.QueryIndices(true, culledChunk.visibleDecalIndexArray, 0);
+            culledChunk.visibleDecalIndices.CopyFrom(culledChunk.visibleDecalIndexArray);
+        }
+    }
+}

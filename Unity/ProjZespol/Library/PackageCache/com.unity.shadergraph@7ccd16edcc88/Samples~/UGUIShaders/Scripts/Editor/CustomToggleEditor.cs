@@ -1,3 +1,29 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:ed889940198d135dde0f3ad33b780d81ae3c61ed99a7fd5cdb28ceb4e7b60679
-size 711
+using UnityEngine;
+using UnityEditor;
+using UnityEditor.UI;
+
+namespace Unity.UI.Shaders.Sample.Editor
+{
+    [CustomEditor(typeof(CustomToggle))]
+    public class CustomToggleEditor : ToggleEditor
+    {
+        SerializedProperty m_OnStateChangedProperty;
+
+        protected override void OnEnable()
+        {
+            base.OnEnable();
+
+            m_OnStateChangedProperty = serializedObject.FindProperty("onStateChanged");
+        }
+
+        public override void OnInspectorGUI()
+        {
+            base.OnInspectorGUI();
+            EditorGUILayout.Space();
+
+            EditorGUILayout.PropertyField(m_OnStateChangedProperty);
+
+            serializedObject.ApplyModifiedProperties();
+        }
+    }
+}

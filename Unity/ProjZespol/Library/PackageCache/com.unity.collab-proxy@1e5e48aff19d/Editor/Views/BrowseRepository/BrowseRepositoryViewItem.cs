@@ -1,3 +1,25 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:2fcb229cdeedb44232427c61ac3f6028598d88c52878edb5d3ffe7304118c27c
-size 659
+using UnityEditor.IMGUI.Controls;
+
+using PlasticGui.WorkspaceWindow.BrowseRepository;
+
+#if UNITY_6000_2_OR_NEWER
+using TreeViewItem = UnityEditor.IMGUI.Controls.TreeViewItem<int>;
+#endif
+
+namespace Unity.PlasticSCM.Editor.Views.BrowseRepository
+{
+    internal class BrowseRepositoryViewItem : TreeViewItem
+    {
+        internal BrowseRepositoryTreeNode TreeNode { get; private set; }
+
+        internal BrowseRepositoryViewItem(
+            int id,
+            BrowseRepositoryTreeNode treeNode,
+            int depth)
+            : base(id, depth)
+        {
+            TreeNode = treeNode;
+            displayName = treeNode.RelativePath;
+        }
+    }
+}

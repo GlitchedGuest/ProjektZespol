@@ -1,3 +1,31 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:1948fc8baadee77bb45266e3736e760958163ebc70a50d7d533bfc533c596701
-size 796
+using System;
+
+namespace Unity.PerformanceTesting.Data
+{
+    /// <summary>
+    /// Represents information about Editor version.
+    /// </summary>
+    [Serializable]
+    public class Editor
+    {
+        /// <summary>
+        /// Full editor version including changeset.
+        /// </summary>
+        [RequiredMember] public string Version;
+
+        /// <summary>
+        /// Branch name from which the editor was built.
+        /// </summary>
+        [RequiredMember] public string Branch;
+
+        /// <summary>
+        /// Changeset 12 characters long.
+        /// </summary>
+        [RequiredMember] public string Changeset;
+
+        /// <summary>
+        /// Editor version datetime in Unix Epoch milliseconds format.
+        /// </summary>
+        [RequiredMember] public int Date;
+    }
+}

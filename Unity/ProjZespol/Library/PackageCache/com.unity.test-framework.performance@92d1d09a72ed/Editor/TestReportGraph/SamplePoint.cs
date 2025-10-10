@@ -1,3 +1,21 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:ab351fe0b77a33cd27699e62c1e4a31415840a52345fde45704e3bcdb418e457
-size 445
+﻿using System;
+
+namespace Unity.PerformanceTesting.Editor
+{
+    internal struct SamplePoint : IComparable<SamplePoint>
+    {
+        public double sample;
+        public int index;
+
+        public SamplePoint(double _sample, int _index)
+        {
+            sample = _sample;
+            index = _index;
+        }
+
+        public int CompareTo(SamplePoint other)
+        {
+            return sample.CompareTo(other.sample);
+        }
+    }
+}

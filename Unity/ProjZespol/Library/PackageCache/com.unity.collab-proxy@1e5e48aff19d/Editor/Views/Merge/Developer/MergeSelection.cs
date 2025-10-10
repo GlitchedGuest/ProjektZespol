@@ -1,3 +1,43 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:d0e67b705166c3d98d1d7f3b437cf42caa219667002dfb9a24fbc52e161d6be4
-size 1264
+﻿using System.Collections.Generic;
+
+using PlasticGui.WorkspaceWindow.Merge;
+
+namespace Unity.PlasticSCM.Editor.Views.Merge.Developer
+{
+    internal static class MergeSelection
+    {
+        internal static List<string> GetPathsFromSelectedFileConflictsIncludingMeta(
+            MergeTreeView treeView)
+        {
+            List<string> result = new List<string>();
+
+            List<MergeChangeInfo> selection =
+                treeView.GetSelectedFileConflicts();
+
+            treeView.FillWithMeta(selection);
+
+            foreach (MergeChangeInfo mergeChange in selection)
+            {
+                result.Add(mergeChange.GetPath());
+            }
+
+            return result;
+        }
+
+        internal static SelectedMergeChangesGroupInfo GetSelectedGroupInfo(
+            MergeTreeView treeView, bool isIncomingMerge)
+        {
+            List<MergeChangeInfo> selectedMergeChanges =
+                treeView.GetSelectedMergeChanges();
+
+            return GetSelectedMergeChangesGroupInfo.For(
+                selectedMergeChanges, isIncomingMerge);
+        }
+
+        internal static MergeChangeInfo GetSingleSelectedMergeChange(
+            MergeTreeView treeView)
+        {
+            return treeView.GetSelectedMergeChange();
+        }
+    }
+}

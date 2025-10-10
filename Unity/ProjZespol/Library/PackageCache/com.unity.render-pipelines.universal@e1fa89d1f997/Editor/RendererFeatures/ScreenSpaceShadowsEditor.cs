@@ -1,3 +1,36 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:21fe8f82db178e7878b94a7042bcfb8c0204532cf2bd808d012ed7c6b0ca3831
-size 1045
+using UnityEngine;
+using UnityEngine.Rendering.Universal;
+
+namespace UnityEditor.Rendering.Universal
+{
+    [CustomEditor(typeof(ScreenSpaceShadows))]
+    internal class ScreenSpaceShadowsEditor : Editor
+    {
+        #region Serialized Properties
+        private SerializedProperty m_SettingsProp;
+        #endregion
+
+        private bool m_IsInitialized = false;
+
+        private struct Styles
+        {
+            public static GUIContent Description = EditorGUIUtility.TrTextContent("Description", "This feature resolves the cascaded shadows in screen space, so there is no options now. It might have additional settings later.");
+        }
+
+        private void Init()
+        {
+            m_SettingsProp = serializedObject.FindProperty("m_Settings");
+            m_IsInitialized = true;
+        }
+
+        public override void OnInspectorGUI()
+        {
+            if (!m_IsInitialized)
+            {
+                Init();
+            }
+
+            EditorGUILayout.PropertyField(m_SettingsProp, Styles.Description);
+        }
+    }
+}

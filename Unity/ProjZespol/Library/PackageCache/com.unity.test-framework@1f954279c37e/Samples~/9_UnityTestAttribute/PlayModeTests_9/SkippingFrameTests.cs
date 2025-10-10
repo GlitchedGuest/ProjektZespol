@@ -1,3 +1,29 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:3ef74b168bd3db07c705ff81bf3720c3415fa335deb9c0dfceb0eed21d33cc25
-size 673
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using NUnit.Framework;
+using UnityEngine;
+using UnityEngine.TestTools;
+
+namespace PlayModeTests_9
+{
+    public class SkippingFrameTests
+    {
+
+        private GameObject PrepareCube()
+        {
+            var go = GameObject.CreatePrimitive(PrimitiveType.Cube);
+            var rb = go.AddComponent<MovementScript>();
+            rb.velocity = Vector3.down * 5;
+            return go;
+        }
+        
+        [UnityTest]
+        public IEnumerator CubeMovesDown()
+        {
+            // todo: Create the test body
+            Assert.Fail("TODO");
+            yield break;
+        }
+    }
+}

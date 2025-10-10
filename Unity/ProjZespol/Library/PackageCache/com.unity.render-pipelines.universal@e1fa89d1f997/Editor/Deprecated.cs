@@ -1,3 +1,21 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:5d5862f7b2389d1196ec734373f16c6d44d1a9bcf37dabdfa72f07cf0717806a
-size 684
+using System;
+
+namespace UnityEditor.Rendering.Universal
+{
+    /// <summary>
+    /// Editor script for a <c>ForwardRendererData</c> class.
+    /// </summary>
+    [Obsolete("ForwardRendererDataEditor has been deprecated. Use UniversalRendererDataEditor instead (UnityUpgradable) -> UniversalRendererDataEditor", true)]
+    public class ForwardRendererDataEditor : ScriptableRendererDataEditor
+    {
+        /// <inheritdoc />
+        public override void OnInspectorGUI()
+        {
+            throw new NotSupportedException("ForwardRendererDataEditor has been deprecated. Use UniversalRendererDataEditor instead");
+        }
+    }
+
+    static partial class EditorUtils
+    {
+    }
+}

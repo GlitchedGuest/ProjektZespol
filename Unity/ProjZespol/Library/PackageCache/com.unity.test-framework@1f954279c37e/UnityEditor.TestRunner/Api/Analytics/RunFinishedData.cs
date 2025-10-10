@@ -1,3 +1,22 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:de4d11b97d5b4346cd49999bf13bce4824ff2c2ee4d8b4b887f54ac9803e7631
-size 634
+using System;
+
+namespace UnityEditor.TestTools.TestRunner.Api.Analytics
+{
+    internal class RunFinishedData
+    {
+        public int totalTests;
+        public int numPassedTests;
+        public int numFailedTests;
+        public int numInconclusiveTests;
+        public int numSkippedTests;
+        public int testModeFilter;
+        public bool isAutomated;
+        public bool isFromCommandLine;
+        public bool isFiltering;
+        public string targetPlatform;
+        public double totalTestDuration;
+        public double totalRunDuration;
+        public bool runSynchronously;
+        public bool isCustomRunner;
+    }
+}

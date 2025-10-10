@@ -1,3 +1,41 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:6571d23ac2285bb3c37536fbc8eab8533388d1cdbcd0a9a4eb67c557e3f5e459
-size 1233
+using UnityEngine;
+
+namespace UnityEditor.Tilemaps
+{
+    /// <summary>
+    /// Tool for doing a selection with the Tile Palette
+    /// </summary>
+    public sealed class SelectTool : TilemapEditorTool
+    {
+        private static class Styles
+        {
+            public static string tooltipStringFormat = "|Select an area of the grid ({0})";
+            public static string shortcutId = GridPaintPaletteWindow.ShortcutIds.k_Select;
+            public static GUIContent toolContent = EditorGUIUtility.IconContent("Grid.Default", GetTooltipText(tooltipStringFormat, shortcutId));
+        }
+
+        /// <summary>
+        /// Tooltip String Format for the SelectTool
+        /// </summary>
+        protected override string tooltipStringFormat
+        {
+            get { return Styles.tooltipStringFormat; }
+        }
+
+        /// <summary>
+        /// Shortcut Id for the SelectTool
+        /// </summary>
+        protected override string shortcutId
+        {
+            get { return Styles.shortcutId; }
+        }
+
+        /// <summary>
+        /// Toolbar Icon for the SelectTool
+        /// </summary>
+        public override GUIContent toolbarIcon
+        {
+            get { return Styles.toolContent; }
+        }
+    }
+}

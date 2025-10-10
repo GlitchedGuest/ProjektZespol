@@ -1,3 +1,30 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:9250b0a44740365968cdab002b62ea5894f0200f9a05eedf832f60e2a7e468d0
-size 868
+using UnityEngine;
+
+namespace UnityEditor
+{
+    // Used for ShaderGraph Sprite shaders
+    class ShaderGraphSpriteGUI : BaseShaderGUI
+    {
+        protected override uint materialFilter => uint.MaxValue & ~(uint)Expandable.SurfaceOptions;
+
+        MaterialProperty[] properties;
+
+        // collect properties from the material properties
+        public override void FindProperties(MaterialProperty[] properties)
+        {
+            // save off the list of all properties for shadergraph
+            this.properties = properties;
+
+            var material = materialEditor?.target as Material;
+            if (material == null)
+                return;
+
+            base.FindProperties(properties);
+        }
+
+        public override void DrawSurfaceInputs(Material material)
+        {
+            DrawShaderGraphProperties(material, properties);
+        }
+    }
+}

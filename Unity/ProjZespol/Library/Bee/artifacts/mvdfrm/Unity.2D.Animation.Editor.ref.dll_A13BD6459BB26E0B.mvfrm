@@ -1,3 +1,11 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:5661ae9b570f095b3c662cf56d124274f51fab774a7897dc6438ea0124a4503a
-size 191
+ICharacterDataProvider
+UnityEditor
+U2D
+Experimental
+Animation
+CharacterData
+CharacterGroup
+CharacterPart
+SpriteLibraryAssetInspector
+SpriteLibraryInspector
+SpriteResolverInspector

@@ -1,3 +1,21 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:1ce21342024ade859849d2bfb29316b15e95b5ca74d9901a88ea8ec97a7b8cbf
-size 961
+using System;
+using Unity.Multiplayer.Center.Questionnaire;
+
+namespace Unity.Multiplayer.Center.Analytics
+{
+    internal static class MultiplayerCenterAnalyticsFactory
+    {
+        public static IMultiplayerCenterAnalytics Create()
+        {
+            var questionnaire = QuestionnaireObject.instance;
+            var questionnaireVersion = questionnaire.Questionnaire.Version;
+            var questionDisplayNames = AnalyticsUtils.GetQuestionDisplayNames(questionnaire.Questionnaire);
+            var answerDisplayNames = AnalyticsUtils.GetAnswerDisplayNames(questionnaire.Questionnaire);
+
+            // Uncomment this line to use the DebugAnalytics class instead of the MultiplayerCenterAnalytics class
+            // return new DebugAnalytics(questionnaireVersion, questionDisplayNames, answerDisplayNames);
+            
+            return new MultiplayerCenterAnalytics(questionnaireVersion, questionDisplayNames, answerDisplayNames);
+        }
+    }
+}

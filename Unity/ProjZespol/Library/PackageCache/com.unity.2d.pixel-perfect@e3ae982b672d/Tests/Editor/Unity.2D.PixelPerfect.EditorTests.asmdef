@@ -1,3 +1,22 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:cd067caf9b2b1322707592dab0af13434db2b67bcadb1e17e26a9090bb4ed368
-size 511
+{
+    "name": "Unity.2D.PixelPerfect.EditorTests",
+    "rootNamespace": "",
+    "references": [
+        "GUID:2543b18169f9e4044a266a0bf35fe4cf"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": true,
+    "precompiledReferences": [
+        "nunit.framework.dll"
+    ],
+    "autoReferenced": false,
+    "defineConstraints": [
+        "UNITY_INCLUDE_TESTS"
+    ],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

@@ -1,3 +1,32 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:893b89a36d8b8616f07546d8770ace0bf4b33a81c750cf71f7c9be36ca94b668
-size 1024
+using System;
+using System.ComponentModel;
+
+using UnityEngine;
+
+namespace Unity.PlasticSCM.Editor
+{
+    // Placeholder. This isn't a public API.
+    [EditorBrowsable(EditorBrowsableState.Never)]
+    [Obsolete("PlasticPlugin is deprecated and will be removed in a future release", false)]
+    public static class PlasticPlugin
+    {
+        // Placeholder. This isn't a public API.
+        [EditorBrowsable(EditorBrowsableState.Never)]
+#pragma warning disable 0067 // The event 'PlasticPlugin.OnNotificationUpdated' is never used
+        public static event Action OnNotificationUpdated;
+#pragma warning restore 0067
+
+        // Placeholder. This isn't a public API.
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        public static void OpenPlasticWindowDisablingOfflineModeIfNeeded()
+        {
+        }
+
+        // Placeholder. This isn't a public API.
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        public static Texture GetPluginStatusIcon()
+        {
+            return null;
+        }
+    }
+}

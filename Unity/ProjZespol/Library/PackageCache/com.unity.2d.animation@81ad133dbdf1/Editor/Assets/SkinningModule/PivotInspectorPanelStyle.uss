@@ -1,3 +1,39 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:7b1aa818193c60f1155f7e954915b42a8fa2fe33b7dcb5124834fbab94f0a458
-size 972
+/**********************************************************************************************************************/
+/* BoneInspectorPanel                                                                                                 */
+/**********************************************************************************************************************/
+
+#PivotInspectorPanel {
+  height : 80px;
+}
+
+#PivotInspectorPanel EnumField > Label {
+  max-width: 0px;
+}
+
+#PivotInspectorPanel EnumField {
+  margin-right : 6px;
+  padding-right : 0px;
+  margin-left : 0px;
+  padding-left : 0px;
+  flex: 1 0 auto;
+}
+
+#PivotInspectorPanel Vector2Field FloatField > Label {
+  max-width : 10px;
+}
+
+#PivotInspectorPanel Vector2Field {
+  margin-right : 0px;
+  padding-right : 0px;
+  margin-left : 0px;
+  padding-left : 0px;
+}
+
+#PivotInspectorPanel #BonePositionField FloatInput {
+  margin-right : 0px;
+  padding-right : 0px;
+}
+
+.unity-composite-field__field-spacer {
+  width: 0px;
+}

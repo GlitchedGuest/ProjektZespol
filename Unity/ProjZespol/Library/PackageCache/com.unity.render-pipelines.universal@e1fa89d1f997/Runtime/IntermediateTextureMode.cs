@@ -1,3 +1,17 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:6004710b91d8618fb2651c10bbec6dd473d23a43a3e45c6590d2029dad352957
-size 921
+namespace UnityEngine.Rendering.Universal
+{
+    /// <summary>
+    /// Controls when URP renders via an intermediate texture.
+    /// </summary>
+    public enum IntermediateTextureMode
+    {
+        /// <summary>
+        /// Uses information declared by active Renderer Features to automatically determine whether to render via an intermediate texture or not. <seealso cref="ScriptableRenderPass.ConfigureInput"/>.
+        /// </summary>
+        Auto,
+        /// <summary>
+        /// Forces rendering via an intermediate texture if any Render Feature is active. Use this option for compatibility with Renderer Features that do not support rendering directly to backbuffer or RenderFeatures that do not declare their inputs with <see cref="ScriptableRenderPass.ConfigureInput"/>. Using this option might have a significant performance impact on some platforms such as Quest.
+        /// </summary>
+        Always
+    }
+}

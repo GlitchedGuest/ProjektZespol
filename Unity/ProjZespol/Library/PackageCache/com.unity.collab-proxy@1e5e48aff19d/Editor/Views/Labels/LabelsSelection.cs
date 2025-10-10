@@ -1,3 +1,78 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:fbb9b1b2c3db0bd152c34b69c9482ff2178293ae391f9dfd2878f05547b18e91
-size 2315
+using System.Collections.Generic;
+using System.Linq;
+
+using Codice.CM.Common;
+using Unity.PlasticSCM.Editor.UI.Tree;
+
+namespace Unity.PlasticSCM.Editor.Views.Labels
+{
+    internal static class LabelsSelection
+    {
+        internal static void SelectLabels(
+            LabelsListView listView,
+            List<RepObjectInfo> labelsToSelect,
+            int defaultRow)
+        {
+            if (labelsToSelect == null || labelsToSelect.Count == 0)
+            {
+                TableViewOperations.SelectFirstRow(listView);
+                return;
+            }
+
+            listView.SelectRepObjectInfos(labelsToSelect);
+
+            if (listView.HasSelection())
+                return;
+
+            TableViewOperations.SelectDefaultRow(listView, defaultRow);
+
+            if (listView.HasSelection())
+                return;
+
+            TableViewOperations.SelectFirstRow(listView);
+        }
+
+        internal static List<RepObjectInfo> GetSelectedRepObjectInfos(
+            LabelsListView listView)
+        {
+            return listView.GetSelectedRepObjectInfos();
+        }
+
+        internal static int GetSelectedLabelsCount(
+            LabelsListView listView)
+        {
+            return listView.GetSelection().Count;
+        }
+
+        internal static MarkerExtendedInfo GetSelectedLabel(
+            LabelsListView listView)
+        {
+            List<RepObjectInfo> selectedRepObjectsInfos = listView.GetSelectedRepObjectInfos();
+
+            if (selectedRepObjectsInfos.Count == 0)
+                return null;
+
+            return (MarkerExtendedInfo)selectedRepObjectsInfos[0];
+        }
+
+        internal static RepositorySpec GetSelectedRepository(
+            LabelsListView listView)
+        {
+            List<RepositorySpec> selectedRepositories = listView.GetSelectedRepositories();
+
+            if (selectedRepositories.Count == 0)
+                return null;
+
+            return selectedRepositories[0];
+        }
+
+        internal static List<RepObjectInfo> GetLabelsToSelect(
+            LabelsListView labelsListView, List<object> entriesToSelect)
+        {
+            if (entriesToSelect == null || entriesToSelect.Count == 0)
+                return GetSelectedRepObjectInfos(labelsListView);
+
+            return entriesToSelect.Cast<RepObjectInfo>().ToList();
+        }
+    }
+}

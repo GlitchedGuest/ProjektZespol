@@ -1,3 +1,8 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:5b6c0b3a2e9ad8f6285f30aed67952de8e4431524f14c326c574dbc7502a2d21
-size 316
+#ifndef UNIVERSAL_DEPRECATED_INCLUDED
+#define UNIVERSAL_DEPRECATED_INCLUDED
+
+// Remove in 2023.2.
+// Deprecated define that was used in shadows.hlsl to set the array size of _AdditionalLightsWorldToShadow.
+#define MAX_PUNCTUAL_LIGHT_SHADOW_SLICES_IN_UBO (MAX_VISIBLE_LIGHTS)
+
+#endif // UNIVERSAL_DEPRECATED_INCLUDED

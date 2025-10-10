@@ -1,3 +1,30 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:5e0ea9ff91d97c1383a1c5f744ea1f645a072f73cfb203c497315e8552ab16f9
-size 1232
+using System;
+using UnityEditor.ShaderGraph;
+using UnityEngine.Rendering;
+
+namespace UnityEditor.Rendering.Universal.ShaderGraph
+{
+    internal static class CreateDecalShaderGraph
+    {
+        [MenuItem("Assets/Create/Shader Graph/URP/Decal Shader Graph", priority = CoreUtils.Sections.section4 + CoreUtils.Priorities.assetsCreateShaderMenuPriority + 1)]
+        public static void CreateLitGraph()
+        {
+            var target = (UniversalTarget)Activator.CreateInstance(typeof(UniversalTarget));
+            target.TrySetActiveSubTarget(typeof(UniversalDecalSubTarget));
+
+            var blockDescriptors = new[]
+            {
+                BlockFields.SurfaceDescription.BaseColor,
+                BlockFields.SurfaceDescription.Alpha,
+                BlockFields.SurfaceDescription.NormalTS,
+                UniversalBlockFields.SurfaceDescription.NormalAlpha,
+                BlockFields.SurfaceDescription.Metallic,
+                BlockFields.SurfaceDescription.Occlusion,
+                BlockFields.SurfaceDescription.Smoothness,
+                UniversalBlockFields.SurfaceDescription.MAOSAlpha,
+            };
+
+            GraphUtil.CreateNewGraphWithOutputs(new[] { target }, blockDescriptors);
+        }
+    }
+}

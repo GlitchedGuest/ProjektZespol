@@ -1,3 +1,24 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:a598534f910d068c0f9309f9667192b7d10f70e7b9da73fe8ee04ce1eabbb72b
-size 812
+namespace UnityEditor.TestTools.TestRunner.GUI.TestAssets
+{
+    /// <inheritdoc />
+    internal class ActiveFolderTemplateAssetCreator : IActiveFolderTemplateAssetCreator
+    {
+        /// <inheritdoc />
+        public string GetActiveFolderPath()
+        {
+            return AssetDatabase.GetAssetPath(Selection.activeObject);
+        }
+
+        /// <inheritdoc />
+        public void CreateFolderWithTemplates(string defaultName, params string[] templateNames)
+        {
+            ProjectWindowUtil.CreateFolderWithTemplates(defaultName, templateNames);
+        }
+
+        /// <inheritdoc />
+        public void CreateScriptAssetFromTemplateFile(string defaultName, string templatePath)
+        {
+            ProjectWindowUtil.CreateScriptAssetFromTemplateFile(templatePath, defaultName);
+        }
+    }
+}

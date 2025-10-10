@@ -1,3 +1,14 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:eb682d8fcd6a93ee35542171c09bd71cd8ab7c48adfaecb969145aaee16ed9fc
-size 264
+﻿using UnityEngine;
+using UnityEditor;
+
+namespace UnityEditor.U2D.Common.Path
+{
+    internal class EditablePathUtility
+    {
+        public static int Mod(int x, int m)
+        {
+            int r = x % m;
+            return r < 0 ? r + m : r;
+        }
+    }
+}

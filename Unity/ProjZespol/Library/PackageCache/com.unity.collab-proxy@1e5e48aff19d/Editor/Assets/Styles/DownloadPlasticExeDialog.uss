@@ -1,3 +1,36 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:f35d4442657a108ca879ddc44592f2b2a937132b02ab6c4c0ff0dab468391039
-size 497
+@import "Base.uss";
+
+#container {
+    margin-top: 20px;
+    margin-right: 20px;
+    margin-bottom: 20px;
+    margin-left: 20px;
+}
+
+#footer {
+    display: flex;
+    flex-direction: row;
+    margin-top: 15px;
+    margin-left: 20px;
+}
+
+#title {
+    -unity-font-style: bold;
+    margin-bottom: 20px;
+    font-size: 13px;
+}
+
+#progressControlsContainer {
+    height: 15px;
+}
+
+Label {
+    white-space: normal;
+    margin-bottom: 20px;
+    font-size: 13px;
+}
+
+Button {
+    width: 80px;
+    height: 25px;
+}

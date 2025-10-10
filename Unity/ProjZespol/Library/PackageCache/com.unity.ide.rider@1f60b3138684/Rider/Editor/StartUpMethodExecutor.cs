@@ -1,3 +1,16 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:308279f32aa9514f24c269037586d27468205d6333a9648e8a38658af7ddcddf
-size 369
+using JetBrains.Annotations;
+using UnityEditor;
+
+namespace JetBrains.Rider.Unity.Editor
+{
+  // Do not rename this class while you don't rename startup command for dotTrace profiler
+  [UsedImplicitly]
+  internal static class StartUpMethodExecutor
+  {
+    [UsedImplicitly]
+    public static void EnterPlayMode()
+    {
+      EditorApplication.isPlaying = true;
+    }
+  }
+}

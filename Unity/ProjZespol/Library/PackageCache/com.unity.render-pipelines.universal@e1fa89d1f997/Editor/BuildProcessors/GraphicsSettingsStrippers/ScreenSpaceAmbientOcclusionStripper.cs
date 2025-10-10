@@ -1,3 +1,63 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:04f976422c81922c137a5d2417f067a4b5572a46b1df16e11a74bae97edd4fb0
-size 2763
+﻿using UnityEditor.Rendering.Universal;
+using UnityEngine.Rendering;
+using UnityEngine.Rendering.Universal;
+
+namespace UnityEditor.Rendering
+{
+    class ScreenSpaceAmbientOcclusionDynamicResourcesStripper : IRenderPipelineGraphicsSettingsStripper<ScreenSpaceAmbientOcclusionDynamicResources>
+    {
+        public bool active => URPBuildData.instance.buildingPlayerForUniversalRenderPipeline;
+
+        public bool CanRemoveSettings(ScreenSpaceAmbientOcclusionDynamicResources resources)
+        {
+            if (GraphicsSettings.TryGetRenderPipelineSettings<URPShaderStrippingSetting>(out var urpShaderStrippingSettings) && !urpShaderStrippingSettings.stripUnusedVariants)
+                return false;
+            
+            foreach (var urpAssetForBuild in URPBuildData.instance.renderPipelineAssets)
+            {
+                foreach (var rendererData in urpAssetForBuild.m_RendererDataList)
+                {
+                    if (rendererData is not UniversalRendererData) 
+                        continue;
+                    
+                    foreach (var rendererFeature in rendererData.rendererFeatures)
+                    {
+                        if (rendererFeature is ScreenSpaceAmbientOcclusion { isActive: true } occlusion
+                            && occlusion.settings.AOMethod == ScreenSpaceAmbientOcclusionSettings.AOMethodOptions.BlueNoise)
+                            return false;
+                    }
+                }
+            }
+
+            return true;
+        }
+    }
+
+    class ScreenSpaceAmbientOcclusionPersistentResourcesStripper : IRenderPipelineGraphicsSettingsStripper<ScreenSpaceAmbientOcclusionPersistentResources>
+    {
+        public bool active => URPBuildData.instance.buildingPlayerForUniversalRenderPipeline;
+
+        public bool CanRemoveSettings(ScreenSpaceAmbientOcclusionPersistentResources resources)
+        {
+            if (GraphicsSettings.TryGetRenderPipelineSettings<URPShaderStrippingSetting>(out var urpShaderStrippingSettings) && !urpShaderStrippingSettings.stripUnusedVariants)
+                return false;
+            
+            foreach (var urpAssetForBuild in URPBuildData.instance.renderPipelineAssets)
+            {
+                foreach (var rendererData in urpAssetForBuild.m_RendererDataList)
+                {
+                    if (rendererData is not UniversalRendererData)
+                        continue;
+                    
+                    foreach (var rendererFeature in rendererData.rendererFeatures)
+                    {
+                        if (rendererFeature is ScreenSpaceAmbientOcclusion { isActive: true })
+                            return false;
+                    }
+                }
+            }
+
+            return true;
+        }
+    }
+}

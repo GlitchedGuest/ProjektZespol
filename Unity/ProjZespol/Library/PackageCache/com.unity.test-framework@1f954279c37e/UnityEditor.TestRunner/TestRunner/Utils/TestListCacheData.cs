@@ -1,3 +1,27 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:b2c31e887b6206b28a714d722692fc4d4e0873328c81ca95ccff744b6735b245
-size 681
+using System;
+using System.Collections.Generic;
+using NUnit.Framework.Interfaces;
+using UnityEngine;
+using UnityEngine.TestTools;
+
+namespace UnityEditor.TestTools.TestRunner
+{
+    internal class TestListCacheData : ScriptableSingleton<TestListCacheData>, ITestListCacheData
+    {
+        [SerializeField]
+        private List<TestPlatform> m_Platforms = new List<TestPlatform>();
+
+        [SerializeField]
+        private List<ITest> m_CachedData = new List<ITest>();
+
+        public List<TestPlatform> platforms
+        {
+            get { return m_Platforms; }
+        }
+
+        public List<ITest> cachedData
+        {
+            get { return m_CachedData; }
+        }
+    }
+}

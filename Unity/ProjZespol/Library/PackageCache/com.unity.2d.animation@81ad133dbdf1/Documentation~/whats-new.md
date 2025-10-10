@@ -1,3 +1,9 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:da0550ccb10b1240527359d7af3092a8cb2db94c6c352c529f1438e9f4123dd3
-size 426
+# What's new in version 10.0
+
+## Added
+- [Shadow Caster 2D](https://docs.unity3d.com/Packages/com.unity.render-pipelines.universal@15.0/manual/2DShadows.html) support for [Sprite Skins](SpriteSkin.md) in URP projects.
+- Optional [Sprite Skin](SpriteSkin.md) GPU deformation in URP projects.
+- Frustum culling for [IK Solvers](2DIK.md#ik-solvers).
+
+## Updated
+- Simplified [Sprite Library Component](SL-component.md) inspector.

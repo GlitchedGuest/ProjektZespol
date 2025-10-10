@@ -1,3 +1,54 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:2bf81fc2be980351ea631dbac4d3e28f7eb0f1384365ae40fbd9b15817e5e615
-size 1240
+using UnityEditor;
+using UnityEngine;
+
+namespace Unity.PlasticSCM.Editor.UI.Progress
+{
+    internal static class DrawProgressForWindow
+    {
+        internal static void ForIndeterminateProgress(
+            ProgressControlsForWindow.Data data)
+        {
+            EditorGUILayout.BeginHorizontal();
+
+            GUILayout.Space(3);
+
+            DoProgressSpinner(data.ProgressPercent);
+
+            DoProgressLabel(data.ProgressMessage);
+
+            GUILayout.FlexibleSpace();
+
+            EditorGUILayout.EndHorizontal();
+        }
+
+        static void DoProgressSpinner(float progressPercent)
+        {
+            EditorGUILayout.BeginVertical();
+
+            GUILayout.FlexibleSpace();
+
+            LoadingSpinner.OnGUI(progressPercent);
+
+            GUILayout.Space(1);
+
+            GUILayout.FlexibleSpace();
+
+            EditorGUILayout.EndVertical();
+        }
+
+        static void DoProgressLabel(string progressMessage)
+        {
+            EditorGUILayout.BeginVertical();
+
+            GUILayout.Space(1);
+
+            GUILayout.FlexibleSpace();
+
+            GUILayout.Label(progressMessage, UnityStyles.StatusBar.Label);
+
+            GUILayout.FlexibleSpace();
+
+            EditorGUILayout.EndVertical();
+        }
+    }
+}

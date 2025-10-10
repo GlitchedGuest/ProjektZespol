@@ -1,3 +1,29 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:7ad9c04be425527493127201b01634251d22cea385aaf0b8348d79124aa871b6
-size 879
+using System.Collections.Generic;
+
+using UnityEditor;
+
+using Codice.Client.BaseCommands;
+using Codice.CM.Common;
+using GluonGui.WorkspaceWindow.Views.Checkin.Operations;
+
+namespace Unity.PlasticSCM.Editor.Views.PendingChanges.Dialogs
+{
+    internal class LaunchDependenciesDialog : DependenciesHandler.IDependenciesDialog
+    {
+        internal LaunchDependenciesDialog(string operation, EditorWindow parentWindow)
+        {
+            mOperation = operation;
+            mParentWindow = parentWindow;
+        }
+
+        bool DependenciesHandler.IDependenciesDialog.IncludeDependencies(
+            WorkspaceInfo wkInfo, IList<ChangeDependencies> dependencies)
+        {
+            return DependenciesDialog.IncludeDependencies(
+                wkInfo, dependencies, mOperation, mParentWindow);
+        }
+
+        string mOperation;
+        EditorWindow mParentWindow;
+    }
+}

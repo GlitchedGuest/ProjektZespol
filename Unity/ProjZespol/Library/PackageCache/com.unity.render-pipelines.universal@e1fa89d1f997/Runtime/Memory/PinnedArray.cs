@@ -1,3 +1,36 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:6110a8ff4f945866d4c0a143333f758e1082a546eb6ca515acbfa38557e482dc
-size 1194
+using System;
+using System.Runtime.InteropServices;
+using Unity.Collections;
+using Unity.Collections.LowLevel.Unsafe;
+
+namespace UnityEngine.Rendering.Universal
+{
+    unsafe struct PinnedArray<T> : IDisposable where T : struct
+    {
+        public T[] managedArray;
+        public GCHandle handle;
+        public NativeArray<T> nativeArray;
+
+        public int length => managedArray != null ? managedArray.Length : 0;
+
+        public PinnedArray(int length)
+        {
+            managedArray = new T[length];
+            handle = GCHandle.Alloc(managedArray, GCHandleType.Pinned);
+            nativeArray = NativeArrayUnsafeUtility.ConvertExistingDataToNativeArray<T>((void*)handle.AddrOfPinnedObject(), length, Allocator.None);
+#if ENABLE_UNITY_COLLECTIONS_CHECKS
+            NativeArrayUnsafeUtility.SetAtomicSafetyHandle(ref nativeArray, AtomicSafetyHandle.Create());
+#endif
+        }
+
+        public void Dispose()
+        {
+            if (managedArray == null) return;
+#if ENABLE_UNITY_COLLECTIONS_CHECKS
+            AtomicSafetyHandle.Release(NativeArrayUnsafeUtility.GetAtomicSafetyHandle(nativeArray));
+#endif
+            handle.Free();
+            this = default;
+        }
+    }
+}

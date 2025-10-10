@@ -1,3 +1,7 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:0c9a15324736685c50b8b3620dfeacca464907637d535b955ffd147032c13272
-size 573
+<ui:UXML xmlns:ui="UnityEngine.UIElements" eui="UnityEditor.UIElements" aui="UnityEditor.U2D.Animation.SpriteLibraryEditor">
+    <UnityEditor.U2D.Animation.SpriteLibraryEditor.EditorBottomToolbar class="sprite-library-editor-window__bottom-toolbar">
+        <ui:Slider picking-mode="Ignore" value="0" high-value="1" name="SizeSlider" />
+        <ui:Button display-tooltip-when-elided="true" name="ListButton"  />
+        <ui:Button display-tooltip-when-elided="true" name="GridButton"  />
+    </UnityEditor.U2D.Animation.SpriteLibraryEditor.EditorBottomToolbar>
+</ui:UXML>

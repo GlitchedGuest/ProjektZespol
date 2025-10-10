@@ -1,3 +1,25 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:68ef9e814e17034776c704bae6ae32b6a7c5d431b2c08d4302f4edbe62f30e9b
-size 660
+﻿using System;
+using System.Diagnostics;
+
+namespace Unity.PlasticSCM.Editor.Tool
+{
+    internal static class IsExeVersion
+    {
+        internal static bool GreaterOrEqual(string exePath, string minVersionString)
+        {
+            try
+            {
+                FileVersionInfo fileVersionInfo = FileVersionInfo.GetVersionInfo(exePath);
+
+                Version version = new Version(fileVersionInfo.FileVersion);
+                Version minVersion = new Version(minVersionString);
+
+                return (version >= minVersion);
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+    }
+}

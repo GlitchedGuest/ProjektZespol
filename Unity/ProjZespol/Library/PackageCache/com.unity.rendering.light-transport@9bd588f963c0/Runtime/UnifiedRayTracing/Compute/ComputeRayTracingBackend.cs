@@ -1,3 +1,29 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:4492d57822fc2ce541964d59c7c1d832fe8b0bf17597c7f3c13f21e3c8b69d53
-size 1145
+namespace UnityEngine.Rendering.UnifiedRayTracing
+{
+    internal class ComputeRayTracingBackend : IRayTracingBackend
+    {
+        public ComputeRayTracingBackend(RayTracingResources resources)
+        {
+            m_Resources = resources;
+        }
+
+        public IRayTracingShader CreateRayTracingShader(Object shader, string kernelName, GraphicsBuffer dispatchBuffer)
+        {
+            Debug.Assert(shader is ComputeShader);
+            return new ComputeRayTracingShader((ComputeShader)shader, kernelName, dispatchBuffer);
+        }
+
+        public IRayTracingAccelStruct CreateAccelerationStructure(AccelerationStructureOptions options, ReferenceCounter counter)
+        {
+            return new ComputeRayTracingAccelStruct(options, m_Resources, counter);
+        }
+
+        public ulong GetRequiredTraceScratchBufferSizeInBytes(uint width, uint height, uint depth)
+        {
+            uint rayCount = width * height * depth;
+            return (RadeonRays.RadeonRaysAPI.GetTraceMemoryRequirements(rayCount) * RayTracingContext.GetScratchBufferStrideInBytes());
+        }
+
+        readonly RayTracingResources m_Resources;
+    }
+}

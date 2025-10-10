@@ -1,3 +1,48 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:4be92d02bd28b6afd9d1da935f9d6b90399e5a6e4d9f4f7775bdce5190899445
-size 1061
+using UnityEngine;
+
+namespace Unity.U2D.Animation.Sample.Dependency
+{
+    [ExecuteInEditMode]
+    internal class AnimationSampleDependency : MonoBehaviour
+    {
+        enum Dependency
+        {
+            None,
+            PsdImporter,
+            AssetBundle
+        }
+
+        [SerializeField]
+        GameObject errorUI = null;
+        [SerializeField]
+        Dependency dependency = Dependency.None;
+
+        void Update()
+        {
+            var hasDependencyInstalled = HasDependencyInstalled();
+            if (errorUI != null)
+                errorUI.SetActive(!hasDependencyInstalled);
+        }
+
+        bool HasDependencyInstalled()
+        {
+            switch (dependency)
+            {
+                case Dependency.PsdImporter:
+#if PSDIMPORTER_ENABLED
+                    return true;
+#else
+                    return false;
+#endif
+                case Dependency.AssetBundle:
+#if ASSETBUNDLE_ENABLED
+                    return true;
+#else
+                    return false;
+#endif
+            }
+
+            return true;
+        }
+    }
+}

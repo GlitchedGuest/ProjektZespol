@@ -1,3 +1,30 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:e25bb95a3865f4aa4295dbc2dad69dd1ff57a126a9da9c79f2606bb77b261298
-size 584
+using System;
+
+namespace Unity.PerformanceTesting.Statistics
+{
+    /// <summary>
+    /// Represents a statistical confidence level.
+    /// </summary>
+    public enum ConfidenceLevel
+    {
+        /// <summary>
+        /// 90.0% confidence interval
+        /// </summary>
+        L90,
+
+        /// <summary>
+        /// 95.0% confidence interval
+        /// </summary>
+        L95,
+
+        /// <summary>
+        /// 99.0% confidence interval
+        /// </summary>
+        L99,
+
+        /// <summary>
+        /// 99.9% confidence interval
+        /// </summary>
+        L999
+    }
+}

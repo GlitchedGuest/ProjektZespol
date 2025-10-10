@@ -1,3 +1,18 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:4f8b537ea326ffa6db4a10cd91aa909222cf0dce41f7df631f37631de0cd6d93
-size 509
+﻿using System;
+using System.ComponentModel;
+
+namespace Unity.PlasticSCM.Editor
+{
+    // Placeholder. This isn't a public API.
+    [EditorBrowsable(EditorBrowsableState.Never)]
+    [Obsolete("CollabPlugin is deprecated and will be removed in a future release", false)]
+    public static class CollabPlugin
+    {
+        // Placeholder. This isn't a public API.
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        public static bool IsEnabled()
+        {
+            return false;
+        }
+    }
+}

@@ -1,3 +1,19 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:8d98057530050bc9ee0532f0250f89e690e2b3b348216e2c3984d1f542ed3525
-size 323
+.unity2d-grid-view {
+}
+
+.unity2d-grid-view__row {
+    flex-direction: row;
+    flex-grow: 0;
+    flex-shrink: 0;
+    flex-basis: auto;
+    justify-content: space-around;
+}
+
+.unity2d-grid-view__item {
+    border-color: rgba(11, 124, 213, 0);
+    border-width: 3px;
+    margin: 1px;
+}
+
+.unity2d-grid-view__item--selected {
+}

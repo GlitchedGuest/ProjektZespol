@@ -1,3 +1,5 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:e6f48d2a2a8e5dcf47074027e445df506d684cc1c77a91a1d3436fbcfee2768c
-size 413
+# Sprite Shape Preferences
+
+![Sprite Shape Preferences](images/SpriteShape_Preferences.png)
+
+You can select the colors used by a Sprite Shape's spline and control points through the Sprite Shape Preferences window (menu: **Edit > Preferences > 2D > Sprite Shape**). These colors are displayed when you enable **Edit Spline** in the [Sprite Shape Controller](SSController.md) properties and edit the Sprite Shape.

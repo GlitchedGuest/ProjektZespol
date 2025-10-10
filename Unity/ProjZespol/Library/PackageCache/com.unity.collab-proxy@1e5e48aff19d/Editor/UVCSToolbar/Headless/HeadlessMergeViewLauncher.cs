@@ -1,3 +1,83 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:179dd88d3e8df24a863964f99a4f677b680e3eb9d1101b0f2ff9494343071d9e
-size 2564
+using Codice.CM.Common;
+
+using PlasticGui;
+using PlasticGui.WorkspaceWindow.Merge;
+
+namespace Unity.PlasticSCM.Editor.Toolbar.Headless
+{
+    internal class HeadlessMergeViewLauncher : IMergeViewLauncher
+    {
+        internal HeadlessMergeViewLauncher(UVCSPlugin uvcsPlugin)
+        {
+            mUVCSPlugin = uvcsPlugin;
+        }
+
+        IMergeView IMergeViewLauncher.FromCalculatedMerge(
+            RepositorySpec repSpec,
+            ObjectInfo objectInfo,
+            EnumMergeType mergeType,
+            CalculatedMergeResult calculatedMergeResult,
+            bool showDiscardChangesButton)
+        {
+            UVCSWindow window = SwitchUVCSPlugin.OnIfNeeded(mUVCSPlugin);
+
+            return window.IMergeViewLauncher.FromCalculatedMerge(
+                repSpec,
+                objectInfo,
+                mergeType,
+                calculatedMergeResult,
+                showDiscardChangesButton);
+        }
+
+        IMergeView IMergeViewLauncher.MergeFrom(
+            RepositorySpec repSpec,
+            ObjectInfo objectInfo,
+            EnumMergeType mergeType,
+            bool showDiscardChangesButton)
+        {
+            UVCSWindow window = SwitchUVCSPlugin.OnIfNeeded(mUVCSPlugin);
+
+            return window.IMergeViewLauncher.MergeFrom(
+                repSpec,
+                objectInfo,
+                mergeType,
+                showDiscardChangesButton);
+        }
+
+        IMergeView IMergeViewLauncher.MergeFrom(
+            RepositorySpec repSpec,
+            ObjectInfo objectInfo,
+            EnumMergeType mergeType,
+            ShowIncomingChangesFrom from,
+            bool showDiscardChangesButton)
+        {
+            UVCSWindow window = SwitchUVCSPlugin.OnIfNeeded(mUVCSPlugin);
+
+            return window.IMergeViewLauncher.MergeFrom(
+                repSpec,
+                objectInfo,
+                mergeType,
+                from,
+                showDiscardChangesButton);
+        }
+
+        IMergeView IMergeViewLauncher.MergeFromInterval(
+            RepositorySpec repSpec,
+            ObjectInfo objectInfo,
+            ObjectInfo ancestorChangesetInfo,
+            EnumMergeType mergeType,
+            bool showDiscardChangesButton)
+        {
+            UVCSWindow window = SwitchUVCSPlugin.OnIfNeeded(mUVCSPlugin);
+
+            return window.IMergeViewLauncher.MergeFromInterval(
+                repSpec,
+                objectInfo,
+                ancestorChangesetInfo,
+                mergeType,
+                showDiscardChangesButton);
+        }
+
+        readonly UVCSPlugin mUVCSPlugin;
+    }
+}

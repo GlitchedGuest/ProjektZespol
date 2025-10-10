@@ -1,3 +1,27 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:2b4c33d7ad63516f7996a7ca55537cc58791c67ef1ea5d665af66698df91da97
-size 1014
+﻿/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Unity Technologies.
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+using SR = System.Reflection;
+
+using System.Collections.Generic;
+using System.Linq;
+using UnityEditor;
+
+namespace Microsoft.Unity.VisualStudio.Editor {
+
+	internal class TypeCacheHelper
+	{
+		internal static IEnumerable<SR.MethodInfo> GetPostProcessorCallbacks(string name)
+		{
+			return TypeCache
+				.GetTypesDerivedFrom<AssetPostprocessor>()
+				.Where(t => t.Assembly.GetName().Name != KnownAssemblies.Bridge) // never call into the bridge if loaded with the package
+				.Select(t => t.GetMethod(name, SR.BindingFlags.Public | SR.BindingFlags.NonPublic | SR.BindingFlags.Static))
+				.Where(m => m != null);
+		}
+	}
+
+}

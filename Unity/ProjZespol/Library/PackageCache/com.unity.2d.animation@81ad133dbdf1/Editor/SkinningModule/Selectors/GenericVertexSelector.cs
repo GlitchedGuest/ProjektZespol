@@ -1,3 +1,22 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:18a6a660dd5f2cfbb311e53c21c27b7e4e276ffaa115f841ef1ccda48ceec118
-size 635
+using System;
+using UnityEngine;
+
+namespace UnityEditor.U2D.Animation
+{
+    internal class GenericVertexSelector : ISelector<int>
+    {
+        public ISelection<int> selection { get; set; }
+        public BaseSpriteMeshData spriteMeshData { get; set; }
+        public Func<int, bool> SelectionCallback;
+
+        public void Select()
+        {
+            Debug.Assert(selection != null);
+            Debug.Assert(spriteMeshData != null);
+            Debug.Assert(SelectionCallback != null);
+
+            for (int i = 0; i < spriteMeshData.vertexCount; i++)
+                selection.Select(i, SelectionCallback(i));
+        }
+    }
+}

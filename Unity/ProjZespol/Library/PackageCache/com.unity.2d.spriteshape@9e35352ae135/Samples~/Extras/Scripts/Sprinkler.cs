@@ -1,3 +1,32 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:301787f6b94dc3e170d286cbae83563f39e4c19ad0be1499b41245b27e20a44d
-size 1012
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.U2D;
+
+namespace SpriteShapeExtras
+{
+    public class Sprinkler : MonoBehaviour
+    {
+
+        public GameObject m_Prefab;
+        public bool m_UseNormals = false;
+        public int m_Instances = 10;
+
+        // Use this for initialization. Plant the Prefabs on Startup
+        void Start ()
+        {
+            SpriteShapeController ssc = GetComponent<SpriteShapeController>();
+            for (int i = 1; i < m_Instances; ++i)
+            {
+                var go = GameObject.Instantiate(m_Prefab);
+                var op = go.AddComponent<SpriteShapeObjectPlacement>();
+                op.spriteShapeController = ssc;
+                op.setNormal = m_UseNormals;
+                op.startPoint = 0;
+                op.endPoint = ssc.spline.GetPointCount();
+                op.mode = SpriteShapeObjectPlacementMode.Manual;
+                op.ratio = Random.Range(0.0f, 1.0f);
+            }
+        }
+    }
+}

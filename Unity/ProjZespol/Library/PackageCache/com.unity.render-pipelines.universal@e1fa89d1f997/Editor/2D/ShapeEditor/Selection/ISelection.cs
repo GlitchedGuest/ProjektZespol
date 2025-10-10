@@ -1,3 +1,16 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:22c4db725342c688503c18e7c87fc21a2be61439cf9fc1fa230bf3267413e0cf
-size 409
+using System.Collections.Generic;
+
+namespace UnityEditor.Rendering.Universal.Path2D
+{
+    internal interface ISelection<T>
+    {
+        int Count { get; }
+        T activeElement { get; set; }
+        T[] elements { get; set; }
+        void Clear();
+        void BeginSelection();
+        void EndSelection(bool select);
+        bool Select(T element, bool select);
+        bool Contains(T element);
+    }
+}

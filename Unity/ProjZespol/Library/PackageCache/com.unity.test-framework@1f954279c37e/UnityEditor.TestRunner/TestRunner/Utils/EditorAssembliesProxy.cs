@@ -1,3 +1,23 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:1c706503be25e2bd170ce1f2f28a8a79f92bb440caba7b28e1111058373ad888
-size 717
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using UnityEngine.TestTools.Utils;
+
+namespace UnityEditor.TestTools.TestRunner
+{
+    internal class EditorAssembliesProxy : IEditorAssembliesProxy
+    {
+        public IAssemblyWrapper[] loadedAssemblies
+        {
+            get {
+                var assemblies = new SortedDictionary<string, EditorAssemblyWrapper>();
+                foreach (var assembly in EditorAssemblies.loadedAssemblies)
+                {
+                    assemblies.TryAdd(assembly.FullName, new EditorAssemblyWrapper(assembly));
+                }
+
+                return assemblies.Select(pair => (IAssemblyWrapper)pair.Value).ToArray();
+            }
+        }
+    }
+}

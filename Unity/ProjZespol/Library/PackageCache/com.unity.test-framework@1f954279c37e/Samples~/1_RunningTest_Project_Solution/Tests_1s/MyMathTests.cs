@@ -1,3 +1,32 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:75b115765b40dd221bf0cac4d46a9563fa4fbe085068cece35e0dd2acf736dc0
-size 684
+﻿using MyExercise_1s;
+using NUnit.Framework;
+
+namespace Tests_1s
+{
+    public class MyMathTests
+    {
+        [Test]
+        public void AddsTwoPositiveIntegers()
+        {
+            Assert.AreEqual(3, MyMath.Add(1, 2));
+        }
+        
+        [Test]
+        public void AddAPositiveAndNegativeInteger()
+        {
+            Assert.AreEqual(1, MyMath.Add(3, -2));
+        }
+        
+        [Test]
+        public void SubtractAPositiveInteger()
+        {
+            Assert.AreEqual(3, MyMath.Subtract(5, 2));
+        }
+        
+        [Test]
+        public void SubtractANegativeInteger()
+        {
+            Assert.AreEqual(7, MyMath.Subtract(5, -2));
+        }
+    }
+}

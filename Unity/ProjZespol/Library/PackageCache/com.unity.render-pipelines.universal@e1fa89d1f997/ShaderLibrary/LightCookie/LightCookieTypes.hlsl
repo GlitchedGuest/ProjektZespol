@@ -1,3 +1,13 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:e72f8359e539e3a69dcd3b772fe27587830e883a5e9c73b1a183c95d5f3562fb
-size 403
+#ifndef UNIVERSAL_LIGHT_COOKIE_TYPES_INCLUDED
+#define UNIVERSAL_LIGHT_COOKIE_TYPES_INCLUDED
+
+#include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/UnityTypes.hlsl"
+
+// Types
+
+#define URP_LIGHT_COOKIE_FORMAT_NONE (-1)
+#define URP_LIGHT_COOKIE_FORMAT_RGB (0)
+#define URP_LIGHT_COOKIE_FORMAT_ALPHA (1)
+#define URP_LIGHT_COOKIE_FORMAT_RED (2)
+
+#endif //UNIVERSAL_LIGHT_COOKIE_TYPES_INCLUDED

@@ -1,3 +1,7 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:0cc34b2b185ec7de02a7d847b5e6e1507a02268af34d632975b707f65563ffb6
-size 289
+namespace UnityEditor.U2D.Aseprite
+{
+    internal static class TextContent
+    {
+        internal static readonly string noSpriteOrTextureImportWarning = L10n.Tr("No Sprites or Texture are generated. Possibly because all layers in file are hidden or failed to generate texture.");
+    }
+}

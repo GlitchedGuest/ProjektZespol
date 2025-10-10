@@ -1,3 +1,14 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:7d05a2431d8b2c2aa633c617ac149fdbe6f74d3e773e34944dcfb93146d39036
-size 290
+#ifndef UNIVERSAL_DECAL_INPUT_INCLUDED
+#define UNIVERSAL_DECAL_INPUT_INCLUDED
+
+struct DecalSurfaceData
+{
+    half4 baseColor;
+    half4 normalWS;
+    half3 emissive;
+    half metallic;
+    half occlusion;
+    half smoothness;
+    half MAOSAlpha;
+};
+#endif // UNIVERSAL_DECAL_INPUT_INCLUDED

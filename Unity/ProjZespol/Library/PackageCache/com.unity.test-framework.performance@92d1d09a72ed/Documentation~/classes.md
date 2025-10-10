@@ -1,3 +1,13 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:e8e99528244e52f66f3ab5441d77e17863d30ab1535c75ac70c170eb6d0984ae
-size 757
+# Classes
+
+This section contains a reference for classes relevant when working with the  Performance Testing Package.
+
+## SampleGroup
+
+**class SampleGroup** - represents a group of samples with the same purpose that share a name, sample unit and whether an increase is better. 
+
+Optional parameters
+- **Name** : Name of the measurement. If unspecified, "Time" is used as the default name.
+- **Unit** : Unit of the measurement to report samples in. Possible values are:
+Nanosecond, Microsecond, Millisecond, Second, Byte, Kilobyte, Megabyte, Gigabyte
+- **IncreaseIsBetter** : If true, an increase in the measurement value is considered a performance improvement (progression). If false, an increase is treated as a performance regression. False by default. 

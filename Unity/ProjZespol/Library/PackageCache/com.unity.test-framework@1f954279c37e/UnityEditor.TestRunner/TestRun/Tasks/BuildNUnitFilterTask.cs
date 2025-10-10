@@ -1,3 +1,25 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:aa97fa6a53c27a4448ed372e6db1ae5bde6437314bbd8a7623741e0b934ed166
-size 758
+using System.Collections;
+using System.Linq;
+using NUnit.Framework.Interfaces;
+using NUnit.Framework.Internal.Filters;
+
+namespace UnityEditor.TestTools.TestRunner.TestRun.Tasks
+{
+    internal class BuildNUnitFilterTask : TestTaskBase
+    {
+        public BuildNUnitFilterTask()
+        {
+            RerunAfterResume = true;
+        }
+
+        public override IEnumerator Execute(TestJobData testJobData)
+        {
+            var executionSettings = testJobData.executionSettings;
+            ITestFilter filter = new OrFilter(executionSettings.filters.Select(f => f.ToRuntimeTestRunnerFilter(executionSettings.runSynchronously).BuildNUnitFilter()).ToArray());
+
+            testJobData.testFilter = filter;
+
+            yield return null;
+        }
+    }
+}

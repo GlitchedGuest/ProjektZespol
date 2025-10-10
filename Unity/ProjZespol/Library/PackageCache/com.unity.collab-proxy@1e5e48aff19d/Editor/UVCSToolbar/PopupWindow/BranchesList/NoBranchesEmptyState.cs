@@ -1,3 +1,46 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:bd1397b5c7b0680fc135f5fcb68eb88ef2006132cf39f4b42a48b378b2ef5da2
-size 1324
+using System;
+
+using UnityEditor;
+using UnityEngine;
+
+using PlasticGui;
+using Unity.PlasticSCM.Editor.UI.Tree;
+
+namespace Unity.PlasticSCM.Editor.Toolbar.PopupWindow.BranchesList
+{
+    internal class NoBranchesEmptyState : CenteredContentPanel
+    {
+        internal NoBranchesEmptyState(Action createBranchAction, Action repaintAction)
+            : base(repaintAction)
+        {
+            mCreateBranchAction = createBranchAction;
+        }
+
+        protected override void DrawGUI()
+        {
+            CenterContent(
+                () =>
+                {
+                    GUILayout.Label(
+                        PlasticLocalization.Name.NoBranchMatchingFilter.GetString(),
+                        EditorStyles.boldLabel);
+                },
+                () =>
+                {
+                    GUILayout.Label(
+                        PlasticLocalization.Name.CreateANewBranchInstead.GetString(),
+                        EditorStyles.label);
+                },
+                () =>
+                {
+                    if (GUILayout.Button(
+                        PlasticLocalization.Name.CreateNewBranchButton.GetString()))
+                    {
+                        mCreateBranchAction();
+                    }
+                });
+        }
+
+        readonly Action mCreateBranchAction;
+    }
+}

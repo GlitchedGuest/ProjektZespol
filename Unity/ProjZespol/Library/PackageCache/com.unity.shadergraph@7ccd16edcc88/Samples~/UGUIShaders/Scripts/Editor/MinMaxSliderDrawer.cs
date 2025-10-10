@@ -1,3 +1,31 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:7453f2b21ce82babfc54564052e2bf97aaf4787c5357e6847858b4e8b6e95481
-size 974
+using UnityEngine;
+using UnityEditor;
+
+namespace Unity.UI.Shaders.Sample.Editor
+{
+    [CustomPropertyDrawer(typeof(MinMaxSliderAttribute))]
+    public class MinMaxSliderDrawer : PropertyDrawer
+    {
+        MinMaxSliderAttribute range => (MinMaxSliderAttribute)attribute;
+
+        Vector2 _value;
+
+        public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
+        {
+            if (property.propertyType == SerializedPropertyType.Vector2)
+            {
+                _value = property.vector2Value;
+                EditorGUI.BeginChangeCheck();
+                EditorGUI.MinMaxSlider(position, label, ref _value.x, ref _value.y, range.min, range.max);
+                if (EditorGUI.EndChangeCheck())
+                {
+                    property.vector2Value = _value;
+                }
+            }
+            else
+            {
+                EditorGUI.PropertyField(position, property, label);
+            }
+        }
+    }
+}

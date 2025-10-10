@@ -1,3 +1,42 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:cb4759791a4ba39f92d862e238d307eb5fc97c1b3dfc4a9b6585342c09b8fb1a
-size 1178
+﻿using UnityEngine;
+using UnityEngine.UIElements;
+
+namespace UnityEditor.Tilemaps
+{
+    [UxmlElement]
+    public partial class TilePaletteClipboardViewElement : VisualElement
+    {
+        private static readonly string ussClassName = "unity-tilepalette-clipboard-view-element";
+        private static readonly string k_Name = L10n.Tr("Tile Palette Clipboard View Element");
+
+
+        public TilePaletteClipboardViewElement()
+        {
+            AddToClassList(ussClassName);
+
+            name = k_Name;
+            TilePaletteOverlayUtility.SetStyleSheet(this);
+
+        }
+
+        private void OnAttachedToPanel(AttachToPanelEvent evt)
+        {
+            GridPaintingState.beforePaletteChanged += BeforePaletteChanged;
+            GridPaintingState.paletteChanged += PaletteChanged;
+        }
+
+        private void OnDetachFromPanel(DetachFromPanelEvent evt)
+        {
+            GridPaintingState.beforePaletteChanged -= BeforePaletteChanged;
+            GridPaintingState.paletteChanged -= PaletteChanged;
+        }
+
+        private void BeforePaletteChanged()
+        {
+        }
+
+        private void PaletteChanged(GameObject palette)
+        {
+        }
+    }
+}

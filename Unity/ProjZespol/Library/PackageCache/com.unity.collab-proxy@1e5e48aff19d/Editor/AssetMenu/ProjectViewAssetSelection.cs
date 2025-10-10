@@ -1,3 +1,61 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:bc13618305860e2569c99410b898e702187535cb13b96329eb2d034033543e6b
-size 1733
+﻿using System;
+
+using UnityEditor;
+using UnityEditor.VersionControl;
+
+using Unity.PlasticSCM.Editor.AssetUtils;
+
+namespace Unity.PlasticSCM.Editor.AssetMenu
+{
+    internal class ProjectViewAssetSelection : AssetUVCSOperations.IAssetSelection
+    {
+        internal ProjectViewAssetSelection(Action assetSelectionChangedAction)
+        {
+            mAssetSelectionChangedAction = assetSelectionChangedAction;
+
+            Selection.selectionChanged += SelectionChanged;
+        }
+
+        internal void Dispose()
+        {
+            Selection.selectionChanged -= SelectionChanged;
+        }
+
+        void SelectionChanged()
+        {
+            // Selection.selectionChanged gets triggered on both
+            // project view and scene view. We only want to trigger
+            // the action if user selects on project view (has assets)
+            if (HasSelectedAssets())
+                mAssetSelectionChangedAction();
+        }
+
+        AssetList AssetUVCSOperations.IAssetSelection.GetSelectedAssets()
+        {
+            if (Selection.assetGUIDs.Length == 0)
+                return new AssetList();
+
+            AssetList result = new AssetList();
+
+            foreach (string guid in Selection.assetGUIDs)
+            {
+                string assetPath = AssetsPath.GetFullPath.ForGuid(guid);
+
+                if (string.IsNullOrEmpty(assetPath))
+                    continue;
+
+                result.Add(new Asset(assetPath));
+            }
+
+            return result;
+        }
+
+        bool HasSelectedAssets()
+        {
+            // Objects in project view have GUIDs, objects in scene view don't
+            return Selection.assetGUIDs.Length > 0;
+        }
+
+        Action mAssetSelectionChangedAction;
+    }
+}

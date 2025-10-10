@@ -1,3 +1,27 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:9ebd5f7cf2f59d88a4d9d40da317259f367a2999c576baa30179d23fb6dc0c1f
-size 839
+using System;
+
+namespace UnityEditor.TestTools.TestRunner.UnityTestProtocol
+{
+    // This class is used for serialization purposes
+    // which requires public access to fields and a default empty constructor
+    [Serializable]
+    internal class QualitySettings
+    {
+        public QualitySettings(int vsync, int antiAliasing, string colorSpace, string anisotropicFiltering, string blendWeights)
+        {
+            Vsync = vsync;
+            AntiAliasing = antiAliasing;
+            ColorSpace = colorSpace;
+            AnisotropicFiltering = anisotropicFiltering;
+            BlendWeights = blendWeights;
+        }
+
+        public QualitySettings(){}
+
+        public int Vsync;
+        public int AntiAliasing;
+        public string ColorSpace;
+        public string AnisotropicFiltering;
+        public string BlendWeights;
+    }
+}

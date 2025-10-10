@@ -1,3 +1,17 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:97d8dd51bc63146af4008cdf31553d7715db613b250160f4abdc7295f2d0f63d
-size 385
+namespace Unity.PlasticSCM.Editor.Toolbar
+{
+    internal static class UVCSToolbar
+    {
+        internal static ToolbarController Controller
+        {
+            get { return mController; }
+        }
+
+        static UVCSToolbar()
+        {
+            mController = new ToolbarController(UVCSPlugin.Instance);
+        }
+
+        static readonly ToolbarController mController;
+    }
+}

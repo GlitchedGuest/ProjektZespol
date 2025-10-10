@@ -1,3 +1,39 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:2fbebc4929bf01ccc0d5bc28d2f343d99db4d8c0f6cc6e3610d8f211002a2e87
-size 1097
+using Codice.Utils;
+using Unity.PlasticSCM.Editor.Settings;
+
+namespace Unity.PlasticSCM.Editor.Toolbar.PopupWindow.Operations
+{
+    internal class UncontrolledPopupOperations
+    {
+        internal UncontrolledPopupOperations(
+            UVCSPlugin uvcsPlugin,
+            IUpdateToolbarButtonVisibility updateToolbarButtonVisibility)
+        {
+            mUVCSPlugin = uvcsPlugin;
+            mUpdateToolbarButtonVisibility = updateToolbarButtonVisibility;
+        }
+
+        internal void ShowUVCSWindow()
+        {
+            SwitchUVCSPlugin.OnIfNeeded(mUVCSPlugin);
+        }
+
+        internal void ShowUVCSSettings()
+        {
+            OpenUVCSProjectSettings.ByDefault();
+        }
+
+        internal void HideUVCSToolbarButton()
+        {
+            mUpdateToolbarButtonVisibility.Hide();
+        }
+
+        internal void OpenUVCSLandingPageInBrowser()
+        {
+            OpenBrowser.TryOpen("https://unity.com/solutions/version-control");
+        }
+
+        readonly IUpdateToolbarButtonVisibility mUpdateToolbarButtonVisibility;
+        readonly UVCSPlugin mUVCSPlugin;
+    }
+}

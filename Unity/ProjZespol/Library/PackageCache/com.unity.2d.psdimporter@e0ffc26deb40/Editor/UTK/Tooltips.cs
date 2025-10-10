@@ -1,3 +1,19 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:4463146b26be01e38a2f9b1eac72f8afa4afbec1462b2c4156fd99489369c6c7
-size 1001
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+namespace UnityEditor.U2D.PSD
+{
+    static class Tooltips
+    {
+        public static readonly string importToggleToolTip = L10n.Tr("Toggle to import layer from Photoshop file.");
+        public static readonly string collapseToggleTooltip = L10n.Tr("Toggle to merge a layer group into a single Sprite.");
+
+        public static readonly string layerHiddenToolTip = L10n.Tr("The layer is hidden in the source file.");
+        public static readonly string hiddenLayerNotImportWarning = L10n.Tr( "Layer will not be imported because hidden layers are excluded from import.");
+        public static readonly string groupSeparatedToolTip = L10n.Tr("Layers Separated. Click to merge them.");
+        public static readonly string groupMergedToolTip = L10n.Tr("Layers merged. Click to separate them.");
+        public static readonly string groupMixedToolTip = L10n.Tr("Group contains child groups that are merged.");
+    }
+}
+

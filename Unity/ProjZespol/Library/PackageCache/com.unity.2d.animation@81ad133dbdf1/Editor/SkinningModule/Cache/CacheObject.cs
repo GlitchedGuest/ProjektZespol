@@ -1,3 +1,39 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:980e2056193edb67d4e13cf0f468480ab1a8c16936d6c59fbedb455cf84bda4c
-size 1050
+using UnityEngine;
+
+namespace UnityEditor.U2D.Animation
+{
+    internal class CacheObject : BaseObject, ISerializationCallbackReceiver
+    {
+        public static T Create<T>(Cache owner) where T : CacheObject
+        {
+            T cacheObject = CreateInstance<T>();
+            cacheObject.hideFlags = HideFlags.HideAndDontSave;
+            cacheObject.owner = owner;
+            cacheObject.name = cacheObject.GetType().ToString();
+            return cacheObject;
+        }
+
+        [SerializeField]
+        Cache m_Owner;
+
+        public Cache owner
+        {
+            get { return m_Owner; }
+            set { m_Owner = value; }
+        }
+
+        void ISerializationCallbackReceiver.OnAfterDeserialize()
+        {
+            OnAfterDeserialize();
+        }
+
+        void ISerializationCallbackReceiver.OnBeforeSerialize()
+        {
+            OnBeforeSerialize();
+        }
+
+        internal virtual void OnCreate() { }
+        protected virtual void OnAfterDeserialize() { }
+        protected virtual void OnBeforeSerialize() { }
+    }
+}

@@ -1,3 +1,19 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:3d1b89ff7f8c9be0e9d2fd66b1dbaa37582b7e576086539ca0f7b1be37e46874
-size 488
+using System.Collections;
+
+using Codice.CM.Common;
+using PlasticGui.WorkspaceWindow.Update;
+using Unity.PlasticSCM.Editor.Developer.UpdateReport;
+
+namespace Unity.PlasticSCM.Editor.Toolbar.Headless
+{
+    internal class HeadlessUpdateReport : IUpdateReport
+    {
+        void IUpdateReport.Show(WorkspaceInfo wkInfo, IList reportLines)
+        {
+            UpdateReportDialog.ShowReportDialog(
+                wkInfo,
+                reportLines,
+                null);
+        }
+    }
+}

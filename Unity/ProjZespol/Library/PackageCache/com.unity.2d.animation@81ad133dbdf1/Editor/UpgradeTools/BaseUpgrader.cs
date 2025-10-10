@@ -1,3 +1,13 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:610a13aa9c969e1fd8dd5278d117d6a69be34bfd69b880c0c9f500b497f34cb3
-size 361
+using System.Collections.Generic;
+using UnityEngine;
+
+namespace UnityEditor.U2D.Animation.Upgrading
+{
+    internal abstract class BaseUpgrader
+    {
+        protected Logger m_Logger = new Logger();
+
+        internal abstract List<Object> GetUpgradableAssets();
+        internal abstract UpgradeReport UpgradeSelection(List<ObjectIndexPair> selection);
+    }
+}

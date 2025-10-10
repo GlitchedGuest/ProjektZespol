@@ -1,3 +1,46 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:9456b3b7c70815b9e1a9cc4248cbd9377336cd224c00ad64a8e7358b676d4083
-size 1160
+using System;
+using UnityEngine;
+
+namespace UnityEditor.Rendering.Universal.Path2D.GUIFramework
+{
+    internal class CommandAction : GUIAction
+    {
+        private string m_CommandName;
+
+        public Action<IGUIState> onCommand;
+
+        public CommandAction(string commandName)
+        {
+            m_CommandName = commandName;
+        }
+
+        protected override bool GetTriggerContidtion(IGUIState guiState)
+        {
+            if (guiState.eventType == EventType.ValidateCommand && guiState.commandName == m_CommandName)
+            {
+                guiState.UseCurrentEvent();
+                return true;
+            }
+
+            return false;
+        }
+
+        protected override bool GetFinishContidtion(IGUIState guiState)
+        {
+            if (guiState.eventType == EventType.ExecuteCommand && guiState.commandName == m_CommandName)
+            {
+                guiState.UseCurrentEvent();
+
+                return true;
+            }
+
+            return false;
+        }
+
+        protected override void OnFinish(IGUIState guiState)
+        {
+            if (onCommand != null)
+                onCommand(guiState);
+        }
+    }
+}

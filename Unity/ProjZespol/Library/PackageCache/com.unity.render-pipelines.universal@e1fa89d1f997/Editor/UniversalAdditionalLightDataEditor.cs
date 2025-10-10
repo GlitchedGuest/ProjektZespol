@@ -1,3 +1,18 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:f7a8eb82ff7bdc6421e9556f7170f53eae4f0259156e7d9604ba018004a9e927
-size 484
+using UnityEngine.Rendering.Universal;
+using UnityEngine.Scripting.APIUpdating;
+
+namespace UnityEditor.Rendering.Universal
+{
+    /// <summary>
+    /// Editor script for a <c>UniversalAdditionalLightData</c> class.
+    /// </summary>
+    [CanEditMultipleObjects]
+    [CustomEditor(typeof(UniversalAdditionalLightData))]
+    public class UniversalAdditionLightDataEditor : Editor
+    {
+        /// <inheritdoc/>
+        public override void OnInspectorGUI()
+        {
+        }
+    }
+}

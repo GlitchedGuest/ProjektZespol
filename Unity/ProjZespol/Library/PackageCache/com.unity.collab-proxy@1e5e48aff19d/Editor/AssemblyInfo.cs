@@ -1,3 +1,7 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:593d7d4d8bd09eac3a3e745567e8b11609cf6be355e758f503c7f165cf8065fe
-size 348
+using System.Runtime.CompilerServices;
+
+[assembly: InternalsVisibleTo("Unity.CollabProxy.Editor")]
+[assembly: InternalsVisibleTo("Unity.PlasticSCM.Editor.Entities")]
+[assembly: InternalsVisibleTo("Unity.PlasticSCM.EditorTests")]
+[assembly: InternalsVisibleTo("Unity.PlasticSCM.DevTools")]
+[assembly: InternalsVisibleTo("DynamicProxyGenAssembly2")]

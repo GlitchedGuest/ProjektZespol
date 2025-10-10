@@ -1,3 +1,54 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:4afd0b96aca959ee077ffc54711efea61ad650b827bac4398f00ac48bb7596b3
-size 1643
+using System;
+using System.Collections.Generic;
+
+namespace UnityEngine.U2D.Animation
+{
+    internal class SpriteSkinContainer : ScriptableObject
+    {
+        public static event Action<SpriteSkin> onAddedSpriteSkin;
+        public static event Action<SpriteSkin> onRemovedSpriteSkin;
+        public static event Action<SpriteSkin> onBoneTransformChanged;
+
+        static SpriteSkinContainer s_Instance;
+
+        public static SpriteSkinContainer instance
+        {
+            get
+            {
+                if (s_Instance == null)
+                {
+                    SpriteSkinContainer[] managers = Resources.FindObjectsOfTypeAll<SpriteSkinContainer>();
+                    if (managers.Length > 0)
+                        s_Instance = managers[0];
+                    else
+                        s_Instance = CreateInstance<SpriteSkinContainer>();
+                    s_Instance.hideFlags = HideFlags.HideAndDontSave;
+                }
+
+                return s_Instance;
+            }
+        }
+
+        List<SpriteSkin> m_SpriteSkin = new List<SpriteSkin>();
+        public IReadOnlyList<SpriteSkin> spriteSkins => m_SpriteSkin;
+
+        public void AddSpriteSkin(SpriteSkin spriteSkin)
+        {
+            m_SpriteSkin.Add(spriteSkin);
+
+            onAddedSpriteSkin?.Invoke(spriteSkin);
+        }
+
+        public void RemoveSpriteSkin(SpriteSkin spriteSkin)
+        {
+            m_SpriteSkin.Remove(spriteSkin);
+
+            onRemovedSpriteSkin?.Invoke(spriteSkin);
+        }
+
+        public void BoneTransformsChanged(SpriteSkin spriteSkin)
+        {
+            onBoneTransformChanged?.Invoke(spriteSkin);
+        }
+    }
+}

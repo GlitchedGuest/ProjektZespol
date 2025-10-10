@@ -1,3 +1,27 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:3514b110156e3a21df609e3e2ec339fb39ac624d21210fdfb84b75015ff3c224
-size 659
+{
+    "name": "Unity.PerformanceTesting",
+    "rootNamespace": "",
+    "references": [
+        "UnityEngine.TestRunner",
+        "com.unity.test.metadata-manager"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": true,
+    "precompiledReferences": [
+        "nunit.framework.dll"
+    ],
+    "autoReferenced": false,
+    "defineConstraints": [
+        "UNITY_TESTS_FRAMEWORK"
+    ],
+    "versionDefines": [
+        {
+            "name": "com.unity.test-framework",
+            "expression": "",
+            "define": "UNITY_TESTS_FRAMEWORK"
+        }
+    ],
+    "noEngineReferences": false
+}

@@ -1,3 +1,34 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:23d35f7c94c5af194752563abd1f45f8d64b4a3ff7186ddb083948e4ae938495
-size 972
+Shader "RayTracing/StandardMaterial"
+{
+    SubShader
+    {
+        Pass
+        {
+            Name "RayTracing"
+
+            HLSLPROGRAM
+
+            #define UNIFIED_RT_BACKEND_HARDWARE
+            #include "Packages/com.unity.rendering.light-transport/Runtime/UnifiedRayTracing/Bindings.hlsl"
+
+            #pragma raytracing test
+
+            struct AttributeData
+            {
+                float2 barycentrics;
+            };
+
+            [shader("closesthit")]
+            void ClosestHitMain(inout UnifiedRT::Hit payload : SV_RayPayload, AttributeData attribs : SV_IntersectionAttributes)
+            {
+                payload.instanceID = InstanceID();
+                payload.primitiveIndex = PrimitiveIndex();
+                payload.uvBarycentrics = attribs.barycentrics;
+                payload.hitDistance = RayTCurrent();
+                payload.isFrontFace = (HitKind() == HIT_KIND_TRIANGLE_FRONT_FACE);
+            }
+
+            ENDHLSL
+        }
+    }
+}

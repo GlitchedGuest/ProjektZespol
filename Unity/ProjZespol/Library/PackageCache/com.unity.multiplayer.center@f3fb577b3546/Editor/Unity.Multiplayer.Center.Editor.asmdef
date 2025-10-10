@@ -1,3 +1,18 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:b87c944aeda00fe3d75f54f85e8422e4cc29d5f6b86d76adb878d039693a6d45
-size 457
+{
+    "name": "Unity.Multiplayer.Center.Editor",
+    "rootNamespace": "Unity.Multiplayer.Center",
+    "references": [
+        "Unity.Multiplayer.Center.Common"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

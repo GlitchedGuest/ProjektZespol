@@ -1,3 +1,35 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:2eaeab4a333e2f0fbd3584b0c1e4307c42ee40126e263f94cc556cd857cb3746
-size 851
+using Codice.Client.Commands.WkTree;
+using Codice.CM.Common;
+
+namespace Codice
+{
+    internal static class CheckWorkspaceTreeNodeStatus
+    {
+        internal static bool IsPrivate(WorkspaceTreeNode node)
+        {
+            return node == null;
+        }
+
+        internal static bool IsCheckedOut(WorkspaceTreeNode node)
+        {
+            if (node == null)
+                return false;
+
+            return node.RevInfo.CheckedOut;
+        }
+
+        internal static bool IsAdded(WorkspaceTreeNode node)
+        {
+            if (node == null)
+                return false;
+
+            return node.RevInfo.CheckedOut &&
+                   node.RevInfo.ParentId == -1;
+        }
+
+        internal static bool IsDirectory(WorkspaceTreeNode node)
+        {
+            return node.RevInfo.Type == EnumRevisionType.enDirectory;
+        }
+    }
+}

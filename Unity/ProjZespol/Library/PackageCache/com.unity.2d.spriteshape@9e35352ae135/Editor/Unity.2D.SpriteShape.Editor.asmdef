@@ -1,3 +1,28 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:5e303f4f64cd97d78d02006f342c5690caa42436d79a7086b601afc98d9d6d04
-size 723
+{
+    "name": "Unity.2D.SpriteShape.Editor",
+    "rootNamespace": "",
+    "references": [
+        "Unity.InternalAPIEditorBridge.001",
+        "Unity.2D.Common.Editor",
+        "Unity.2D.Common.Runtime",
+        "Unity.2D.SpriteShape.Runtime",
+        "Unity.2D.Common.Path.Editor"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [
+        {
+            "name": "Unity",
+            "expression": "2023.2.0a22",
+            "define": "USE_NEW_EDITOR_ANALYTICS"
+        }
+    ],
+    "noEngineReferences": false
+}

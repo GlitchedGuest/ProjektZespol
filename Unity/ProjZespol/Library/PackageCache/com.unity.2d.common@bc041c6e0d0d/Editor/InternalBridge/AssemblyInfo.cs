@@ -1,3 +1,9 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:77dee02bac5709b1ffd3933c96cc57320311f61e6b9c385f95ec276ee5cb070f
-size 483
+using System.Runtime.CompilerServices;
+
+[assembly: InternalsVisibleTo("Unity.2D.Animation.Editor")]
+[assembly: InternalsVisibleTo("Unity.2D.Animation.Tests.EditorTests")]
+[assembly: InternalsVisibleTo("Unity.2D.SpriteShape.Editor")]
+[assembly: InternalsVisibleTo("Unity.2D.SpriteShape.EditorTests")]
+[assembly: InternalsVisibleTo("Unity.2D.PsdImporter.Editor")]
+[assembly: InternalsVisibleTo("Unity.2D.Muse.Editor")]
+[assembly: InternalsVisibleTo("Unity.2D.Muse.Tests.EditorTests")]

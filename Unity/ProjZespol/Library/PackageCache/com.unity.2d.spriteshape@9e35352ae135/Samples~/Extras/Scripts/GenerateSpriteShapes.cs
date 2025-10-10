@@ -1,3 +1,49 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:09e00458c8d7cbb87e3a07bc9abdecde651599f750207488288b6afbb5cd90aa
-size 1877
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.Rendering;
+using UnityEngine.U2D;
+
+namespace SpriteShapeExtras
+{
+
+    // Please add this Component to Camera or some top level object on each loadable scene.
+    public class GenerateSpriteShapes : MonoBehaviour
+    {
+
+        // Once all SpriteShapes are rendered, remove this Component if On or remove it from elsewhere.
+        public bool destroyOnCompletion = true;
+
+        void OnGUI()
+        {
+
+            // Loop all invisible SpriteShapeRenderers and generate geometry.
+            SpriteShapeRenderer[] spriteShapeRenderers = (SpriteShapeRenderer[])GameObject.FindObjectsByType<SpriteShapeRenderer>(FindObjectsSortMode.None);
+            CommandBuffer rc = new CommandBuffer();
+            rc.GetTemporaryRT(0, 256, 256, 0);
+            rc.SetRenderTarget(0);
+            foreach (var spriteShapeRenderer in spriteShapeRenderers)
+            {
+                var spriteShapeController = spriteShapeRenderer.gameObject.GetComponent<SpriteShapeController>();
+                if (spriteShapeRenderer != null && spriteShapeController != null)
+                {
+                    if (!spriteShapeRenderer.isVisible)
+                    {
+                        spriteShapeController.BakeMesh();
+                        rc.DrawRenderer(spriteShapeRenderer, spriteShapeRenderer.sharedMaterial);
+                        // Debug.Log("generating shape for " + spriteShapeRenderer.gameObject.name);
+                    }
+                }
+            }
+            rc.ReleaseTemporaryRT(0);
+            Graphics.ExecuteCommandBuffer(rc);
+
+            // SpriteShape Renderers are generated. This component is no longer needed. Delete this [or] remove this Component from elsewhere.
+            if (destroyOnCompletion)
+                Destroy(this);
+
+        }
+
+    }
+
+}

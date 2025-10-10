@@ -1,3 +1,57 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:6cdd690005049341810030150b20718db508cc76eb7488683ff7d9589eb560d4
-size 1769
+using GluonGui;
+using PlasticGui;
+using Unity.PlasticSCM.Editor.UI;
+
+namespace Unity.PlasticSCM.Editor.Toolbar.Headless
+{
+    internal class HeadlessGluonViewHost
+    {
+        internal ViewHost ViewHost { get { return mViewHost; } }
+
+        internal HeadlessGluonViewHost(IRefreshableView branchesListPopupPanel)
+        {
+            mViewHost = new ViewHost();
+
+            mViewHost.AddRefreshableView(
+                ViewType.BranchesListPopup,
+                branchesListPopupPanel);
+            mViewHost.AddRefreshableView(
+                ViewType.PendingChangesView,
+                new RefreshableView(ViewType.PendingChangesView));
+            mViewHost.AddRefreshableView(
+                ViewType.IncomingChangesView,
+                new RefreshableView(ViewType.IncomingChangesView));
+            mViewHost.AddRefreshableView(
+                ViewType.BranchesView,
+                new RefreshableView(ViewType.BranchesView));
+            mViewHost.AddRefreshableView(
+                ViewType.ChangesetsView,
+                new RefreshableView(ViewType.ChangesetsView));
+            mViewHost.AddRefreshableView(
+                ViewType.HistoryView,
+                new RefreshableView(ViewType.HistoryView));
+        }
+
+        ViewHost mViewHost;
+
+        class RefreshableView : IRefreshableView
+        {
+            internal RefreshableView(ViewType viewType)
+            {
+                mViewType = viewType;
+            }
+
+            void IRefreshableView.Refresh()
+            {
+                UVCSWindow window = GetWindowIfOpened.UVCS();
+
+                if (window == null)
+                    return;
+
+                window.ViewHost.RefreshView(mViewType);
+            }
+
+            readonly ViewType mViewType;
+        }
+    }
+}

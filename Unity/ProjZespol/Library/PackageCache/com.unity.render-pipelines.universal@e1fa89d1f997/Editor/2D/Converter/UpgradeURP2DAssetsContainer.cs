@@ -1,3 +1,8 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:4aa4b7b1ebf1d8a9171f2eedb9e4c2e79ae6fc4f7fd7c17cb3ac93a54a060bef
-size 374
+namespace UnityEditor.Rendering.Universal
+{
+    internal sealed class UpgradeURP2DAssetsContainer : RenderPipelineConverterContainer
+    {
+        public override string name => "Upgrade 2D (URP) Assets";
+        public override string info => "Converter performs the following tasks:\n* Upgrades assets from earlier 2D URP versions to the current 2D URP version.";
+    }
+}

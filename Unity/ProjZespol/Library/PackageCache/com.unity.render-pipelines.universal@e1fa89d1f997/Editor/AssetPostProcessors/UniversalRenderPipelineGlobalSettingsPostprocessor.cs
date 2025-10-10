@@ -1,3 +1,17 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:afb941318032cb5d325a612aa22473d555bc2703be14c71be8d5f711d73a0540
-size 798
+﻿using System.Linq;
+using UnityEngine.Rendering.Universal;
+
+namespace UnityEditor.Rendering.Universal
+{
+    //We ensure and save GS after each domain reload because we need to make them valid for AssetImportWorkers.
+    //They will create render pipeline separately but they can't migrate or create new Assets.
+    class UniversalRenderPipelineGlobalSettingsPostprocessor : AssetPostprocessor
+    {
+        const string k_GraphicsSettingsPath = "ProjectSettings/GraphicsSettings.asset";
+        static void OnPostprocessAllAssets(string[] importedAssets , string[] __, string[] ___, string[] ____, bool didDomainReload)
+        {
+            if (didDomainReload || importedAssets.Contains(k_GraphicsSettingsPath))
+                UniversalRenderPipelineGlobalSettings.Ensure();
+        }
+    }
+}

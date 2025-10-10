@@ -1,3 +1,55 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:2e7d39f66de7341cdc169e33fd3b0bda61a60c5b464e61f3d673aa276868d5be
-size 1427
+using UnityEditor;
+using UnityEngine;
+
+using PlasticGui;
+using PlasticGui.WorkspaceWindow.Merge;
+
+namespace Unity.PlasticSCM.Editor.Views.Merge.Developer.DirectoryConflicts
+{
+    internal class DivergentMoveMenu : MergeViewDirectoryConflictMenu.IDirectoryConflictMenu
+    {
+        internal DivergentMoveMenu(
+            IMergeViewMenuOperations mergeViewMenuOperations)
+        {
+            mMergeViewMenuOperations = mergeViewMenuOperations;
+
+            BuildComponents();
+        }
+
+        GenericMenu MergeViewDirectoryConflictMenu.IDirectoryConflictMenu.Menu
+        {
+            get { return mMenu; }
+        }
+
+        void MergeViewDirectoryConflictMenu.IDirectoryConflictMenu.Popup()
+        {
+            mMenu = new GenericMenu();
+
+            UpdateMenuItems(mMenu);
+
+            mMenu.ShowAsContext();
+        }
+
+        void ViewSource_Click()
+        {
+            mMergeViewMenuOperations.OpenSrcRevision();
+        }
+
+        void UpdateMenuItems(GenericMenu menu)
+        {
+            menu.AddItem(mViewSourceMenuItemContent, false, ViewSource_Click);
+        }
+
+        void BuildComponents()
+        {
+            mViewSourceMenuItemContent = new GUIContent(
+                PlasticLocalization.Name.DivergentMoveViewSource.GetString());
+        }
+
+        GenericMenu mMenu;
+
+        GUIContent mViewSourceMenuItemContent;
+
+        readonly IMergeViewMenuOperations mMergeViewMenuOperations;
+    }
+}

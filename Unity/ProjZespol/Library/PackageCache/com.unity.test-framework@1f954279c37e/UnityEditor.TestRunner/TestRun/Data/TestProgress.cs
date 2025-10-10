@@ -1,3 +1,30 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:65890903334dade8e6ea2c1680c33af9174123ba57c84babad6beeabb0845867
-size 688
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using UnityEngine;
+
+namespace UnityEditor.TestTools.TestRunner.TestRun
+{
+    [Serializable]
+    internal class TestProgress
+    {
+        [SerializeField]
+        public string CurrentTest;
+
+        [SerializeField]
+        public string[] AllTestsToRun;
+
+        [SerializeField]
+        public List<string> RemainingTests;
+
+        [SerializeField]
+        public List<string> CompletedTests;
+
+        public TestProgress(string[] allTestsToRun)
+        {
+            AllTestsToRun = allTestsToRun;
+            RemainingTests = allTestsToRun.ToList();
+            CompletedTests = new List<string>();
+        }
+    }
+}

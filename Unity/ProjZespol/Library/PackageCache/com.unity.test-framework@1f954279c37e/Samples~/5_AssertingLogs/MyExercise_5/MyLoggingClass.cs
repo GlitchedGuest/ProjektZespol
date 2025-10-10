@@ -1,3 +1,17 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:16ef542e5b6909c76677f3b1cb33188023b4ba06229091f47d54bbad4a3cd90a
-size 332
+using UnityEngine;
+
+namespace MyExercise_5
+{
+    public class MyLoggingClass
+    {
+        public void DoSomething()
+        {
+            Debug.Log("Doing something");
+        }
+        
+        public void DoSomethingElse()
+        {
+            Debug.LogError("An error happened. Code: " + Random.Range(0, 10));
+        }
+    }
+}

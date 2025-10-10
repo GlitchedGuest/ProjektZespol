@@ -1,3 +1,53 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:6bb4c05200343505ff73abc57724f843586429f7a102409b9146e0568c080b97
-size 1425
+#if !UNITY_6000_3_OR_NEWER
+using UnityEditor;
+
+using Unity.PlasticSCM.Editor.Configuration;
+using Unity.PlasticSCM.Editor.Toolbar;
+
+namespace Unity.Cloud.Collaborate
+{
+    [InitializeOnLoad]
+    static class UVCSToolbarBoostrap
+    {
+        static UVCSToolbarBoostrap()
+        {
+            mDropDownButton = new UVCSToolbarButton(
+                UVCSToolbar.Controller.PopupClicked,
+                Toolbar.RepaintToolbar);
+
+            Toolbar.AddSubToolbar(mDropDownButton);
+
+            UVCSToolbar.Controller.OnToolbarInvalidated += ToolbarInvalidated;
+            UVCSToolbar.Controller.OnToolbarButtonInvalidated += ButtonInvalidated;
+
+            ButtonInvalidated();
+        }
+
+        static void ToolbarInvalidated()
+        {
+            Toolbar.RepaintToolbar();
+        }
+
+        static void ButtonInvalidated()
+        {
+            UVCSToolbarButtonData buttonData = UVCSToolbar.Controller.GetButtonData();
+
+            mDropDownButton.BeginUpdate();
+
+            try
+            {
+                mDropDownButton.Text = buttonData.Text;
+                mDropDownButton.Tooltip = buttonData.Tooltip;
+                mDropDownButton.Icon = buttonData.Icon;
+                mDropDownButton.IsVisible = buttonData.IsVisible;
+            }
+            finally
+            {
+                mDropDownButton.EndUpdate();
+            }
+        }
+
+        static UVCSToolbarButton mDropDownButton;
+    }
+}
+#endif

@@ -1,3 +1,9 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:bd090678b9b66a32e02035f8d5d3bab5a2a635a9106495a1a14f175f4ac991cd
-size 310
+namespace UnityEditor.U2D.Animation
+{
+    internal static class SpriteLibrarySourceAssetPropertyString
+    {
+        public const string library = "m_Library";
+        public const string primaryLibraryGUID = "m_PrimaryLibraryGUID";
+        public const string modificationHash = "m_ModificationHash";
+    }
+}

@@ -1,3 +1,44 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:85bef535d80e3f4f03d339815f834042cbc043848146e59b0f1b6cee1c314600
-size 1225
+using System;
+
+namespace UnityEngine.U2D.Animation
+{
+    internal static class SpriteLibraryUtility
+    {
+        // Allow delegate override for test
+        internal static Func<string, int> GetStringHash = Bit30Hash_GetStringHash;
+
+        /// <summary>
+        /// Used to convert Sprite Key to the new Sprite Hash.
+        /// </summary>
+        /// <param name="input">Sprite Key to convert</param>
+        /// <returns>A 30-bit long hash.</returns>
+        internal static int Convert32BitTo30BitHash(int input)
+        {
+            int output = PreserveFirst30Bits(input);
+            return output;
+        }
+
+        static int Bit30Hash_GetStringHash(string value)
+        {
+#if DEBUG_GETSTRINGHASH_CLASH
+            if (value == "abc" || value == "123")
+                value = "abc";
+#endif
+            int hash = Animator.StringToHash(value);
+            hash = PreserveFirst30Bits(hash);
+            return hash;
+        }
+
+        static int PreserveFirst30Bits(int input)
+        {
+            const int mask = 0x3FFFFFFF;
+            return input & mask;
+        }
+
+        internal static long GenerateHash()
+        {
+            long hash = DateTime.Now.Ticks;
+            return hash;
+        }
+    }
+}

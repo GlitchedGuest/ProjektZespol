@@ -1,3 +1,35 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:bb29c4c6cc33a9bd2a5fd1c2d5832956cd9002b741f598fdf7f301e539fc3c19
-size 1256
+using UnityEditor;
+
+namespace Unity.Multiplayer.Center.Recommendations
+{
+    /// <summary>
+    /// Current way to fetch recommendation data from disk. Will probably change to fetching something from a server.
+    /// </summary>
+    [FilePath(PathConstants.RecommendationDataPath, FilePathAttribute.Location.ProjectFolder)]
+    internal class RecommenderSystemDataObject : ScriptableSingleton<RecommenderSystemDataObject>
+    {
+        public RecommenderSystemData RecommenderSystemData;
+        
+#if MULTIPLAYER_CENTER_DEV_MODE  
+        [MenuItem("Multiplayer/Recommendations/Populate Default Recommendation Data")]
+        public static void CreateDefaultInstance()
+        {
+            instance.RecommenderSystemData = RecommendationAssetUtils.PopulateDefaultRecommendationData();
+            instance.ForceSave();
+        }
+
+        void ForceSave()
+        {
+            base.Save(saveAsText:true);
+            AssetDatabase.Refresh();
+            DestroyImmediate(this);
+        }
+#endif
+    }
+
+    static class PathConstants
+    {
+        const string k_RootPath = "Packages/com.unity.multiplayer.center/Editor/Recommendations/";
+        public const string RecommendationDataPath = k_RootPath + "RecommendationData_6000.0.recommendations";
+    }
+}

@@ -1,3 +1,21 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:f0d457a2186953a96ace26888277ebed7ce19410193a957d1f8eebeb6f764f56
-size 523
+using UnityEditor.IMGUI.Controls;
+
+using Codice.CM.Common;
+
+#if UNITY_6000_2_OR_NEWER
+using TreeViewItem = UnityEditor.IMGUI.Controls.TreeViewItem<int>;
+#endif
+
+namespace Unity.PlasticSCM.Editor.CloudDrive.CreateWorkspace
+{
+    internal class CollaboratorsListViewItem : TreeViewItem
+    {
+        internal SecurityMember User { get; private set; }
+
+        internal CollaboratorsListViewItem(int id, SecurityMember user) : base(id)
+        {
+            User = user;
+            displayName = user.Name;
+        }
+    }
+}

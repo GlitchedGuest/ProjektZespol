@@ -1,3 +1,22 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:a1c43652a613a5eddd8749044168edd57d8256236ea8a29d6c8328b6cc62b040
-size 643
+using System.IO;
+
+namespace UnityEditor.U2D.Aseprite
+{
+    /// <summary>
+    /// Parsed representation of an Aseprite Path chunk.
+    /// Not supported yet.
+    /// </summary>
+    internal class PathChunk : BaseChunk
+    {
+        /// <inheritdoc />
+        public override ChunkTypes chunkType => ChunkTypes.Path;
+
+        internal PathChunk(uint chunkSize) : base(chunkSize) { }
+        
+        /// <summary>
+        /// Read and store the chunk data.
+        /// </summary>
+        /// <param name="reader">The active binary reader of the file.</param>        
+        protected override void InternalRead(BinaryReader reader) { }
+    }
+}

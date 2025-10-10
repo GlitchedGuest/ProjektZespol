@@ -1,3 +1,41 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:9bb51132c76edc630b56a2519fa2ef874801c31ffbd126ff9764062d70f96d2b
-size 985
+﻿using UnityEditor;
+using UnityEngine;
+
+using Unity.PlasticSCM.Editor.UI;
+
+namespace Unity.PlasticSCM.Editor.AssetUtils
+{
+    internal static class RepaintEditor
+    {
+        internal static void InspectorWindow()
+        {
+            UnityEditor.Editor[] editors =
+                Resources.FindObjectsOfTypeAll<UnityEditor.Editor>();
+
+            foreach (UnityEditor.Editor editor in editors)
+                editor.Repaint();
+        }
+
+        internal static void ProjectWindow()
+        {
+            EditorWindow projectWindow = FindEditorWindow.ProjectWindow();
+
+            if (projectWindow == null)
+                return;
+
+            projectWindow.Repaint();
+        }
+
+        internal static void HierarchyWindow()
+        {
+            EditorApplication.RepaintHierarchyWindow();
+        }
+
+        internal static void AllWindowsWithOverlays()
+        {
+            InspectorWindow();
+            ProjectWindow();
+            HierarchyWindow();
+        }
+    }
+}

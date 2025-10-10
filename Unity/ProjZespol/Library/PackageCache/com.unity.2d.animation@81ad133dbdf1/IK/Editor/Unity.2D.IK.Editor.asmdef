@@ -1,3 +1,23 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:54261a429b4f83833ee6c1908efa0c65bec5274468e22c835f302a2b456fab4d
-size 617
+{
+    "name": "Unity.2D.IK.Editor",
+    "references": [
+        "Unity.InternalAPIEditorBridge.001",
+        "Unity.InternalAPIEngineBridge.001",
+        "Unity.2D.Common.Editor",
+        "Unity.2D.Common.Runtime",
+        "Unity.2D.IK.Runtime",
+        "Unity.2D.Animation.Runtime",
+        "Unity.2D.Animation.Editor"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

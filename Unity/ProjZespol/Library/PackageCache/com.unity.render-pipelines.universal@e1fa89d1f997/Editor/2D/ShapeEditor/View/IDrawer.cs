@@ -1,3 +1,18 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:4a52dc89e5e76a69f23ebd6c22d1d8816911d2ff299c6fac795e7b900edd94e8
-size 722
+using UnityEngine;
+
+namespace UnityEditor.Rendering.Universal.Path2D
+{
+    internal interface IDrawer
+    {
+        void DrawSelectionRect(Rect rect);
+        void DrawCreatePointPreview(Vector3 position);
+        void DrawRemovePointPreview(Vector3 position);
+        void DrawPoint(Vector3 position);
+        void DrawPointHovered(Vector3 position);
+        void DrawPointSelected(Vector3 position);
+        void DrawLine(Vector3 p1, Vector3 p2, float width, Color color);
+        void DrawDottedLine(Vector3 p1, Vector3 p2, float width, Color color);
+        void DrawBezier(Vector3 p1, Vector3 p2, Vector3 p3, Vector3 p4, float width, Color color);
+        void DrawTangent(Vector3 position, Vector3 tangent);
+    }
+}

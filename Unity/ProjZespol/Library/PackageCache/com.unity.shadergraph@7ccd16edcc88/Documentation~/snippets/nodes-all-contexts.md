@@ -1,3 +1,5 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:40c1b462a6de2dd913910fca48b0f364b1a39c58df5ac99e1bc506a5646024b5
-size 203
+---
+title: nodes-all-contexts.md
+---
+
+node can also be connected to any Block node in either Context. For more information on Block nodes and Contexts, see <a href="../Master-Stack.md">Master Stack</a>.

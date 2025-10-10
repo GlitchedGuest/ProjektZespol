@@ -1,3 +1,26 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:2e2d55dc0463eefa8990e990125a8716d9cdcb6298649cbeb8daf206b072a6e1
-size 1009
+using System;
+using System.Collections;
+using UnityEditor.TestTools.TestRunner.Api;
+
+namespace UnityEditor.TestTools.TestRunner.TestRun.Tasks.Events
+{
+    internal class RegisterCallbackDelegatorEventsTask : TestTaskBase
+    {
+        public RegisterCallbackDelegatorEventsTask()
+        {
+            RerunAfterResume = true;
+        }
+
+        internal ICallbacksDelegator ApiCallbacksDelegator = CallbacksDelegator.instance;
+
+        public override IEnumerator Execute(TestJobData testJobData)
+        {
+            ApiCallbacksDelegator.SetTestRunFilter(testJobData.executionSettings.BuildNUnitFilter());
+            testJobData.RunStartedEvent.AddListener(ApiCallbacksDelegator.RunStarted);
+            testJobData.TestStartedEvent.AddListener(ApiCallbacksDelegator.TestStarted);
+            testJobData.TestFinishedEvent.AddListener(ApiCallbacksDelegator.TestFinished);
+            testJobData.RunFinishedEvent.AddListener(ApiCallbacksDelegator.RunFinished);
+            yield break;
+        }
+    }
+}

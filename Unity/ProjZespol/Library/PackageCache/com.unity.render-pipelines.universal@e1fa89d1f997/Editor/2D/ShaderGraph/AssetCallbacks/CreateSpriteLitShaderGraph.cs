@@ -1,3 +1,29 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:d6863bb37f7493797eca5b7204c5e2306982fd3bfbb868435bc8323e4a7756bd
-size 1165
+using System;
+using UnityEditor.ShaderGraph;
+using UnityEngine.Rendering;
+
+namespace UnityEditor.Rendering.Universal.ShaderGraph
+{
+    static class CreateSpriteLitShaderGraph
+    {
+        [MenuItem("Assets/Create/Shader Graph/URP/Sprite Lit Shader Graph", priority = CoreUtils.Sections.section1 + CoreUtils.Priorities.assetsCreateShaderMenuPriority + 1)]
+        public static void CreateSpriteLitGraph()
+        {
+            var target = (UniversalTarget)Activator.CreateInstance(typeof(UniversalTarget));
+            target.TrySetActiveSubTarget(typeof(UniversalSpriteLitSubTarget));
+
+            var blockDescriptors = new[]
+            {
+                BlockFields.VertexDescription.Position,
+                BlockFields.VertexDescription.Normal,
+                BlockFields.VertexDescription.Tangent,
+                BlockFields.SurfaceDescription.BaseColor,
+                UniversalBlockFields.SurfaceDescription.SpriteMask,
+                BlockFields.SurfaceDescription.NormalTS,
+                BlockFields.SurfaceDescription.Alpha,
+            };
+
+            GraphUtil.CreateNewGraphWithOutputs(new[] { target }, blockDescriptors);
+        }
+    }
+}

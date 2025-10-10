@@ -1,3 +1,25 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:ed92b302d97d374ed3e6f7e0e1c01e662ff438f7b9f8d3c3f0727d8dda184d14
-size 706
+using System;
+using System.Collections;
+using UnityEngine;
+using UnityEngine.TestTools.TestRunner;
+
+namespace UnityEditor.TestTools.TestRunner.TestRun.Tasks.Events
+{
+    internal class CreateEventsTask : TestTaskBase
+    {
+        public CreateEventsTask()
+        {
+            RerunAfterResume = true;
+        }
+
+        public override IEnumerator Execute(TestJobData testJobData)
+        {
+            testJobData.RunStartedEvent = new RunStartedEvent();
+            testJobData.TestStartedEvent = new TestStartedEvent();
+            testJobData.TestFinishedEvent = new TestFinishedEvent();
+            testJobData.RunFinishedEvent = new RunFinishedEvent();
+
+            yield break;
+        }
+    }
+}

@@ -1,3 +1,1 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:a4b563dbd98e6413e205c75f156c7622801b15ec5dcb4672cd48b1b000eeab87
-size 24
+E:\ProjektZespol\Unity\ProjZespol

@@ -1,3 +1,18 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:5f0cfae73f279787900571355b1ba77a2642d6f554c3cfb92391b2c668aaa71e
-size 377
+﻿using System.Collections;
+using System.Collections.Generic;
+using NUnit.Framework;
+using UnityEngine;
+using UnityEngine.TestTools;
+
+namespace PlayModeTests_10s
+{
+    public class SlowTests
+    {
+        [UnityTest]
+        [Explicit, Category("integration")]
+        public IEnumerator ASlowTest()
+        {
+            yield return new WaitForSeconds(5);
+        }
+    }
+}

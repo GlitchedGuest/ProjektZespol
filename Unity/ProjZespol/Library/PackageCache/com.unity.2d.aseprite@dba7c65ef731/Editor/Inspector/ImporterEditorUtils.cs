@@ -1,3 +1,18 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:c9d52bc8bfab6208952241d6e459c8c7d70d026fa7c91d193b03329c48af57e3
-size 547
+using UnityEngine.UIElements;
+
+namespace UnityEditor.U2D.Aseprite
+{
+    internal static class ImporterEditorUtils
+    {
+        const string k_DarkSkinUssClass = "asepriteImporter-editor-dark";
+        const string k_LightSkinUssClass = "asepriteImporter-editor-light";
+
+        public static void AddSkinUssClass(VisualElement element)
+        {
+            if (EditorGUIUtility.isProSkin)
+                element.AddToClassList(k_DarkSkinUssClass);
+            else
+                element.AddToClassList(k_LightSkinUssClass);
+        }
+    }
+}

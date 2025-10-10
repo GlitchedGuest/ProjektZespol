@@ -1,3 +1,19 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:beb53463b87c347f13d441c07d7282b589229a2938e3c9d0ff7189dd0874ba24
-size 971
+using Unity.Collections;
+using Unity.Burst;
+
+namespace UnityEngine.Rendering
+{
+    [BurstCompile]
+    internal static class InstanceCullerBurst
+    {
+        [BurstCompile(DisableSafetyChecks = true, OptimizeFor = OptimizeFor.Performance)]
+        public static unsafe void SetupCullingJobInput(float lodBias, BatchCullingContext* context, ReceiverPlanes* receiverPlanes,
+            ReceiverSphereCuller* receiverSphereCuller, FrustumPlaneCuller* frustumPlaneCuller, float* screenRelativeMetric)
+        {
+            *receiverPlanes = ReceiverPlanes.Create(*context, Allocator.TempJob);
+            *receiverSphereCuller = ReceiverSphereCuller.Create(*context, Allocator.TempJob);
+            *frustumPlaneCuller = FrustumPlaneCuller.Create(*context, receiverPlanes->planes.AsArray(), *receiverSphereCuller, Allocator.TempJob);
+            *screenRelativeMetric = LODGroupRenderingUtils.CalculateScreenRelativeMetric(context->lodParameters, lodBias);
+        }
+    }
+}

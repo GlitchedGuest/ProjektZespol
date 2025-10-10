@@ -1,3 +1,20 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:442f29710730aaf0004f322b6bf2a7d2d0915f21e1b1f7075fc40b2bcbc16369
-size 929
+namespace UnityEngine.Rendering.Universal
+{
+    /// <summary>
+    /// Utility class for component checks.
+    /// </summary>
+    public static class ComponentUtility
+    {
+        /// <summary> Check if the provided camera is compatible with Universal Render Pipeline </summary>
+        /// <param name="camera">The Camera to check</param>
+        /// <returns>True if it is compatible, false otherwise</returns>
+        public static bool IsUniversalCamera(Camera camera)
+            => camera.GetComponent<UniversalAdditionalCameraData>() != null;
+
+        /// <summary> Check if the provided light is compatible with Universal Render Pipeline </summary>
+        /// <param name="light">The Light to check</param>
+        /// <returns>True if it is compatible, false otherwise</returns>
+        public static bool IsUniversalLight(Light light)
+            => light.GetComponent<UniversalAdditionalLightData>() != null;
+    }
+}

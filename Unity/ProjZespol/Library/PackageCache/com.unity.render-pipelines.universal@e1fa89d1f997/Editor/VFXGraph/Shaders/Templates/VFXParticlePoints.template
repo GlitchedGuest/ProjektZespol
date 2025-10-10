@@ -1,3 +1,13 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:b234d3a78e73aec713142758867196a3d2c7cab69448712510359247d9d50778
-size 617
+{
+	SubShader
+	{	
+		${VFXInclude("Shaders/VFXParticleHeader.template")}
+		${VFXInclude("Shaders/ParticlePoints/PassSelection.template")}
+		${VFXInclude("Shaders/ParticlePoints/PassDepth.template"),IS_OPAQUE_PARTICLE}
+		${VFXInclude("Shaders/ParticlePoints/PassDepthNormal.template"),IS_OPAQUE_PARTICLE}
+		${VFXInclude("Shaders/ParticlePoints/PassVelocity.template"),USE_MOTION_VECTORS_PASS}
+		${VFXInclude("Shaders/ParticlePoints/PassForward.template")}
+		${VFXInclude("Shaders/ParticlePoints/PassShadowCaster.template"),USE_CAST_SHADOWS_PASS}
+		${VFXIncludeRP("Templates/ParticlePoints/PassForward2D.template")}
+	}
+}

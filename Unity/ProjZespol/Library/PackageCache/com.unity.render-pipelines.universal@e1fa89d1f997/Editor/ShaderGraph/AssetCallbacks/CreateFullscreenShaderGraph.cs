@@ -1,3 +1,25 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:11bf801cd6c226791352881438ff4ffead0a7fdb5cd0e5a3ca9ab3732e3b9950
-size 926
+using System;
+using UnityEditor.ShaderGraph;
+using UnityEngine.Rendering;
+using UnityEditor.Rendering.Fullscreen.ShaderGraph;
+
+namespace UnityEditor.Rendering.Universal.ShaderGraph
+{
+    static class CreateFullscreenShaderGraph
+    {
+        [MenuItem("Assets/Create/Shader Graph/URP/Fullscreen Shader Graph", priority = CoreUtils.Sections.section5 + CoreUtils.Priorities.assetsCreateShaderMenuPriority)]
+        public static void CreateFullscreenGraph()
+        {
+            var target = (UniversalTarget)Activator.CreateInstance(typeof(UniversalTarget));
+            target.TrySetActiveSubTarget(typeof(UniversalFullscreenSubTarget));
+
+            var blockDescriptors = new[]
+            {
+                BlockFields.SurfaceDescription.BaseColor,
+                BlockFields.SurfaceDescription.Alpha,
+            };
+
+            GraphUtil.CreateNewGraphWithOutputs(new[] { target }, blockDescriptors);
+        }
+    }
+}

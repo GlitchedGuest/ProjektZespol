@@ -1,3 +1,18 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:132499d3e2d8e7446ff472b0054a14876ff59e80c0920c1d3e74a385e454d42e
-size 527
+﻿using System;
+
+namespace Unity.PerformanceTesting.Exceptions
+{
+    /// <summary>
+    /// Performance test exception.
+    /// </summary>
+    [Serializable]
+    public class PerformanceTestException : System.Exception
+    {
+        /// <summary>
+        /// Performance test exception. Used to indicate failures while running a performance test.
+        /// </summary>
+        /// <param name="message">Exception message.</param>
+        public PerformanceTestException(string message)
+            : base(message) { }
+    }
+}

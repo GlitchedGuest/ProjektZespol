@@ -1,3 +1,38 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:e4e4e62d3599c83d821ee7e447a0f8ff52591a674119b4daf3321a81f6f6967b
-size 961
+using Unity.PlasticSCM.Editor.UI;
+
+namespace Unity.PlasticSCM.Editor.CloudDrive
+{
+    internal static class CloudDriveMenuItem
+    {
+        internal static void AddMenuItem()
+        {
+            HandleMenuItem.AddMenuItem(
+                MENU_ITEM_NAME,
+                MENU_ITEM_PRIORITY,
+                ShowCloudDriveWindow,
+                validate: null);
+        }
+
+        internal static void RemoveMenuItem()
+        {
+            HandleMenuItem.RemoveMenuItem(MENU_ITEM_NAME);
+        }
+
+        static void ShowCloudDriveWindow()
+        {
+            ShowWindow.CloudDrive();
+        }
+
+        const string MENU_ITEM_NAME = "Window/" + UnityConstants.CloudDrive.WINDOW_TITLE;
+
+        const int MENU_ITEM_PRIORITY =
+        // Display the menu item in alphabetical order,
+#if UNITY_6000_1_OR_NEWER
+        // before Window/UI Toolkit
+        3019;
+#else
+        // after Window/Search and before Window/Asset Store
+        1300;
+#endif
+    }
+}

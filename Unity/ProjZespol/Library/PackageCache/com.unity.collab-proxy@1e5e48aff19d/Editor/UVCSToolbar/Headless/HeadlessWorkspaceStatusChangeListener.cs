@@ -1,3 +1,30 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:bdaeb67c8ba15a4c154bacb5a6a78ff3dfcb3160fb171dfc5a2ffeba9c0cee0f
-size 831
+using System;
+
+using PlasticGui.Gluon;
+using Unity.PlasticSCM.Editor.UI;
+
+namespace Unity.PlasticSCM.Editor.Toolbar.Headless
+{
+    internal class HeadlessWorkspaceStatusChangeListener : IWorkspaceStatusChangeListener
+    {
+        internal HeadlessWorkspaceStatusChangeListener(Action refreshWorkspaceWorkingInfo)
+        {
+            mRefreshWorkspaceWorkingInfo = refreshWorkspaceWorkingInfo;
+        }
+
+        void IWorkspaceStatusChangeListener.OnWorkspaceStatusChanged()
+        {
+            UVCSWindow window = GetWindowIfOpened.UVCS();
+
+            if (window == null)
+            {
+                mRefreshWorkspaceWorkingInfo();
+                return;
+            }
+
+            window.IWorkspaceStatusChangeListener.OnWorkspaceStatusChanged();
+        }
+
+        readonly Action mRefreshWorkspaceWorkingInfo;
+    }
+}

@@ -1,3 +1,15 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:3c0d7391c5fac01f532f321872ae91d174ed95132a920cbf0fa16007f593c33e
-size 441
+using UnityEngine;
+using UnityEngine.Rendering;
+using UnityEngine.Rendering.Universal;
+
+namespace UnityEditor.Rendering.Universal
+{
+    class ModelPostprocessor : AssetPostprocessor
+    {
+        void OnPostprocessModel(GameObject go)
+        {
+            CoreEditorUtils.AddAdditionalData<Camera, UniversalAdditionalCameraData>(go);
+            CoreEditorUtils.AddAdditionalData<Light, UniversalAdditionalLightData>(go);
+        }
+    }
+}

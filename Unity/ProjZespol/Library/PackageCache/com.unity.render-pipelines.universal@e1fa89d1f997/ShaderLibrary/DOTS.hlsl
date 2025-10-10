@@ -1,3 +1,13 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:424a623118393c12bf4191ed1873c1d88fc66c9afa74e7488782271a25cc9e0f
-size 447
+#ifndef UNIVERSAL_DOTS_PRAGMAS_INCLUDED
+#define UNIVERSAL_DOTS_PRAGMAS_INCLUDED
+
+#ifndef HAVE_VFX_MODIFICATION
+    #pragma multi_compile _ DOTS_INSTANCING_ON
+    #if UNITY_PLATFORM_ANDROID || (UNITY_PLATFORM_WEBGL && !SHADER_API_WEBGPU) || UNITY_PLATFORM_UWP
+        #pragma target 3.5 DOTS_INSTANCING_ON
+    #else
+        #pragma target 4.5 DOTS_INSTANCING_ON
+    #endif
+#endif // HAVE_VFX_MODIFICATION
+
+#endif // UNIVERSAL_DOTS_PRAGMAS_INCLUDED

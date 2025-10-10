@@ -1,3 +1,22 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:ec01542a36d81eb46e97c3103d6f3bb194cb5f19987783f8157b91fc880db1e4
-size 984
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &1
+MonoBehaviour:
+  m_ObjectHideFlags: 61
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 12386, guid: 0000000000000000e000000000000000, type: 0}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Keys:
+  - __PanelContainer__rootVisualContainer__package-list-scrollview-key__UnityEditor.PackageManager.UI.Internal.PackageListScrollView
+  - __PanelContainer__rootVisualContainer__package-list-scrollview-key__VerticalScroller__Slider__UnityEngine.UIElements.Scroller+ScrollerSlider
+  - __PanelContainer__rootVisualContainer__package-list-scrollview-key__HorizontalScroller__Slider__UnityEngine.UIElements.Scroller+ScrollerSlider
+  m_Values:
+  - '{"m_ScrollOffset":{"x":0.0,"y":0.0}}'
+  - '{"m_Value":0.0,"m_LowValue":0.0,"m_HighValue":7.0}'
+  - '{"m_Value":0.0,"m_LowValue":0.0,"m_HighValue":0.0}'

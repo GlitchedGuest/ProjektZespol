@@ -1,3 +1,29 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:7d7b22aa31b0984ddfbce701142011f6e23ea4aa2afacdf7c3bcd3c6b36b32b0
-size 565
+#ifndef UNIVERSAL_SPEEDTREE7_INPUT_INCLUDED
+#define UNIVERSAL_SPEEDTREE7_INPUT_INCLUDED
+
+#define SPEEDTREE_Y_UP
+
+#ifdef GEOM_TYPE_BRANCH_DETAIL
+    #define GEOM_TYPE_BRANCH
+#endif
+
+
+#if defined(GEOM_TYPE_FROND) || defined(GEOM_TYPE_LEAF) || defined(GEOM_TYPE_FACING_LEAF)
+#define SPEEDTREE_ALPHATEST
+    half _Cutoff;
+#endif
+
+#ifdef SCENESELECTIONPASS
+    int _ObjectId;
+    int _PassValue;
+#endif
+
+#include "SpeedTree7CommonInput.hlsl"
+
+#ifdef GEOM_TYPE_BRANCH_DETAIL
+    sampler2D _DetailTex;
+#endif
+
+#define _Surface 0.0 // Speed Trees are always opaque
+
+#endif

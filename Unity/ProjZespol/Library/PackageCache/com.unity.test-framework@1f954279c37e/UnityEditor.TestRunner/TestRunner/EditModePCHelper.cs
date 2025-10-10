@@ -1,3 +1,33 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:a22d3b9ed2b024a397878536fd391fb09edbdc0d8681a1ac6355e0961c2258c0
-size 1007
+using System;
+using System.Collections;
+using System.Reflection;
+using UnityEngine.TestTools;
+
+namespace UnityEditor.TestTools.TestRunner
+{
+    internal class EditModePcHelper : TestCommandPcHelper
+    {
+        public override void SetEnumeratorPC(IEnumerator enumerator, int pc)
+        {
+            GetPCFieldInfo(enumerator).SetValue(enumerator, pc);
+        }
+
+        public override int GetEnumeratorPC(IEnumerator enumerator)
+        {
+            if (enumerator == null)
+            {
+                return 0;
+            }
+            return (int)GetPCFieldInfo(enumerator).GetValue(enumerator);
+        }
+
+        private FieldInfo GetPCFieldInfo(IEnumerator enumerator)
+        {
+            var field = enumerator.GetType().GetField("$PC", BindingFlags.NonPublic | BindingFlags.Instance);
+            if (field == null) // Roslyn
+                field = enumerator.GetType().GetField("<>1__state", BindingFlags.NonPublic | BindingFlags.Instance);
+
+            return field;
+        }
+    }
+}

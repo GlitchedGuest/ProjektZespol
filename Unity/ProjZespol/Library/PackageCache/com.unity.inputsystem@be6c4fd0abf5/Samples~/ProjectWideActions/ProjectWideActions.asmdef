@@ -1,3 +1,22 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:738b2fc2c30180112f6d4a686de615fb8ad8b82c38ec0f4af8edeb6512238ff7
-size 558
+{
+    "name": "ProjectWideActions",
+    "rootNamespace": "",
+    "references": [
+        "GUID:75469ad4d38634e559750d17036d5f7c"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [
+        {
+            "name": "Unity",
+            "expression": "2022.3",
+            "define": "UNITY_INPUT_SYSTEM_PROJECT_WIDE_ACTIONS"
+        }
+    ],
+    "noEngineReferences": false
+}

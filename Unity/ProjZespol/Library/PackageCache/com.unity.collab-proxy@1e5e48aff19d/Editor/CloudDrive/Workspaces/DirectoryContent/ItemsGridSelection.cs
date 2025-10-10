@@ -1,3 +1,31 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:20fdf104d3eed499490a1fcb7d328a0c44c40707c23bd0a4ed5360e179710ab7
-size 872
+using System.Collections.Generic;
+
+namespace Unity.PlasticSCM.Editor.CloudDrive.Workspaces.DirectoryContent
+{
+    internal static class ItemsGridSelection
+    {
+        internal static List<string> GetItemsPathsToSelect(
+            bool isItemsDirPathChanging,
+            ItemsGridView itemsGridView)
+        {
+            if (isItemsDirPathChanging)
+                return new List<string>();
+
+            return itemsGridView.GetSelectedItemsPaths();
+        }
+
+        internal static void SelectItems(
+            bool isItemsDirPathChanging,
+            List<string> itemsPathsToSelect,
+            ItemsGridView itemsGridView)
+        {
+            if (isItemsDirPathChanging)
+            {
+                itemsGridView.ClearSelection();
+                return;
+            }
+
+            itemsGridView.SelectItemsFromPaths(itemsPathsToSelect);
+        }
+    }
+}

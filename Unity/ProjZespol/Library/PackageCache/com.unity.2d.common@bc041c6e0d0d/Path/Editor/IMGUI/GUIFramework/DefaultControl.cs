@@ -1,3 +1,39 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:d05569e4a7ddd80600508802ebf1207d2ee3cfc248c6361c62bacc39ccdbb5b7
-size 1263
+﻿using System;
+using UnityEngine;
+
+namespace UnityEditor.U2D.Common.Path.GUIFramework
+{
+    /// <summary>
+    /// Represents the default implementation of a control.
+    /// </summary>
+    internal abstract class DefaultControl : Control
+    {
+        /// <summary>
+        /// Default kPickDistance == 5.0f
+        /// </summary>
+        public static readonly float kPickDistance = 5f;
+
+        /// <summary>
+        /// Initializes and returns an instance of DefaultControl
+        /// </summary>
+        /// <param name="name">The name of the default control.</param>
+        public DefaultControl(string name) : base(name)
+        {
+        }
+
+        /// <summary>
+        /// Overrides the Control.OnBeginLayout function.
+        /// </summary>
+        /// <remarks>
+        ///  Sets the LayoutData.distance to DefaultControl.kPickDistance.
+        /// </remarks>
+        /// <param name="data">The layout data.</param>
+        /// <param name="guiState">The current state of the custom editor.</param>
+        /// <returns>Returns the modified layout data.</returns>
+        protected override LayoutData OnBeginLayout(LayoutData data, IGUIState guiState)
+        {
+            data.distance = kPickDistance;
+            return data;
+        }
+    }
+}

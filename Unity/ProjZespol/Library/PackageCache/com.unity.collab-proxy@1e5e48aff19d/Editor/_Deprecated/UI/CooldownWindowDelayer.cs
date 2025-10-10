@@ -1,3 +1,35 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:2e1ec19a25055478e6132e3522b522b1dbef9b1e28adf7b3d1176d9777b48a7f
-size 987
+using System;
+using System.ComponentModel;
+
+namespace Unity.PlasticSCM.Editor.UI
+{
+    // Placeholder. This isn't a public API.
+    [EditorBrowsable(EditorBrowsableState.Never)]
+    [Obsolete("CooldownWindowDelayer is deprecated and will be removed in a future release", false)]
+    public class CooldownWindowDelayer
+    {
+        // Placeholder. This isn't a public API.
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        public CooldownWindowDelayer(Action action, double cooldownSeconds)
+        {
+        }
+
+        // Placeholder. This isn't a public API.
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        public void Ping()
+        {
+        }
+
+        // Placeholder. This isn't a public API.
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        public void Pause()
+        {
+        }
+
+        // Placeholder. This isn't a public API.
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        public void Resume()
+        {
+        }
+    }
+}

@@ -1,3 +1,23 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:dc170e05a02c019f65bf916d4682cc379a0407a87dd9a73cf7b3eebd37e813c7
-size 612
+namespace UnityEngine.U2D.Animation
+{
+    /// <summary>
+    /// Default script update order for 2D Animation systems.
+    /// </summary>
+    internal static class UpdateOrder
+    {
+        /// <summary>
+        /// Sprite Resolver execution order.
+        /// </summary>
+        public const int spriteResolverUpdateOrder = -20;
+
+        /// <summary>
+        /// IK Manager 2D execution order.
+        /// </summary>
+        public const int ikUpdateOrder = -10;
+
+        /// <summary>
+        /// Sprite Skin execution order.
+        /// </summary>
+        public const int spriteSkinUpdateOrder = 10;
+    }
+}

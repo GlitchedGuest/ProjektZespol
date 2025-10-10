@@ -1,3 +1,11 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:baaec2c9d4194e857cc1cbb7f9925fc9ed8dc0351bf05965f49796623682f41f
-size 602
+using System.Runtime.CompilerServices;
+
+[assembly: InternalsVisibleTo("Unity.RenderPipelines.Core.Runtime.Shared")]
+[assembly: InternalsVisibleTo("Unity.RenderPipelines.Core.Editor")]
+[assembly: InternalsVisibleTo("Unity.RenderPipelines.Core.Runtime.Tests")]
+[assembly: InternalsVisibleTo("Unity.GraphicTests.Performance.RPCore.Runtime")]
+[assembly: InternalsVisibleTo("Unity.GraphicTests.Performance.Universal.Runtime")] // access to internal ProfileIds
+
+// Smoke test project visibility
+[assembly: InternalsVisibleTo("SRPSmoke.Runtime.Tests")]
+[assembly: InternalsVisibleTo("SRPSmoke.Editor.Tests")]

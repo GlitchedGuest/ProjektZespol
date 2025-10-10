@@ -1,3 +1,11 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:35ca73b1210d5c7d4261c20b63e114727fa27229cd73e6bb688f22dbf57777b2
-size 307
+namespace Unity.VisualScripting.Analytics
+{
+    class StateMacroSavedEvent : UnityEditor.AssetModificationProcessor
+    {
+        static string[] OnWillSaveAssets(string[] paths)
+        {
+            UsageAnalytics.CollectAndSendForType<StateGraphAsset>(paths);
+            return paths;
+        }
+    }
+}

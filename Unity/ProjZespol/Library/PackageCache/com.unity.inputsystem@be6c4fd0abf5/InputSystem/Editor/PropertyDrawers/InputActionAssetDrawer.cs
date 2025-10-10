@@ -1,3 +1,30 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:f33e7bbf5bd8d70a3dd5174280746ff656cde840fbe6a127c8d548c60d13ca03
-size 1244
+// Note: If not UNITY_INPUT_SYSTEM_PROJECT_WIDE_ACTIONS we do not use a custom property drawer and
+//       picker for InputActionAsset but rather rely on default (classic) object picker.
+#if UNITY_EDITOR && UNITY_INPUT_SYSTEM_PROJECT_WIDE_ACTIONS
+using UnityEditor;
+using UnityEditor.Search;
+
+namespace UnityEngine.InputSystem.Editor
+{
+    /// <summary>
+    /// Custom property drawer in order to use the "Advanced Picker" from UnityEditor.Search.
+    /// </summary>
+    [CustomPropertyDrawer(typeof(InputActionAsset))]
+    internal sealed class InputActionAssetDrawer : PropertyDrawer
+    {
+        private readonly SearchContext m_Context = UnityEditor.Search.SearchService.CreateContext(new[]
+        {
+            InputActionAssetSearchProviders.CreateInputActionAssetSearchProvider(),
+            InputActionAssetSearchProviders.CreateInputActionAssetSearchProviderForProjectWideActions(),
+        }, string.Empty, SearchConstants.PickerSearchFlags);
+
+
+        public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
+        {
+            ObjectField.DoObjectField(position, property, typeof(InputActionAsset), label,
+                m_Context, SearchConstants.PickerViewFlags);
+        }
+    }
+}
+
+#endif

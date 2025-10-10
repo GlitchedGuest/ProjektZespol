@@ -1,3 +1,55 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:105cd91b1d7a8a6b0edca70653cb341236e0002b7f0a44ac9a2499b7a9270956
-size 1421
+using UnityEditor;
+using UnityEngine;
+
+using PlasticGui;
+using PlasticGui.WorkspaceWindow.Merge;
+
+namespace Unity.PlasticSCM.Editor.Views.Merge.Developer.DirectoryConflicts
+{
+    internal class LoadedTwiceMenu : MergeViewDirectoryConflictMenu.IDirectoryConflictMenu
+    {
+        internal LoadedTwiceMenu(
+            IMergeViewMenuOperations mergeViewMenuOperations)
+        {
+            mMergeViewMenuOperations = mergeViewMenuOperations;
+
+            BuildComponents();
+        }
+
+        GenericMenu MergeViewDirectoryConflictMenu.IDirectoryConflictMenu.Menu
+        {
+            get { return mMenu; }
+        }
+
+        void MergeViewDirectoryConflictMenu.IDirectoryConflictMenu.Popup()
+        {
+            mMenu = new GenericMenu();
+
+            UpdateMenuItems(mMenu);
+
+            mMenu.ShowAsContext();
+        }
+
+        void ViewSource_Click()
+        {
+            mMergeViewMenuOperations.OpenSrcRevision();
+        }
+
+        void UpdateMenuItems(GenericMenu menu)
+        {
+            menu.AddItem(mViewSourceMenuItemContent, false, ViewSource_Click);
+        }
+
+        void BuildComponents()
+        {
+            mViewSourceMenuItemContent = new GUIContent(
+                PlasticLocalization.Name.LoadedTwiceViewSource.GetString());
+        }
+
+        GenericMenu mMenu;
+
+        GUIContent mViewSourceMenuItemContent;
+
+        readonly IMergeViewMenuOperations mMergeViewMenuOperations;
+    }
+}

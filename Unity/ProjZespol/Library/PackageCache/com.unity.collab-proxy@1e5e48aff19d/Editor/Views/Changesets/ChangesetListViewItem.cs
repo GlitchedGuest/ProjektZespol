@@ -1,3 +1,20 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:94b8a6b4b6e242d12c8466f3309650fff7aeefa578f4e30df232abbc04504bee
-size 498
+using UnityEditor.IMGUI.Controls;
+#if UNITY_6000_2_OR_NEWER
+using TreeViewItem = UnityEditor.IMGUI.Controls.TreeViewItem<int>;
+#endif
+
+namespace Unity.PlasticSCM.Editor.Views.Changesets
+{
+    class ChangesetListViewItem : TreeViewItem
+    {
+        internal object ObjectInfo { get; private set; }
+
+        internal ChangesetListViewItem(int id, object objectInfo)
+            : base(id, 1)
+        {
+            ObjectInfo = objectInfo;
+
+            displayName = id.ToString();
+        }
+    }
+}

@@ -1,3 +1,43 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:e76b6ceda14227c59fc8c5629570d35488899728bb6e01180816c7c74528e250
-size 1184
+using System;
+using System.Collections.Generic;
+using Unity.Mathematics;
+using UnityEngine;
+
+namespace UnityEditor.U2D.Animation
+{
+    internal interface ISkinningSerializer
+    {
+        bool CanDeserialize(string data);
+        SkinningCopyData Deserialize(string data);
+        string Serialize(SkinningCopyData skinningData);
+    }
+
+    [Serializable]
+    internal class SpriteBoneCopyData
+    {
+        public UnityEngine.U2D.SpriteBone spriteBone;
+        public int order;
+    }
+
+    [Serializable]
+    internal class SkinningCopySpriteData
+    {
+        public string spriteName;
+        public List<SpriteBoneCopyData> spriteBones;
+        public Vector2[] vertices;
+        public EditableBoneWeight[] vertexWeights;
+        public int[] indices;
+        public int2[] edges;
+        public List<string> boneWeightGuids;
+        public List<string> boneWeightNames;
+    }
+
+    [Serializable]
+    internal class SkinningCopyData
+    {
+        public float pixelsPerUnit;
+        public List<SkinningCopySpriteData> copyData = new List<SkinningCopySpriteData>();
+        public UnityEngine.U2D.SpriteBone[] characterBones;
+        public bool isCharacterData = false;
+    }
+}

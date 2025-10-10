@@ -1,3 +1,23 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:203772782ca320e740f2a25e122f1cdca678134cb192b97f953b2f31e08d47a6
-size 596
+using System.IO;
+using UnityEngine;
+
+namespace UnityEditor.U2D.Animation
+{
+    internal static class ResourceLoader
+    {
+        const string k_ResourcePath = "Packages/com.unity.2d.animation/Editor/Assets";
+
+        internal static string GetAssetPath(string path)
+        {
+            return Path.Combine(k_ResourcePath, path);
+        }
+
+        internal static T Load<T>(string path) where T : Object
+        {
+            string assetPath = Path.Combine(k_ResourcePath, path);
+            T asset = AssetDatabase.LoadAssetAtPath<T>(assetPath);
+            return asset;
+        }
+    }
+}
+

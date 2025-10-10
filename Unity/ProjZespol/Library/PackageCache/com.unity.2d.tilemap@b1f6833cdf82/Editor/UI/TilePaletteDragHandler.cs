@@ -1,3 +1,40 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:8843d03ce166f6c46bbf1d5b6f8c615958f7ffd7ab47deafac8dc668f4245d8c
-size 1226
+using System;
+using UnityEngine.UIElements;
+
+namespace UnityEditor.Tilemaps
+{
+    internal class TilePaletteDragHandler : MouseManipulator
+    {
+        private readonly Action m_DragUpdated;
+        private readonly Action m_DragPerformed;
+
+        public TilePaletteDragHandler(Action dragUpdated, Action dragPerformed)
+        {
+            m_DragUpdated = dragUpdated;
+            m_DragPerformed = dragPerformed;
+            activators.Add(new ManipulatorActivationFilter { button = MouseButton.LeftMouse });
+        }
+
+        protected override void RegisterCallbacksOnTarget()
+        {
+            target.RegisterCallback<DragUpdatedEvent>(OnDragUpdate);
+            target.RegisterCallback<DragPerformEvent>(OnDragPerformEvent);
+        }
+
+        protected override void UnregisterCallbacksFromTarget()
+        {
+            target.UnregisterCallback<DragUpdatedEvent>(OnDragUpdate);
+            target.UnregisterCallback<DragPerformEvent>(OnDragPerformEvent);
+        }
+
+        private void OnDragUpdate(DragUpdatedEvent evt)
+        {
+            m_DragUpdated?.Invoke();
+        }
+
+        private void OnDragPerformEvent(DragPerformEvent evt)
+        {
+            m_DragPerformed?.Invoke();
+        }
+    }
+}

@@ -1,3 +1,19 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:e1be067871df265922d8bab33236781ee0d89c93f2ad813c32c000fce4c82208
-size 521
+using UnityEditor.IMGUI.Controls;
+using UnityEngine;
+#if UNITY_6000_2_OR_NEWER
+using TreeView = UnityEditor.IMGUI.Controls.TreeView<int>;
+#endif
+namespace Unity.PlasticSCM.Editor.UI
+{
+    internal static class DrawSearchField
+    {
+        internal static void For(
+            SearchField searchField,
+            TreeView treeView,
+            float width)
+        {
+            treeView.searchString = searchField.OnToolbarGUI(
+                treeView.searchString, GUILayout.MaxWidth(width / 2f));
+        }
+    }
+}

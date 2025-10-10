@@ -1,3 +1,6 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:9e7ff37cf06b2a19145e753513bbe5ca65c3395aca7188ca16ac063a8e903078
-size 487
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <ui:VisualElement style="flex-direction: row; position: absolute; bottom: 150px; align-self: center;">
+        <ui:Label name="Description" style="color: rgb(255, 255, 255); white-space: normal; width: 300px;" />
+        <ui:DropdownField style="width: 150px; position: relative; margin-left: 4px; align-self: center; padding-left: 0;" />
+    </ui:VisualElement>
+</ui:UXML>

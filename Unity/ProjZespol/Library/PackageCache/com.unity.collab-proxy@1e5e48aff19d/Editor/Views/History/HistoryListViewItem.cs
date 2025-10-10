@@ -1,3 +1,23 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:919a9ff02d99e9a2bef70f5ba398908bd8d13f46c73151b2399903934a29503f
-size 535
+﻿
+using UnityEditor.IMGUI.Controls;
+
+using Codice.CM.Common;
+#if UNITY_6000_2_OR_NEWER
+using TreeViewItem = UnityEditor.IMGUI.Controls.TreeViewItem<int>;
+#endif
+
+namespace Unity.PlasticSCM.Editor.Views.History
+{
+    internal class HistoryListViewItem : TreeViewItem
+    {
+        internal RepObjectInfo Revision { get; private set; }
+
+        internal HistoryListViewItem(int id, RepObjectInfo revision)
+            : base(id, 1)
+        {
+            Revision = revision;
+
+            displayName = id.ToString();
+        }
+    }
+}

@@ -1,3 +1,40 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:a1eb1c8a9088aea39a01a066260592a4b97f8fcec13fc107e7e17f68ab08d0a9
-size 1412
+using UnityEngine;
+using UnityEngine.Profiling;
+using UnityEngine.Rendering;
+using UnityEngine.Rendering.Universal;
+
+[ExecuteInEditMode]
+public class CheckAssignedRenderPipelineAsset : MonoBehaviour
+{
+    [SerializeField] private UniversalRenderPipelineAsset m_PipelineAsset;
+    [SerializeField] private GameObject m_WarningGameObject;
+
+    private bool m_LastCorrectPipelineResults = false;
+
+    private bool isCorrectAssetAssigned => QualitySettings.renderPipeline == m_PipelineAsset
+                                           || QualitySettings.renderPipeline == null && GraphicsSettings.defaultRenderPipeline == m_PipelineAsset;
+
+    private void Awake()
+    {
+        CheckIfCorrectAssetIsAssigned();
+    }
+
+    private void Update()
+    {
+        CheckIfCorrectAssetIsAssigned();
+    }
+
+    private void CheckIfCorrectAssetIsAssigned()
+    {
+        if (m_PipelineAsset == null)
+            return;
+
+        bool correctAssetAssigned = isCorrectAssetAssigned;
+        if (!correctAssetAssigned && m_LastCorrectPipelineResults != correctAssetAssigned)
+            Debug.LogError("Incorrect/missing Universal Renderpipeline Asset assigned in Quality or Graphics Settings.\nPlease assign \"" + m_PipelineAsset.name + "\" to it.");
+
+        m_LastCorrectPipelineResults = correctAssetAssigned;
+        if (m_WarningGameObject != null)
+            m_WarningGameObject.SetActive(!correctAssetAssigned);
+    }
+}

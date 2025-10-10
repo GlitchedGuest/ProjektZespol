@@ -1,3 +1,65 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:f75c45d42251c51e52416a67df434e89418aeb02fac297fca84691171a07d504
-size 2162
+using System.Collections;
+using NUnit.Framework.Interfaces;
+using NUnit.Framework.Internal;
+using NUnit.Framework.Internal.Commands;
+using System.Linq;
+using UnityEngine.TestRunner.NUnitExtensions.Runner;
+
+namespace UnityEngine.TestTools
+{
+    internal class ParametrizedIgnoreCommand : DelegatingTestCommand, IEnumerableTestMethodCommand
+    {
+        private readonly TestCommand m_Command;
+
+        public object[] Arguments { get; }
+        public string Reason { get; }
+
+        public ParametrizedIgnoreCommand(TestCommand command, object[] arguments, string reason = "") : base(command)
+        {
+            m_Command = command;
+            Arguments = arguments;
+            Reason = reason;
+        }
+
+        public override TestResult Execute(ITestExecutionContext context)
+        {
+            if (context.CurrentTest is TestMethod testMethod)
+            {
+                var isIgnored = testMethod.parms.Arguments.SequenceEqual(Arguments);
+                if (isIgnored)
+                {
+                    context.CurrentResult.SetResult(ResultState.Ignored, Reason);
+                    return context.CurrentResult;
+                }
+            }
+
+            return m_Command.Execute(context);
+        }
+
+        public IEnumerable ExecuteEnumerable(ITestExecutionContext context)
+        { 
+            if (context.CurrentTest is TestMethod testMethod)
+            {
+                var isIgnored = testMethod.parms.Arguments.SequenceEqual(Arguments);
+                if (isIgnored)
+                {
+                    context.CurrentResult.SetResult(ResultState.Ignored, Reason);
+                    yield break;
+                }
+            }
+            
+            if (innerCommand is IEnumerableTestMethodCommand)
+            {
+                var executeEnumerable = ((IEnumerableTestMethodCommand)innerCommand).ExecuteEnumerable(context);
+                foreach (var iterator in executeEnumerable)
+                {
+                    yield return iterator;
+                }
+            }
+            else
+            {
+                context.CurrentResult = innerCommand.Execute(context);
+            }
+        }
+    }
+}

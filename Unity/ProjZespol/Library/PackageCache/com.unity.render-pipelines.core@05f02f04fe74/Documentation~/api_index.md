@@ -1,3 +1,12 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:64f4344c79c0f8be881ce839b1aef1bba76298fd25a44b57fe948f3d22e3bb97
-size 650
+---
+uid: srp-core-api-index
+---
+
+# Scriptable Render Pipeline Core scripting API
+
+This is the documentation for the scripting APIs of the Scriptable Render Pipeline (SRP) Core package.
+
+**Note**:  URP and HDRP are built on the Scriptable Render Pipeline (SRP) Core package, but have their own class types. For more information, refer to the following:
+
+- [Universal Render Pipeline (URP) Scripting API](https://docs.unity3d.com/Packages/com.unity.render-pipelines.universal@17.0/api/index.html)
+- [High Definition Render Pipeline (HDRP) Scripting API](https://docs.unity3d.com/Packages/com.unity.render-pipelines.high-definition@17.0/api/index.html)

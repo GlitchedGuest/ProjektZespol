@@ -1,3 +1,25 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:baa4f3570238dd79ac513ce2ec34bef65239b975805be56e894dcfaee28b4186
-size 867
+﻿using UnityEngine;
+using UnityEngine.U2D;
+using UnityEditor;
+
+namespace UnityEditor.U2D
+{
+    internal class SpriteShapeAssetPostProcessor : AssetPostprocessor
+    {
+        static void OnPostprocessAllAssets(string[] importedAssets, string[] deletedAssets, string[] movedAssets, string[] movedFromAssetPaths)
+        {
+            if (importedAssets.Length > 0)
+            {
+                GameObject[] allGOs = UnityEngine.Object.FindObjectsByType<GameObject>(FindObjectsSortMode.None);
+                foreach (GameObject go in allGOs)
+                {
+                    if (!go.activeInHierarchy)
+                        continue;
+                    SpriteShapeController sc = go.GetComponent<SpriteShapeController>();
+                    if (sc != null)
+                        sc.RefreshSpriteShape();
+                }
+            }
+        }
+    }
+}

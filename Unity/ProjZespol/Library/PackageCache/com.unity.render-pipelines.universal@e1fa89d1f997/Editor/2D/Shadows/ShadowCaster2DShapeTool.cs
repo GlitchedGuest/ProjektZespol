@@ -1,3 +1,37 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:2d9030028e97d84697de81a415c6acb84cb2b5ac355f190adb52e993679d976d
-size 1281
+using UnityEditor.Rendering.Universal.Path2D;
+using UnityEngine;
+using UnityEngine.Rendering.Universal;
+
+namespace UnityEditor.Rendering.Universal
+{
+    class ShadowCaster2DShapeTool : PathEditorTool<ShadowCasterPath>
+    {
+        const string k_ShapePath = "m_ShapePath";
+
+        protected override IShape GetShape(Object target)
+        {
+            return (target as ShadowCaster2D).shapePath.ToPolygon(false);
+        }
+
+        protected override void SetShape(ShadowCasterPath shapeEditor, SerializedObject serializedObject)
+        {
+            serializedObject.Update();
+
+            var pointsProperty = serializedObject.FindProperty(k_ShapePath);
+            pointsProperty.arraySize = shapeEditor.pointCount;
+
+            for (var i = 0; i < shapeEditor.pointCount; ++i)
+                pointsProperty.GetArrayElementAtIndex(i).vector3Value = shapeEditor.GetPoint(i).position;
+
+            // This is untracked right now...
+            serializedObject.ApplyModifiedProperties();
+
+            ShadowCaster2D shadowCaster = target as ShadowCaster2D;
+            if (shadowCaster != null)
+            {
+                int hash = LightUtility.GetShapePathHash(shadowCaster.shapePath);
+                shadowCaster.shapePathHash = hash;
+            }
+        }
+    }
+}

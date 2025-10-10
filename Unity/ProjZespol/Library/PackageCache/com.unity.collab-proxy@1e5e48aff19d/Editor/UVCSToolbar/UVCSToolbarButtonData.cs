@@ -1,3 +1,26 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:8759e2f8628c0cb6af7e422855065dfa55e803e11d5c9d3aa17ceebbd3138e17
-size 822
+using UnityEngine;
+
+using PlasticGui;
+using Unity.PlasticSCM.Editor.UI;
+
+namespace Unity.PlasticSCM.Editor.Toolbar
+{
+    internal class UVCSToolbarButtonData
+    {
+        internal bool IsVisible { get; set; }
+        internal string Text { get; set; }
+        internal string Tooltip { get; set; }
+        internal Texture Icon { get; set; }
+
+        internal static UVCSToolbarButtonData BuildDefault()
+        {
+            return new UVCSToolbarButtonData
+            {
+                Text = PlasticLocalization.Name.UnityVersionControl.GetString(),
+                Tooltip = PlasticLocalization.Name.UseUnityVersionControlToManageYourProject.GetString(),
+                Icon = Images.GetPlasticViewIcon(),
+                IsVisible = UVCSToolbarButtonIsShownPreference.IsEnabled(),
+            };
+        }
+    }
+}

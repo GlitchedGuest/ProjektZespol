@@ -1,3 +1,23 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:b2e7ae29c5f632d628421cb88679de195ecb1c2dd24a167eb169de777372d59b
-size 567
+using MyExercise_2s;
+using NUnit.Framework;
+
+namespace Tests_2s
+{
+    internal class StringFormatterTests
+    {
+        [Test]
+        public void JoinsObjectsWithSemiColon()
+        {
+            // Arrange
+            var formatterUnderTest = new StringFormatter();
+            formatterUnderTest.Configure(";");
+            var objects = new object[] {"a", "bc", 5, "d"};
+            
+            // Act
+            var result = formatterUnderTest.Join(objects);
+            
+            // Assert
+            Assert.AreEqual("a;bc;5;d", result);
+        }
+    }
+}

@@ -1,3 +1,43 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:d188e786483c1a51d67ba8eb3bf21c936537cc795d4bf2f9826c8ad13c64d47f
-size 1315
+using UnityEditor.EditorTools;
+using UnityEngine;
+
+namespace UnityEditor.Tilemaps
+{
+    /// <summary>
+    /// Tool for doing a box fill with the Tile Palette
+    /// </summary>
+    //[EditorTool("Box Tool", typeof(GridLayout))]
+    public sealed class BoxTool : TilemapEditorTool
+    {
+        private static class Styles
+        {
+            public static string tooltipStringFormat = "|Paint a filled box with active brush ({0})";
+            public static string shortcutId = GridPaintPaletteWindow.ShortcutIds.k_Rectangle;
+            public static GUIContent toolContent = EditorGUIUtility.IconContent("Grid.BoxTool", GetTooltipText(tooltipStringFormat, shortcutId));
+        }
+
+        /// <summary>
+        /// Tooltip String Format for the BoxTool
+        /// </summary>
+        protected override string tooltipStringFormat
+        {
+            get { return Styles.tooltipStringFormat; }
+        }
+
+        /// <summary>
+        /// Shortcut Id for the BoxTool
+        /// </summary>
+        protected override string shortcutId
+        {
+            get { return Styles.shortcutId; }
+        }
+
+        /// <summary>
+        /// Toolbar Icon for the BoxTool
+        /// </summary>
+        public override GUIContent toolbarIcon
+        {
+            get { return Styles.toolContent; }
+        }
+    }
+}

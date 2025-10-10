@@ -1,3 +1,32 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:5d7eca9ba1781334db2627913ea4a864890a22ec3af57f80eb9f23290cb5c5e4
-size 873
+using System.IO;
+
+using UnityEditor;
+using UnityEngine;
+
+using PlasticGui.WorkspaceWindow.Items;
+using Unity.PlasticSCM.Editor.UI;
+
+namespace Unity.PlasticSCM.Editor.CloudDrive.Workspaces.DirectoryContent
+{
+    internal static class DrawItemNameBar
+    {
+        internal static void Draw(Rect rect, ExpandedTreeNode node)
+        {
+            EditorGUI.DrawRect(
+                rect,
+                UnityStyles.Colors.FooterBarBackground);
+
+            if (node == null)
+                return;
+
+            GUI.Label(
+                rect,
+                new GUIContent(
+                    Path.Combine(
+                        Path.GetFileName(node.WkInfo.ClientPath),
+                        node.RelativePath).Replace("\\", "/"),
+                    DrawExpandedTreeNode.GetIcon(node)),
+                UnityStyles.CloudDrive.ItemNameBarLabel);
+        }
+    }
+}

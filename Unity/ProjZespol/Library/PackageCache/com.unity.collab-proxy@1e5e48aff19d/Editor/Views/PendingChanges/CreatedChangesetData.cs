@@ -1,3 +1,27 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:1d5667b42c826fb43f2eee06173d7d372dfdaa372c0fd8aeef0adb8f60e60866
-size 730
+﻿using Codice.CM.Common;
+
+namespace Unity.PlasticSCM.Editor.Views.PendingChanges
+{
+    internal class CreatedChangesetData
+    {
+        internal enum Type
+        {
+            Checkin,
+            Shelve
+        }
+
+        internal Type OperationType { get; private set; }
+        internal long CreatedChangesetId { get; private set; }
+        internal RepositorySpec RepositorySpec { get; private set; }
+
+        internal CreatedChangesetData(
+            Type operationType,
+            long createdChangesetId,
+            RepositorySpec repositorySpec)
+        {
+            OperationType = operationType;
+            CreatedChangesetId = createdChangesetId;
+            RepositorySpec = repositorySpec;
+        }
+    }
+}

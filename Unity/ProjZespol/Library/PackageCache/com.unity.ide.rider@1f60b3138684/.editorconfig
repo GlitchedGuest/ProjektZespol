@@ -1,3 +1,9 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:02fdb9f69f4d6f7a63b7c54b49d73d7dc1103714e402ca1858fbe0ba5239310c
-size 180
+root = true
+
+[*]
+indent_style = space
+indent_size = 2
+end_of_line = lf
+
+[*.cs]
+dotnet_analyzer_diagnostic.severity = none # https://github.com/JetBrains/resharper-unity/issues/2481

@@ -1,3 +1,55 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:ca2d2ac57ed48e7ef11a747c07493563945bf5f92ad8beae83d0e6ff2471ef2a
-size 2294
+using System;
+using System.Collections;
+using UnityEngine;
+
+namespace UnityEditor.TestTools.TestRunner.TestRun.Tasks
+{
+    internal class EditModeRunTask : TestTaskBase
+    {
+        public EditModeRunTask()
+        {
+            SupportsResumingEnumerator = true;
+            RerunAfterResume = true;
+        }
+
+        public override IEnumerator Execute(TestJobData testJobData)
+        {
+            if (testJobData.taskInfoStack.Peek().taskMode == TaskMode.Canceled)
+            {
+                var runner = testJobData.editModeRunner;
+                if (runner != null)
+                {
+                    runner.OnRunCancel();
+                }
+                yield break;
+            }
+            else if (testJobData.taskInfoStack.Peek().taskMode == TaskMode.Resume)
+            {
+                var runner = testJobData.editModeRunner;
+                if (runner == null)
+                {
+                    yield break;
+                }
+
+                runner.Resume(testJobData.executionSettings.BuildNUnitFilter(), testJobData.testTree, testJobData.TestStartedEvent, testJobData.TestFinishedEvent, testJobData.Context);
+                yield break;
+            }
+
+            yield return null; // Allow for setting the test job data after a resume.
+            var editModeRunner = ScriptableObject.CreateInstance<EditModeRunner>();
+            testJobData.editModeRunner = editModeRunner;
+
+            editModeRunner.UnityTestAssemblyRunnerFactory = new UnityTestAssemblyRunnerFactory();
+            editModeRunner.Init(testJobData.executionSettings.BuildNUnitFilter(), testJobData.executionSettings.runSynchronously, testJobData.testTree, testJobData.TestStartedEvent,
+                testJobData.TestFinishedEvent, testJobData.Context, testJobData.executionSettings.orderedTestNames, testJobData.executionSettings.randomOrderSeed, testJobData.executionSettings.featureFlags.disableNestedEnumeratorBugfix);
+
+            while (testJobData.editModeRunner != null && !testJobData.editModeRunner.RunFinished)
+            {
+                testJobData.editModeRunner.TestConsumer(testJobData.testRunnerStateSerializer);
+                yield return null;
+            }
+
+            testJobData.TestResults = testJobData.editModeRunner.m_Runner.Result;
+        }
+    }
+}

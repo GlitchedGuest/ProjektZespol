@@ -1,3 +1,31 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:716a3d7ca5bba8d34942795a249a6e443cb721b25e99182a0b7f3301eea24176
-size 721
+using System;
+
+namespace UnityEditor.TestTools.TestRunner.Api.Analytics
+{
+    internal class AnalyticsTestCallback : ICallbacks
+    {
+        private Action<ITestResultAdaptor> _runFinishedCallback;
+
+        public AnalyticsTestCallback(Action<ITestResultAdaptor> runFinishedCallback)
+        {
+            _runFinishedCallback = runFinishedCallback;
+        }
+
+        public void RunStarted(ITestAdaptor testsToRun)
+        {
+        }
+
+        public void RunFinished(ITestResultAdaptor result)
+        {
+            _runFinishedCallback(result);
+        }
+
+        public void TestStarted(ITestAdaptor test)
+        {
+        }
+
+        public void TestFinished(ITestResultAdaptor result)
+        {
+        }
+    }
+}

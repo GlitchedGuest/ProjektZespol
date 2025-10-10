@@ -1,3 +1,19 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:9f5d89f4136fb05c62ce937ed383c0bee929c5a941cc79f0280c4f8129d4c8d1
-size 422
+using System.Linq;
+
+namespace MyExercise_2s
+{
+    public class StringFormatter
+    {
+        private string m_joinDelimiter = ",";
+        
+        public void Configure(string joinDelimiter)
+        {
+            m_joinDelimiter = joinDelimiter;
+        }
+
+        public string Join(object[] args)
+        {
+            return string.Join(m_joinDelimiter, args.Select(arg => arg.ToString()).ToArray());
+        }
+    }
+}

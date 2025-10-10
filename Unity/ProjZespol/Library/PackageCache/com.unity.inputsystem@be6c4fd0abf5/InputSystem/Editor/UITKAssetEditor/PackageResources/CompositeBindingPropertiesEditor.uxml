@@ -1,3 +1,5 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:cc07f6176a2664a863674e5e37c13cf188598b06ab37cc6de51f024712b12d61
-size 654
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="True">
+    <ui:VisualElement>
+        <ui:DropdownField label="Composite Type" index="-1" choices="System.Collections.Generic.List`1[System.String]" name="composite-type-dropdown" tooltip="Type of composite. Allows changing the composite type retroactively. Doing so will modify the bindings that are part of the composite." />
+    </ui:VisualElement>
+</ui:UXML>

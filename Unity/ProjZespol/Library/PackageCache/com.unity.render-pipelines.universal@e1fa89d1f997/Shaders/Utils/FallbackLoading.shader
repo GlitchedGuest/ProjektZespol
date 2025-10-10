@@ -1,3 +1,68 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:8ff806d54958ab7a333f8c96598685b2160cb94f1f85abad2bfd5314be8662e6
-size 1960
+Shader "Hidden/Universal Render Pipeline/FallbackLoading"
+{
+    SubShader
+    {
+        Tags
+        {
+            "RenderType" = "Opaque"
+            "RenderPipeline" = "UniversalPipeline"
+            "IgnoreProjector" = "True"
+            "ShaderModel" = "4.5"
+        }
+
+        Pass
+        {
+            HLSLPROGRAM
+            #pragma target 4.5
+            #pragma editor_sync_compilation
+
+            // -------------------------------------
+            // Shader Stages
+            #pragma vertex vert
+            #pragma fragment frag
+
+            // -------------------------------------
+            // Unity defined keywords
+            #pragma multi_compile _ STEREO_INSTANCING_ON STEREO_MULTIVIEW_ON
+            #pragma multi_compile _ DOTS_INSTANCING_ON
+
+            //--------------------------------------
+            // DOTS Instancing
+            #include_with_pragmas "Packages/com.unity.render-pipelines.universal/ShaderLibrary/DOTS.hlsl"
+
+            // -------------------------------------
+            // Includes
+            #include "Packages/com.unity.render-pipelines.core/ShaderLibrary/Common.hlsl"
+            #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Input.hlsl"
+
+            struct appdata_t
+            {
+                float4 vertex : POSITION;
+                UNITY_VERTEX_INPUT_INSTANCE_ID
+            };
+
+            struct v2f
+            {
+                float4 vertex : SV_POSITION;
+                UNITY_VERTEX_OUTPUT_STEREO
+            };
+
+            v2f vert (appdata_t v)
+            {
+                v2f o;
+                UNITY_SETUP_INSTANCE_ID(v);
+                UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO(o);
+                o.vertex = TransformObjectToHClip(v.vertex.xyz);
+                return o;
+            }
+
+            float4 frag (v2f i) : SV_Target
+            {
+                return float4(0,1,1,1);
+            }
+            ENDHLSL
+        }
+    }
+
+    Fallback Off
+}

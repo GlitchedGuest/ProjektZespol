@@ -1,3 +1,65 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:5e1601988c50d36041c98a37092c786bd915213a256bf44d1c2bd81a3eb81647
-size 1612
+using System;
+using UnityEngine;
+
+namespace Unity.PlasticSCM.Editor.UI.Tree
+{
+    internal abstract class CenteredContentPanel
+    {
+        internal CenteredContentPanel(Action repaintAction)
+        {
+            mRepaintAction = repaintAction;
+        }
+
+        internal void OnGUI(Rect rect)
+        {
+            if (Event.current.type == EventType.Repaint && mLastValidRect != rect)
+            {
+                mLastValidRect = rect;
+                mRepaintAction();
+            }
+
+            GUILayout.BeginArea(mLastValidRect);
+
+            DrawGUI();
+
+            GUILayout.EndArea();
+        }
+
+        protected abstract void DrawGUI();
+
+        protected static void CenterContent(params Action[] contents)
+        {
+            CenterVertical(() =>
+            {
+                foreach (Action content in contents)
+                {
+                    CenterHorizontal(() =>
+                    {
+                        content();
+                    });
+                }
+            });
+        }
+
+        static void CenterVertical(Action content)
+        {
+            GUILayout.BeginVertical();
+            GUILayout.FlexibleSpace();
+            content();
+            GUILayout.FlexibleSpace();
+            GUILayout.EndVertical();
+        }
+
+        static void CenterHorizontal(Action content)
+        {
+            GUILayout.BeginHorizontal();
+            GUILayout.FlexibleSpace();
+            content();
+            GUILayout.FlexibleSpace();
+            GUILayout.EndHorizontal();
+        }
+
+        protected readonly Action mRepaintAction;
+        Rect mLastValidRect;
+    }
+}

@@ -1,3 +1,33 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:0f0166682658f2fd9444cf8627296a27a90ff8b94d2db5e6adb83248b6c7cdfc
-size 778
+using System;
+using System.Collections;
+using UnityEngine;
+
+namespace UnityEditor.TestTools.TestRunner.TestRun.Tasks
+{
+    internal class ExitPlayModeTask : TestTaskBase
+    {
+        public ExitPlayModeTask()
+        {
+            RunOnCancel = true;
+            RunOnError = ErrorRunMode.RunAlways;
+        }
+
+        public Func<bool> IsInPlayMode = () => Application.isPlaying;
+        public Action ExitPlayMode = () => EditorApplication.isPlaying = false;
+
+        public override IEnumerator Execute(TestJobData testJobData)
+        {
+            if (!IsInPlayMode())
+            {
+                yield break;
+            }
+
+            ExitPlayMode();
+
+            while (IsInPlayMode())
+            {
+                yield return null;
+            }
+        }
+    }
+}

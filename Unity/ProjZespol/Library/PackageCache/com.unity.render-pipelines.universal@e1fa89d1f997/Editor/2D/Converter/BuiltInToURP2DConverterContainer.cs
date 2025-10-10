@@ -1,3 +1,8 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:db1763a99ea57f92624c766f7fc5c5bcc312281b123da922b70995cfcdf93856
-size 371
+namespace UnityEditor.Rendering.Universal
+{
+    internal sealed class BuiltInToURP2DConverterContainer : RenderPipelineConverterContainer
+    {
+        public override string name => "Built-in to 2D (URP)";
+        public override string info => "Converter performs the following tasks:\n* Converts project elements from the Built-in Render Pipeline to 2D URP.";
+    }
+}

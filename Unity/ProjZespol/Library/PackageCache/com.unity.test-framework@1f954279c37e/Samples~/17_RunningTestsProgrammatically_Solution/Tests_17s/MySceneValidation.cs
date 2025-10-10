@@ -1,3 +1,54 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:cb9612944a641e9aad5a37f65980023d3d62c1d27f62e2615e74694d450b97f8
-size 1664
+﻿using System.Collections;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using NUnit.Framework;
+using UnityEditor.SceneManagement;
+using UnityEngine;
+using UnityEngine.TestTools;
+
+namespace Tests_17s
+{
+    [TestFixture]
+    [Category("SceneValidation")]
+    public class MySceneValidation
+    {
+        private string k_SceneName = @"Assets\MyScene.unity";
+
+        [OneTimeSetUp]
+        public void LoadScene()
+        {
+            if (!File.Exists(k_SceneName))
+            {
+                Assert.Inconclusive("The path to the Scene is not correct. Set the correct path for the k_SceneName variable.");
+            }
+            EditorSceneManager.OpenScene(k_SceneName);
+        }
+        
+        [Test]
+        public void MySceneContainsFiveMyMonoBehaviors()
+        {
+            var myMonoBehaviors = Object.FindObjectsOfType<MyMonoBehaviour>();
+            
+            Assert.That(myMonoBehaviors.Length, Is.EqualTo(5), $"Incorrect number of {nameof(myMonoBehaviors)} in scene.");
+        }
+
+        [Test]
+        public void AllMyMonobehaviorsAreConfigured()
+        {
+            var myMonoBehaviors = Object.FindObjectsOfType<MyMonoBehaviour>();
+
+            var monobehaviorsConfigured = myMonoBehaviors.Where(behavior => behavior.IsConfigured).ToArray();
+            
+            Assert.That(monobehaviorsConfigured.Length, Is.EqualTo(myMonoBehaviors.Length), $"No all {nameof(myMonoBehaviors)} where configured.");
+        }
+
+
+        [OneTimeTearDown]
+        public void TearDown()
+        {
+            EditorSceneManager.NewScene(NewSceneSetup.DefaultGameObjects, NewSceneMode.Single);
+        }
+        
+    }
+}

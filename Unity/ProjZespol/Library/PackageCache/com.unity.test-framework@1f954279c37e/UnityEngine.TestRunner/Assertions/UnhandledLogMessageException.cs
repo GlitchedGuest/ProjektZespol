@@ -1,3 +1,36 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:07fc8699ae894091cfc36a2547e0f061aa904f4bd81f7b14a872d4b377413ea9
-size 999
+using System;
+using NUnit.Framework;
+using NUnit.Framework.Interfaces;
+using UnityEngine.TestTools.Logging;
+using UnityEngine.TestTools.Utils;
+
+namespace UnityEngine.TestTools.TestRunner
+{
+    internal class UnhandledLogMessageException : ResultStateException
+    {
+        public LogEvent LogEvent;
+        private readonly string m_CustomStackTrace;
+
+        public UnhandledLogMessageException(LogEvent log)
+            : base(BuildMessage(log))
+        {
+            LogEvent = log;
+            m_CustomStackTrace = StackTraceFilter.Filter(log.StackTrace);
+        }
+
+        private static string BuildMessage(LogEvent log)
+        {
+            return string.Format("Unhandled log message: '{0}'. Use UnityEngine.TestTools.LogAssert.Expect", log);
+        }
+
+        public override ResultState ResultState
+        {
+            get { return ResultState.Failure; }
+        }
+
+        public override string StackTrace
+        {
+            get { return m_CustomStackTrace; }
+        }
+    }
+}

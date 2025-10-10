@@ -1,3 +1,22 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:1d76607dfa8d5db38544e6fb62ae7d218d7e022c8bf291786c149a9346d63182
-size 439
+using UnityEngine;
+
+namespace MyExercise_4
+{
+    public class ValueOutputter
+    {
+        public Vector3 GetVector3()
+        {
+            return new Vector3(10f + (1f/3f), 3f, 9f + (2f/3f));
+        }
+        
+        public Quaternion GetQuaternion()
+        {
+            return new Quaternion(10f, 0f, 7f + (1f/3f), 0f);
+        }
+        
+        public float GetFloat()
+        {
+            return 19f + (1f/3f);
+        }
+    }
+}

@@ -1,3 +1,19 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:58cc7946fff816b8e5836083a673f6e62806c5bc0a6515fc713a98131ba48058
-size 545
+using System;
+using System.Collections;
+using UnityEngine;
+
+namespace UnityEditor.TestTools.TestRunner.TestRun.Tasks.Events
+{
+    internal class RunStartedInvocationEvent : TestTaskBase
+    {
+        public override IEnumerator Execute(TestJobData testJobData)
+        {
+            if (testJobData.testTree == null)
+            {
+                throw new Exception("TestTree must be set before run started event.");
+            }
+            testJobData.RunStartedEvent.Invoke(testJobData.testTree);
+            yield break;
+        }
+    }
+}

@@ -1,3 +1,10 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:3a8ef81bccfed46389d44635e2536023b038e37bb10a32378bbbf662e64db5cf
-size 780
+# Channel nodes
+
+Combine, split, reorder, or flip vector and color channels.
+
+| **Topic**                  | **Description**                                                                     |
+|----------------------------|-------------------------------------------------------------------------------------|
+| [Combine](Combine-Node.md) | Creates new vectors from the four inputs R, G, B and A.                             |
+| [Flip](Flip-Node.md)       | Flips the individual channels of input In selected by the node's parameters.        |
+| [Split](Split-Node.md)     | Splits the input vector In into four Float outputs R, G, B and A.                   |
+| [Swizzle](Swizzle-Node.md) | Creates a new vector from the reordered elements of the input vector.               |

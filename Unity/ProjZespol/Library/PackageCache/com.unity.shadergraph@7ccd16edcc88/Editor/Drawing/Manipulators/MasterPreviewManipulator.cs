@@ -1,3 +1,41 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:e15a4fc141513b0bdb961a602e0f435ef802d21c985a2535ee048239d50fe2aa
-size 1134
+using System;
+using UnityEngine;
+
+using UnityEngine.UIElements;
+
+namespace UnityEditor.ShaderGraph.Drawing
+{
+    internal sealed class MasterPreviewManipulator : ContextualMenuManipulator
+    {
+        internal MasterPreviewManipulator(Action<ContextualMenuPopulateEvent> menuBuilder) : base(menuBuilder)
+        {
+
+        }
+
+        protected override void RegisterCallbacksOnTarget()
+        {
+            base.RegisterCallbacksOnTarget();
+            if (IsOSXContextualMenuPlatform())
+            {
+                target.RegisterCallback<PointerDownEvent>(MasterPointerDownEventOSX);
+            }
+        }
+
+        protected override void UnregisterCallbacksFromTarget()
+        {
+            base.UnregisterCallbacksFromTarget();
+            if (IsOSXContextualMenuPlatform())
+            {
+                target.UnregisterCallback<PointerDownEvent>(MasterPointerDownEventOSX);
+            }
+        }
+
+        void MasterPointerDownEventOSX(IPointerEvent evt)
+        {
+            if (CanStartManipulation(evt))
+            {
+                (evt as EventBase)?.StopImmediatePropagation();
+            }
+        }
+    }
+}

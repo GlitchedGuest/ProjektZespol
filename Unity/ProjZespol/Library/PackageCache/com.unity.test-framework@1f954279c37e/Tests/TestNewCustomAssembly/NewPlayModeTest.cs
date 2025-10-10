@@ -1,3 +1,19 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:ab7d1737c4dacca26c8c8d2fd595a387be0b40b73224cb02c57eff1a3ec3bd02
-size 374
+using UnityEngine;
+using UnityEngine.TestTools;
+using NUnit.Framework;
+using System.Collections;
+
+internal class NewPlayModeTest
+{
+    //This script is just to have a referance to nunit
+    [Test]
+    public void NewPlayModeTestSimplePasses()
+    {
+    }
+
+    [UnityTest]
+    public IEnumerator NewPlayModeTestWithEnumeratorPasses()
+    {
+        yield return null;
+    }
+}

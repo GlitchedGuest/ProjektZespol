@@ -1,3 +1,18 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:8f38a4e0e985006fce0c8b07aa49ee7e97d662a212725aee9494aac144ff6ffa
-size 519
+using System;
+
+namespace UnityEngine.Rendering.UnifiedRayTracing
+{
+    internal interface IRayTracingBackend
+    {
+        IRayTracingShader CreateRayTracingShader(
+            Object shader,
+            string kernelName,
+            GraphicsBuffer dispatchBuffer);
+
+        IRayTracingAccelStruct CreateAccelerationStructure(
+            AccelerationStructureOptions options,
+            ReferenceCounter counter);
+
+        ulong GetRequiredTraceScratchBufferSizeInBytes(uint width, uint height, uint depth);
+    }
+}

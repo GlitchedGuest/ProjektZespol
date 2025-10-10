@@ -1,3 +1,44 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:8968a4ae4728c0f1503482e903bd8408d5cf47aa4ee419fb78d176d6d848cbfe
-size 1322
+using UnityEngine;
+using UnityEngine.Rendering;
+using UnityEngine.Rendering.Universal;
+
+namespace UnityEditor.Rendering.Universal
+{
+    /// <summary>
+    /// Editor script for a <c>PostProcessData</c> class.
+    /// </summary>
+    [CustomEditor(typeof(PostProcessData), true)]
+    public class PostProcessDataEditor : Editor
+    {
+        SerializedProperty m_Shaders;
+        SerializedProperty m_Textures;
+
+        private void OnEnable()
+        {
+            m_Shaders = serializedObject.FindProperty("shaders");
+            m_Textures = serializedObject.FindProperty("textures");
+        }
+
+        /// <inheritdoc/>
+        public override void OnInspectorGUI()
+        {
+            serializedObject.Update();
+
+            // Add a "Reload All" button in inspector when we are in developer's mode
+            if (EditorPrefs.GetBool("DeveloperMode"))
+            {
+                EditorGUILayout.Space();
+                EditorGUILayout.PropertyField(m_Shaders, true);
+                EditorGUILayout.PropertyField(m_Textures, true);
+
+                if (GUILayout.Button("Reload All"))
+                {
+                    var resources = target as PostProcessData;
+                    resources.Reset();
+                }
+            }
+
+            serializedObject.ApplyModifiedProperties();
+        }
+    }
+}

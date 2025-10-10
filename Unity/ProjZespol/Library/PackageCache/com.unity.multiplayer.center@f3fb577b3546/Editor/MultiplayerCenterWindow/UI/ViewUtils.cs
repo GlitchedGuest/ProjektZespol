@@ -1,3 +1,18 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:2716c46824d66fde9892f92e35597df05ae15329b22c6a2c7c4c5b1c2e5d20fa
-size 546
+using UnityEngine.UIElements;
+
+namespace Unity.Multiplayer.Center.Window.UI
+{
+    internal static class ViewUtils
+    {
+        public static void MoveToggleLeft(BaseBoolField button)
+        {
+            var label = button.Q<Label>();
+            button.Insert(button.childCount - 1, label);
+            // equivalent to button.Children.First()
+            using var iterator = button.Children().GetEnumerator();
+            iterator.MoveNext();
+            var first = iterator.Current;
+            first.style.flexGrow = 0;
+        }
+    }
+}

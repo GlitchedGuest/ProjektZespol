@@ -1,3 +1,24 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:1dc2c8f34d80a01e44fbc5e2afdf7991ddf139ebd25cc732d08cd0c16dbb6268
-size 669
+#if UNITY_EDITOR
+using UnityEditor.Build;
+using UnityEditor.Build.Reporting;
+
+namespace UnityEngine.InputSystem.Editor
+{
+    internal class InputSettingsBuildProvider : IPreprocessBuildWithReport, IPostprocessBuildWithReport
+    {
+        private Object m_Asset;
+
+        public int callbackOrder => 0;
+
+        public void OnPreprocessBuild(BuildReport report)
+        {
+            m_Asset = BuildProviderHelpers.PreProcessSinglePreloadedAsset(InputSystem.settings);
+        }
+
+        public void OnPostprocessBuild(BuildReport report)
+        {
+            BuildProviderHelpers.PostProcessSinglePreloadedAsset(ref m_Asset);
+        }
+    }
+}
+#endif // UNITY_EDITOR

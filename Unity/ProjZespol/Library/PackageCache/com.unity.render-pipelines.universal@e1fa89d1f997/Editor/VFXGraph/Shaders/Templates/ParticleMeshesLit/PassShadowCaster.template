@@ -1,3 +1,17 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:82435a848e6173e64455638ee8f14df68abbadbf4a5f699ba9e9d31ffcfa48af
-size 359
+// Shadow pass
+Pass
+{
+    Tags { "LightMode"=${VFXPassShadow} }
+
+    ZClip [_ZClip]
+    ZWrite On
+    Blend Off
+    
+    HLSLPROGRAM
+    #define VFX_PASSDEPTH VFX_PASSDEPTH_SHADOW
+    #if !USE_ALPHA_TEST && IS_TRANSPARENT_PARTICLE
+    #define USE_ALPHA_TEST 1
+    #endif
+    ${VFXIncludeRP("Templates/ParticleMeshesLit/PassDepthOrMV.template")}
+    ENDHLSL
+}

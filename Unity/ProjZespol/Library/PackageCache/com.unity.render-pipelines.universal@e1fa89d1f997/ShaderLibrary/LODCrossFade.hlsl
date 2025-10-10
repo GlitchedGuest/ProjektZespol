@@ -1,3 +1,26 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:95fea0c28560e3f0355cdc35c98558296fa870c154c916a3939945779ebd874e
-size 584
+#ifndef UNIVERSAL_PIPELINE_LODCROSSFADE_INCLUDED
+#define UNIVERSAL_PIPELINE_LODCROSSFADE_INCLUDED
+
+#include "Packages/com.unity.render-pipelines.core/ShaderLibrary/GlobalSamplers.hlsl"
+
+float _DitheringTextureInvSize;
+
+TEXTURE2D(_DitheringTexture);
+
+half CopySign(half x, half s)
+{
+    return (s >= 0) ? abs(x) : -abs(x);
+}
+
+void LODFadeCrossFade(float4 positionCS)
+{
+    half2 uv = positionCS.xy * _DitheringTextureInvSize;
+
+    half d = SAMPLE_TEXTURE2D(_DitheringTexture, sampler_PointRepeat, uv).a;
+
+    d = unity_LODFade.x - CopySign(d, unity_LODFade.x);
+
+    clip(d);
+}
+
+#endif

@@ -1,3 +1,35 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:9f182d284bbda71c140b10cb4d75448188c3d11bf5e35fc90ec6cfd5675ab440
-size 893
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+namespace UnityEditor.Rendering.Universal.Path2D
+{
+    internal struct Polygon : IShape
+    {
+        public bool isOpenEnded;
+
+        public Vector3[] points;
+
+        ShapeType IShape.type => ShapeType.Polygon;
+
+        bool IShape.isOpenEnded => isOpenEnded;
+
+        ControlPoint[] IShape.ToControlPoints()
+        {
+            if (points == null)
+                throw new NullReferenceException("Points array is null");
+
+            var controlPoints = new List<ControlPoint>();
+
+            foreach (var point in points)
+            {
+                controlPoints.Add(new ControlPoint() { position = point });
+            }
+
+            return controlPoints.ToArray();
+        }
+
+        public static Polygon empty = new Polygon() { isOpenEnded = true, points = new Vector3[0] };
+    }
+}

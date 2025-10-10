@@ -1,3 +1,27 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:0b7b99d33b3526d2da82b7335e52bcfec86456ed630dcb23fa6d8bce2a9f71de
-size 638
+using System.Threading;
+
+using UnityEditor;
+
+using Unity.PlasticSCM.Editor.CloudDrive;
+using Unity.PlasticSCM.Editor.Hub;
+using Unity.PlasticSCM.Editor.UI;
+
+namespace Unity.PlasticSCM.Editor
+{
+    [InitializeOnLoad]
+    internal static class PackageEntryPoint
+    {
+        static PackageEntryPoint()
+        {
+            EditorDispatcher.InitializeMainThreadIdAndContext(
+                Thread.CurrentThread.ManagedThreadId,
+                SynchronizationContext.Current);
+
+            ProcessHubCommand.Initialize();
+
+            UVCSPlugin.InitializeIfNeeded();
+
+            CloudDrivePlugin.InitializeIfNeeded();
+        }
+    }
+}

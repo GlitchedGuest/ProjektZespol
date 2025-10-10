@@ -1,3 +1,49 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:3df715f9d319921039277c1c3cb35d84bc20d131138b3e0700c61a7b8ca41e16
-size 1296
+﻿using System;
+using System.Threading;
+
+using Codice.LogWrapper;
+
+namespace Unity.PlasticSCM.Editor.UI
+{
+    internal static class GUIActionRunner
+    {
+        internal delegate void ActionDelegate();
+
+        internal static void RunGUIAction(ActionDelegate action)
+        {
+            if (EditorDispatcher.IsOnMainThread)
+            {
+                action();
+                return;
+            }
+
+            lock (mLock)
+            {
+                ManualResetEvent syncEvent = new ManualResetEvent(false);
+
+                EditorDispatcher.Dispatch(delegate {
+                    try
+                    {
+                        action();
+                    }
+                    catch (Exception e)
+                    {
+                        mLog.ErrorFormat("GUI action failed: {0}", e.Message);
+                        mLog.DebugFormat("Stack trace:{0}{1}", Environment.NewLine, e.StackTrace);
+                        throw;
+                    }
+                    finally
+                    {
+                        syncEvent.Set();
+                    }
+                });
+
+                syncEvent.WaitOne();
+            }
+        }
+
+        static object mLock = new object();
+
+        static readonly ILog mLog = PlasticApp.GetLogger("GUIActionRunner");
+    }
+}

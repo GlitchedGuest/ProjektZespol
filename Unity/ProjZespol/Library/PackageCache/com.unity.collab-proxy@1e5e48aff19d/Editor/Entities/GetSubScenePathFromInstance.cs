@@ -1,3 +1,43 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:f3987d6b111d4a8164aa29e112b9d472acda90ea600d13f7abd0674cd4a12917
-size 1247
+﻿#if HAS_ENTITIES_PACKAGE
+using UnityEditor;
+using UnityEngine;
+using Unity.Scenes;
+
+using Unity.PlasticSCM.Editor.AssetsOverlays;
+
+using Object = UnityEngine.Object;
+
+namespace Unity.PlasticSCM.Editor.Entities
+{
+    internal class GetSubScenePathFromInstance : DrawHierarchyOverlay.IGetAssetPathFromInstance
+    {
+        internal static void Register()
+        {
+            DrawHierarchyOverlay.GetSubSceneAssetPath = new GetSubScenePathFromInstance();
+        }
+
+        bool DrawHierarchyOverlay.IGetAssetPathFromInstance.TryGetAssetPath(
+            int instanceID,
+            out string assetPath)
+        {
+            assetPath = null;
+
+            Object hierarchyObject = FindUnityObject.ForInstanceID(instanceID);
+
+            if (hierarchyObject == null || hierarchyObject is not GameObject)
+                return false;
+
+            assetPath = GetSubScenePathFromGameObject((GameObject) hierarchyObject);
+
+            return assetPath != null;
+        }
+
+        string GetSubScenePathFromGameObject(GameObject gameObject)
+        {
+            SubScene subSceneComponent = gameObject.GetComponent<SubScene>();
+
+            return subSceneComponent == null ? null : subSceneComponent.EditableScenePath;
+        }
+    }
+}
+#endif

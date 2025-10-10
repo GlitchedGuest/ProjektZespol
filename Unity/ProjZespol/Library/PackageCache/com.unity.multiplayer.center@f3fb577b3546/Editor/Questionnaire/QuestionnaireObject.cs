@@ -1,3 +1,28 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:ace165773b4d1dba7d9735044de9166a836ea5e6df61487d522c8f5c96a6a846
-size 851
+using System;
+using UnityEditor;
+using UnityEngine;
+
+namespace Unity.Multiplayer.Center.Questionnaire
+{
+    /// <summary>
+    /// The questionnaire scriptable object, used to store and edit the data
+    /// </summary>
+    [FilePath("Packages/com.unity.multiplayer.center/Editor/Questionnaire/Questionnaire.questionnaire", FilePathAttribute.Location.ProjectFolder)]
+    internal class QuestionnaireObject : ScriptableSingleton<QuestionnaireObject>
+    {
+        public QuestionnaireData Questionnaire;
+        
+        
+        public void ForceReload()
+        {
+            DestroyImmediate(QuestionnaireObject.instance);
+            var questions = QuestionnaireObject.instance.Questionnaire;
+        }
+        
+        public void ForceSave()
+        {
+            base.Save(saveAsText:true);
+            AssetDatabase.Refresh();
+        }
+    }
+}

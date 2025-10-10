@@ -1,3 +1,13 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:ebde3ddb6d619aecebb9f7ca7107a3965efd00e44fbb5bccbe69f003b2fba34c
-size 366
+using System;
+
+namespace UnityEditor.TestTools.TestRunner.GUI
+{
+    internal class AssetsDatabaseHelper : IAssetsDatabaseHelper
+    {
+        public void OpenAssetInItsDefaultExternalEditor(string assetPath, int line)
+        {
+            var asset = AssetDatabase.LoadMainAssetAtPath(assetPath);
+            AssetDatabase.OpenAsset(asset, line);
+        }
+    }
+}

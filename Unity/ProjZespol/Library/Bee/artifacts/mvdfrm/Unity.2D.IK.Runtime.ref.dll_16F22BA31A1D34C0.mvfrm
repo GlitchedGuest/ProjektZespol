@@ -1,3 +1,15 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:2359a0038740375f524146843033f722e22923e42b204b864aa9c683b2c009c6
-size 175
+CCDSolver2D
+UnityEngine
+Experimental
+U2D
+IK
+FabrikSolver2D
+IKChain2D
+IKManager2D
+IKUtility
+LimbSolver2D
+Solver2D
+Solver2DMenuAttribute
+CCD2D
+FABRIKChain2D
+Limb

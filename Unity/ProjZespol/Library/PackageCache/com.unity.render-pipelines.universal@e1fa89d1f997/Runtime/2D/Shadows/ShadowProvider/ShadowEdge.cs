@@ -1,3 +1,25 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:796dbc2b4f70ece2056c4469b0963790f0c1c8304d20070786131cde34d6d1d8
-size 456
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+namespace UnityEngine.Rendering.Universal
+{
+    internal struct ShadowEdge
+    {
+        public int v0;
+        public int v1;
+
+        public ShadowEdge(int indexA, int indexB)
+        {
+            v0 = indexA;
+            v1 = indexB;
+        }
+
+        public void Reverse()
+        {
+            int tmp = v0;
+            v0 = v1;
+            v1 = tmp;
+        }
+    }
+}

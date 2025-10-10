@@ -1,3 +1,8 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:8102d4e088d9ade7b1a56168f1d82a72e2d8b66d5e748e381218b4582f5b211a
-size 402
+using System.Runtime.CompilerServices;
+
+[assembly: InternalsVisibleTo("Unity.2D.Animation.Runtime")]
+[assembly: InternalsVisibleTo("Unity.2D.Animation.Editor")]
+[assembly: InternalsVisibleTo("Unity.2D.Animation.Tests.RuntimeTests")]
+[assembly: InternalsVisibleTo("Unity.2D.IK.Editor")]
+[assembly: InternalsVisibleTo("Unity.2D.IK.Runtime")]
+[assembly: InternalsVisibleTo("Unity.2D.PSDImporter.Editor")]

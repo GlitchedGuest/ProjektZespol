@@ -1,3 +1,33 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:05596df3d33c2f4ee6b9c84d17d8db019d50ec52772fb881abf0c1cad8b6f027
-size 1006
+#if HAS_VFX_GRAPH
+using UnityEditor.ShaderGraph;
+using UnityEngine;
+using UnityEngine.Rendering;
+
+namespace UnityEditor.Rendering.Universal
+{
+    internal class VFXShaderGraphLitGUI : ShaderGraphLitGUI
+    {
+        protected override uint materialFilter => uint.MaxValue & ~(uint)Expandable.SurfaceInputs;
+    }
+
+    internal class VFXShaderGraphUnlitGUI : ShaderGraphUnlitGUI
+    {
+        protected override uint materialFilter => uint.MaxValue & ~(uint)Expandable.SurfaceInputs;
+    }
+
+    internal class VFXSixWayGUI : SixWayGUI
+    {
+        protected override uint materialFilter => uint.MaxValue & ~(uint)Expandable.SurfaceInputs;
+    }
+
+    internal class VFXGenericShaderGraphMaterialGUI : GenericShaderGraphMaterialGUI
+    {
+        public override void OnGUI(MaterialEditor materialEditor, MaterialProperty[] props)
+        {
+            //When material used in VFX, all properties are converted to input slots.
+            //This fallback is used with sprite output.
+        }
+    }
+
+}
+#endif

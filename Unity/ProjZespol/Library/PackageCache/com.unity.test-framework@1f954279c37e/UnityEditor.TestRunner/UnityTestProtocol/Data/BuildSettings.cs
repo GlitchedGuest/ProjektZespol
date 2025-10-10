@@ -1,3 +1,23 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:3881598203f63e7a25042c057aab9e129968c4b81054f156688a41c4cf7968c4
-size 742
+using System;
+
+namespace UnityEditor.TestTools.TestRunner.UnityTestProtocol
+{
+    // This class is used for serialization purposes
+    // which requires public access to fields and a default empty constructor
+    [Serializable]
+    internal class BuildSettings
+    {
+        public BuildSettings(string platform, string buildTarget, bool developmentPlayer, string androidBuildSystem = "")
+        {
+            Platform = platform;
+            BuildTarget = buildTarget;
+            DevelopmentPlayer = developmentPlayer;
+            AndroidBuildSystem = androidBuildSystem;
+        }
+
+        public string Platform;
+        public string BuildTarget;
+        public bool DevelopmentPlayer;
+        public string AndroidBuildSystem;
+    }
+}

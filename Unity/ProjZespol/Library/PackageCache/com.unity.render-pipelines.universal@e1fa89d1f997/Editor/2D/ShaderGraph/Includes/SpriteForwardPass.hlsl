@@ -1,3 +1,51 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:03556f5394f790e6952d9b4ad103036d70bb9060346d3891f898f4515ea331f7
-size 1817
+#include "Packages/com.unity.render-pipelines.universal/Shaders/2D/Include/Core2D.hlsl"
+#include "Packages/com.unity.render-pipelines.universal/Shaders/2D/Include/SurfaceData2D.hlsl"
+#include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Debug/Debugging2D.hlsl"
+
+half4 _RendererColor;
+
+PackedVaryings vert(Attributes input)
+{
+    Varyings output = (Varyings)0;
+    input.positionOS = UnityFlipSprite(input.positionOS, unity_SpriteProps.xy);
+    output = BuildVaryings(input);
+    output.color *= _RendererColor * unity_SpriteColor; // vertex color has to applied here
+    PackedVaryings packedOutput = PackVaryings(output);
+    return packedOutput;
+}
+
+half4 frag(PackedVaryings packedInput) : SV_TARGET
+{
+    Varyings unpacked = UnpackVaryings(packedInput);
+    UNITY_SETUP_INSTANCE_ID(unpacked);
+    UNITY_SETUP_STEREO_EYE_INDEX_POST_VERTEX(unpacked);
+
+    SurfaceDescription surfaceDescription = BuildSurfaceDescription(unpacked);
+
+#ifdef UNIVERSAL_USELEGACYSPRITEBLOCKS
+    half4 color = surfaceDescription.SpriteColor;
+#else
+    half4 color = half4(surfaceDescription.BaseColor, surfaceDescription.Alpha);
+#endif
+
+    #if defined(DEBUG_DISPLAY)
+    SurfaceData2D surfaceData;
+    InitializeSurfaceData(color.rgb, color.a, surfaceData);
+    InputData2D inputData;
+    InitializeInputData(unpacked.positionWS.xy, half2(unpacked.texCoord0.xy), inputData);
+    half4 debugColor = 0;
+
+    SETUP_DEBUG_DATA_2D(inputData, unpacked.positionWS, unpacked.positionCS);
+
+    if (CanDebugOverrideOutputColor(surfaceData, inputData, debugColor))
+    {
+        return debugColor;
+    }
+    #endif
+
+    // Disable vertex color multiplication. Users can get the color from VertexColor node
+#if !defined(HAVE_VFX_MODIFICATION) && !defined(_DISABLE_COLOR_TINT)
+    color *= unpacked.color;
+#endif
+    return color;
+}

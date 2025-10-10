@@ -1,3 +1,28 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:07fa70322c5ab49e46463e425047b4c42e340460ca72d35d28e0a2957501166e
-size 1061
+using System.Collections.Generic;
+using UnityEngine.Rendering.RenderGraphModule;
+
+namespace UnityEngine.Rendering.Universal
+{
+    public sealed partial class UniversalRenderPipeline
+    {
+        static void RecordRenderGraph(RenderGraph renderGraph, ScriptableRenderContext context, ScriptableRenderer renderer)
+        {
+            renderer.RecordRenderGraph(renderGraph, context);
+        }
+
+        static void RecordAndExecuteRenderGraph(RenderGraph renderGraph, ScriptableRenderContext context, ScriptableRenderer renderer, CommandBuffer cmd, Camera camera, string cameraName)
+        {
+            RenderGraphParameters rgParams = new RenderGraphParameters
+            {
+                executionName = cameraName,
+                commandBuffer = cmd,
+                scriptableRenderContext = context,
+                currentFrameIndex = Time.frameCount,
+            };
+
+            renderGraph.BeginRecording(rgParams);
+            RecordRenderGraph(renderGraph, context, renderer);
+            renderGraph.EndRecordingAndExecute();
+        }
+    }
+}

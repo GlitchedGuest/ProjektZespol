@@ -1,3 +1,11 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:2f798dac5d8314d6c038df024a858d10d63b151ff31e6b772e50def99c1611df
-size 498
+namespace UnityEditor.Rendering.Universal
+{
+    [CustomEditor(typeof(UnityEngine.Rendering.Universal.CinemachineUniversalPixelPerfect)), CanEditMultipleObjects]
+    internal class CinemachineUniversalPixelPerfectEditor : Editor
+    {
+        public override void OnInspectorGUI()
+        {
+            EditorGUILayout.HelpBox("This Cinemachine extension is now deprecated and doesn't function properly. Instead, use the one from Cinemachine v2.4.0 or newer.", MessageType.Error);
+        }
+    }
+}

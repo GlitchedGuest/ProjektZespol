@@ -1,3 +1,25 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:dcd22902c215e1173626a9a889645bb0588a152bf1a5fe7206d0d48219017c98
-size 742
+using System;
+
+namespace UnityEditor.TestTools.TestRunner.UnityTestProtocol
+{
+    // This class is used for serialization purposes
+    // which requires public access to fields and a default empty constructor
+    [Serializable]
+    internal class ScreenSettings
+    {
+        public ScreenSettings(int screenWidth, int screenHeight, int screenRefreshRate, bool fullscreen)
+        {
+            ScreenWidth = screenWidth;
+            ScreenHeight = screenHeight;
+            ScreenRefreshRate = screenRefreshRate;
+            Fullscreen = fullscreen;
+        }
+
+        public ScreenSettings() { }
+        public int ScreenWidth;
+        public int ScreenHeight;
+        public int ScreenRefreshRate;
+        public bool Fullscreen;
+
+    }
+}

@@ -1,3 +1,25 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:a6fe7b42ea439f9c1d08e9b4ca07cad9159f9b40dd25800f47bcff53fc8375cf
-size 738
+using UnityEditor.Build;
+using UnityEditor.Build.Reporting;
+
+namespace UnityEditor.Rendering
+{
+    //Make CoreBuildData constructed and kept till end of build
+    class CorePreprocessBuild : IPreprocessBuildWithReport, IPostprocessBuildWithReport
+    {
+        int IOrderedCallback.callbackOrder => int.MinValue + 50;
+
+        private static CoreBuildData m_BuildData = null;
+
+        void IPreprocessBuildWithReport.OnPreprocessBuild(BuildReport report)
+        {
+            m_BuildData?.Dispose();
+            m_BuildData = CoreBuildData.instance;
+        }
+
+        void IPostprocessBuildWithReport.OnPostprocessBuild(BuildReport report)
+        {
+            m_BuildData?.Dispose();
+            m_BuildData = null;
+        }
+    }
+}

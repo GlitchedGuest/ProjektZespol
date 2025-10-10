@@ -1,3 +1,62 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:81d7cf65acb69d2acf88f40c8b3206e2cc7a7c896cb4fb40b8835e3c9c43f387
-size 1796
+using System;
+using System.Collections;
+using NUnit.Framework.Interfaces;
+using NUnit.Framework.Internal;
+
+namespace UnityEditor.TestTools.TestRunner.TestRun.Tasks.Events
+{
+    internal class UpdateTestProgressTask : TestTaskBase
+    {
+        private TestProgress m_TestProgress;
+
+        public UpdateTestProgressTask()
+        {
+            RerunAfterResume = true;
+        }
+
+        public override IEnumerator Execute(TestJobData testJobData)
+        {
+            if (testJobData.testProgress == null)
+            {
+                throw new RequiredTestRunDataMissingException(nameof(testJobData.testProgress));
+            }
+
+            if (testJobData.TestStartedEvent == null)
+            {
+                throw new RequiredTestRunDataMissingException(nameof(testJobData.TestStartedEvent));
+            }
+
+            if (testJobData.TestFinishedEvent == null)
+            {
+                throw new RequiredTestRunDataMissingException(nameof(testJobData.TestFinishedEvent));
+            }
+
+            m_TestProgress = testJobData.testProgress;
+            testJobData.TestStartedEvent.AddListener(TestStarted);
+            testJobData.TestFinishedEvent.AddListener(TestFinished);
+
+            yield break;
+        }
+
+        private void TestStarted(ITest test)
+        {
+            if (test.IsSuite || !(test is TestMethod))
+            {
+                return;
+            }
+
+            m_TestProgress.CurrentTest = test.Name;
+        }
+
+        private void TestFinished(ITestResult testResult)
+        {
+            if (testResult.Test.IsSuite)
+            {
+                return;
+            }
+            var name = testResult.Test.FullName;
+            m_TestProgress.RemainingTests.Remove(name);
+            m_TestProgress.CompletedTests.Add(name);
+        }
+    }
+}

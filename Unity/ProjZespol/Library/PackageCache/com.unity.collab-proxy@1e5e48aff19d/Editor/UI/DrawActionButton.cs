@@ -1,3 +1,53 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:ea063055bfb684ee5d934c37edf2ed6056cfea12e27c4783f5c215f4c49e9e6c
-size 1562
+using UnityEditor;
+using UnityEngine;
+
+namespace Unity.PlasticSCM.Editor.UI
+{
+    internal static class DrawActionButton
+    {
+        internal static GUIStyle ButtonStyle { get { return mButtonStyle; } }
+
+        internal static bool For(string buttonText)
+        {
+            GUIContent buttonContent = new GUIContent(buttonText);
+
+            return ForRegularButton(buttonContent);
+        }
+
+        internal static bool For(string buttonText, string buttonTooltip)
+        {
+            GUIContent buttonContent = new GUIContent(buttonText, buttonTooltip);
+
+            return ForRegularButton(buttonContent);
+        }
+
+        internal static bool ForCommentSection(string buttonText, float width)
+        {
+            GUIContent buttonContent = new GUIContent(buttonText);
+
+            Rect rt = GUILayoutUtility.GetRect(
+                buttonContent,
+                mButtonStyle,
+                GUILayout.MinWidth(width),
+                GUILayout.MaxWidth(width));
+
+            return GUI.Button(rt, buttonContent, mButtonStyle);
+        }
+
+        static bool ForRegularButton(GUIContent buttonContent)
+        {
+            Rect rt = GUILayoutUtility.GetRect(
+                buttonContent,
+                mButtonStyle,
+                GUILayout.MinWidth(UnityConstants.REGULAR_BUTTON_WIDTH));
+
+            return GUI.Button(rt, buttonContent, mButtonStyle);
+        }
+
+        static readonly GUIStyle mButtonStyle =
+            new GUIStyle(EditorStyles.miniButton)
+            {
+                stretchWidth = false
+            };
+    }
+}

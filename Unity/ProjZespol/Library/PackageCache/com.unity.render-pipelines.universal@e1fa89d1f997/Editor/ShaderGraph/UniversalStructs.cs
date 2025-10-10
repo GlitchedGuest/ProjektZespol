@@ -1,3 +1,37 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:174f3ddbc60d727faa0cca3019e5f11b2e2b63aa960fe397ec1092d68007e882
-size 1543
+using UnityEditor.ShaderGraph;
+
+namespace UnityEditor.Rendering.Universal.ShaderGraph
+{
+    static class UniversalStructs
+    {
+        public static StructDescriptor Varyings = new StructDescriptor()
+        {
+            name = "Varyings",
+            packFields = true,
+            populateWithCustomInterpolators = true,
+            fields = new FieldDescriptor[]
+            {
+                StructFields.Varyings.positionCS,
+                StructFields.Varyings.positionWS,
+                StructFields.Varyings.normalWS,
+                StructFields.Varyings.tangentWS,
+                StructFields.Varyings.texCoord0,
+                StructFields.Varyings.texCoord1,
+                StructFields.Varyings.texCoord2,
+                StructFields.Varyings.texCoord3,
+                StructFields.Varyings.color,
+                StructFields.Varyings.screenPosition,
+                UniversalStructFields.Varyings.staticLightmapUV,
+                UniversalStructFields.Varyings.dynamicLightmapUV,
+                UniversalStructFields.Varyings.sh,
+                UniversalStructFields.Varyings.probeOcclusion,
+                UniversalStructFields.Varyings.fogFactorAndVertexLight,
+                UniversalStructFields.Varyings.shadowCoord,
+                StructFields.Varyings.instanceID,
+                UniversalStructFields.Varyings.stereoTargetEyeIndexAsBlendIdx0,
+                UniversalStructFields.Varyings.stereoTargetEyeIndexAsRTArrayIdx,
+                StructFields.Varyings.cullFace,
+            }
+        };
+    }
+}

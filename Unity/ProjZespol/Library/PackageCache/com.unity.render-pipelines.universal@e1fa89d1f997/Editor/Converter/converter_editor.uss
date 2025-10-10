@@ -1,3 +1,11 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:3b63b4035796b0bb9c950c1493a21f91a836fd40d44aa29ab327896f8a8dc679
-size 152
+.iconButton {
+    background-color: rgba(0,0,0,0);
+}
+
+.light :hover {
+    background-color: #B2B2B2;
+}
+
+.dark :hover {
+    background-color: #303030;
+}

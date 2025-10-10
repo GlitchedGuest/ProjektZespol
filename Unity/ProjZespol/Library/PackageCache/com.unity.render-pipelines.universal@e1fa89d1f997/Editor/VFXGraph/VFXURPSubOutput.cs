@@ -1,3 +1,11 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:e952c0f9243b2c08ee8d9d8cbd51cca215c499b3ab5e32a77255a4ea6bb3ad6b
-size 284
+#if HAS_VFX_GRAPH
+
+namespace UnityEditor.VFX.URP
+{
+    class VFXURPSubOutput : VFXSRPSubOutput
+    {
+        //URP only support motion vector on opaque geometry (with or without ShaderGraph)
+        public override bool supportsMotionVector => owner.isBlendModeOpaque;
+    }
+}
+#endif

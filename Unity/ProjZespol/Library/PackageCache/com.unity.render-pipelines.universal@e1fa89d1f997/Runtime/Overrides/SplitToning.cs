@@ -1,3 +1,38 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:2f1b08f657ff32f8483d85edfe8ec3b0c6fcd41164284c5baf987d73091a70f2
-size 1447
+using System;
+
+namespace UnityEngine.Rendering.Universal
+{
+    /// <summary>
+    /// A volume component that holds settings for the Split Toning effect.
+    /// </summary>
+    [Serializable, VolumeComponentMenu("Post-processing/Split Toning")]
+    [SupportedOnRenderPipeline(typeof(UniversalRenderPipelineAsset))]
+    [URPHelpURL("Post-Processing-Split-Toning")]
+    public sealed class SplitToning : VolumeComponent, IPostProcessComponent
+    {
+        /// <summary>
+        /// The color to use for shadows.
+        /// </summary>
+        [Tooltip("The color to use for shadows.")]
+        public ColorParameter shadows = new ColorParameter(Color.grey, false, false, true);
+
+        /// <summary>
+        /// The color to use for highlights.
+        /// </summary>
+        [Tooltip("The color to use for highlights.")]
+        public ColorParameter highlights = new ColorParameter(Color.grey, false, false, true);
+
+        /// <summary>
+        /// Balance between the colors in the highlights and shadows.
+        /// </summary>
+        [Tooltip("Balance between the colors in the highlights and shadows.")]
+        public ClampedFloatParameter balance = new ClampedFloatParameter(0f, -100f, 100f);
+
+        /// <inheritdoc/>
+        public bool IsActive() => shadows != Color.grey || highlights != Color.grey;
+
+        /// <inheritdoc/>
+        [Obsolete("Unused #from(2023.1)", false)]
+        public bool IsTileCompatible() => true;
+    }
+}

@@ -1,3 +1,13 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:805e45e9ec4160ec8c7b5eb50a66bdca5aec03563cdcb84dcf40d5cb35cca099
-size 446
+#ifndef UNIVERSAL_UNLIT_META_PASS_INCLUDED
+#define UNIVERSAL_UNLIT_META_PASS_INCLUDED
+
+#include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/UniversalMetaPass.hlsl"
+
+half4 UniversalFragmentMetaUnlit(Varyings input) : SV_Target
+{
+    MetaInput metaInput = (MetaInput)0;
+    metaInput.Albedo = _BaseColor.rgb * SAMPLE_TEXTURE2D(_BaseMap, sampler_BaseMap, input.uv).rgb;
+
+    return UniversalFragmentMeta(input, metaInput);
+}
+#endif

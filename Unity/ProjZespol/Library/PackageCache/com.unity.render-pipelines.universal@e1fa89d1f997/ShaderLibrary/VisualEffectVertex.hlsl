@@ -1,3 +1,29 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:46348e67ea9a4241f95235bb9338ad022d4dada660fcd5057eb508b8491c5140
-size 826
+// Wrapper vertex invocations for VFX. Necessary to work around various null input geometry issues for vertex input layout on DX12 and Vulkan.
+void VertVFX(
+#if NULL_GEOMETRY_INPUT
+    uint vertexID : VERTEXID_SEMANTIC
+    , uint instanceID : INSTANCEID_SEMANTIC
+#else
+    Attributes input
+#endif
+
+#if (SHADERPASS == SHADERPASS_MOTION_VECTORS)
+    , out PackedMotionVectorPassVaryings packedMvOutput
+#endif
+    , out PackedVaryings packedOutput
+)
+{
+#if NULL_GEOMETRY_INPUT
+    Attributes input;
+    ZERO_INITIALIZE(Attributes, input);
+    input.vertexID = vertexID;
+    input.instanceID = instanceID;
+#endif
+
+#if (SHADERPASS != SHADERPASS_MOTION_VECTORS)
+    packedOutput = vert(input);
+#else
+    MotionVectorPassAttributes dummy = (MotionVectorPassAttributes)0;
+    vert(input, dummy, packedMvOutput, packedOutput);
+#endif
+}

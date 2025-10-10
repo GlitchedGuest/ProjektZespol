@@ -1,3 +1,39 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:4836c658bd503521505bcc76f1b7d40af13dec40be78d9e9cdc0ea1e4d3a0c1a
-size 1307
+using System;
+
+namespace UnityEngine.Rendering.UnifiedRayTracing
+{
+    internal struct MeshInstanceDesc
+    {
+        public Mesh mesh;
+        public int subMeshIndex;
+        public Matrix4x4 localToWorldMatrix;
+        public uint mask;
+        public uint instanceID;
+        public bool enableTriangleCulling;
+        public bool frontTriangleCounterClockwise;
+
+        public MeshInstanceDesc(Mesh mesh, int subMeshIndex = 0)
+        {
+            this.mesh = mesh;
+            this.subMeshIndex = subMeshIndex;
+            localToWorldMatrix = Matrix4x4.identity;
+            mask = 0xFFFFFFFF;
+            instanceID = 0xFFFFFFFF;
+            enableTriangleCulling = true;
+            frontTriangleCounterClockwise = false;
+        }
+    }
+
+    internal interface IRayTracingAccelStruct : IDisposable
+    {
+        int AddInstance(MeshInstanceDesc meshInstance);
+        void RemoveInstance(int instanceHandle);
+        void ClearInstances();
+        void UpdateInstanceTransform(int instanceHandle, Matrix4x4 localToWorldMatrix);
+        void UpdateInstanceID(int instanceHandle, uint instanceID);
+        void UpdateInstanceMask(int instanceHandle, uint mask);
+        void Build(CommandBuffer cmd, GraphicsBuffer scratchBuffer);
+        ulong GetBuildScratchBufferRequiredSizeInBytes();
+    }
+}
+

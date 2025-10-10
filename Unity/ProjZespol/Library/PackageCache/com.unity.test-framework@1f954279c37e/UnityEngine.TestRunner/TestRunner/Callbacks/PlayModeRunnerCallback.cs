@@ -1,3 +1,48 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:336168f76c8a163cda0bf63e079c36affbb44afdea9be6e3e080c6ad3bf2e13b
-size 1312
+using System;
+using NUnit.Framework;
+using NUnit.Framework.Interfaces;
+
+namespace UnityEngine.TestTools.TestRunner.Callbacks
+{
+    [AddComponentMenu("")]
+    internal class PlayModeRunnerCallback : MonoBehaviour, ITestRunnerListener
+    {
+        private TestResultRenderer m_ResultRenderer;
+
+        public void RunFinished(ITestResult testResults)
+        {
+            Application.logMessageReceived -= LogRecieved;
+            if (Camera.main == null)
+            {
+                gameObject.AddComponent<Camera>();
+            }
+            m_ResultRenderer = new TestResultRenderer(testResults, gameObject.GetComponent<RemoteTestResultSender>());
+            m_ResultRenderer.ShowResults();
+        }
+
+        public void TestFinished(ITestResult result)
+        {
+        }
+
+        public void OnGUI()
+        {
+            if (m_ResultRenderer != null)
+                m_ResultRenderer.Draw();
+        }
+
+        public void RunStarted(ITest testsToRun)
+        {
+            Application.logMessageReceived += LogRecieved;
+        }
+
+        public void TestStarted(ITest test)
+        {
+        }
+
+        private void LogRecieved(string message, string stacktrace, LogType type)
+        {
+            if (TestContext.Out != null)
+                TestContext.Out.WriteLine(message);
+        }
+    }
+}

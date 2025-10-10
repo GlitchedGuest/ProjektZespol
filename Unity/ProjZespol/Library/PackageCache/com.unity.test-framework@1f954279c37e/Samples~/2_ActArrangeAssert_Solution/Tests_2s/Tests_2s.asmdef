@@ -1,3 +1,22 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:53b2fcd96e77f929cd1d900ab695729c53f4e2bebc598651c9975e6973a8e8d4
-size 471
+{
+    "name": "Tests_2s",
+    "references": [
+        "UnityEngine.TestRunner",
+        "UnityEditor.TestRunner",
+        "MyExercise_2s"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": true,
+    "precompiledReferences": [
+        "nunit.framework.dll"
+    ],
+    "autoReferenced": true,
+    "defineConstraints": [
+        "UNITY_INCLUDE_TESTS"
+    ],
+    "versionDefines": []
+}

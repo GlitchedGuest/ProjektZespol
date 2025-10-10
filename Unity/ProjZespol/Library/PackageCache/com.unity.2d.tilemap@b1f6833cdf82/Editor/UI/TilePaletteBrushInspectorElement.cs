@@ -1,3 +1,41 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:863a30a4ad19ebbcd9b0a951c10e70f2e779ae807c35ea8f99b33cd153a4c01f
-size 1673
+using System;
+using UnityEngine.UIElements;
+
+namespace UnityEditor.Tilemaps
+{
+    /// <summary>
+    /// Visual Element showing the Inspector for the Active Brush for Grid Painting.
+    /// </summary>
+    [UxmlElement]
+    public partial class TilePaletteBrushInspectorElement : IMGUIContainer
+    {
+        /// <summary>
+        /// Factory for TilePaletteBrushInspectorElement.
+        /// </summary>
+        [Obsolete("TilePaletteBrushInspectorElementFactory is deprecated and will be removed. Use UxmlElementAttribute instead.", false)]
+        public class TilePaletteBrushInspectorElementFactory : UxmlFactory<TilePaletteBrushInspectorElement, TilePaletteBrushInspectorElementUxmlTraits> {}
+        /// <summary>
+        /// UxmlTraits for TilePaletteBrushInspectorElement.
+        /// </summary>
+        [Obsolete("TilePaletteBrushInspectorElementUxmlTraits is deprecated and will be removed. Use UxmlElementAttribute instead.", false)]
+        public class TilePaletteBrushInspectorElementUxmlTraits : UxmlTraits {}
+
+        /// <summary>
+        /// USS class name of elements of this type.
+        /// </summary>
+        private new static readonly string ussClassName = "unity-tilepalette-brushinspector";
+
+        private TilePaletteBrushInspector m_BrushInspector = new TilePaletteBrushInspector();
+
+        /// <summary>
+        /// Initializes and returns an instance of TilePaletteBrushInspectorElement.
+        /// </summary>
+        public TilePaletteBrushInspectorElement()
+        {
+            AddToClassList(ussClassName);
+            TilePaletteOverlayUtility.SetStyleSheet(this);
+
+            onGUIHandler = m_BrushInspector.OnGUI;
+        }
+    }
+}

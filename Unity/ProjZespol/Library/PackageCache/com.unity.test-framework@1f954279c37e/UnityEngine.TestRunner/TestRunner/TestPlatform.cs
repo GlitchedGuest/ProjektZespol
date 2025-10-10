@@ -1,3 +1,44 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:6c2eaa79617e45b9397b7172c012c950ac3524179d9d27e88864848b4f6a60b0
-size 1030
+using System;
+
+namespace UnityEngine.TestTools
+{
+    /// <summary>
+    /// A flag indicating the targeted test platforms.
+    /// </summary>
+    [Flags]
+    [Serializable]
+    public enum TestPlatform : byte
+    {
+        /// <summary>
+        /// Both platforms.
+        /// </summary>
+        All = 0xFF,
+        /// <summary>
+        /// The EditMode test platform.
+        /// </summary>
+        EditMode = 1 << 1,
+        /// <summary>
+        /// The PlayMode test platform.
+        /// </summary>
+        PlayMode = 1 << 2
+    }
+
+    internal static class TestPlatformEnumExtensions
+    {
+        public static bool IsFlagIncluded(this TestPlatform flags, TestPlatform flag)
+        {
+            return (flags & flag) == flag;
+        }
+
+        public static TestPlatform MergeFlags(this TestPlatform[] flags)
+        {
+            TestPlatform mergedFlag = default;
+            foreach (var flag in flags)
+            {
+                mergedFlag |= flag;
+            }
+
+            return mergedFlag;
+        }
+    }
+}

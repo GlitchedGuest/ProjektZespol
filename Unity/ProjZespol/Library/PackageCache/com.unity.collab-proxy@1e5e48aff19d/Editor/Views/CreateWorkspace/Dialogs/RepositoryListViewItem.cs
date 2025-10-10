@@ -1,3 +1,26 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:557cddced7c6f0f72488768cb17cf119eefb3795065919a105bb70342df6f482
-size 743
+﻿using Codice.Client.Common;
+using UnityEditor.IMGUI.Controls;
+
+using Codice.CM.Common;
+#if UNITY_6000_2_OR_NEWER
+using TreeViewItem = UnityEditor.IMGUI.Controls.TreeViewItem<int>;
+#endif
+
+namespace Unity.PlasticSCM.Editor.Views.CreateWorkspace.Dialogs
+{
+    internal class RepositoryListViewItem : TreeViewItem
+    {
+        internal RepositoryInfo Repository { get; private set; }
+
+        internal string ServerDisplayName { get; private set; }
+
+        internal RepositoryListViewItem(int id, RepositoryInfo repository)
+            : base(id, 0)
+        {
+            Repository = repository;
+            ServerDisplayName = ResolveServer.ToDisplayString(repository.Server);
+
+            displayName = repository.Name;
+        }
+    }
+}
