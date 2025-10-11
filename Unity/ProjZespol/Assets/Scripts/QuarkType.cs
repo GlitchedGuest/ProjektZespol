@@ -150,6 +150,7 @@ public class QuarkType : IComparable<QuarkType>, IEquatable<QuarkType>
         
         while (Mantissa >= (NormalizeDivisor * 10))
         {
+            if (Exponent == ulong.MaxValue) return;
             Mantissa /= 10;
             Exponent++;
         }

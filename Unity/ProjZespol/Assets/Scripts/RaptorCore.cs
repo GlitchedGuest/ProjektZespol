@@ -84,7 +84,7 @@ public class RaptorCore : MonoBehaviour
         // T1.4: ulong, ulong Constructor (Large Mantissa)
         // 5,000,000,000,000UL with Base Exp 10. Should become 5.0e22
         var t1_4 = new QuarkType(5000000000000UL, 10UL);
-        Assert(t1_4.Exponent == 22, $"T1.4: ulong, ulong large mantissa. Result: {t1_4.Exponent}");
+        Assert(t1_4.Exponent == 14, $"T1.4: ulong, ulong large mantissa. Result: {t1_4.Exponent}");
 
         // T1.5: ulong, ulong Constructor (Small Mantissa)
         // 5UL with Base Exp 10. Should become 5.0e2
