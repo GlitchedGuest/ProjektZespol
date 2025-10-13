@@ -468,6 +468,7 @@ public class QuarkType : IComparable<QuarkType>, IEquatable<QuarkType>
         return logM + (double)Exponent;
     }
 
+    public static QuarkType operator ++(QuarkType a) => a + 1;
     public QuarkType Pow(double power)
     {
         if (Mantissa == 0) return Zero;
