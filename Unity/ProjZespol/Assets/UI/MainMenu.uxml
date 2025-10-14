@@ -1,0 +1,13 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <Style src="project://database/Assets/UI/MainMenu.uss?fileID=7433441132597879392&amp;guid=d90b63a1271321f4682975c65f5a3b7b&amp;type=3#MainMenu" />
+    <ui:VisualElement name="Panel" class="panel" style="flex-grow: 1;">
+        <ui:VisualElement name="Container" class="container" style="flex-grow: 1; margin-top: 10%; margin-left: 0; margin-bottom: 10%; border-left-color: rgb(255, 255, 255); border-right-color: rgb(255, 255, 255); border-top-color: rgb(255, 255, 255); border-bottom-color: rgb(255, 255, 255); border-top-left-radius: 20px; border-top-right-radius: 20px; border-bottom-right-radius: 20px; border-bottom-left-radius: 20px; border-top-width: 10px; border-right-width: 10px; border-bottom-width: 10px; border-left-width: 10px; align-items: center; transform-origin: top;">
+            <ui:Label text="Clicker" />
+            <ui:VisualElement name="ButtonContainer" class="buttoncontainer" style="flex-grow: 1; width: 100%; height: auto; color: rgba(0, 0, 0, 0); background-color: rgba(0, 0, 0, 0); -unity-text-align: upper-left; align-items: center; transform-origin: center;">
+                <ui:Button text="Graj" name="StartButton" />
+                <ui:Button text="Ustawienia" name="SettingsButton" />
+                <ui:Button text="Wyjdź do pulpitu" parse-escape-sequences="false" name="QuitButton" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>
