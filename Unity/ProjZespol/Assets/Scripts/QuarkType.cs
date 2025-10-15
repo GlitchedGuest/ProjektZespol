@@ -2,12 +2,16 @@ using System;
 using UnityEngine;
 using System.Runtime.InteropServices;
 using System.Numerics;
+using Unity.VisualScripting;
 
 [StructLayout(LayoutKind.Sequential)]
 public class QuarkType : IComparable<QuarkType>, IEquatable<QuarkType>
 {
     public uint Mantissa;
-    public ulong Exponent;
+    private uint _mantisLim;
+    
+    public ulong Exponent;    
+    private ulong _ExponentLim;
 
     private const int MantissaLength = 9;
     private const uint NormalizeDivisor = 100000000;
@@ -166,6 +170,25 @@ public class QuarkType : IComparable<QuarkType>, IEquatable<QuarkType>
             {
                 Mantissa *= 10;
             }
+        }
+
+        //limit the value if needed.
+        if (!(_ExponentLim == 0 && 0 == _mantisLim))
+        {
+            if (Exponent > _ExponentLim)
+            { Exponent = _ExponentLim;
+                Mantissa = _mantisLim;
+            }
+
+            if (Exponent == _ExponentLim) {
+                if (Mantissa > _mantisLim)
+                {
+                    Mantissa = _mantisLim;
+                }
+            
+            }
+
+
         }
     }
     private static QuarkType Add(QuarkType larger, QuarkType smaller)
@@ -525,5 +548,13 @@ public class QuarkType : IComparable<QuarkType>, IEquatable<QuarkType>
         double decimalMantissa = (double)Mantissa / NormalizeDivisor;
         return $"{decimalMantissa.ToString("F2", System.Globalization.CultureInfo.InvariantCulture)}e{Exponent}";
     }
-
+    public void clearLimit() { 
+        _mantisLim = 0;
+        _ExponentLim = 0;
+    }
+    public void SetLimit(QuarkType t) {
+        _mantisLim = t.Mantissa;
+        _ExponentLim = t.Exponent;
+    }
+    public QuarkType GetLimit() { return new QuarkType(_mantisLim, _ExponentLim); }
 }
