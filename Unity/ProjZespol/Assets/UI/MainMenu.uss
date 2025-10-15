@@ -7,6 +7,8 @@
     width: 50%;
     background-color: rgba(0, 0, 0, 0.6);
     align-items: center;
+    margin-top: 10px;
+    margin-bottom: 10px;
 }
 
 .container > .unity-label {
@@ -62,4 +64,10 @@
 
 .unity-button:active {
     transform-origin: top;
+}
+
+.hidden {
+    display: none;
+    visibility: hidden;
+    overflow: visible;
 }
