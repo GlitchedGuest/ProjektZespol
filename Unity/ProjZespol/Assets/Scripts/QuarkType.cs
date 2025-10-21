@@ -1,17 +1,19 @@
 using System;
-using UnityEngine;
-using System.Runtime.InteropServices;
+using System.IO;
 using System.Numerics;
+using System.Runtime.InteropServices;
 using Unity.VisualScripting;
+using UnityEngine;
 
+[Serializable]
 [StructLayout(LayoutKind.Sequential)]
 public class QuarkType : IComparable<QuarkType>, IEquatable<QuarkType>
 {
-    public uint Mantissa;
-    private uint _mantisLim;
-    
-    public ulong Exponent;    
-    private ulong _ExponentLim;
+    [SerializeField] public uint Mantissa;
+    [SerializeField] private uint _mantisLim;
+
+    [SerializeField] public ulong Exponent;
+    [SerializeField] private ulong _ExponentLim;
 
     private const int MantissaLength = 9;
     private const uint NormalizeDivisor = 100000000;
@@ -557,4 +559,27 @@ public class QuarkType : IComparable<QuarkType>, IEquatable<QuarkType>
         _ExponentLim = t.Exponent;
     }
     public QuarkType GetLimit() { return new QuarkType(_mantisLim, _ExponentLim); }
+
+    public void SerializeToStream(BinaryWriter writer)
+    {
+        writer.Write(Mantissa);      // 4 bytes
+        writer.Write(_mantisLim);    // 4 bytes
+        writer.Write(Exponent);       // 8 bytes
+        writer.Write(_ExponentLim);   // 8 bytes
+    }
+
+    public static QuarkType DeserializeFromStream(BinaryReader reader)
+    {
+        uint mantissa = reader.ReadUInt32();
+        uint mantisLim = reader.ReadUInt32();
+        ulong exponent = reader.ReadUInt64();
+        ulong exponentLim = reader.ReadUInt64();
+
+        return new QuarkType(mantissa, exponent)
+        {
+            _mantisLim = mantisLim,
+            _ExponentLim = exponentLim
+        };
+    }
+
 }
