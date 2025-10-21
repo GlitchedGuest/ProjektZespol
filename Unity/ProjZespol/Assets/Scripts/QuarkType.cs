@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using UnityEngine;
 using System.Runtime.InteropServices;
 using System.Numerics;
@@ -22,6 +22,19 @@ public class QuarkType : IComparable<QuarkType>, IEquatable<QuarkType>
         Mantissa = mantissa;
         Exponent = exponent;
         Normalize();
+    }
+
+    public static implicit operator double(QuarkType q)
+    {
+        if (q.Mantissa == 0)
+            return 0.0;
+
+        double value = (double)q.Mantissa / NormalizeDivisor;
+
+        if (q.Exponent != 0)
+            value *= Math.Pow(10.0, q.Exponent);
+
+        return value;
     }
     public QuarkType(double doubleValue)
     {
@@ -352,8 +365,33 @@ public class QuarkType : IComparable<QuarkType>, IEquatable<QuarkType>
             throw new ArgumentException("Cannot multiply by a negative double/float value; QuarkType does not support negative results.", nameof(b));
         }
 
+
+        int scale = 0;
+        while (b > 0 && b < 1.0)
+        {
+            b *= 10.0;
+            scale++;
+            if (scale > 300)
+                break;
+        }
+
+        while (b >= 10.0)
+        {
+            b /= 10.0;
+            scale--;
+        }
+
         QuarkType bQuark = new QuarkType(b);
-        return a * bQuark; 
+        if (scale > 0)
+            bQuark.Exponent -= (ulong)scale;
+        else if (scale < 0)
+            bQuark.Exponent += (ulong)(-scale);
+
+        QuarkType result = a * bQuark;
+
+        result.Normalize();
+
+        return result;
     }
 
     public static QuarkType operator *(QuarkType a, long b)

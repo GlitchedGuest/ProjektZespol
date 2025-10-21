@@ -70,12 +70,12 @@ public class RaptorCore : MonoBehaviour
                     Gold += 1; // narazie wpisalem 1 bo nie wiem co innego
                     break;
                 case 2:
-                    Gold += 50;// 0.5 * Currency; TODO trzeba jakis przeliczanie zrobic przy sprzedazy @lukasz
-                    Currency -=10; // to tez do zmiany
+                    Gold += Currency * 0.5;// 0.5 * Currency; TODO trzeba jakis przeliczanie zrobic przy sprzedazy @lukasz
+                    Currency *= 0.5;
                     break;
                 case 3:
-                    Currency = 0; // tu tez 
-                    Gold += 100; // TODO
+                    Gold += Currency;
+                    Currency = 0;
                     break;
             }
             UpdateUI();
