@@ -70,8 +70,9 @@ public class RaptorCore : MonoBehaviour
                     Gold += 1; // narazie wpisalem 1 bo nie wiem co innego
                     break;
                 case 2:
-                    Gold += Currency * 0.5;// 0.5 * Currency; TODO trzeba jakis przeliczanie zrobic przy sprzedazy @lukasz
-                    Currency *= 0.5;
+                    double tmp = Currency * 0.5;
+                    Gold += tmp;
+                    Currency -= tmp;
                     break;
                 case 3:
                     Gold += Currency;

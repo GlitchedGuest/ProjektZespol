@@ -134,10 +134,7 @@ public class QuarkType : IComparable<QuarkType>, IEquatable<QuarkType>
 
         if (finalExponent == 0 && tempMantissa < NormalizeDivisor)
         {
-            while (tempMantissa < NormalizeDivisor && tempMantissa > 0)
-            {
-                tempMantissa *= 10;
-            }
+            tempMantissa = 0;
         }
 
         Mantissa = (uint)tempMantissa;
@@ -200,9 +197,27 @@ public class QuarkType : IComparable<QuarkType>, IEquatable<QuarkType>
                 }
             
             }
-
+        
 
         }
+
+
+        //underflowGuradandFix
+        if (Exponent < MantissaLength)
+        {
+
+            int allowedDigits = (int)Exponent + 1;      // Exponent 0 -> 1 digit, etc.
+            int digitsToTruncate = MantissaLength - allowedDigits;
+
+            // Compute divisor to remove excess digits from front
+            uint divisor = 1;
+            for (int i = 0; i < digitsToTruncate; i++)
+                divisor *= 10;
+
+            // Keep the highest allowed digits, preserve trailing zeros
+            Mantissa = (Mantissa / divisor) * divisor;
+        }
+
     }
     private static QuarkType Add(QuarkType larger, QuarkType smaller)
     {
@@ -381,16 +396,23 @@ public class QuarkType : IComparable<QuarkType>, IEquatable<QuarkType>
             scale--;
         }
 
+
         QuarkType bQuark = new QuarkType(b);
         if (scale > 0)
-            bQuark.Exponent -= (ulong)scale;
+            if (bQuark.Exponent > (ulong)scale)
+                bQuark.Exponent -= (ulong)scale;
+            else
+            {
+                bQuark.Exponent = 0UL;
+            }
         else if (scale < 0)
             bQuark.Exponent += (ulong)(-scale);
 
-        QuarkType result = a * bQuark;
+        double Mantis = ((double)a.Mantissa / NormalizeDivisor) * ((double)bQuark.Mantissa / NormalizeDivisor);
+        ulong Exponent = a.Exponent + bQuark.Exponent;
 
+        QuarkType result = new QuarkType((ulong)(Mantis*(NormalizeDivisor/10)), Exponent);
         result.Normalize();
-
         return result;
     }
 
