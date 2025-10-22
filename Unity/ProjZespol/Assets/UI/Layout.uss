@@ -18,3 +18,7 @@
 .btncolor {
     background-color: rgb(34, 34, 34);
 }
+
+.mariginbottom10 {
+    margin-bottom: 10px;
+}

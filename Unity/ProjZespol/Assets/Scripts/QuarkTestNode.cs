@@ -24,17 +24,18 @@ public class QuarkTestNode : MonoBehaviour
         Debug.Log("<color=white>--- QuarkType Test Suite ---</color>");
 
         TestNormalizationAndConstructors();
-        TestPrimitiveConversions(); // <--- NEW TEST SECTION
+        TestPrimitiveConversions(); 
         TestComparisonOperators();
         TestAddition();
-        TestPrimitiveAddition(); // <--- NEW TEST SECTION
+        TestPrimitiveAddition(); 
         TestSubtraction();
-        TestPrimitiveSubtraction(); // <--- NEW TEST SECTION
+        TestPrimitiveSubtraction(); 
         TestMultiplication();
-        TestPrimitiveMultiplication(); // <--- NEW TEST SECTION
+        TestPrimitiveMultiplication(); 
         TestLogarithmFunctions();
         TestPowerFunction();
         TestPrecisionLossAndEdgeCases();
+        TestMultiplicationEXT();
 
         Debug.Log("-----------------------------");
         if (_testsFailed == 0)
@@ -209,6 +210,41 @@ public class QuarkTestNode : MonoBehaviour
         var d = new QuarkType(300000000, 1); // 3.0e1
         var expected7_4 = new QuarkType(492500000, 3); // Expected 4.925e3
         Assert(Math.Abs(d.Pow(2.5).Log10() - expected7_4.Log10()) < 0.001, $"T7.4: Pow(3e1, 2.5) Log10 Check.");
+    }
+
+    void TestMultiplicationEXT()
+    {
+        Debug.Log("\n<color=yellow>## 13. Multiplication Extended</color>");
+
+        // T2.1: Basic Multiplication (10 * 2 = 20)
+        var t13_1a = new QuarkType(10);
+        var t13_1 = t13_1a * 2.0;
+        Assert(t13_1.Mantissa == 200000000 && t13_1.Exponent == 1,
+            $"T2.1: 10 * 2.0 = 20.0. Result: {t13_1}");
+
+        // T2.2: Multiply by 0.5 (10 * 0.5 = 5)
+        var t13_2a = new QuarkType(10UL);
+        var t13_2 = t13_2a * 0.5;
+        Assert(t13_2.Mantissa == 500000000 && t13_2.Exponent == 0,
+            $"T2.2: 10 * 0.5 = 5.0. Result: {t13_2}");
+
+        // T2.3: Multiply by 0.2 (10 * 0.2 = 2)
+        var t13_3a = new QuarkType(10UL);
+        var t13_3 = t13_3a * 0.2;
+        Assert(t13_3.Mantissa == 200000000 && t13_3.Exponent == 0,
+            $"T2.3: 10 * 0.2 = 2.0. Result: {t13_3}");
+
+        // T2.4: Multiply normalized large number by fraction (1.23e5 * 0.01 = 1.23e3)
+        var t13_4a = new QuarkType(123000000, 5UL);
+        var t13_4 = t13_4a * 0.01;
+        Assert(t13_4.Mantissa == 123000000 && t13_4.Exponent == 3,
+            $"T2.6: 1.23e5 * 0.01 = 1.23e3. Result: {t13_4}");
+
+        // T2.5: Multiply normalized large number by large double (1.23e3 * 1e6 = 1.23e9)
+        var t13_5a = new QuarkType(123000000, 3UL);
+        var t13_5 = t13_5a * 1e6;
+        Assert(t13_5.Exponent == 9 && t13_5.Mantissa == 123000000,
+            $"T2.7: 1.23e3 * 1e6 = 1.23e9. Result: {t13_5}");
     }
     void TestPrecisionLossAndEdgeCases()
     {

@@ -1,5 +1,6 @@
-using System;
-using System.IO;
+﻿using System;
+using UnityEngine;
+using System.Runtime.InteropServices;
 using System.Numerics;
 using System.Runtime.InteropServices;
 using Unity.VisualScripting;
@@ -24,6 +25,19 @@ public class QuarkType : IComparable<QuarkType>, IEquatable<QuarkType>
         Mantissa = mantissa;
         Exponent = exponent;
         Normalize();
+    }
+
+    public static implicit operator double(QuarkType q)
+    {
+        if (q.Mantissa == 0)
+            return 0.0;
+
+        double value = (double)q.Mantissa / NormalizeDivisor;
+
+        if (q.Exponent != 0)
+            value *= Math.Pow(10.0, q.Exponent);
+
+        return value;
     }
     public QuarkType(double doubleValue)
     {
@@ -123,10 +137,7 @@ public class QuarkType : IComparable<QuarkType>, IEquatable<QuarkType>
 
         if (finalExponent == 0 && tempMantissa < NormalizeDivisor)
         {
-            while (tempMantissa < NormalizeDivisor && tempMantissa > 0)
-            {
-                tempMantissa *= 10;
-            }
+            tempMantissa = 0;
         }
 
         Mantissa = (uint)tempMantissa;
@@ -189,9 +200,27 @@ public class QuarkType : IComparable<QuarkType>, IEquatable<QuarkType>
                 }
             
             }
-
+        
 
         }
+
+
+        //underflowGuradandFix
+        if (Exponent < MantissaLength)
+        {
+
+            int allowedDigits = (int)Exponent + 1;      // Exponent 0 -> 1 digit, etc.
+            int digitsToTruncate = MantissaLength - allowedDigits;
+
+            // Compute divisor to remove excess digits from front
+            uint divisor = 1;
+            for (int i = 0; i < digitsToTruncate; i++)
+                divisor *= 10;
+
+            // Keep the highest allowed digits, preserve trailing zeros
+            Mantissa = (Mantissa / divisor) * divisor;
+        }
+
     }
     private static QuarkType Add(QuarkType larger, QuarkType smaller)
     {
@@ -354,8 +383,40 @@ public class QuarkType : IComparable<QuarkType>, IEquatable<QuarkType>
             throw new ArgumentException("Cannot multiply by a negative double/float value; QuarkType does not support negative results.", nameof(b));
         }
 
+
+        int scale = 0;
+        while (b > 0 && b < 1.0)
+        {
+            b *= 10.0;
+            scale++;
+            if (scale > 300)
+                break;
+        }
+
+        while (b >= 10.0)
+        {
+            b /= 10.0;
+            scale--;
+        }
+
+
         QuarkType bQuark = new QuarkType(b);
-        return a * bQuark; 
+        if (scale > 0)
+            if (bQuark.Exponent > (ulong)scale)
+                bQuark.Exponent -= (ulong)scale;
+            else
+            {
+                bQuark.Exponent = 0UL;
+            }
+        else if (scale < 0)
+            bQuark.Exponent += (ulong)(-scale);
+
+        double Mantis = ((double)a.Mantissa / NormalizeDivisor) * ((double)bQuark.Mantissa / NormalizeDivisor);
+        ulong Exponent = a.Exponent + bQuark.Exponent;
+
+        QuarkType result = new QuarkType((ulong)(Mantis*(NormalizeDivisor/10)), Exponent);
+        result.Normalize();
+        return result;
     }
 
     public static QuarkType operator *(QuarkType a, long b)
