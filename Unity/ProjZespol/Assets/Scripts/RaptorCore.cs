@@ -4,7 +4,7 @@ using UnityEngine;
 public class RaptorCore : MonoBehaviour
 {
 
-    QuarkType Currency = 0;
+    public QuarkType Currency = 0;
 
     //Click based
     QuarkType CBasevalue = 1;
@@ -18,7 +18,7 @@ public class RaptorCore : MonoBehaviour
 
 
     [SerializeField] private Animator anim;
-    private double Gold = 0;
+    public double Gold = 0;
 
     private void Awake()
     {
