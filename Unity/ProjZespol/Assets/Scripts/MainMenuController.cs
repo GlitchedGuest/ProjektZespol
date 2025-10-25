@@ -9,6 +9,7 @@ public class MainMenuController : MonoBehaviour
     private VisualElement settingsContainer;
     [SerializeField] private AudioSource sfxSource;
     [SerializeField] private AudioSource musicSource;
+    [SerializeField] private SceneController sceneController;
     private Button startButton;
     private Button settingsButton;
     private Button quitButton;
@@ -55,7 +56,7 @@ public class MainMenuController : MonoBehaviour
     }
     private void OnStartButtonClicked()
     {
-        SceneManager.LoadScene("SampleScene");
+        sceneController.LoadScene("SampleScene");
         Debug.Log("Start");
     }
     private void OnSettingsButtonClicked()
