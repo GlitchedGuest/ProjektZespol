@@ -35,11 +35,11 @@ public class RaptorCore : MonoBehaviour
     {
         QuarkType value = 0;
         
-        int chance = UnityEngine.Random.Range(0, 100);
-        if (chance < 30) //to 30 pozniej sie zamieni na statystyke w character class
+        float chance = UnityEngine.Random.Range(0.00f, 100.00f);
+        if (chance < 30.00f) //to 30 pozniej sie zamieni na statystyke w character class
         {
-            value += (CBasevalue * CMultiplier * 3).Pow(CPower);
-            Debug.Log("Kryt");
+            value += (CBasevalue * CMultiplier * 3).Pow(CPower); //to do zmiany gdy będzie wchodzić temat balansu
+            Debug.Log("Kryt " + chance);
         }
         else
             value = (CBasevalue * CMultiplier).Pow(CPower);
