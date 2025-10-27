@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-public class CharacterClass
+public class CharacterClass:MonoBehaviour
 {
     //this is class for the "rpg" character
 
