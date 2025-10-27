@@ -6,6 +6,7 @@ public class LayoutController : MonoBehaviour
     public static LayoutController Instance { get; private set; }
     
     [SerializeField] private RaptorCore raptorCore;
+    [SerializeField] private CharacterClass characterClass;
     
     
     public VisualElement ui;
@@ -16,8 +17,18 @@ public class LayoutController : MonoBehaviour
     public Label currencyLabel;
     public Label goldLabel;
     public Button sell1;
-    public Button sell50;
-    public Button sell100;
+    public Button addfactory;
+    public Slider currencySlider;
+
+    public VisualElement ContentPage1; // karta zasobow
+    public VisualElement ContentPage2;
+    public VisualElement ContentPage3;
+
+    //Lvlbar
+
+    public ProgressBar LvlBar;
+    public Label LvlNumber;
+
 
     [SerializeField] private AudioSource audioSource;
     void Awake()
@@ -31,6 +42,7 @@ public class LayoutController : MonoBehaviour
     {
         currencyLabel = ui.Q<Label>("Currency");
         goldLabel = ui.Q<Label>("Money");
+        currencySlider = ui.Q<Slider>("AmoutSlider");
 
 
         text = ui.Q<Label>("Napis");
@@ -45,59 +57,53 @@ public class LayoutController : MonoBehaviour
 
         sell1 = ui.Q<Button>("sell1");
         sell1.clicked += ClickSell1;
-        sell50 = ui.Q<Button>("sell50");
-        sell50.clicked += ClickSell50;
-        sell100 = ui.Q<Button>("sell100");
-        sell100.clicked += ClickSell100;
 
+        ContentPage1 = ui.Q<VisualElement>("Content");
+        ContentPage2 = ui.Q<VisualElement>("Content2");
+        ContentPage3 = ui.Q<VisualElement>("Content3");
 
-        OffSellButtons();
+        // lvlbar
+
+        LvlNumber = ui.Q<Label>("lvlNumber");
+        LvlBar = ui.Q<ProgressBar>("lvlprog");
+
+        //factory button
+
+        addfactory = ui.Q<Button>("addfactory");
+        addfactory.clicked += AddFactory;
     }
 
     private void ClickBtn1()
     {
         audioSource.Play();
-        text.style.display = DisplayStyle.None;
-        sell1.style.display = DisplayStyle.Flex;
-        sell50.style.display = DisplayStyle.Flex;
-        sell100.style.display = DisplayStyle.Flex;
+        ContentPage1.style.display = DisplayStyle.Flex;
+        ContentPage2.style.display = DisplayStyle.None;
+        ContentPage3.style.display = DisplayStyle.None;
     }
     private void ClickBtn2()
     {
         audioSource.Play();
-        text.style.display = DisplayStyle.Flex;
-        text.text = "elo";
-        OffSellButtons();
+        ContentPage1.style.display = DisplayStyle.None;
+        ContentPage2.style.display = DisplayStyle.Flex;
+        ContentPage3.style.display = DisplayStyle.None;
     }
     private void ClickBtn3()
     {
         audioSource.Play();
-        text.style.display = DisplayStyle.Flex;
-        text.text = "¿elo";
-        OffSellButtons();
+        ContentPage1.style.display = DisplayStyle.None;
+        ContentPage2.style.display = DisplayStyle.None;
+        ContentPage3.style.display = DisplayStyle.Flex;
     }
 
 
     // przyciski zasobow
     private void ClickSell1()
     {
-        raptorCore.SellMaterials(1);
-    }
-    private void ClickSell50()
-    {
-        raptorCore.SellMaterials(2);
-    }
-    private void ClickSell100()
-    {
-        raptorCore.SellMaterials(3);
+        double exp= raptorCore.SellMaterials(currencySlider.value);
+        characterClass.GainExp((ulong)exp);
+        audioSource.Play();
     }
 
-    public void OffSellButtons()
-    {
-        sell1.style.display = DisplayStyle.None;
-        sell50.style.display = DisplayStyle.None;
-        sell100.style.display = DisplayStyle.None;
-    }
 
     public void SetCurrencyText(string value)
     {
@@ -110,8 +116,24 @@ public class LayoutController : MonoBehaviour
         if (goldLabel != null)
             goldLabel.text = value;
     }
+    public void Update()
+    {
+        text.text = currencySlider.value.ToString()+"%";
+        UpdateLvlBar();
+    }
+    private void UpdateLvlBar()
+    {
+        LvlNumber.text = characterClass.GetLevel().ToString();
+        LvlBar.value = characterClass.GetCurrentExp();
+        LvlBar.highValue = characterClass.GetMaxExpCap();
 
-    
+    }
+
+    private void AddFactory()
+    {
+        audioSource.Play();
+        //TODO
+    }
 
 
 }
