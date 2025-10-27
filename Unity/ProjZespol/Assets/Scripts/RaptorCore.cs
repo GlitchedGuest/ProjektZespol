@@ -33,8 +33,17 @@ public class RaptorCore : MonoBehaviour
     }
     void click()
     {
-        Currency += (CBasevalue * CMultiplier).Pow(CPower);
+        QuarkType value = 0;
         
+        int chance = UnityEngine.Random.Range(0, 100);
+        if (chance < 30) //to 30 pozniej sie zamieni na statystyke w character class
+        {
+            value += (CBasevalue * CMultiplier * 3).Pow(CPower);
+            Debug.Log("Kryt");
+        }
+        else
+            value = (CBasevalue * CMultiplier).Pow(CPower);
+        Currency += value;
     }
 
     void Start()
