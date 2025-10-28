@@ -18,6 +18,7 @@ public class RaptorCore : MonoBehaviour
 
 
     [SerializeField] private Animator anim;
+    [SerializeField] private CharacterClass characterClass;
     public double Gold = 0;
 
     private void Awake()
@@ -36,7 +37,7 @@ public class RaptorCore : MonoBehaviour
         QuarkType value = 0;
         
         float chance = UnityEngine.Random.Range(0.00f, 100.00f);
-        if (chance < 30.00f) //to 30 pozniej sie zamieni na statystyke w character class
+        if (chance < characterClass.GetCriticalChance())
         {
             value += (CBasevalue * CMultiplier * 3).Pow(CPower); //to do zmiany gdy będzie wchodzić temat balansu
             Debug.Log("Kryt " + chance);
