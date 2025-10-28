@@ -1,33 +1,62 @@
 ﻿using System;
 using UnityEngine;
-using System.Runtime.InteropServices;
-using System.Numerics;
-using System.Runtime.InteropServices;
-using Unity.VisualScripting;
-using UnityEngine;
 using System.IO;
 
-[Serializable]
-[StructLayout(LayoutKind.Sequential)]
-public class QuarkType : IComparable<QuarkType>, IEquatable<QuarkType>
+
+public class QuarkType: IComparable<QuarkType>, IEquatable<QuarkType>
 {
-    [SerializeField] public uint Mantissa;
-    [SerializeField] private uint _mantisLim;
+    public long Mantissa;
+    public long Exponent;
 
-    [SerializeField] public ulong Exponent;
-    [SerializeField] private ulong _ExponentLim;
-
+    //Helper const values
     private const int MantissaLength = 9;
-    private const uint NormalizeDivisor = 100000000;
-    private const int MaxPrecisionLossShift = MantissaLength + 2;
+    private const long NormalizeDivisor = 100000000;
+    private const long ExponentRangeForPrecision = MantissaLength + 1;
 
-    public QuarkType(uint mantissa, ulong exponent)
+    //helper boolean check
+    public bool IsNegative => Mantissa < 0;
+
+    //Construction section
+    public QuarkType(long mantissa, long exponent)
     {
         Mantissa = mantissa;
         Exponent = exponent;
         Normalize();
     }
 
+
+    public QuarkType(double doubleValue)
+    {
+
+        Mantissa = 0;
+        Exponent = 0;
+
+        if (doubleValue == 0.0 || double.IsNaN(doubleValue) || double.IsInfinity(doubleValue))
+        {
+            return;
+        }
+
+        double absValue = Math.Abs(doubleValue);
+
+        double log10 = Math.Log10(absValue);
+        long derivedExponent = (long)Math.Floor(log10);
+
+        double powerOf10 = Math.Pow(10.0, derivedExponent);
+        double trueDecimalMantissa = absValue / powerOf10;
+
+        // Calculate magnitude, then apply sign from doubleValue
+        long magnitudeMantissa = (long)Math.Round(trueDecimalMantissa * NormalizeDivisor);
+
+        Mantissa = (doubleValue < 0.0) ? -magnitudeMantissa : magnitudeMantissa;
+        Exponent = derivedExponent;
+        Normalize();
+    }
+
+    public QuarkType(long longValue) : this((double)longValue) { }
+    public QuarkType(ulong ulongValue) : this((double)ulongValue) { }
+
+
+    // constructors casts
     public static implicit operator double(QuarkType q)
     {
         if (q.Mantissa == 0)
@@ -40,124 +69,19 @@ public class QuarkType : IComparable<QuarkType>, IEquatable<QuarkType>
 
         return value;
     }
-    public QuarkType(double doubleValue)
-    {
 
-        Mantissa = 0;
-        Exponent = 0;
-
-        if (doubleValue <= 0.0)
-        {
-            if (doubleValue < 0.0)
-                throw new ArgumentException("QuarkType does not support negative numbers.", nameof(doubleValue));
-            return; 
-        }
-
-
-        double log10 = Math.Log10(doubleValue);
-        ulong derivedExponent = (ulong)Math.Floor(log10);
-
-
-        double powerOf10 = Math.Pow(10.0, derivedExponent);
-        double trueDecimalMantissa = doubleValue / powerOf10;
-
-        Mantissa = (uint)Math.Round(trueDecimalMantissa * NormalizeDivisor);
-        Exponent = derivedExponent;
-
-        Normalize();
-    }
-
-    public QuarkType(long longValue)
-    {
-        Mantissa = 0;
-        Exponent = 0;
-
-        if (longValue < 0)
-        {
-            throw new ArgumentException("QuarkType does not support negative numbers.", nameof(longValue));
-        }
-        if (longValue == 0) return;
-
-        ulong tempValue = (ulong)longValue;
-
-        double log10 = Math.Log10(tempValue);
-        ulong derivedExponent = (ulong)Math.Floor(log10);
-
-        double powerOf10 = Math.Pow(10.0, derivedExponent);
-        double trueDecimalMantissa = (double)tempValue / powerOf10;
-
-        Mantissa = (uint)Math.Round(trueDecimalMantissa * NormalizeDivisor);
-        Exponent = derivedExponent;
-
-        Normalize();
-    }
-
-    public QuarkType(ulong ulongValue)
-    {
-        Mantissa = 0;
-        Exponent = 0;
-
-        if (ulongValue == 0) return;
-
-        double log10 = Math.Log10(ulongValue);
-        ulong derivedExponent = (ulong)Math.Floor(log10);
-
-        double powerOf10 = Math.Pow(10.0, derivedExponent);
-        double trueDecimalMantissa = (double)ulongValue / powerOf10;
-
-        Mantissa = (uint)Math.Round(trueDecimalMantissa * NormalizeDivisor);
-        Exponent = derivedExponent;
-
-        Normalize();
-    }
-
-    public QuarkType(ulong largeMantissa, ulong exponent)
-    {
-        Mantissa = 0;
-        Exponent = 0;
-
-        if (largeMantissa == 0)
-        {
-            return;
-        }
-
-        ulong tempMantissa = largeMantissa;
-        ulong finalExponent = exponent;
-
-        while (tempMantissa >= (ulong)(NormalizeDivisor * 10))
-        {
-            tempMantissa /= 10;
-            finalExponent++;
-        }
-
-        while (tempMantissa < NormalizeDivisor && finalExponent > 0)
-        {
-            tempMantissa *= 10;
-            finalExponent--;
-        }
-
-        if (finalExponent == 0 && tempMantissa < NormalizeDivisor)
-        {
-            tempMantissa = 0;
-        }
-
-        Mantissa = (uint)tempMantissa;
-        Exponent = finalExponent;
-    }
-
-
-
-    public static implicit operator QuarkType(int value) => new QuarkType((long)value);
-    public static implicit operator QuarkType(short value) => new QuarkType((long)value);
-    public static implicit operator QuarkType(byte value) => new QuarkType((long)value);
-    public static implicit operator QuarkType(uint value) => new QuarkType((ulong)value);
-    public static implicit operator QuarkType(ushort value) => new QuarkType((ulong)value);
+    public static implicit operator QuarkType(int value) => new QuarkType((double)value);
+    public static implicit operator QuarkType(long value) => new QuarkType((double)value);
+    public static implicit operator QuarkType(uint value) => new QuarkType((double)value);
+    public static implicit operator QuarkType(ulong value) => new QuarkType((double)value);
     public static implicit operator QuarkType(float value) => new QuarkType((double)value);
 
+    //HelperValues
+    public static QuarkType Zero => new QuarkType(0, 0);
+    public static QuarkType One => new QuarkType(NormalizeDivisor, 0);
+    public static QuarkType NegativeOne => new QuarkType(-NormalizeDivisor, 0);
 
-
-    public static QuarkType Zero = new QuarkType(0, 0);
-    public static QuarkType One = new QuarkType(NormalizeDivisor, 0);
+    //Normalize function
     public void Normalize()
     {
         if (Mantissa == 0)
@@ -165,67 +89,45 @@ public class QuarkType : IComparable<QuarkType>, IEquatable<QuarkType>
             Exponent = 0;
             return;
         }
-        
-        while (Mantissa >= (NormalizeDivisor * 10))
+
+        long mantissaMagnitude = Math.Abs(Mantissa);
+
+
+        int iter = 0;
+        while (mantissaMagnitude >= (NormalizeDivisor * 10) && iter++ < 100)
         {
-            if (Exponent == ulong.MaxValue) return;
-            Mantissa /= 10;
+            if (Exponent == long.MaxValue) { return; }  // Overflow check 
+            mantissaMagnitude /= 10;
             Exponent++;
         }
-        while (Mantissa < NormalizeDivisor && Exponent > 0)
+
+        iter = 0;
+        while (mantissaMagnitude < NormalizeDivisor && iter++ < 100)
         {
-            Mantissa *= 10;
+            if (Exponent == long.MinValue) { break; }  // Underflow check 
+            mantissaMagnitude *= 10;
             Exponent--;
         }
 
-        if (Exponent == 0 && Mantissa < NormalizeDivisor)
+        Mantissa = this.IsNegative ? -mantissaMagnitude : mantissaMagnitude;
+
+        if (Exponent == long.MinValue && mantissaMagnitude < NormalizeDivisor)
         {
-            while (Mantissa < NormalizeDivisor && Mantissa > 0)
-            {
-                Mantissa *= 10;
-            }
+            Mantissa = 0;
+            Exponent = 0;
         }
 
-        //limit the value if needed.
-        if (!(_ExponentLim == 0 && 0 == _mantisLim))
-        {
-            if (Exponent > _ExponentLim)
-            { Exponent = _ExponentLim;
-                Mantissa = _mantisLim;
-            }
-
-            if (Exponent == _ExponentLim) {
-                if (Mantissa > _mantisLim)
-                {
-                    Mantissa = _mantisLim;
-                }
-            
-            }
-        
-
-        }
-
-
-        //underflowGuradandFix
-        if (Exponent < MantissaLength)
-        {
-
-            int allowedDigits = (int)Exponent + 1;      // Exponent 0 -> 1 digit, etc.
-            int digitsToTruncate = MantissaLength - allowedDigits;
-
-            // Compute divisor to remove excess digits from front
-            uint divisor = 1;
-            for (int i = 0; i < digitsToTruncate; i++)
-                divisor *= 10;
-
-            // Keep the highest allowed digits, preserve trailing zeros
-            Mantissa = (Mantissa / divisor) * divisor;
-        }
 
     }
-    private static QuarkType Add(QuarkType larger, QuarkType smaller)
+
+
+
+
+
+    //comparison
+    public override bool Equals(object obj)
     {
-        return larger + smaller;
+        return Equals(obj as QuarkType);
     }
 
     public bool Equals(QuarkType other)
@@ -233,415 +135,278 @@ public class QuarkType : IComparable<QuarkType>, IEquatable<QuarkType>
         return this.Mantissa == other.Mantissa && this.Exponent == other.Exponent;
     }
 
+    public override int GetHashCode()
+    {
+        return HashCode.Combine(Mantissa, Exponent);
+    }
+
     public int CompareTo(QuarkType other)
+    {
+        bool thisIsNegative = this.IsNegative;
+        bool otherIsNegative = other.IsNegative;
+
+        if (thisIsNegative != otherIsNegative)
+        {
+            // Negative is less than positive
+            return thisIsNegative ? -1 : 1;
+        }
+        int magnitudeComparison = CompareMagnitudeTo(other);
+
+        if (thisIsNegative)
+        {
+            return -magnitudeComparison;
+        }
+        else
+        {
+            return magnitudeComparison;
+        }
+    }
+
+    private int CompareMagnitudeTo(QuarkType other)
     {
         if (Exponent != other.Exponent)
         {
             return Exponent.CompareTo(other.Exponent);
         }
-
-        return Mantissa.CompareTo(other.Mantissa);
+        return Math.Abs(Mantissa).CompareTo(Math.Abs(other.Mantissa));
     }
 
-    // --- Equality and Inequality ---
-
+    //Operator overloading
     public static bool operator ==(QuarkType left, QuarkType right)
     {
-        // Use the Equals method defined above for standard equality checking.
         return left.Equals(right);
     }
 
     public static bool operator !=(QuarkType left, QuarkType right)
     {
-        return !(left == right);
+        return !left.Equals(right);
     }
 
-    // --- Comparison Operators ---
-
-    public static bool operator <(QuarkType left, QuarkType right)
+    public static QuarkType operator -(QuarkType a)
     {
-        // left < right if CompareTo returns a value less than zero (-1)
-        return left.CompareTo(right) < 0;
+        if (a.Mantissa == 0) return Zero;
+        return new QuarkType(-a.Mantissa, a.Exponent);
     }
 
-    public static bool operator >(QuarkType left, QuarkType right)
-    {
-        // left > right if CompareTo returns a value greater than zero (1)
-        return left.CompareTo(right) > 0;
-    }
 
-    public static bool operator <=(QuarkType left, QuarkType right)
-    {
-        // left <= right if CompareTo returns a value less than or equal to zero (-1 or 0)
-        return left.CompareTo(right) <= 0;
-    }
-
-    public static bool operator >=(QuarkType left, QuarkType right)
-    {
-        // left >= right if CompareTo returns a value greater than or equal to zero (1 or 0)
-        return left.CompareTo(right) >= 0;
-    }
-
+    //Core addition logic
     public static QuarkType operator +(QuarkType a, QuarkType b)
     {
-
         if (a.Mantissa == 0) return b;
         if (b.Mantissa == 0) return a;
 
-        if (a.Exponent < b.Exponent)
+
+        QuarkType larger = a.Exponent >= b.Exponent ? a : b;
+        QuarkType smaller = a.Exponent >= b.Exponent ? b : a;
+
+        long exponentDifference = larger.Exponent - smaller.Exponent;
+
+        if (exponentDifference > ExponentRangeForPrecision)
         {
-            return Add(b, a); 
+            return larger;
         }
 
-        ulong exponentDifference = a.Exponent - b.Exponent;
+        long smallerMantissaDenormalized = smaller.Mantissa;
 
-        if (exponentDifference > (ulong)MantissaLength + 1)
+        for (long i = 0; i < exponentDifference; i++)
         {
-            return a;
+            smallerMantissaDenormalized /= 10;
         }
 
-        uint bMantissaDenormalized = b.Mantissa;
+        long newMantissaLong = larger.Mantissa + smallerMantissaDenormalized;
 
-        for (ulong i = 0; i < exponentDifference; i++)
-        {
-            bMantissaDenormalized /= 10;
-        }
-
-        ulong newMantissaULong = (ulong)a.Mantissa + bMantissaDenormalized;
-
-        QuarkType result = new QuarkType((uint)newMantissaULong, a.Exponent);
-        result.Normalize();
-        return result;
+        return new QuarkType(newMantissaLong, larger.Exponent);
     }
-
-    public static QuarkType operator +(QuarkType a, double b)
+    public static QuarkType operator -(QuarkType a, QuarkType b)
     {
-        // Convert the primitive type 'b' into a QuarkType, then use the core QuarkType + QuarkType operator.
-        QuarkType bQuark = new QuarkType(b);
-        return a + bQuark;
+        return a + (-b);
     }
-
-    public static QuarkType operator +(double a, QuarkType b)
-    {
-        return b + a;
-    }
-
-    public static QuarkType operator +(QuarkType a, long b)
-    {
-        if (b < 0)
-        {
-            throw new ArgumentException("Cannot add a negative 'long' value to QuarkType.", nameof(b));
-        }
-        QuarkType bQuark = new QuarkType(b);
-        return a + bQuark;
-    }
-
-    public static QuarkType operator +(long a, QuarkType b)
-    {
-        return b + a;
-    }
-
-    public static QuarkType operator +(QuarkType a, ulong b)
-    {
-        QuarkType bQuark = new QuarkType(b);
-        return a + bQuark;
-    }
-
-    public static QuarkType operator +(ulong a, QuarkType b)
-    {
-        return b + a;
-    }
-    public static QuarkType operator +(float a, QuarkType b) => (double)a + b;
-    public static QuarkType operator +(QuarkType a, float b) => a + (double)b;
-
-    public static QuarkType operator +(QuarkType a, short b) => a + (long)b;
-    public static QuarkType operator +(short a, QuarkType b) => (long)a + b;
-
-    public static QuarkType operator +(QuarkType a, byte b) => a + (long)b;
-    public static QuarkType operator +(byte a, QuarkType b) => (long)a + b;
-
-    public static QuarkType operator +(QuarkType a, uint b) => a + (ulong)b;
-    public static QuarkType operator +(uint a, QuarkType b) => (ulong)a + b;
 
     public static QuarkType operator *(QuarkType a, QuarkType b)
     {
         if (a.Mantissa == 0 || b.Mantissa == 0) return Zero;
 
-        // 1. Multiply mantissas (can overflow a uint, so use ulong)
-        ulong newMantissaULong = (ulong)a.Mantissa * b.Mantissa / NormalizeDivisor;
-
-        // 2. Add exponents (E_A + E_B)
-        ulong newExponent = a.Exponent + b.Exponent;
-
-        return new QuarkType(newMantissaULong, newExponent);
-    }
-
-    public static QuarkType operator *(QuarkType a, double b)
-    {
-       
-        if (b < 0.0)
+        double productMagnitude = ((double)Math.Abs(a.Mantissa) * Math.Abs(b.Mantissa)) / NormalizeDivisor;
+        long newMantissaMagnitude = (long)Math.Round(productMagnitude);
+        long newExponent = 0;
+        try
         {
-            throw new ArgumentException("Cannot multiply by a negative double/float value; QuarkType does not support negative results.", nameof(b));
-        }
-
-
-        int scale = 0;
-        while (b > 0 && b < 1.0)
-        {
-            b *= 10.0;
-            scale++;
-            if (scale > 300)
-                break;
-        }
-
-        while (b >= 10.0)
-        {
-            b /= 10.0;
-            scale--;
-        }
-
-
-        QuarkType bQuark = new QuarkType(b);
-        if (scale > 0)
-            if (bQuark.Exponent > (ulong)scale)
-                bQuark.Exponent -= (ulong)scale;
-            else
+            checked
             {
-                bQuark.Exponent = 0UL;
+                newExponent = a.Exponent + b.Exponent;
             }
-        else if (scale < 0)
-            bQuark.Exponent += (ulong)(-scale);
-
-        double Mantis = ((double)a.Mantissa / NormalizeDivisor) * ((double)bQuark.Mantissa / NormalizeDivisor);
-        ulong Exponent = a.Exponent + bQuark.Exponent;
-
-        QuarkType result = new QuarkType((ulong)(Mantis*(NormalizeDivisor/10)), Exponent);
-        result.Normalize();
-        return result;
-    }
-
-    public static QuarkType operator *(QuarkType a, long b)
-    {
-        if (b < 0)
-        {
-            throw new ArgumentException("Cannot multiply by a negative 'long' value; QuarkType does not support negative results.", nameof(b));
         }
-
-        QuarkType bQuark = new QuarkType(b);
-        return a * bQuark;
-    }
-
-    public static QuarkType operator *(QuarkType a, ulong b)
-    {
-        QuarkType bQuark = new QuarkType(b);
-        return a * bQuark;
-    }
-
-    public static QuarkType operator *(double a, QuarkType b) =>  b * a;
-    public static QuarkType operator *(long a, QuarkType b) => b * a;
-    public static QuarkType operator *(ulong a, QuarkType b) => b * a;
-    public static QuarkType operator *(float a, QuarkType b) => (double)a * b;
-    public static QuarkType operator *(QuarkType a, float b) => a * (double)b;
-
-    public static QuarkType operator *(QuarkType a, short b) => a * (long)b;
-    public static QuarkType operator *(short a, QuarkType b) => (long)a * b;
-
-    public static QuarkType operator *(QuarkType a, byte b) => a * (long)b;
-    public static QuarkType operator *(byte a, QuarkType b) => (long)a * b;
-
-    public static QuarkType operator *(QuarkType a, uint b) => a * (ulong)b;
-    public static QuarkType operator *(uint a, QuarkType b) => (ulong)a * b;
-    public static QuarkType operator -(QuarkType a, QuarkType b)
-    {
-        if (b.Mantissa == 0) return a;
-        if (a.Mantissa == 0) return Zero;
-  
-        if (a.CompareTo(b) < 0)
-        {
-            return Zero; 
-        }
-       
-        ulong exponentDifference = a.Exponent - b.Exponent;
-
-        if (exponentDifference >= (ulong)MaxPrecisionLossShift)
-        {
-            return a;
-        }
-
-        ulong bMantissaDenormalized = b.Mantissa;
-
-        for (ulong i = 0; i < exponentDifference; i++)
-        {
-            bMantissaDenormalized /= 10;
-        }
-
-        long newMantissaLong = (long)a.Mantissa - (long)bMantissaDenormalized;
-
-        uint resultMantissa = (uint)newMantissaLong;
-        ulong resultExponent = a.Exponent;
-
-        if (resultMantissa == 0)
+        catch (OverflowException)
         {
             return Zero;
         }
+        
 
-        QuarkType result = new QuarkType(resultMantissa, resultExponent);
-        return result;
-    }
-
-    public static QuarkType operator -(QuarkType a, double b)
-    {
-        QuarkType bQuark = new QuarkType(b);
-        return a - bQuark; 
-    }
-
-    public static QuarkType operator -(double a, QuarkType b)
-    {
-        QuarkType aQuark = new QuarkType(a);
-        return aQuark - b;
-    }
-
-    public static QuarkType operator -(ulong a, QuarkType b)
-    {
-        QuarkType aQuark = new QuarkType(a);
-        return aQuark - b;
-    }
-
-    public static QuarkType operator -(QuarkType a, ulong b)
-    {
-        QuarkType bQuark = new QuarkType(b);
-        return a - bQuark;
-    }
-
-    public static QuarkType operator -(long a, QuarkType b)
-    {
-        if (a < 0)
-        {
-            throw new ArgumentException("Cannot start subtraction with a negative 'long' value, as QuarkType does not support negative results.", nameof(a));
-        }
-        QuarkType aQuark = new QuarkType((ulong)a);
-        return aQuark - b;
-    }
-    public static QuarkType operator -(QuarkType a, long b)
-    {
-        QuarkType bQuark = new QuarkType(b);
-        return a - bQuark;
-    }
-
-    public static QuarkType operator -(float a, QuarkType b) => (double)a - b;
-    public static QuarkType operator -(QuarkType a, float b) => a - (double)b;
-
-    public static QuarkType operator -(QuarkType a, short b) => a - (long)b;
-    public static QuarkType operator -(short a, QuarkType b) => (long)a - b;
-
-    public static QuarkType operator -(QuarkType a, byte b) => a - (long)b;
-    public static QuarkType operator -(byte a, QuarkType b) => (long)a - b;
-
-    public static QuarkType operator -(QuarkType a, uint b) => a - (ulong)b;
-    public static QuarkType operator -(uint a, QuarkType b) => (ulong)a - b;
-
-
-    public double Log10()
-    {
-        if (Mantissa == 0)
-        {
-            return double.NegativeInfinity;
-        }
-
-        double decimalMantissa = (double)Mantissa / NormalizeDivisor;
-
-        double logM = Math.Log10(decimalMantissa);
-
-        return logM + (double)Exponent;
-    }
-
-    public static QuarkType operator ++(QuarkType a) => a + 1;
-    public QuarkType Pow(double power)
-    {
-        if (Mantissa == 0) return Zero;
-        if (power == 0.0) return One;
-        if (power == 1.0) return this;
-
-        double logValue = this.Log10();
-
-        double rawNewExponent = logValue * power;
-
-        if (rawNewExponent > ulong.MaxValue)
-        {
-            return new QuarkType(uint.MaxValue, ulong.MaxValue);
-        }
-
-        ulong newExponent = (ulong)Math.Floor(rawNewExponent);
-
-        double mantissaFraction = rawNewExponent - newExponent;
-
-        double newMantissaDecimal = Math.Pow(10.0, mantissaFraction);
-
-        uint newMantissa = (uint)Math.Round(newMantissaDecimal * NormalizeDivisor);
+        // Determine sign of the result
+        bool newIsNegative = a.IsNegative != b.IsNegative;
+        long newMantissa = newIsNegative ? -newMantissaMagnitude : newMantissaMagnitude;
 
         return new QuarkType(newMantissa, newExponent);
     }
 
-    public double LogBase(double baseValue)
+    public static QuarkType operator /(QuarkType a, QuarkType b)
     {
-        if (Mantissa == 0)
+        if (b.Mantissa == 0)
         {
-            return double.NegativeInfinity;
+            long sign = (a.Mantissa < 0) != (b.Mantissa < 0) ? -1 : 1;
+            return new QuarkType(sign * long.MaxValue, long.MaxValue);
+        }
+        if (a.Mantissa == 0) return Zero;
+
+        bool newIsNegative = (a.Mantissa < 0) != (b.Mantissa < 0);
+
+        long newExponent = a.Exponent - b.Exponent;
+
+
+        decimal mantissaA = Math.Abs(a.Mantissa);
+        decimal mantissaB = Math.Abs(b.Mantissa);
+        decimal newMantissaDecimal = (mantissaA / mantissaB) * NormalizeDivisor;
+
+        if (newMantissaDecimal > long.MaxValue / 10)
+        {
+            while (newMantissaDecimal >= NormalizeDivisor * 10)
+            {
+                newMantissaDecimal /= 10;
+                newExponent++;
+            }
         }
 
-        if (baseValue <= 0 || baseValue == 1.0)
+        while (newMantissaDecimal < NormalizeDivisor)
         {
-            throw new ArgumentException("Logarithm base must be positive and not equal to 1.", nameof(baseValue));
+            newMantissaDecimal *= 10;
+            newExponent--;
         }
 
-        double log10_X = this.Log10();
+        long newMantissaMagnitude = (long)Math.Round(newMantissaDecimal);
+        long newMantissa = newIsNegative ? -newMantissaMagnitude : newMantissaMagnitude;
 
-        double log10_Base = Math.Log10(baseValue);
-
-        if (log10_Base == 0.0)
-        {
-            return double.NaN;
-        }
-
-        return log10_X / log10_Base;
+        return new QuarkType(newMantissa, newExponent);
     }
+
+    public static QuarkType operator +(QuarkType a, double b) => a + new QuarkType(b);
+    public static QuarkType operator +(double a, QuarkType b) => new QuarkType(a) + b;
+    public static QuarkType operator -(QuarkType a, double b) => a - new QuarkType(b);
+    public static QuarkType operator -(double a, QuarkType b) => new QuarkType(a) - b;
+    public static QuarkType operator *(QuarkType a, double b) => a * new QuarkType(b);
+    public static QuarkType operator *(double a, QuarkType b) => new QuarkType(a) * b;
+    public static QuarkType operator /(QuarkType a, double b) => a / new QuarkType(b);
+    public static QuarkType operator /(double a, QuarkType b) => new QuarkType(a) / b;
+    public static QuarkType operator ++(QuarkType a) => a + 1.0;
+
 
     public override string ToString()
     {
-        if (Mantissa == 0) return "0";
-        double decimalMantissa = (double)Mantissa / NormalizeDivisor;
-        return $"{decimalMantissa.ToString("F2", System.Globalization.CultureInfo.InvariantCulture)}e{Exponent}";
+        if (Mantissa == 0)
+            return "0";
+
+        long mantissa = Math.Abs(Mantissa);
+
+        // Define suffixes
+        string[] suffixes = { "", "k", "M", "B", "T", "Qa", "Qi", "Sx", "Sp", "Oc", "No", "Dc" };
+        int suffixIndex = (int)(Exponent / 3);
+
+        if (suffixIndex >= suffixes.Length)
+        {
+            double displayMantissa = (double)mantissa / 1e8; // normalize mantissa
+            long displayExponent = Exponent;
+            if (IsNegative)
+                displayMantissa = -displayMantissa;
+            return $"{displayMantissa.ToString("0.##", System.Globalization.CultureInfo.InvariantCulture)}e{displayExponent}";
+        }
+
+        // Remainder exponent to scale mantissa within suffix range
+        int expRemainder = (int)(Exponent - suffixIndex * 3);
+
+        // Scale mantissa for display
+        double displayValue = (double)mantissa / 1e8; // normalize mantissa
+        if (expRemainder > 0)
+            displayValue *= Math.Pow(10, expRemainder);
+        else if (expRemainder < 0)
+            displayValue /= Math.Pow(10, -expRemainder);
+
+        if (IsNegative)
+            displayValue = -displayValue;
+
+        // Format value: up to 2 decimals for small numbers
+        string formatted = displayValue < 10 ? displayValue.ToString("0.##", System.Globalization.CultureInfo.InvariantCulture)
+                         : displayValue < 100 ? displayValue.ToString("0.#", System.Globalization.CultureInfo.InvariantCulture)
+                         : displayValue.ToString("0", System.Globalization.CultureInfo.InvariantCulture);
+
+        return $"{formatted}{suffixes[suffixIndex]}";
     }
-    public void clearLimit() { 
-        _mantisLim = 0;
-        _ExponentLim = 0;
-    }
-    public void SetLimit(QuarkType t) {
-        _mantisLim = t.Mantissa;
-        _ExponentLim = t.Exponent;
-    }
-    public QuarkType GetLimit() { return new QuarkType(_mantisLim, _ExponentLim); }
+
 
     public void SerializeToStream(BinaryWriter writer)
     {
-        writer.Write(Mantissa);      // 4 bytes
-        writer.Write(_mantisLim);    // 4 bytes
+        writer.Write(Mantissa);      // 8 bytes
         writer.Write(Exponent);       // 8 bytes
-        writer.Write(_ExponentLim);   // 8 bytes
     }
 
     public static QuarkType DeserializeFromStream(BinaryReader reader)
     {
-        uint mantissa = reader.ReadUInt32();
-        uint mantisLim = reader.ReadUInt32();
-        ulong exponent = reader.ReadUInt64();
-        ulong exponentLim = reader.ReadUInt64();
-
-        return new QuarkType(mantissa, exponent)
-        {
-            _mantisLim = mantisLim,
-            _ExponentLim = exponentLim
-        };
+        long mantissa = reader.ReadInt64();
+        long exponent = reader.ReadInt64();
+        return new QuarkType(mantissa, exponent);
     }
+
+    public QuarkType Floor()
+    {
+        if (Mantissa == 0) return new QuarkType(0, 0);
+
+        long absMant = Math.Abs(Mantissa);
+
+        if (Exponent < 0)
+        {
+            return new QuarkType(0, 0);
+        }
+
+        long scale = NormalizeDivisor;
+        for (long i = 0; i < Exponent; i++)
+            scale *= 10;
+
+        long newMantissa = (Mantissa / scale) * scale;
+
+        return new QuarkType(newMantissa, Exponent);
+    }
+
+    public QuarkType Ceil()
+    {
+        if (Mantissa == 0) return new QuarkType(0, 0);
+
+        const int NormalizeDivisorPower = 8;
+        if (Exponent >= NormalizeDivisorPower)
+            return new QuarkType(Mantissa, Exponent);
+
+        long divisor = NormalizeDivisor;
+
+        if (Exponent > 0)
+        {
+            for (long i = 0; i < Exponent; i++) divisor /= 10;
+        }
+        else if (Exponent < 0)
+        {
+            long magnitude = Math.Abs(Exponent);
+            for (long i = 0; i < magnitude; i++)
+            {
+                if (long.MaxValue / 10 < divisor)
+                    return IsNegative ? new QuarkType(0, 0) : new QuarkType(NormalizeDivisor, 0);
+                divisor *= 10;
+            }
+        }
+
+        long truncatedPart = Mantissa / divisor;
+        long remainder = Mantissa % divisor;
+
+        if (remainder != 0 && !IsNegative) truncatedPart += 1;
+
+        long newMantissa = truncatedPart * NormalizeDivisor;
+        return new QuarkType(newMantissa, 0);
+    }
+
 
 }

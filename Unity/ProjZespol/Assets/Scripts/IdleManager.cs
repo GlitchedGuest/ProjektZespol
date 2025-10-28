@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -60,7 +61,9 @@ public class IdleManager : MonoBehaviour
             totalProduction += f.GetProduction();
         }
 
-        raptorCore.Currency += totalProduction;
+        raptorCore.Currency += Math.Ceiling(totalProduction);
+
+ 
 
         LayoutController.Instance?.SetCurrencyText(raptorCore.Currency.ToString());
     }
