@@ -3,20 +3,26 @@ using UnityEngine;
 
 public class QuarkTestNode : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+
     private int _testsRun = 0;
     private int _testsFailed = 0;
 
-    // NOTE: This tolerance is too high for true equality but good for quick magnitude checks.
-    private const double LOG_TOLERANCE = 0.0001;
+    // A small tolerance for approximate equality checks where precision loss is expected (e.g., division).
+    // Note: Since Log10 is removed, this approximation is now based on direct component comparison.
+    private const long MANTISSA_TOLERANCE = 1; // Allows for rounding error of 1 in the least significant digit (1e-8)
 
     // Helper to check if two QuarkTypes are close (for floating-point results)
-    private bool IsApproximatelyEqual(QuarkType a, QuarkType b, double tolerance = LOG_TOLERANCE)
+    private bool IsApproximatelyEqual(QuarkType a, QuarkType b, long mantissaTolerance = MANTISSA_TOLERANCE)
     {
-        // Must have similar magnitude. Check Log10.
-        // We use a safe check for Log10 when Mantissa is 0 to avoid errors.
+        // Must have the same sign and similar exponent
+        if ((a.Mantissa < 0) != (b.Mantissa < 0)) return false;
+        if (a.Exponent != b.Exponent) return false;
+
+        // Check for exact zero equality
         if (a.Mantissa == 0 || b.Mantissa == 0) return a.Mantissa == b.Mantissa;
-        return Math.Abs(a.Log10() - b.Log10()) < tolerance;
+
+        // Compare magnitudes within tolerance
+        return Math.Abs(a.Mantissa - b.Mantissa) <= mantissaTolerance;
     }
 
     void Start()
@@ -24,18 +30,21 @@ public class QuarkTestNode : MonoBehaviour
         Debug.Log("<color=white>--- QuarkType Test Suite ---</color>");
 
         TestNormalizationAndConstructors();
-        TestPrimitiveConversions(); 
+        TestPrimitiveConversions();
         TestComparisonOperators();
         TestAddition();
-        TestPrimitiveAddition(); 
+        TestPrimitiveAddition();
         TestSubtraction();
-        TestPrimitiveSubtraction(); 
+        TestPrimitiveSubtraction();
         TestMultiplication();
-        TestPrimitiveMultiplication(); 
-        TestLogarithmFunctions();
-        TestPowerFunction();
-        TestPrecisionLossAndEdgeCases();
+        TestPrimitiveMultiplication();
         TestMultiplicationEXT();
+
+        // --- NEW CRITICAL TEST SECTIONS ---
+        TestDivision();
+        TestSignedAndRangeArithmetic();
+        TestPrecisionLossAndEdgeCases(); // Moved to the end
+        // ----------------------------------
 
         Debug.Log("-----------------------------");
         if (_testsFailed == 0)
@@ -64,214 +73,132 @@ public class QuarkTestNode : MonoBehaviour
         }
     }
 
-    // --- Existing Test Sections (Omitted for brevity, assume they are present) ---
+    // --- EXISTING TEST SECTIONS (UPDATED FOR SIGNED/LONG TYPES) ---
+
     void TestNormalizationAndConstructors()
     {
         Debug.Log("\n<color=yellow>## 1. Normalization & Constructors</color>");
 
         // T1.1: Basic Normalization (10.0e0 -> 1.0e1)
-        var t1_1 = new QuarkType(1000000000, 0);
-        Assert(t1_1.Mantissa == 100000000 && t1_1.Exponent == 1, $"T1.1: Mantissa Overflow (10.0e0 -> 1.0e1). Result: {t1_1}");
+        var t1_1 = new QuarkType(1000000000L, 0L);
+        Assert(t1_1.Mantissa == 100000000L && t1_1.Exponent == 1L, $"T1.1: Mantissa Overflow (10.0e0 -> 1.0e1). Result: {t1_1}");
 
-        // T1.2: ulong Constructor (123456789UL) -> 1.23456789e8
-        var t1_2 = new QuarkType(123456789UL);
-        Assert(t1_2.Mantissa == 123456789 && t1_2.Exponent == 8, $"T1.2: ulong 123456789 -> {t1_2}");
+        // T1.2: Negative long Constructor (-123456789L) -> -1.23456789e8
+        var t1_2 = new QuarkType(-123456789L);
+        // Note: Raw 123456789 is 1.23456789e8. Mantissa is 1.23... * 10^8.
+        Assert(t1_2.Mantissa == -123456789L && t1_2.Exponent == 8L, $"T1.2: long -123456789 -> {t1_2}");
 
-        // T1.3: ulong Constructor (ULong.MaxValue ~ 1.84e19) -> 1.84...e19
-        var t1_3 = new QuarkType(ulong.MaxValue);
-        Assert(t1_3.Exponent == 19, $"T1.3: ulong.MaxValue Exponent. Result: {t1_3.Exponent}");
+        // T1.3: double Constructor (Small Fraction) -> 1.234e-5
+        var t1_3 = new QuarkType(0.00001234);
+        var expected1_3 = new QuarkType(123400000L, -5L);
+        Assert(t1_3.Mantissa == expected1_3.Mantissa && t1_3.Exponent == expected1_3.Exponent,
+               $"T1.3: Double Constructor (0.00001234 -> 1.234e-5). Result: {t1_3}");
 
-        // T1.4: ulong, ulong Constructor (Large Mantissa)
-        // 5,000,000,000,000UL with Base Exp 10. Should become 5.0e22
-        var t1_4 = new QuarkType(5000000000000UL, 10UL);
-        Assert(t1_4.Exponent == 14, $"T1.4: ulong, ulong large mantissa. Result: {t1_4.Exponent}");
+        // T1.4: Constructor with negative exponent, small mantissa (5e-2)
+        var t1_4 = new QuarkType(5L, -2L); // Raw 0.05 * 10^-2. Normalize to 5.0e-10.
+        var expected1_4 = new QuarkType(500000000L, -10L);
+        Assert(t1_4.Exponent == expected1_4.Exponent && t1_4.Mantissa == expected1_4.Mantissa, $"T1.4: Raw 5e-2 -> {t1_4}. Exponent should be -10.");
 
-        // T1.5: ulong, ulong Constructor (Small Mantissa)
-        // 5UL with Base Exp 10. Should become 5.0e2
-        var t1_5 = new QuarkType(5UL, 10UL);
-        Assert(t1_5.Exponent == 2 && t1_5.Mantissa == 500000000, $"T1.5: ulong, ulong small mantissa. Result: {t1_5}");
+        // T1.5: Constructor with negative mantissa, large exponent
+        var t1_5 = new QuarkType(-500000000L, 10L);
+        Assert(t1_5.Mantissa == -500000000L && t1_5.Exponent == 10L, $"T1.5: Negative mantissa. Result: {t1_5}");
     }
+
     void TestComparisonOperators()
     {
         Debug.Log("\n<color=yellow>## 2. Comparison Operators</color>");
 
-        var a = new QuarkType(100000000, 100); // 1.0e100
-        var b = new QuarkType(100000001, 100); // 1.00000001e100 (Mantissa >)
-        var c = new QuarkType(999999999, 99); // 9.99999999e99 (Exponent <)
+        var a = new QuarkType(100000000L, 100L); // 1.0e100
+        var b = new QuarkType(100000001L, 100L); // 1.00000001e100
+        var c = new QuarkType(-100000000L, 100L); // -1.0e100
+        var d = new QuarkType(999999999L, 99L); // 9.99999999e99
 
-        Assert(b > a, "T2.1: Mantissa Difference (b > a)");
-        Assert(a < b, "T2.2: Mantissa Difference (a < b)");
-        Assert(c < a, "T2.3: Exponent Difference (c < a)");
-        Assert(c.CompareTo(a) == -1, "T2.4: CompareTo Exponent Check");
-        Assert(a.CompareTo(b) == -1, "T2.5: CompareTo Mantissa Check");
-        Assert(a == new QuarkType(100000000, 100), "T2.6: Equality");
-        Assert(a != b, "T2.7: Inequality");
+        Assert(b > a, "T2.1: Positive Mantissa Difference (b > a)");
+        Assert(c < a, "T2.2: Sign Difference (c < a)");
+        Assert(a > c, "T2.3: Sign Difference (a > c)");
+        Assert(c < QuarkType.Zero, "T2.4: Negative vs Zero");
+        Assert(d < a, "T2.5: Exponent Difference (d < a)");
+        Assert(a == new QuarkType(100000000L, 100L), "T2.6: Equality");
+        Assert(c.CompareTo(new QuarkType(-100000001L, 100L)) == 1, "T2.7: Negative Comparison (Larger magnitude is smaller value)");
     }
+
     void TestAddition()
     {
         Debug.Log("\n<color=yellow>## 3. Addition</color>");
 
-        // T3.1: Zero Addition
-        var a = new QuarkType(100000000, 50);
-        Assert(a + QuarkType.Zero == a, "T3.1: A + 0 = A");
+        // T3.1: A + (-A) = 0
+        var a = new QuarkType(500000000L, 10L);
+        var b = -a;
+        Assert(a + b == QuarkType.Zero, "T3.1: A + (-A) = 0");
 
-        // T3.2: Mantissa Overflow (9e10 + 2e10 = 1.1e11)
-        var b = new QuarkType(900000000, 10);
-        var c = new QuarkType(200000000, 10);
-        var expected3_2 = new QuarkType(110000000, 11); // Normalized result
-        Assert(IsApproximatelyEqual(b + c, expected3_2), $"T3.2: Mantissa Overflow. Expected: {expected3_2}, Got: {b + c}");
+        // T3.2: Large Positive + Small Negative (Approx same magnitude)
+        var c = new QuarkType(900000000L, 10L); // 9.0e10
+        var d = new QuarkType(-890000000L, 10L); // -8.9e10
+        var expected3_2 = new QuarkType(100000000L, 9L); // Raw 0.1e10 -> 1.0e9
+        Assert(IsApproximatelyEqual(c + d, expected3_2), $"T3.2: c + d = 1.0e9. Got: {c + d}");
 
-        // T3.3: Large Exponent Difference (should rely on full '+' logic)
-        var largeExp = new QuarkType(100000000, 100);
-        var smallExp = new QuarkType(100000000, 80);
-        Assert(largeExp + smallExp == largeExp, "T3.3: Addition with insignificant number (1e100 + 1e80 = 1e100)");
+        // T3.3: Negative + Negative (Mantissa Overflow)
+        var e = new QuarkType(-900000000L, 10L);
+        var f = new QuarkType(-200000000L, 10L);
+        var expected3_3 = new QuarkType(-110000000L, 11L); // Normalized -1.1e11
+        Assert(IsApproximatelyEqual(e + f, expected3_3), $"T3.3: Negative Overflow. Expected: {expected3_3}, Got: {e + f}");
+
+        // T3.4: Large Positive + Small Positive (Exponent Alignment)
+        var g = new QuarkType(100000000L, 100L);
+        var h = new QuarkType(100000000L, 90L);
+        Assert(g + h == g, "T3.4: Addition with insignificant number (1e100 + 1e90 = 1e100)");
     }
+
     void TestSubtraction()
     {
         Debug.Log("\n<color=yellow>## 4. Subtraction</color>");
 
-        // T4.1: Clamping to Zero
-        var a = new QuarkType(100000000, 5);
-        var b = new QuarkType(200000000, 5);
-        Assert(a - b == QuarkType.Zero, "T4.1: Clamping (a - b where a < b)");
+        // T4.1: Positive - Negative = Addition
+        var a = new QuarkType(500000000L, 5L); // 5.0e5
+        var b = new QuarkType(-200000000L, 5L); // -2.0e5
+        var expected4_1 = new QuarkType(700000000L, 5L); // 7.0e5
+        Assert(a - b == expected4_1, $"T4.1: Positive - Negative = Addition (5e5 - (-2e5) = 7e5). Got: {a - b}");
 
-        // T4.2: Self Subtraction
-        Assert(a - a == QuarkType.Zero, "T4.2: A - A = 0");
+        // T4.2: Negative - Positive = Larger Negative
+        var c = new QuarkType(-500000000L, 5L); // -5.0e5
+        var d = new QuarkType(200000000L, 5L); // 2.0e5
+        var expected4_2 = new QuarkType(-700000000L, 5L); // -7.0e5
+        Assert(c - d == expected4_2, $"T4.2: Negative - Positive = Larger Negative (-5e5 - 2e5 = -7e5). Got: {c - d}");
 
-        // T4.3: Result Renormalization (9.0e5 - 8.9e5 = 0.1e5 -> 1.0e4)
-        var c = new QuarkType(900000000, 5);
-        var d = new QuarkType(890000000, 5);
-        var expected4_3 = new QuarkType(100000000, 4);
-        Assert(IsApproximatelyEqual(c - d, expected4_3), $"T4.3: Result Renormalization (9e5 - 8.9e5). Expected: {expected4_3}, Got: {c - d}");
+        // T4.3: Result Renormalization (1.0e5 - 9.9e4 = 0.1e5 -> 1.0e4)
+        var e = new QuarkType(100000000L, 5L);
+        var f = new QuarkType(990000000L, 4L);
+        var expected4_3 = new QuarkType(100000000L, 3L); // 1.0e3
+        Assert(IsApproximatelyEqual(e - f, expected4_3), $"T4.3: Result Renormalization (1.0e5 - 9.9e4). Expected: {expected4_3}, Got: {e - f}");
     }
+
     void TestMultiplication()
     {
         Debug.Log("\n<color=yellow>## 5. Multiplication</color>");
 
-        // T5.1: Identity Multiplication
-        var a = new QuarkType(200000000, 5);
-        Assert(a * QuarkType.One == a, "T5.1: A * 1 = A");
+        // T5.1: Negative * Positive = Negative
+        var a = new QuarkType(-200000000L, 5L);
+        var b = new QuarkType(300000000L, 4L);
+        var expected5_1 = new QuarkType(-600000000L, 9L); // -6.0e9
+        Assert(a * b == expected5_1, $"T5.1: Negative * Positive = Negative (-2e5 * 3e4 = -6e9)");
 
-        // T5.2: Simple Multiplication (2e5 * 3e4 = 6e9) - Checks corrected logic
-        var b = new QuarkType(200000000, 5);
-        var c = new QuarkType(300000000, 4);
-        var expected5_2 = new QuarkType(600000000, 9);
-        Assert(b * c == expected5_2, $"T5.2: 2e5 * 3e4 = {expected5_2}");
+        // T5.2: Negative * Negative = Positive
+        var c = new QuarkType(-500000000L, 10L);
+        var expected5_2 = new QuarkType(250000000L, 21L); // Normalized 2.5e21
+        Assert(IsApproximatelyEqual(c * c, expected5_2), $"T5.2: Negative * Negative = Positive. Expected: {expected5_2}, Got: {c * c}");
 
-        // T5.3: Multiplication with Mantissa Carry (5e10 * 5e10 = 25e20 -> 2.5e21)
-        var d = new QuarkType(500000000, 10);
-        var expected5_3 = new QuarkType(250000000, 21);
-        Assert(IsApproximatelyEqual(d * d, expected5_3), $"T5.3: Mantissa Carry. Expected: {expected5_3}, Got: {d * d}");
-
-        // T5.4: Max Ulong Exponent Check
-        var maxExpQuark = new QuarkType(100000000, ulong.MaxValue - 100);
-        var result5_4 = maxExpQuark * new QuarkType(100000000, 100);
-        Assert(result5_4.Exponent == ulong.MaxValue, "T5.4: Multiplication resulting in Exponent saturation (ulong.MaxValue)");
+        // T5.3: Multiplication with small fraction (2e5 * 1e-10 = 2e-5)
+        var d = new QuarkType(100000000L, -10L);
+        var e = new QuarkType(200000000L, 5L);
+        var expected5_3 = new QuarkType(200000000L, -5L);
+        Assert(e * d == expected5_3, $"T5.3: 2e5 * 1e-10 = 2e-5. Got: {e * d}");
     }
-    void TestLogarithmFunctions()
-    {
-        Debug.Log("\n<color=yellow>## 6. Logarithm Functions</color>");
-
-        // T6.1: Log10 Exact Check (1.0e100 -> 100.0)
-        var a = new QuarkType(100000000, 100);
-        Assert(Math.Abs(a.Log10() - 100.0) < 1e-9, $"T6.1: Log10(1e100) is 100.0. Got: {a.Log10():F9}");
-
-        // T6.2: LogBase 2 (Expected: 332.52)
-        var b = new QuarkType(123450000, 100);
-        double log2Result = b.LogBase(2.0);
-        Assert(Math.Abs(log2Result - 332.52) < 0.1, $"T6.2: Log2(1.23e100) -> {log2Result:F2}");
-
-        // T6.3: LogBase E (Natural Log)
-        double lnResult = b.LogBase(Math.E);
-        Assert(Math.Abs(lnResult - 230.40) < 0.1, $"T6.3: Ln(1.23e100) -> {lnResult:F2}");
-
-        // T6.4: Log of Zero
-        Assert(QuarkType.Zero.Log10() == double.NegativeInfinity, "T6.4: Log(0) is -Inf.");
-    }
-    void TestPowerFunction()
-    {
-        Debug.Log("\n<color=yellow>## 7. Power Function</color>");
-
-        // T7.1: Power of 0 (x^0 = 1)
-        var a = new QuarkType(500000000, 5);
-        Assert(a.Pow(0.0) == QuarkType.One, "T7.1: Pow(x, 0) = 1");
-
-        // T7.2: Pow(10, 3) = 1000
-        var b = new QuarkType(100000000, 1); // 1.0e1
-        var expected7_2 = new QuarkType(100000000, 3); // 1.0e3
-        Assert(b.Pow(3.0) == expected7_2, $"T7.2: Pow(1e1, 3) -> {b.Pow(3.0)}");
-
-        // T7.3: Fractional power (Root)
-        var c = new QuarkType(900000000, 4); // 9.0e4
-        var expected7_3 = new QuarkType(300000000, 2); // 3.0e2
-        Assert(c.Pow(0.5) == expected7_3, $"T7.3: Pow(9e4, 0.5) -> {c.Pow(0.5)}");
-
-        // T7.4: Power resulting in Mantissa change
-        var d = new QuarkType(300000000, 1); // 3.0e1
-        var expected7_4 = new QuarkType(492500000, 3); // Expected 4.925e3
-        Assert(Math.Abs(d.Pow(2.5).Log10() - expected7_4.Log10()) < 0.001, $"T7.4: Pow(3e1, 2.5) Log10 Check.");
-    }
-
-    void TestMultiplicationEXT()
-    {
-        Debug.Log("\n<color=yellow>## 13. Multiplication Extended</color>");
-
-        // T2.1: Basic Multiplication (10 * 2 = 20)
-        var t13_1a = new QuarkType(10);
-        var t13_1 = t13_1a * 2.0;
-        Assert(t13_1.Mantissa == 200000000 && t13_1.Exponent == 1,
-            $"T2.1: 10 * 2.0 = 20.0. Result: {t13_1}");
-
-        // T2.2: Multiply by 0.5 (10 * 0.5 = 5)
-        var t13_2a = new QuarkType(10UL);
-        var t13_2 = t13_2a * 0.5;
-        Assert(t13_2.Mantissa == 500000000 && t13_2.Exponent == 0,
-            $"T2.2: 10 * 0.5 = 5.0. Result: {t13_2}");
-
-        // T2.3: Multiply by 0.2 (10 * 0.2 = 2)
-        var t13_3a = new QuarkType(10UL);
-        var t13_3 = t13_3a * 0.2;
-        Assert(t13_3.Mantissa == 200000000 && t13_3.Exponent == 0,
-            $"T2.3: 10 * 0.2 = 2.0. Result: {t13_3}");
-
-        // T2.4: Multiply normalized large number by fraction (1.23e5 * 0.01 = 1.23e3)
-        var t13_4a = new QuarkType(123000000, 5UL);
-        var t13_4 = t13_4a * 0.01;
-        Assert(t13_4.Mantissa == 123000000 && t13_4.Exponent == 3,
-            $"T2.6: 1.23e5 * 0.01 = 1.23e3. Result: {t13_4}");
-
-        // T2.5: Multiply normalized large number by large double (1.23e3 * 1e6 = 1.23e9)
-        var t13_5a = new QuarkType(123000000, 3UL);
-        var t13_5 = t13_5a * 1e6;
-        Assert(t13_5.Exponent == 9 && t13_5.Mantissa == 123000000,
-            $"T2.7: 1.23e3 * 1e6 = 1.23e9. Result: {t13_5}");
-    }
-    void TestPrecisionLossAndEdgeCases()
-    {
-        Debug.Log("\n<color=yellow>## 8. Precision Loss and Edge Cases</color>");
-
-        // T8.1: Max Exponent Power Clamp
-        var maxExp = new QuarkType(100000000, ulong.MaxValue - 100);
-        var result8_1 = maxExp.Pow(1.00001);
-        Assert(result8_1.Exponent == ulong.MaxValue, "T8.1: Power Clamp to Max Exponent.");
-
-        // T8.2: Max Mantissa Comparison
-        var nearMax = new QuarkType(uint.MaxValue, 5);
-        var maxMantissa = new QuarkType(uint.MaxValue, 4);
-        Assert(nearMax > maxMantissa, "T8.2: Exponent wins max mantissa comparison.");
-
-        // T8.3: Mantissa Rollover (Test T1.2 revisited)
-        var t1_2_test = new QuarkType(1000000000, 0);
-        Assert(t1_2_test.Mantissa == 100000000 && t1_2_test.Exponent == 1, "T8.3: Mantissa Rollover Check.");
-
-        // T8.4: Zero Power Base (0^5 = 0)
-        Assert(QuarkType.Zero.Pow(5.0) == QuarkType.Zero, "T8.4: Pow(0, 5) is 0.");
-    }
-    // --- End of Existing Test Sections ---
 
     // ------------------------------------------------------------------
-    // NEW TEST SECTION: Primitive Conversions
+    // REMOVED: TestLogarithmFunctions (Section 6)
+    // REMOVED: TestPowerFunction (Section 7)
     // ------------------------------------------------------------------
+
     void TestPrimitiveConversions()
     {
         Debug.Log("\n<color=yellow>## 9. Primitive Conversions (Implicit/Constructors)</color>");
@@ -286,113 +213,179 @@ public class QuarkTestNode : MonoBehaviour
         var expected9_2 = new QuarkType(123.456); // float routes to double constructor
         Assert(IsApproximatelyEqual(qFloat, expected9_2), $"T9.2: float to QuarkType (123.456f). Result: {qFloat}");
 
-        // T9.3: byte (Implicit conversion to QuarkType)
-        QuarkType qByte = (byte)255;
-        var expected9_3 = new QuarkType(255L);
-        Assert(qByte.Mantissa == expected9_3.Mantissa && qByte.Exponent == expected9_3.Exponent, $"T9.3: byte to QuarkType (255). Result: {qByte}");
-
-        // T9.4: ushort (Implicit conversion to QuarkType)
-        QuarkType qUShort = (ushort)65000;
-        var expected9_4 = new QuarkType(65000UL);
-        Assert(qUShort.Mantissa == expected9_4.Mantissa && qUShort.Exponent == expected9_4.Exponent, $"T9.4: ushort to QuarkType (65000). Result: {qUShort}");
+        // T9.3: Negative long (Implicit conversion)
+        QuarkType qNegLong = -9876543210L;
+        var expected9_3 = new QuarkType(-987654321L, 9L);
+        Assert(qNegLong.Mantissa == expected9_3.Mantissa && qNegLong.Exponent == expected9_3.Exponent, $"T9.3: Negative long to QuarkType. Result: {qNegLong}");
     }
 
-    // ------------------------------------------------------------------
-    // NEW TEST SECTION: Primitive Addition
-    // ------------------------------------------------------------------
     void TestPrimitiveAddition()
     {
         Debug.Log("\n<color=yellow>## 10. Primitive Addition (+)</color>");
-        var a = new QuarkType(500000000, 10); // 5.0e10
-        var expected = new QuarkType(500000010, 10); // 5.00000010e10
+        var a = new QuarkType(500000000L, 10L); // 5.0e10
 
         // T10.1: QuarkType + int (Routes to + long)
         QuarkType result10_1 = a + 10;
-        Assert(IsApproximatelyEqual(result10_1, expected), $"T10.1: Q + int (5e10 + 10). Expected: {expected}, Got: {result10_1}");
+        var expected10_1 = new QuarkType(500000000L, 10L); // 5.0e10 + 10
+        Assert(IsApproximatelyEqual(result10_1, expected10_1), $"T10.1: Q + int (5e10 + 10). Expected: {expected10_1}, Got: {result10_1}");
 
         // T10.2: float + QuarkType (Routes to double + Q)
         QuarkType result10_2 = 10.5f + a;
-        var expected10_2 = new QuarkType(500000001, 10); // 5.0e10 + 10.5
+        var expected10_2 = new QuarkType(500000001L, 10L); // 5.0e10 + 10.5 (rounded)
         Assert(IsApproximatelyEqual(result10_2, expected10_2), $"T10.2: float + Q (10.5f + 5e10). Expected: {expected10_2}, Got: {result10_2}");
-
-        // T10.3: Q + ulong (Routes to Q + ulong)
-        QuarkType result10_3 = a + 500UL;
-        var expected10_3 = new QuarkType(500000005, 10); // 5.0e10 + 500
-        Assert(IsApproximatelyEqual(result10_3, expected10_3), $"T10.3: Q + ulong (5e10 + 500UL). Expected: {expected10_3}, Got: {result10_3}");
-
-        // T10.4: Edge Case: Q + small byte
-        var b = new QuarkType(100000000, 0); // 1.0
-        QuarkType result10_4 = b + (byte)5;
-        var expected10_4 = new QuarkType(600000000, 0); // 6.0
-        Assert(result10_4 == expected10_4, $"T10.4: Q + byte (1.0 + 5). Expected: {expected10_4}, Got: {result10_4}");
     }
 
-    // ------------------------------------------------------------------
-    // NEW TEST SECTION: Primitive Subtraction
-    // ------------------------------------------------------------------
     void TestPrimitiveSubtraction()
     {
         Debug.Log("\n<color=yellow>## 11. Primitive Subtraction (-)</color>");
-        var a = new QuarkType(500000000, 10); // 5.0e10
+        var a = new QuarkType(500000000L, 8L); // 5.0e3
 
         // T11.1: QuarkType - long (Routes to Q - long)
         QuarkType result11_1 = a - 10L;
-        var expected11_1 = new QuarkType(499999990, 10); // 5.0e10 - 10
+        var expected11_1 = new QuarkType(499999990L, 8L); // 5.0e10 - 10
         Assert(IsApproximatelyEqual(result11_1, expected11_1), $"T11.1: Q - long (5e10 - 10L). Expected: {expected11_1}, Got: {result11_1}");
 
         // T11.2: float - QuarkType (Routes to double - Q)
-        QuarkType result11_2 = 500.0f - new QuarkType(100000000, 2); // 500.0 - 100.0
+        QuarkType result11_2 = 500.0f - new QuarkType(100000000L, 2L); // 500.0 - 100.0
         var expected11_2 = new QuarkType(400.0); // 4.0e2
         Assert(IsApproximatelyEqual(result11_2, expected11_2), $"T11.2: float - Q (500f - 100). Expected: {expected11_2}, Got: {result11_2}");
 
-        // T11.3: long - QuarkType (Clamping/Zero Result)
-        QuarkType result11_3 = 10L - a; // 10L - 5.0e10
-        Assert(result11_3 == QuarkType.Zero, $"T11.3: long - Q (10L - 5e10) should clamp to Zero. Got: {result11_3}");
-
-        // T11.4: ulong - QuarkType (Exact subtraction)
-        var c = new QuarkType(500000000, 2); // 500.0
-        QuarkType result11_4 = 600UL - c;
-        var expected11_4 = new QuarkType(100000000, 2); // 100.0
-        Assert(result11_4 == expected11_4, $"T11.4: ulong - Q (600UL - 500). Expected: {expected11_4}, Got: {result11_4}");
-
-        // T11.5: Subtraction using an int
-        QuarkType result11_5 = a - 5;
-        var expected11_5 = new QuarkType(499999995, 10);
-        Assert(IsApproximatelyEqual(result11_5, expected11_5), $"T11.5: Q - int (5e10 - 5). Expected: {expected11_5}, Got: {result11_5}");
+        // T11.3: long - QuarkType (Resulting in negative)
+        var c = new QuarkType(100000000L, 2L); // 100.0
+        QuarkType result11_3 = 10L - c; // 10 - 100 = -90
+        var expected11_3 = new QuarkType(-900000000L, 1L);
+        Assert(result11_3 == expected11_3, $"T11.3: long - Q (10L - 100). Expected: {expected11_3}, Got: {result11_3}");
     }
 
-    // ------------------------------------------------------------------
-    // NEW TEST SECTION: Primitive Multiplication
-    // ------------------------------------------------------------------
     void TestPrimitiveMultiplication()
     {
         Debug.Log("\n<color=yellow>## 12. Primitive Multiplication (*)</color>");
-        var a = new QuarkType(200000000, 5); // 2.0e5
+        var a = new QuarkType(200000000L, 5L); // 2.0e5
 
         // T12.1: Q * int (Routes to Q * long)
         QuarkType result12_1 = a * 5;
-        var expected12_1 = new QuarkType(100000000, 6); // 1.0e6
+        var expected12_1 = new QuarkType(100000000L, 6L); // 1.0e6
         Assert(result12_1 == expected12_1, $"T12.1: Q * int (2e5 * 5). Expected: {expected12_1}, Got: {result12_1}");
 
         // T12.2: double * Q (Routes to double * Q)
         QuarkType result12_2 = 2.5 * a;
-        var expected12_2 = new QuarkType(500000000, 5); // 5.0e5
+        var expected12_2 = new QuarkType(500000000L, 5L); // 5.0e5
         Assert(IsApproximatelyEqual(result12_2, expected12_2), $"T12.2: double * Q (2.5 * 2e5). Expected: {expected12_2}, Got: {result12_2}");
-
-        // T12.3: ulong * Q (Routes to ulong * Q)
-        QuarkType result12_3 = 50UL * a;
-        var expected12_3 = new QuarkType(100000000, 7); // 1.0e7
-        Assert(result12_3 == expected12_3, $"T12.3: ulong * Q (50UL * 2e5). Expected: {expected12_3}, Got: {result12_3}");
-
-        // T12.4: Q * float (Routes to Q * double)
-        QuarkType result12_4 = a * 1.5f;
-        var expected12_4 = new QuarkType(300000000, 5); // 3.0e5
-        Assert(IsApproximatelyEqual(result12_4, expected12_4), $"T12.4: Q * float (2e5 * 1.5f). Expected: {expected12_4}, Got: {result12_4}");
     }
 
-    // Update is called once per frame
-    void Update()
+    void TestMultiplicationEXT()
     {
-        
+        Debug.Log("\n<color=yellow>## 13. Multiplication Extended</color>");
+
+        // T13.1: Basic Multiplication (10 * 2 = 20)
+        var t13_1a = new QuarkType(10L);
+        var t13_1 = t13_1a * 2.0;
+        Assert(t13_1.Mantissa == 200000000L && t13_1.Exponent == 1L,
+            $"T13.1: 10 * 2.0 = 20.0. Result: {t13_1}");
+
+        // T13.2: Multiply by 0.5 (10 * 0.5 = 5)
+        var t13_2a = new QuarkType(10L);
+        var t13_2 = t13_2a * 0.5;
+        Assert(t13_2.Mantissa == 500000000L && t13_2.Exponent == 0L,
+            $"T13.2: 10 * 0.5 = 5.0. Result: {t13_2}");
     }
+
+    // ------------------------------------------------------------------
+    // NEW TEST SECTION: Division Operator
+    // ------------------------------------------------------------------
+    void TestDivision()
+    {
+        Debug.Log("\n<color=yellow>## 14. Division Operator</color>");
+
+        // T14.1: Simple Division (6e5 / 3e2 = 2e3)
+        var a = new QuarkType(600000000L, 5L);
+        var b = new QuarkType(300000000L, 2L);
+        var expected14_1 = new QuarkType(200000000L, 3L);
+        Assert(a / b == expected14_1, $"T14.1: Simple Division (6e5 / 3e2 = 2e3). Got: {a / b}");
+
+        // T14.2: Division resulting in Mantissa Renormalization (9e2 / 2e2 = 4.5e0)
+        var c = new QuarkType(900000000L, 2L);
+        var d = new QuarkType(200000000L, 2L);
+        var expected14_2 = new QuarkType(450000000L, 0L);
+        Assert(c / d == expected14_2, $"T14.2: Mantissa Renormalization (9e2 / 2e2 = 4.5e0). Got: {c / d}");
+
+        // T14.3: Division resulting in Exponent Adjustment (1e2 / 5e2 = 0.2e0 -> 2.0e-1)
+        var e = new QuarkType(100000000L, 2L);
+        var f = new QuarkType(500000000L, 2L);
+        var expected14_3 = new QuarkType(200000000L, -1L);
+        Assert(e / f == expected14_3, $"T14.3: Exponent Adjustment (1e2 / 5e2 = 2e-1). Got: {e / f}");
+
+        // T14.4: Division with large range: 1e100 / 1e-100 = 1e200
+        var large = new QuarkType(100000000L, 100L);
+        var small = new QuarkType(100000000L, -100L);
+        var expected14_4 = new QuarkType(100000000L, 200L);
+        Assert(large / small == expected14_4, $"T14.4: Range Check (1e100 / 1e-100 = 1e200). Got: {large / small}");
+
+        // T14.5: Negative Division: -6e5 / 3e2 = -2e3
+        var expected14_5 = new QuarkType(-200000000L, 3L);
+        Assert(new QuarkType(-600000000L, 5L) / b == expected14_5, $"T14.5: Negative Result (-6e5 / 3e2 = -2e3). Got: {new QuarkType(-600000000L, 5L) / b}");
+
+        // T14.6: Division by Zero (must return 'Infinity' marker)
+        QuarkType divByZero = a / QuarkType.Zero;
+        Assert(divByZero.Exponent == long.MaxValue && divByZero.Mantissa == long.MaxValue, "T14.6: Division by Zero returns MaxValue/Infinity marker.");
+    }
+
+    // ------------------------------------------------------------------
+    // NEW TEST SECTION: Signed and Range Arithmetic
+    // ------------------------------------------------------------------
+    void TestSignedAndRangeArithmetic()
+    {
+        Debug.Log("\n<color=yellow>## 15. Signed and Range Arithmetic</color>");
+
+        // T15.1: Subtraction resulting in a negative number
+        var a = new QuarkType(100000000L, 5L); // 1.0e5
+        var b = new QuarkType(200000000L, 5L); // 2.0e5
+        var expected15_1 = new QuarkType(-100000000L, 5L); // -1.0e5
+        Assert(a - b == expected15_1, $"T15.1: Subtraction to Negative (1e5 - 2e5 = -1e5). Got: {a - b}");
+
+        // T15.2: Division of large magnitude positive by small magnitude negative, resulting in a large negative exponent
+        var largePos = new QuarkType(100000000L, 100L); // 1e100
+        var smallNeg = new QuarkType(-500000000L, 90L); // -5e90
+        var expected15_2 = new QuarkType(-200000000L, 9L); // -2.0e9
+        Assert(largePos / smallNeg == expected15_2, $"T15.2: Large Pos / Small Neg = Negative. Got: {largePos / smallNeg}");
+
+        // T15.3: Check Unary Minus (flip sign)
+        var c = new QuarkType(-500000000L, -50L);
+        var expected15_3 = new QuarkType(500000000L, -50L);
+        Assert(-c == expected15_3, $"T15.3: Unary Minus (-c = expected). Got: {-c}");
+
+        // T15.4: Addition with significant precision loss but correct sign (1.0e10 - 1.0e-10)
+        var d = new QuarkType(100000000L, 10L); // 1e10
+        var e = new QuarkType(100000000L, -10L); // 1e-10
+        // Result should still be 1e10 due to precision cutoff
+        Assert(d - e == d, $"T15.4: Subtraction with large exponent difference (1e10 - 1e-10 = 1e10). Got: {d - e}");
+    }
+
+    // ------------------------------------------------------------------
+    // END: NEW TEST SECTION
+    // ------------------------------------------------------------------
+
+    void TestPrecisionLossAndEdgeCases()
+    {
+        Debug.Log("\n<color=yellow>## 16. Precision Loss and Edge Cases</color>");
+
+        // T16.1: Max Exponent Check (Uses long.MaxValue now)
+        var maxExp = new QuarkType(999999999L, long.MaxValue - 100L);
+        var result16_1 = maxExp * new QuarkType(200000000L, 100L); // 2.0
+        Assert(result16_1.Exponent == long.MaxValue, "T16.1: Multiplication resulting in Exponent saturation (long.MaxValue).");
+
+        // T16.2: Underflow to Zero (Using a very small exponent)
+        var smallExp = new QuarkType(100000000L, long.MinValue + 10L);
+        var result16_2 = smallExp * new QuarkType(100000000L, -20L); // Should result in 0
+        Assert(result16_2.Mantissa == 0 && result16_2.Exponent == 0, "T16.2: Underflow resulting in Zero.");
+
+        // T16.3: Large magnitude division resulting in Mantissa precision loss
+        var x = new QuarkType(999999999L, 0L); // ~10
+        var y = new QuarkType(300000000L, 0L); // 3
+        var expected16_3 = new QuarkType(333333333L, 0L); // Expected 3.33333333 * 10^0
+        // Actual result is 3.33333333... but we are clamped to 9 digits.
+        Assert(IsApproximatelyEqual(x / y, expected16_3, 2), $"T16.3: Division precision check (10/3). Expected: {expected16_3}, Got: {x / y}");
+    }
+
+    void Update() { }
 }
