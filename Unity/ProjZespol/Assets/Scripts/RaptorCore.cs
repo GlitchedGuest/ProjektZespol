@@ -67,29 +67,23 @@ public class RaptorCore : MonoBehaviour
         LayoutController.Instance?.SetGoldText(Gold.ToString());
     }
 
-    public void SellMaterials(int sellValue)
+    public double SellMaterials(float sellValue)
     {
-        
-        if (Currency >= 1)
-        {
-            switch (sellValue)
-            {
-                case 1:
-                    Currency -= 1;
-                    Gold += 1; // narazie wpisalem 1 bo nie wiem co innego
-                    break;
-                case 2:
-                    double tmp = Currency * 0.5;
-                    Gold += tmp;
-                    Currency -= tmp;
-                    break;
-                case 3:
-                    Gold += Currency;
-                    Currency = 0;
-                    break;
-            }
-            UpdateUI();
+        double tmp;
+        if (sellValue == 100) {
+            Gold += Currency;
+            tmp = Currency;
+            Currency = 0;
         }
+        else
+        {
+            tmp = Currency * Math.Round((sellValue / 100f), 2);
+            Gold += tmp;
+            Currency -= tmp;
+        }
+
+        UpdateUI();
+        return tmp; // tymczasowe rozwiazanie zwracanie ilosci exp
     }
 
 }
