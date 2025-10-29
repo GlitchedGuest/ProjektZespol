@@ -8,9 +8,9 @@ public class CharacterClass:MonoBehaviour
     private uint level = 1;
     private ulong currentExp = 0;
     private ulong maxExpCap = 100;
-    private uint maxLvlCap = 20;   
+    private uint maxLvlCap = 20;
     //there will be other statistics like critical chance later etc
-
+    private float criticalChance = 15.5f;
 
     //Use this to gain exp from activities
     public void GainExp(ulong exp)
@@ -50,6 +50,9 @@ public class CharacterClass:MonoBehaviour
     //use this to display current level
     public uint GetLevel() { return level; }
     //If you need to set character to specific level
+    public float GetCriticalChance() { return criticalChance; }
+    //If you need critical chance
+
     public void SetLevel(uint _level)
     {
         if (_level > maxLvlCap)
