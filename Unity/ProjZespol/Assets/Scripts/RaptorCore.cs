@@ -39,11 +39,11 @@ public class RaptorCore : MonoBehaviour
         float chance = UnityEngine.Random.Range(0.00f, 100.00f);
         if (chance < characterClass.GetCriticalChance())
         {
-            value += (CBasevalue * CMultiplier * 3) //to do zmiany gdy będzie wchodzić temat balansu
+            value += (CBasevalue * CMultiplier * 3); //to do zmiany gdy będzie wchodzić temat balansu
             Debug.Log("Kryt " + chance);
         }
         else
-            value = (CBasevalue * CMultiplier)
+            value = (CBasevalue * CMultiplier);
         Currency += value;
     }
 

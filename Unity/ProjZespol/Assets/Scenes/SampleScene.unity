@@ -841,6 +841,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2629494924822515725, guid: 74134571a0795ce4a840c2356e47dbbb, type: 3}
+      propertyPath: characterClass
+      value: 
+      objectReference: {fileID: 1162231167}
     - target: {fileID: 8409902104913310546, guid: 74134571a0795ce4a840c2356e47dbbb, type: 3}
       propertyPath: m_Name
       value: ClickerObject
