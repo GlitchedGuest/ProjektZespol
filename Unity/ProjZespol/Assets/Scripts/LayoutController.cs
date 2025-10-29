@@ -1,5 +1,7 @@
 using UnityEngine;
 using UnityEngine.UIElements;
+using System.Collections.Generic;
+using System.Reflection;
 
 public class LayoutController : MonoBehaviour
 {
@@ -7,7 +9,7 @@ public class LayoutController : MonoBehaviour
     
     [SerializeField] private RaptorCore raptorCore;
     [SerializeField] private CharacterClass characterClass;
-    
+    [SerializeField] private IdleManager idleManager;
     
     public VisualElement ui;
     public Button btn1;
@@ -17,7 +19,6 @@ public class LayoutController : MonoBehaviour
     public Label currencyLabel;
     public Label goldLabel;
     public Button sell1;
-    public Button addfactory;
     public Slider currencySlider;
 
     public VisualElement ContentPage1; // karta zasobow
@@ -25,17 +26,31 @@ public class LayoutController : MonoBehaviour
     public VisualElement ContentPage3;
 
     //Lvlbar
-
     public ProgressBar LvlBar;
     public Label LvlNumber;
 
+    private class FactoryUI
+    {
+        public Button toggleButton;
+        public VisualElement detailsPanel;
+        public Label nameLabel;
+        public Label countLabel;
+        public Label costLabel;
+        public Button[] buyButtons = new Button[4]; // 1, 5, 25, MAX
+        public Button[] sellButtons = new Button[4]; // 1, 5, 25, MAX
+        public bool isVisible = false;
+    }
+
+    public ScrollView scrollView;
+    private List<FactoryUI> factoryUIs = new List<FactoryUI>();
+    private int numberOfFactories = 3; // Can add more at later stages of development
 
     [SerializeField] private AudioSource audioSource;
+
     void Awake()
     {
         Instance = this;
         ui = GetComponent<UIDocument>().rootVisualElement;
-        
     }
 
     private void OnEnable()
@@ -43,7 +58,6 @@ public class LayoutController : MonoBehaviour
         currencyLabel = ui.Q<Label>("Currency");
         goldLabel = ui.Q<Label>("Money");
         currencySlider = ui.Q<Slider>("AmoutSlider");
-
 
         text = ui.Q<Label>("Napis");
         btn1 = ui.Q<Button>("btn");
@@ -54,7 +68,6 @@ public class LayoutController : MonoBehaviour
         btn3.clicked += ClickBtn3;
 
         // zasoby
-
         sell1 = ui.Q<Button>("sell1");
         sell1.clicked += ClickSell1;
 
@@ -63,14 +76,69 @@ public class LayoutController : MonoBehaviour
         ContentPage3 = ui.Q<VisualElement>("Content3");
 
         // lvlbar
-
         LvlNumber = ui.Q<Label>("lvlNumber");
         LvlBar = ui.Q<ProgressBar>("lvlprog");
 
-        //factory button
+        // Inicjalizacja fabryk
+        scrollView = ui.Q<ScrollView>("ScrollView");
+        scrollView.verticalScrollerVisibility = ScrollerVisibility.Hidden;
+        scrollView.horizontalScrollerVisibility = ScrollerVisibility.Hidden;
+        InitializeFactories();
+    }
 
-        addfactory = ui.Q<Button>("addfactory");
-        addfactory.clicked += AddFactory;
+    private void InitializeFactories()
+    {
+        for (int i = 1; i <= numberOfFactories; i++)
+        {
+            FactoryUI factoryUI = new FactoryUI();
+            
+            factoryUI.toggleButton = ui.Q<Button>($"Factory{i}Btn");
+            factoryUI.detailsPanel = ui.Q<VisualElement>($"Factory{i}Details");
+            factoryUI.nameLabel = ui.Q<Label>($"Factory{i}Name");
+            factoryUI.countLabel = ui.Q<Label>($"Factory{i}Count");
+            factoryUI.costLabel = ui.Q<Label>($"Factory{i}Cost");
+
+            // Buy
+            factoryUI.buyButtons[0] = ui.Q<Button>($"Factory{i}Buy1");
+            factoryUI.buyButtons[1] = ui.Q<Button>($"Factory{i}Buy5");
+            factoryUI.buyButtons[2] = ui.Q<Button>($"Factory{i}Buy25");
+            factoryUI.buyButtons[3] = ui.Q<Button>($"Factory{i}BuyMax");
+
+            // Sell
+            factoryUI.sellButtons[0] = ui.Q<Button>($"Factory{i}Sell1");
+            factoryUI.sellButtons[1] = ui.Q<Button>($"Factory{i}Sell5");
+            factoryUI.sellButtons[2] = ui.Q<Button>($"Factory{i}Sell25");
+            factoryUI.sellButtons[3] = ui.Q<Button>($"Factory{i}SellMax");
+
+            int factoryIndex = i - 1;
+
+            if (factoryUI.toggleButton != null)
+            {
+                factoryUI.toggleButton.clicked += () => ToggleFactoryDetails(factoryIndex);
+            }
+
+            // Buy
+            if (factoryUI.buyButtons[0] != null)
+                factoryUI.buyButtons[0].clicked += () => BuyFactory(factoryIndex, 1);
+            if (factoryUI.buyButtons[1] != null)
+                factoryUI.buyButtons[1].clicked += () => BuyFactory(factoryIndex, 5);
+            if (factoryUI.buyButtons[2] != null)
+                factoryUI.buyButtons[2].clicked += () => BuyFactory(factoryIndex, 25);
+            if (factoryUI.buyButtons[3] != null)
+                factoryUI.buyButtons[3].clicked += () => BuyFactoryMax(factoryIndex);
+
+            // Sell
+            if (factoryUI.sellButtons[0] != null)
+                factoryUI.sellButtons[0].clicked += () => SellFactory(factoryIndex, 1);
+            if (factoryUI.sellButtons[1] != null)
+                factoryUI.sellButtons[1].clicked += () => SellFactory(factoryIndex, 5);
+            if (factoryUI.sellButtons[2] != null)
+                factoryUI.sellButtons[2].clicked += () => SellFactory(factoryIndex, 25);
+            if (factoryUI.sellButtons[3] != null)
+                factoryUI.sellButtons[3].clicked += () => SellFactoryMax(factoryIndex);
+
+            factoryUIs.Add(factoryUI);
+        }
     }
 
     private void ClickBtn1()
@@ -80,6 +148,7 @@ public class LayoutController : MonoBehaviour
         ContentPage2.style.display = DisplayStyle.None;
         ContentPage3.style.display = DisplayStyle.None;
     }
+    
     private void ClickBtn2()
     {
         audioSource.Play();
@@ -87,6 +156,7 @@ public class LayoutController : MonoBehaviour
         ContentPage2.style.display = DisplayStyle.Flex;
         ContentPage3.style.display = DisplayStyle.None;
     }
+    
     private void ClickBtn3()
     {
         audioSource.Play();
@@ -95,15 +165,12 @@ public class LayoutController : MonoBehaviour
         ContentPage3.style.display = DisplayStyle.Flex;
     }
 
-
-    // przyciski zasobow
     private void ClickSell1()
     {
-        double exp= raptorCore.SellMaterials(currencySlider.value);
+        double exp = raptorCore.SellMaterials(currencySlider.value);
         characterClass.GainExp((ulong)exp);
         audioSource.Play();
     }
-
 
     public void SetCurrencyText(string value)
     {
@@ -116,24 +183,199 @@ public class LayoutController : MonoBehaviour
         if (goldLabel != null)
             goldLabel.text = value;
     }
+
     public void Update()
     {
-        text.text = currencySlider.value.ToString()+"%";
+        text.text = currencySlider.value.ToString() + "%";
         UpdateLvlBar();
+        UpdateFactoryUI();
     }
+
     private void UpdateLvlBar()
     {
         LvlNumber.text = characterClass.GetLevel().ToString();
         LvlBar.value = characterClass.GetCurrentExp();
         LvlBar.highValue = characterClass.GetMaxExpCap();
-
     }
 
-    private void AddFactory()
+    private void ToggleFactoryDetails(int factoryIndex)
     {
         audioSource.Play();
-        //TODO
+
+        if (factoryIndex < 0 || factoryIndex >= factoryUIs.Count)
+        {
+            return;
+        }
+
+        var factoryUI = factoryUIs[factoryIndex];
+        factoryUI.isVisible = !factoryUI.isVisible;
+
+        if (factoryUI.detailsPanel != null)
+        {
+            factoryUI.detailsPanel.style.display = factoryUI.isVisible ? DisplayStyle.Flex : DisplayStyle.None;
+        }
     }
 
+    private void BuyFactory(int factoryIndex, int amount)
+    {
+        audioSource.Play();
+        
+        if (idleManager == null)
+        {
+            Debug.LogError("IdleManager nie jest przypisany!");
+            return;
+        }
 
+        for (int i = 0; i < amount; i++)
+        {
+            bool success = idleManager.BuyFactory(factoryIndex);
+            if (!success)
+            {
+                Debug.Log($"Kupiono tylko {i} z {amount} fabryk");
+                break;
+            }
+        }
+
+        UpdateFactoryUI();
+    }
+
+    private void BuyFactoryMax(int factoryIndex)
+    {
+        audioSource.Play();
+        
+        if (idleManager == null)
+        {
+            Debug.LogError("IdleManager nie jest przypisany!");
+            return;
+        }
+
+        var factory = GetFactory(factoryIndex);
+        if (factory == null) return;
+
+        int maxAmount = 0;
+        double playerGold = raptorCore.Gold;
+        double currentCost = factory.currentCost;
+
+        while (playerGold >= currentCost && maxAmount < 100000) // Limiter
+        {
+            playerGold -= currentCost;
+            currentCost *= factory.costMultiplier;
+            maxAmount++;
+        }
+
+        for (int i = 0; i < maxAmount; i++)
+        {
+            if (!idleManager.BuyFactory(factoryIndex))
+                break;
+        }
+
+        Debug.Log($"Kupiono MAX: {maxAmount} fabryk");
+        UpdateFactoryUI();
+    }
+
+    private void SellFactory(int factoryIndex, int amount)
+    {
+        audioSource.Play();
+        
+        if (idleManager == null)
+        {
+            Debug.LogError("IdleManager nie jest przypisany!");
+            return;
+        }
+
+        for (int i = 0; i < amount; i++)
+        {
+            bool success = idleManager.SellFactory(factoryIndex);
+            if (!success)
+            {
+                Debug.Log($"Sprzedano tylko {i} z {amount} fabryk (brak fabryk)");
+                break;
+            }
+        }
+
+        UpdateFactoryUI();
+    }
+
+    private void SellFactoryMax(int factoryIndex)
+    {
+        audioSource.Play();
+        
+        if (idleManager == null)
+        {
+            Debug.LogError("IdleManager nie jest przypisany!");
+            return;
+        }
+
+        var factory = GetFactory(factoryIndex);
+        if (factory == null) return;
+
+        int soldCount = 0;
+        while (factory.count > 0)
+        {
+            if (!idleManager.SellFactory(factoryIndex))
+                break;
+            soldCount++;
+        }
+
+        Debug.Log($"Sprzedano MAX: {soldCount} fabryk");
+        UpdateFactoryUI();
+    }
+
+    private void UpdateFactoryUI()
+    {
+        if (idleManager == null) return;
+
+        for (int i = 0; i < factoryUIs.Count; i++)
+        {
+            var factoryUI = factoryUIs[i];
+            var factory = GetFactory(i);
+
+            if (factory == null || factoryUI.countLabel == null || factoryUI.costLabel == null)
+                continue;
+
+            factoryUI.countLabel.text = $"Ilość: {factory.count}";
+            factoryUI.costLabel.text = $"Koszt: {factory.currentCost:F2}";
+
+            double playerGold = raptorCore.Gold;
+
+            UpdateButton(factoryUI.buyButtons[0], playerGold >= factory.currentCost);
+            UpdateButton(factoryUI.buyButtons[1], playerGold >= factory.currentCost * 5);
+            UpdateButton(factoryUI.buyButtons[2], playerGold >= factory.currentCost * 10);
+            UpdateButton(factoryUI.buyButtons[3], playerGold >= factory.currentCost);
+
+            UpdateButton(factoryUI.sellButtons[0], factory.count >= 1);
+            UpdateButton(factoryUI.sellButtons[1], factory.count >= 5);
+            UpdateButton(factoryUI.sellButtons[2], factory.count >= 10);
+            UpdateButton(factoryUI.sellButtons[3], factory.count > 0);
+        }
+        SetGoldText(raptorCore.Gold.ToString());
+    }
+
+    private void UpdateButton(Button button, bool enabled)
+    {
+        if (button != null)
+        {
+            button.SetEnabled(enabled);
+        }
+    }
+
+    private Factory GetFactory(int index)
+    {
+        if (idleManager == null)
+            return null;
+
+        var factoriesField = typeof(IdleManager).GetField("factories", 
+            BindingFlags.NonPublic | BindingFlags.Instance);
+        
+        if (factoriesField != null)
+        {
+            var factories = factoriesField.GetValue(idleManager) as List<Factory>;
+            if (factories != null && index >= 0 && index < factories.Count)
+            {
+                return factories[index];
+            }
+        }
+
+        return null;
+    }
 }

@@ -6,18 +6,16 @@ using UnityEngine;
 public class IdleManager : MonoBehaviour
 {
     [SerializeField] private RaptorCore raptorCore;
-    [SerializeField] private float tickInterval = 1f; // 20 ticków/sek
+    [SerializeField] private float tickInterval = 1f; // 1 tick/sek
     private Coroutine tickCoroutine;
     [SerializeField] private List<Factory> factories;
 
     private void Awake()
     {
         if (factories == null) factories = new List<Factory>();
-        if (factories.Count == 0)
-        {
-            factories.Add(new Factory("Fabryka1"));
-        }
-        Debug.Log("IdleManager: dodano domyślną fabrykę.");
+        factories.Add(new Factory("Student", 15, 1.15, 1));
+        factories.Add(new Factory("Gornik", 100, 1.17, 10));
+        factories.Add(new Factory("Wiertlo", 1000, 1.2, 50));
     }
 
     private void OnEnable()
@@ -82,7 +80,7 @@ public class IdleManager : MonoBehaviour
         {
             raptorCore.Gold -= cost;
             f.count++;
-            Debug.Log($"Kupiono fabrykę '{f.name}' (nowy count = {f.count}), koszt = {cost}");
+            Debug.Log($"Kupiono fabryke '{f.name}' (nowy count = {f.count}), koszt = {cost}");
             LayoutController.Instance?.SetCurrencyText(raptorCore.Currency.ToString());
             return true;
         }
@@ -111,7 +109,7 @@ public class IdleManager : MonoBehaviour
         double sellValue = f.GetSellValue(); // obliczane na podstawie (count - 1)
         f.count--;
         raptorCore.Gold += sellValue;
-        Debug.Log($"Sprzedano fabrykę '{f.name}' za {sellValue} (nowy count = {f.count})");
+        Debug.Log($"Sprzedano fabryke '{f.name}' za {sellValue} (nowy count = {f.count})");
         LayoutController.Instance?.SetGoldText(raptorCore.Gold.ToString());
         return true;
     }
