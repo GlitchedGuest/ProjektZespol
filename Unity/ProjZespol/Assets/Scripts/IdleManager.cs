@@ -6,18 +6,50 @@ using UnityEngine;
 public class IdleManager : MonoBehaviour
 {
     [SerializeField] private RaptorCore raptorCore;
-    [SerializeField] private float tickInterval = 1f; // 1 tick/sek
+    [SerializeField] private float tickInterval = 1f;
     private Coroutine tickCoroutine;
     [SerializeField] private List<Factory> factories;
+    [SerializeField] private List<Resource> resources;
 
     private void Awake()
     {
-        if (factories == null) factories = new List<Factory>();
-        factories.Add(new Factory("Student", 15, 1.15, 1));
-        factories.Add(new Factory("Gornik", 100, 1.17, 10));
-        factories.Add(new Factory("Wiertlo", 1000, 1.2, 50));
+        InitResources();
+        InitFactories();
     }
 
+    private void InitResources()
+    {
+        if (resources == null) resources = new List<Resource>();
+
+        resources.Clear();
+        resources.Add(new Resource("Resource1"));
+        resources.Add(new Resource("Resource2"));
+        resources.Add(new Resource("Resource3"));
+
+        foreach (var res in resources)
+        {
+            raptorCore.RegisterResource(res);
+        }
+    }
+    private void InitFactories()
+    {
+        if (factories == null) factories = new List<Factory>();
+
+        factories.Clear();
+
+        //TODO: Adjust factory parameters as needed
+        factories.Add(new Factory(resources[0], "F1.1", 15, 1.15, 1));
+        factories.Add(new Factory(resources[0], "F1.2", 100, 1.17, 10));
+        factories.Add(new Factory(resources[0], "F1.3", 1000, 1.2, 50));
+
+        factories.Add(new Factory(resources[1], "F2.1", 150, 1.13, 10));
+        factories.Add(new Factory(resources[1], "F2.2", 2000, 1.16, 30));
+        factories.Add(new Factory(resources[1], "F2.3", 5000, 1.2, 50));
+
+        factories.Add(new Factory(resources[2], "F3.1", 1000, 1.15, 100));
+        factories.Add(new Factory(resources[2], "F3.2", 3000, 1.18, 300));
+        factories.Add(new Factory(resources[2], "F3.3", 8000, 1.22, 700));
+    }
     private void OnEnable()
     {
         if (tickCoroutine == null)
@@ -52,18 +84,19 @@ public class IdleManager : MonoBehaviour
     {
         if (factories == null || factories.Count == 0) return;
 
-        double totalProduction = 0.0;
         foreach (var f in factories)
         {
-            if (f == null) continue;
-            totalProduction += f.GetProduction();
+            if (f == null || f.count <= 0) continue;
+            double production = f.GetProduction();
+            if (f.resource != null)
+            {
+                f.resource.value += (QuarkType)production;
+            }
         }
 
-        raptorCore.Currency += Math.Ceiling(totalProduction);
-
- 
-
-        LayoutController.Instance?.SetCurrencyText(raptorCore.Currency.ToString());
+        string currentResource = raptorCore.GetCurrentResourceName();
+        QuarkType currentResourceAmount = raptorCore.GetResourceValue(currentResource);
+        LayoutController.Instance?.SetCurrencyText(currentResourceAmount.ToString());
     }
 
     public bool BuyFactory(int index)
@@ -106,11 +139,35 @@ public class IdleManager : MonoBehaviour
             return false;
         }
 
-        double sellValue = f.GetSellValue(); // obliczane na podstawie (count - 1)
+        double sellValue = f.GetSellValue();
         f.count--;
         raptorCore.Gold += sellValue;
         Debug.Log($"Sprzedano fabryke '{f.name}' za {sellValue} (nowy count = {f.count})");
         LayoutController.Instance?.SetGoldText(raptorCore.Gold.ToString());
         return true;
+    }
+
+    public Factory GetFactory(int index)
+    {
+        if (factories != null && index >= 0 && index < factories.Count)
+            return factories[index];
+        return null;
+    }
+
+    public List<Factory> GetFactories()
+    {
+        return factories;
+    }
+
+    public Resource GetResource(int index)
+    {
+        if (resources != null && index >= 0 && index < resources.Count)
+            return resources[index];
+        return null;
+    }
+
+    public int GetFactoryCount()
+    {
+        return factories != null ? factories.Count : 0;
     }
 }

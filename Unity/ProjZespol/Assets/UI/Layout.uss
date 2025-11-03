@@ -138,3 +138,11 @@
     border-bottom-width: 0;
     border-left-width: 0;
 }
+
+.f3color {
+    background-color: rgba(36, 255, 0, 0.71);
+}
+
+.f2color {
+    background-color: rgba(255, 0, 0, 0.71);
+}

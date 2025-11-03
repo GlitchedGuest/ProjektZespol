@@ -1,12 +1,12 @@
 using UnityEngine;
 using UnityEngine.UIElements;
 using System.Collections.Generic;
-using System.Reflection;
 
 public class LayoutController : MonoBehaviour
 {
     public static LayoutController Instance { get; private set; }
-    
+
+    [SerializeField] private SpriteRenderer clickerObject;
     [SerializeField] private RaptorCore raptorCore;
     [SerializeField] private CharacterClass characterClass;
     [SerializeField] private IdleManager idleManager;
@@ -15,12 +15,14 @@ public class LayoutController : MonoBehaviour
     public Button btn1;
     public Button btn2;
     public Button btn3;
+    public Button resourceBtn;
     public Label text;
+    public VisualElement currencyIcon;
     public Label currencyLabel;
     public Label goldLabel;
+    public VisualElement shopIcon;
     public Button sell1;
     public Slider currencySlider;
-
     public VisualElement ContentPage1; // karta zasobow
     public VisualElement ContentPage2;
     public VisualElement ContentPage3;
@@ -28,6 +30,7 @@ public class LayoutController : MonoBehaviour
     //Lvlbar
     public ProgressBar LvlBar;
     public Label LvlNumber;
+
 
     private class FactoryUI
     {
@@ -43,7 +46,7 @@ public class LayoutController : MonoBehaviour
 
     public ScrollView scrollView;
     private List<FactoryUI> factoryUIs = new List<FactoryUI>();
-    private int numberOfFactories = 3; // Can add more at later stages of development
+    private int numberOfFactories = 9;
 
     [SerializeField] private AudioSource audioSource;
 
@@ -55,6 +58,7 @@ public class LayoutController : MonoBehaviour
 
     private void OnEnable()
     {
+        currencyIcon = ui.Q<VisualElement>("cbbleicon");
         currencyLabel = ui.Q<Label>("Currency");
         goldLabel = ui.Q<Label>("Money");
         currencySlider = ui.Q<Slider>("AmoutSlider");
@@ -66,8 +70,12 @@ public class LayoutController : MonoBehaviour
         btn2.clicked += ClickBtn2;
         btn3 = ui.Q<Button>("btn3");
         btn3.clicked += ClickBtn3;
+        resourceBtn = ui.Q<Button>("ResourceButton");
+        resourceBtn.clicked += CycleCurrency;
+
 
         // zasoby
+        shopIcon = ui.Q<VisualElement>("shopcbbleicon");
         sell1 = ui.Q<Button>("sell1");
         sell1.clicked += ClickSell1;
 
@@ -79,7 +87,6 @@ public class LayoutController : MonoBehaviour
         LvlNumber = ui.Q<Label>("lvlNumber");
         LvlBar = ui.Q<ProgressBar>("lvlprog");
 
-        // Inicjalizacja fabryk
         scrollView = ui.Q<ScrollView>("ScrollView");
         scrollView.verticalScrollerVisibility = ScrollerVisibility.Hidden;
         scrollView.horizontalScrollerVisibility = ScrollerVisibility.Hidden;
@@ -98,26 +105,24 @@ public class LayoutController : MonoBehaviour
             factoryUI.countLabel = ui.Q<Label>($"Factory{i}Count");
             factoryUI.costLabel = ui.Q<Label>($"Factory{i}Cost");
 
-            // Buy
             factoryUI.buyButtons[0] = ui.Q<Button>($"Factory{i}Buy1");
             factoryUI.buyButtons[1] = ui.Q<Button>($"Factory{i}Buy5");
             factoryUI.buyButtons[2] = ui.Q<Button>($"Factory{i}Buy25");
             factoryUI.buyButtons[3] = ui.Q<Button>($"Factory{i}BuyMax");
 
-            // Sell
             factoryUI.sellButtons[0] = ui.Q<Button>($"Factory{i}Sell1");
             factoryUI.sellButtons[1] = ui.Q<Button>($"Factory{i}Sell5");
             factoryUI.sellButtons[2] = ui.Q<Button>($"Factory{i}Sell25");
             factoryUI.sellButtons[3] = ui.Q<Button>($"Factory{i}SellMax");
 
-            int factoryIndex = i - 1;
 
+            int factoryIndex = i - 1;
+            
             if (factoryUI.toggleButton != null)
             {
                 factoryUI.toggleButton.clicked += () => ToggleFactoryDetails(factoryIndex);
             }
 
-            // Buy
             if (factoryUI.buyButtons[0] != null)
                 factoryUI.buyButtons[0].clicked += () => BuyFactory(factoryIndex, 1);
             if (factoryUI.buyButtons[1] != null)
@@ -127,7 +132,6 @@ public class LayoutController : MonoBehaviour
             if (factoryUI.buyButtons[3] != null)
                 factoryUI.buyButtons[3].clicked += () => BuyFactoryMax(factoryIndex);
 
-            // Sell
             if (factoryUI.sellButtons[0] != null)
                 factoryUI.sellButtons[0].clicked += () => SellFactory(factoryIndex, 1);
             if (factoryUI.sellButtons[1] != null)
@@ -167,7 +171,23 @@ public class LayoutController : MonoBehaviour
 
     private void ClickSell1()
     {
-        double exp = raptorCore.SellMaterials(currencySlider.value);
+        double exp = 0;
+        //TODO: adjust values for correct progression
+        switch(raptorCore.GetCurrentResourceName())
+        {
+            case "Resource1":
+                exp = raptorCore.SellResource("Resource1", currencySlider.value);
+                break;
+            case "Resource2":
+                exp = raptorCore.SellResource("Resource1", currencySlider.value, 1.5);
+                break;
+            case "Resource3":
+                exp = raptorCore.SellResource("Resource1", currencySlider.value, 2);
+                break;
+            default:
+                exp *= 1.0;
+                break;
+        }
         characterClass.GainExp((ulong)exp);
         audioSource.Play();
     }
@@ -201,11 +221,9 @@ public class LayoutController : MonoBehaviour
     private void ToggleFactoryDetails(int factoryIndex)
     {
         audioSource.Play();
-
+        
         if (factoryIndex < 0 || factoryIndex >= factoryUIs.Count)
-        {
             return;
-        }
 
         var factoryUI = factoryUIs[factoryIndex];
         factoryUI.isVisible = !factoryUI.isVisible;
@@ -231,12 +249,13 @@ public class LayoutController : MonoBehaviour
             bool success = idleManager.BuyFactory(factoryIndex);
             if (!success)
             {
-                Debug.Log($"Kupiono tylko {i} z {amount} fabryk");
+                Debug.Log($"Kupiono tylko {i} z {amount} fabryk (brak środków)");
                 break;
             }
         }
 
         UpdateFactoryUI();
+        SetGoldText(raptorCore.Gold.ToString());
     }
 
     private void BuyFactoryMax(int factoryIndex)
@@ -256,7 +275,7 @@ public class LayoutController : MonoBehaviour
         double playerGold = raptorCore.Gold;
         double currentCost = factory.currentCost;
 
-        while (playerGold >= currentCost && maxAmount < 100000) // Limiter
+        while (playerGold >= currentCost && maxAmount < 1000) // limit bezpieczeństwa
         {
             playerGold -= currentCost;
             currentCost *= factory.costMultiplier;
@@ -271,6 +290,7 @@ public class LayoutController : MonoBehaviour
 
         Debug.Log($"Kupiono MAX: {maxAmount} fabryk");
         UpdateFactoryUI();
+        SetGoldText(raptorCore.Gold.ToString());
     }
 
     private void SellFactory(int factoryIndex, int amount)
@@ -294,6 +314,7 @@ public class LayoutController : MonoBehaviour
         }
 
         UpdateFactoryUI();
+        SetGoldText(raptorCore.Gold.ToString());
     }
 
     private void SellFactoryMax(int factoryIndex)
@@ -319,6 +340,7 @@ public class LayoutController : MonoBehaviour
 
         Debug.Log($"Sprzedano MAX: {soldCount} fabryk");
         UpdateFactoryUI();
+        SetGoldText(raptorCore.Gold.ToString());
     }
 
     private void UpdateFactoryUI()
@@ -329,26 +351,25 @@ public class LayoutController : MonoBehaviour
         {
             var factoryUI = factoryUIs[i];
             var factory = GetFactory(i);
-
+            
             if (factory == null || factoryUI.countLabel == null || factoryUI.costLabel == null)
                 continue;
 
             factoryUI.countLabel.text = $"Ilość: {factory.count}";
-            factoryUI.costLabel.text = $"Koszt: {factory.currentCost:F2}";
+            factoryUI.costLabel.text = $"Koszt: {factory.currentCost}";
 
             double playerGold = raptorCore.Gold;
-
+            
             UpdateButton(factoryUI.buyButtons[0], playerGold >= factory.currentCost);
             UpdateButton(factoryUI.buyButtons[1], playerGold >= factory.currentCost * 5);
-            UpdateButton(factoryUI.buyButtons[2], playerGold >= factory.currentCost * 10);
+            UpdateButton(factoryUI.buyButtons[2], playerGold >= factory.currentCost * 25);
             UpdateButton(factoryUI.buyButtons[3], playerGold >= factory.currentCost);
 
             UpdateButton(factoryUI.sellButtons[0], factory.count >= 1);
             UpdateButton(factoryUI.sellButtons[1], factory.count >= 5);
-            UpdateButton(factoryUI.sellButtons[2], factory.count >= 10);
+            UpdateButton(factoryUI.sellButtons[2], factory.count >= 25);
             UpdateButton(factoryUI.sellButtons[3], factory.count > 0);
         }
-        SetGoldText(raptorCore.Gold.ToString());
     }
 
     private void UpdateButton(Button button, bool enabled)
@@ -364,18 +385,46 @@ public class LayoutController : MonoBehaviour
         if (idleManager == null)
             return null;
 
-        var factoriesField = typeof(IdleManager).GetField("factories", 
-            BindingFlags.NonPublic | BindingFlags.Instance);
-        
-        if (factoriesField != null)
-        {
-            var factories = factoriesField.GetValue(idleManager) as List<Factory>;
-            if (factories != null && index >= 0 && index < factories.Count)
-            {
-                return factories[index];
-            }
-        }
+        return idleManager.GetFactory(index);
+    }
 
-        return null;
+    private void CycleCurrency()
+    {
+        if (raptorCore == null || clickerObject == null)
+        {
+            return;
+        }
+        //Color change is temporary until it's decided on which icons will be used
+        switch (raptorCore.GetCurrentResourceName())
+        {
+            case "Resource1":
+                currencyIcon.style.unityBackgroundImageTintColor = new StyleColor(Color.red);
+                shopIcon.style.unityBackgroundImageTintColor = new StyleColor(Color.red);
+                resourceBtn.text = "Resource2";
+                raptorCore.SetCurrentResource("Resource2");
+                clickerObject.color = Color.red;
+                break;
+            case "Resource2":
+                currencyIcon.style.unityBackgroundImageTintColor = new StyleColor(Color.green);
+                shopIcon.style.unityBackgroundImageTintColor = new StyleColor(Color.green);
+                resourceBtn.text = "Resource3";
+                raptorCore.SetCurrentResource("Resource3");
+                clickerObject.color = Color.green;
+                break;
+            case "Resource3":
+                currencyIcon.style.unityBackgroundImageTintColor = new StyleColor(Color.white);
+                shopIcon.style.unityBackgroundImageTintColor = new StyleColor(Color.white);
+                resourceBtn.text = "Resource1";
+                raptorCore.SetCurrentResource("Resource1");
+                clickerObject.color = Color.white;
+                break;
+            default:
+                currencyIcon.style.unityBackgroundImageTintColor = new StyleColor(Color.white);
+                shopIcon.style.unityBackgroundImageTintColor = new StyleColor(Color.white);
+                resourceBtn.text = "Resource1";
+                raptorCore.SetCurrentResource("Resource1");
+                clickerObject.color = Color.white;
+                break;
+        }
     }
 }

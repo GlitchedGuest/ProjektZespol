@@ -1,10 +1,22 @@
 ﻿using System;
+using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class RaptorCore : MonoBehaviour
 {
 
-    public QuarkType Currency = 0;
+    public QuarkType Currency
+    {
+        get => GetResourceValue(currentResource);
+        set
+        {
+            if(resources.ContainsKey(currentResource))
+            {
+                resources[currentResource].value = value;
+            }
+        }
+    }
 
     //Click based
     QuarkType CBasevalue = 1;
@@ -20,6 +32,8 @@ public class RaptorCore : MonoBehaviour
     [SerializeField] private Animator anim;
     [SerializeField] private CharacterClass characterClass;
     public double Gold = 0;
+    private Dictionary<string, Resource> resources = new Dictionary<string, Resource>();
+    private string currentResource = "Resource1";
 
     private void Awake()
     {
@@ -44,7 +58,7 @@ public class RaptorCore : MonoBehaviour
         }
         else
             value = (CBasevalue * CMultiplier);
-        Currency += value;
+        AddResource(currentResource, value);
     }
 
     void Start()
@@ -65,18 +79,84 @@ public class RaptorCore : MonoBehaviour
     }
     void UpdateUI()
     {
-        
-        LayoutController.Instance?.SetCurrencyText(Currency.ToString());
+        QuarkType currentResourceAmount = GetResourceValue(currentResource);
+        LayoutController.Instance?.SetCurrencyText(currentResourceAmount.ToString());
         LayoutController.Instance?.SetGoldText(Gold.ToString());
     }
 
-    public double SellMaterials(float sellValue)
+    public void RegisterResource(Resource resource)
     {
-        var tmp = (Currency * (sellValue / 100f)).Ceil();
-        Gold += tmp;
-        Currency -= tmp;
-        UpdateUI();
-        return (double)tmp; // tymczasowe rozwiazanie zwracanie ilosci exp
+        if (!resources.ContainsKey(resource.name))
+        {
+            resources[resource.name] = resource;
+        }
     }
 
+    public void AddResource(string resource, QuarkType amount)
+    {
+        if (resources.ContainsKey(resource))
+        {
+            resources[resource].value += amount;
+
+            if (resource == currentResource)
+            {
+                UpdateUI();
+            }
+        }
+    }
+    public QuarkType GetResourceValue(string resource)
+    {
+        if (resources.ContainsKey(resource))
+        {
+            return resources[resource].value;
+        }
+        return 0;
+    }
+    public string GetCurrentResourceName()
+    {
+        return currentResource;
+    }
+    public bool HasResource(string resource, QuarkType amount)
+    {
+        return GetResourceValue(resource) >= amount;
+    }
+    public bool RemoveResource(string resource, QuarkType amount)
+    {
+        if (HasResource(resource, amount))
+        {
+            resources[resource].value -= amount;
+
+            if (resource == currentResource)
+            {
+                UpdateUI();
+            }
+            return true;
+        }
+        return false;
+    }
+    public void SetCurrentResource(string resource)
+    {
+        if (resources.ContainsKey(resource))
+        {
+            currentResource = resource;
+            UpdateUI();
+        }
+    }
+
+    public double SellResource(string resource, float sellvalue, double pricePerUnit = 1.0)
+    {
+        QuarkType currentAmount = GetResourceValue(resource);
+        var amountToSell = (currentAmount * (sellvalue / 100f)).Ceil();
+
+        if (amountToSell <= 0)
+        {
+            return 0;
+        }
+        
+        double goldEarned = amountToSell * pricePerUnit;
+        Gold += goldEarned;
+        RemoveResource(resource, amountToSell);
+        UpdateUI();
+        return goldEarned;
+    }
 }
