@@ -29,6 +29,7 @@ public class MainMenuController : MonoBehaviour
     {
         resolutions = Screen.resolutions;
         mainMenu = GetComponent<UIDocument>().rootVisualElement;
+
     }
     private void OnEnable()
     {
@@ -90,6 +91,14 @@ public class MainMenuController : MonoBehaviour
         });
 
         fullScreen.value = Screen.fullScreen;
+
+
+        musicSlider.value = PlayerPrefs.GetFloat("MusicVolume", 1f);
+        sfxSlider.value = PlayerPrefs.GetFloat("SfxVolume", 1f);
+
+        
+        musicSource.volume = musicSlider.value;
+        sfxSource.volume = sfxSlider.value;
     }
     #endregion
     #region Button And Slider Methods
@@ -125,12 +134,16 @@ public class MainMenuController : MonoBehaviour
     private void OnMusicVolumeChanged(ChangeEvent<float> evt)
     {
         musicSource.volume = evt.newValue;
+        PlayerPrefs.SetFloat("MusicVolume", evt.newValue);
+        PlayerPrefs.Save(); 
         Debug.Log($"Głośność muzyki: {evt.newValue}");
     }
 
     private void OnSfxVolumeChanged(ChangeEvent<float> evt)
     {
         sfxSource.volume = evt.newValue;
+        PlayerPrefs.SetFloat("SfxVolume", evt.newValue); 
+        PlayerPrefs.Save();
         Debug.Log($"Głośność sfx: {evt.newValue}");
     }
 
