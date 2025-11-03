@@ -171,23 +171,7 @@ public class LayoutController : MonoBehaviour
 
     private void ClickSell1()
     {
-        double exp = 0;
-        //TODO: adjust values for correct progression
-        switch(raptorCore.GetCurrentResourceName())
-        {
-            case "Resource1":
-                exp = raptorCore.SellResource("Resource1", currencySlider.value);
-                break;
-            case "Resource2":
-                exp = raptorCore.SellResource("Resource1", currencySlider.value, 1.5);
-                break;
-            case "Resource3":
-                exp = raptorCore.SellResource("Resource1", currencySlider.value, 2);
-                break;
-            default:
-                exp *= 1.0;
-                break;
-        }
+        double exp = raptorCore.SellMaterials(currencySlider.value);
         characterClass.GainExp((ulong)exp);
         audioSource.Play();
     }

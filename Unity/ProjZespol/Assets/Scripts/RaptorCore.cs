@@ -83,6 +83,21 @@ public class RaptorCore : MonoBehaviour
         LayoutController.Instance?.SetCurrencyText(currentResourceAmount.ToString());
         LayoutController.Instance?.SetGoldText(Gold.ToString());
     }
+    public double SellMaterials(float sellValue)
+    {
+        //TODO: adjust values for correct progression
+        switch(currentResource)
+        {
+            case "Resource1":
+                return SellResource("Resource1", sellValue, 1.0);
+            case "Resource2":
+                return SellResource("Resource2", sellValue, 2.0);
+            case "Resource3":
+                return SellResource("Resource3", sellValue, 3.0);
+            default:
+                return 0;
+        }
+    }
 
     public void RegisterResource(Resource resource)
     {
