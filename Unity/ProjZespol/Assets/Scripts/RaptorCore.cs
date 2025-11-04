@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Xml.Serialization;
 using UnityEngine;
+using static UnityEngine.Rendering.DebugUI;
 
 public class RaptorCore : MonoBehaviour
 {
@@ -19,6 +21,7 @@ public class RaptorCore : MonoBehaviour
 
     [SerializeField] private Animator anim;
     [SerializeField] private CharacterClass characterClass;
+    [SerializeField] private GameObject skillCheck;
     public double Gold = 0;
 
     private void Awake()
@@ -34,17 +37,30 @@ public class RaptorCore : MonoBehaviour
     }
     void click()
     {
-        QuarkType value = 0;
-        
-        float chance = UnityEngine.Random.Range(0.00f, 100.00f);
-        if (chance < characterClass.GetCriticalChance())
+        if (!skillCheck.activeSelf)
         {
-            value += (CBasevalue * CMultiplier * 3); //to do zmiany gdy będzie wchodzić temat balansu
-            Debug.Log("Kryt " + chance);
+            QuarkType value = 0;
+            SkillCheckManager();
+            float chance = UnityEngine.Random.Range(0.00f, 100.00f);
+            if (chance < characterClass.GetCriticalChance())
+            {
+                value += (CBasevalue * CMultiplier * 3); //to do zmiany gdy będzie wchodzić temat balansu
+                Debug.Log("Kryt " + chance);
+            }
+            else
+                value = (CBasevalue * CMultiplier);
+            Currency += value;
         }
-        else
-            value = (CBasevalue * CMultiplier);
-        Currency += value;
+    }
+
+    void SkillCheckManager()
+    {
+        float chance = UnityEngine.Random.Range(0.00f, 100.00f);
+        if (chance < 20.00f)
+        {
+            skillCheck.SetActive(true);
+            skillCheck.GetComponent<SkillCheckScript>().StartSkillCheck();
+        }      
     }
 
     void Start()
