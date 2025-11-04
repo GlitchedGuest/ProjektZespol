@@ -15,6 +15,8 @@ public class LayoutController : MonoBehaviour
     public Button btn1;
     public Button btn2;
     public Button btn3;
+    public Button btn4;
+    public Button btn5;
     public Label text;
     public Label currencyLabel;
     public Label goldLabel;
@@ -24,6 +26,8 @@ public class LayoutController : MonoBehaviour
     public VisualElement ContentPage1; // karta zasobow
     public VisualElement ContentPage2;
     public VisualElement ContentPage3;
+    public VisualElement ContentPage4;
+    public VisualElement ContentPage5;
 
     //Lvlbar
     public ProgressBar LvlBar;
@@ -47,10 +51,80 @@ public class LayoutController : MonoBehaviour
 
     [SerializeField] private AudioSource audioSource;
 
+
+    //drzewka
+    private Label skillDescription;
+    private Dictionary<string, Button> buttons = new();
+    private HashSet<string> learned = new();
+
+    private Label skillDescription2;
+    private Dictionary<string, Button> buttons2 = new();
+    private HashSet<string> learned2 = new();
+
+
+    private Label skillDescription3;
+    private Dictionary<string, Button> buttons3 = new();
+    private HashSet<string> learned3 = new();
+
+
+    Color lockedColor = new Color(0.3f, 0.3f, 0.3f);
+    Color availableColor = new Color(0.8f, 0.6f, 0.3f);
+    Color learnedColor = new Color(0.2f, 0.8f, 0.2f);
+
+
+    private Dictionary<string, List<string>> dependencies = new()
+    {
+        { "Skill1", new List<string>() },
+        { "Skill2A", new List<string> { "Skill1" } },
+        { "Skill2B", new List<string> { "Skill1" } },
+        { "Skill3A", new List<string> { "Skill2A" } },
+        { "Skill3B", new List<string> { "Skill2B" } },
+        { "Skill4A", new List<string> { "Skill3A" } },
+        { "Skill4B", new List<string> { "Skill3B" } },
+        { "Skill5", new List<string> { "Skill4A", "Skill4B" } }, // OR logika
+        { "Skill6A", new List<string> { "Skill5" } },
+        { "Skill6B", new List<string> { "Skill5" } },
+    };
+
+    private Dictionary<string, List<string>> dependencies2 = new()
+    {
+        { "Skill1-tree2", new List<string>() },
+        { "Skill2A-tree2", new List<string> { "Skill1-tree2" } },
+        { "Skill2B-tree2", new List<string> { "Skill1-tree2" } },
+        { "Skill2C-tree2", new List<string> { "Skill1-tree2" } },
+        { "Skill3A-tree2", new List<string> { "Skill2A-tree2" } },
+        { "Skill3B-tree2", new List<string> { "Skill2B-tree2" } },
+        { "Skill3C-tree2", new List<string> { "Skill2C-tree2" } },
+        { "Skill3D-tree2", new List<string> { "Skill2C-tree2" } },
+        { "Skill4-tree2", new List<string> { "Skill3D-tree2" } },
+        { "Skill5-tree2", new List<string> { "Skill4-tree2", "Skill3C-tree2", "Skill3B-tree2", "Skill3A-tree2" } }, // OR logika
+    };
+
+    private Dictionary<string, List<string>> dependencies3 = new()
+    {
+        { "Skill1-tree3", new List<string>() },
+        { "Skill2-tree3", new List<string> { "Skill1-tree3" } },
+        { "Skill3A-tree3", new List<string> { "Skill2-tree3" } },
+        { "Skill3B-tree3", new List<string> { "Skill2-tree3" } },
+        { "Skill4A-tree3", new List<string> { "Skill3A-tree3" } },
+        { "Skill4B-tree3", new List<string> { "Skill3B-tree3" } },
+
+        { "Skill5A-tree3", new List<string> { "Skill4A-tree3" } },
+        { "Skill5B-tree3", new List<string> { "Skill4B-tree3" } },
+        { "Skill5C-tree3", new List<string> { "Skill4B-tree3" } },
+        { "Skill6-tree3", new List<string> { "Skill5C-tree3" } }, // OR logika
+    };
+
+
+
+
     void Awake()
     {
         Instance = this;
         ui = GetComponent<UIDocument>().rootVisualElement;
+        var value = PlayerPrefs.GetFloat("SfxVolume", 1f);
+        audioSource.volume = value;
+
     }
 
     private void OnEnable()
@@ -66,6 +140,11 @@ public class LayoutController : MonoBehaviour
         btn2.clicked += ClickBtn2;
         btn3 = ui.Q<Button>("btn3");
         btn3.clicked += ClickBtn3;
+        btn4 = ui.Q<Button>("btn4");
+        btn4.clicked += ClickBtn4;
+        btn5 = ui.Q<Button>("btn5");
+        btn5.clicked += ClickBtn5;
+
 
         // zasoby
         sell1 = ui.Q<Button>("sell1");
@@ -74,6 +153,8 @@ public class LayoutController : MonoBehaviour
         ContentPage1 = ui.Q<VisualElement>("Content");
         ContentPage2 = ui.Q<VisualElement>("Content2");
         ContentPage3 = ui.Q<VisualElement>("Content3");
+        ContentPage4 = ui.Q<VisualElement>("Content4");
+        ContentPage5 = ui.Q<VisualElement>("Content5");
 
         // lvlbar
         LvlNumber = ui.Q<Label>("lvlNumber");
@@ -84,7 +165,369 @@ public class LayoutController : MonoBehaviour
         scrollView.verticalScrollerVisibility = ScrollerVisibility.Hidden;
         scrollView.horizontalScrollerVisibility = ScrollerVisibility.Hidden;
         InitializeFactories();
+
+        skillDescription = ui.Q<Label>("Describe");
+        skillDescription2 = ui.Q<Label>("Describe2");
+        skillDescription3 = ui.Q<Label>("Describe3");
+
+        OneClickArmyTreeInit();
+        JackSkillTreeInit();
+        AutomatronSkillTreeInit();
     }
+
+
+
+    private void OneClickArmyTreeInit()
+    {
+        
+
+        
+        var skill1 = ui.Q<Button>("Skill1");
+        var skill2A = ui.Q<Button>("Skill2A");
+        var skill2B = ui.Q<Button>("Skill2B");
+
+        var skill3A = ui.Q<Button>("Skill3A");
+        var skill3B = ui.Q<Button>("Skill3B");
+
+        var skill4A = ui.Q<Button>("Skill4A");
+        var skill4B = ui.Q<Button>("Skill4B");
+
+        var skill5 = ui.Q<Button>("Skill5");
+
+        var skill6A = ui.Q<Button>("Skill6A");
+        var skill6B = ui.Q<Button>("Skill6B");
+
+        
+        RegisterSkillHover(skill1, "Umożliwia pojawienie się skill checków(nie udany kosztuje gracza zwolnieniem idle produkcji)",skillDescription);
+        RegisterSkillHover(skill2A, "Zwiększa szanse na kliki krytyczne", skillDescription);
+        RegisterSkillHover(skill2B, "Udany skill check zwiększa ilość zbieranych punktów na chwilę(nie udany zmniejsza)", skillDescription);
+
+        RegisterSkillHover(skill3A, "Każdy klik krytyczny chwilowo zwiększa idle produkcje", skillDescription);
+        RegisterSkillHover(skill3B, "Skill checki częściej się pojawiają", skillDescription);
+
+        RegisterSkillHover(skill4A, "Stakuje szanse na klik krytyczny(każde kliknięcie niekrytyczne zwiększa szanse na krytyczne)", skillDescription);
+        RegisterSkillHover(skill4B, "Skill checki nie mają negatywnych skutków po przegraniu", skillDescription);
+
+        RegisterSkillHover(skill5, "Częstotliwość skill checka jest zależna od ilości klików krytycznych(im częściej są tym częściej skill checki)", skillDescription);
+
+        RegisterSkillHover(skill6A, "Każdy kolejny skill check łączy się w kombos. Im większy kombos tym więcej punktów za klik(im większy kombos też trudniejsze skill checki)", skillDescription);
+        RegisterSkillHover(skill6B, "Po trzech udanych skill checkach z rzędu przez krótki moment są same kliki krytyczne", skillDescription);
+
+        string[] all = { "Skill1", "Skill2A", "Skill2B", "Skill3A", "Skill3B", "Skill4A", "Skill4B", "Skill5", "Skill6A", "Skill6B" };
+
+        foreach (string id in all)
+        {
+            var btn = ui.Q<Button>(id);
+            if (btn != null)
+            {
+                buttons[id] = btn;
+                btn.clicked += () => OnSkillClicked(id);
+                UpdateVisual(id);
+            }
+        }
+
+    }
+
+
+
+    private void JackSkillTreeInit()
+    {
+
+        var skill1 = ui.Q<Button>("Skill1-tree2");
+        var skill2 = ui.Q<Button>("Skill2A-tree2");
+        var skill3 = ui.Q<Button>("Skill2B-tree2");
+
+        var skill4 = ui.Q<Button>("Skill2C-tree2");
+        var skill5 = ui.Q<Button>("Skill3A-tree2");
+
+        var skill6 = ui.Q<Button>("Skill3B-tree2");
+        var skill7 = ui.Q<Button>("Skill3C-tree2");
+
+        var skill8 = ui.Q<Button>("Skill3D-tree2");
+
+        var skill9 = ui.Q<Button>("Skill4-tree2");
+        var skill10 = ui.Q<Button>("Skill5-tree2");
+
+        RegisterSkillHover(skill1, "Można sprzedawać po wyższych cenach „punkty", skillDescription2);
+        RegisterSkillHover(skill2, "Udany skill check chwilowo podwyższa ceny sprzedaży w sklepie", skillDescription2);
+        RegisterSkillHover(skill3, "Potki mają zwiększoną skuteczność", skillDescription2);
+        RegisterSkillHover(skill4, "Nieudany skill check daje możliwość zdobycia jednej losowej potki", skillDescription2);
+        RegisterSkillHover(skill5, "Im więcej udanych skill checków tym ceny będą wyższe", skillDescription2);
+        RegisterSkillHover(skill6, "Efekty potek się stakują", skillDescription2);
+        RegisterSkillHover(skill7, "Nieudany skill check gwarantuje zdobycie jednej losowej potki", skillDescription2);
+        RegisterSkillHover(skill8, "Nieudany skill check zwiększa chwilowo przyrost exp z akcji", skillDescription2);
+        RegisterSkillHover(skill9, "im więcej nieudanych skill checków tym bonus jest większy", skillDescription2);
+        RegisterSkillHover(skill10, "Automatyczna sprzedaż wszystkich punktów po osiągnięciu limitu fabryki", skillDescription2);
+
+        var all2 = new[] { "Skill1-tree2", "Skill2A-tree2", "Skill2B-tree2", "Skill2C-tree2","Skill3A-tree2", "Skill3B-tree2", "Skill3C-tree2", "Skill3D-tree2", "Skill4-tree2","Skill5-tree2"   };
+        foreach (string id in all2)
+        {
+            var btn = ui.Q<Button>(id);
+            if (btn != null)
+            {
+                buttons2[id] = btn;
+                btn.clicked += () => OnSkillClicked_T2(id);
+                UpdateVisual_T2(id);
+            }
+        }
+
+    }
+
+
+    private void AutomatronSkillTreeInit()
+    {
+
+        var skill1 = ui.Q<Button>("Skill1-tree3");
+        var skill2 = ui.Q<Button>("Skill2-tree3");
+        var skill3 = ui.Q<Button>("Skill3A-tree3");
+
+        var skill4 = ui.Q<Button>("Skill3B-tree3");
+        
+        var skill5 = ui.Q<Button>("Skill4A-tree3");
+
+        var skill6 = ui.Q<Button>("Skill4B-tree3");
+        var skill7 = ui.Q<Button>("Skill5A-tree3");
+
+        var skill8 = ui.Q<Button>("Skill5B-tree3");
+
+        var skill9 = ui.Q<Button>("Skill5C-tree3");
+        var skill10 = ui.Q<Button>("Skill6-tree3");
+
+        RegisterSkillHover(skill1, "Im więcej fabryk gracz posiada tym większy bonus do idle dla fabryki in focus", skillDescription3);
+        RegisterSkillHover(skill2, "Limit punktów na fabrykę zostaje zwiększony", skillDescription3);
+        RegisterSkillHover(skill3, "Skill checki mogą się pojawiać w solowym momencie niezależnie od tego czy gracz kilka czy nie", skillDescription3);
+        RegisterSkillHover(skill4, "Fabryki not in Focus mają większy bonus do produkcji Idle", skillDescription3);
+        RegisterSkillHover(skill5, "Nieudany skill check zwiększa produkcje idle do momentu udanego skill checka(stackuje się)", skillDescription3);
+        RegisterSkillHover(skill6, "Im dłużej gracz nie wykona akcji myszką tym więcej punktów zacznie się naliczać", skillDescription3);
+        RegisterSkillHover(skill7, "Nieudany skill check zwiększa produkcje wszystkich fabryk", skillDescription3);
+        RegisterSkillHover(skill8, "Gracz może robić inne akcje poza klikanie w obiekt", skillDescription3);
+        RegisterSkillHover(skill9, "Bonus aplikuje się do każdej fabryki not in focus", skillDescription3);
+        RegisterSkillHover(skill10, "Bonus zależy od ilość posiadanych już puntków(im mniej tym większy bonus)", skillDescription3);
+
+        var all3 = new[] { "Skill1-tree3", "Skill2-tree3", "Skill3A-tree3", "Skill3B-tree3", "Skill4A-tree3", "Skill4B-tree3", "Skill5A-tree3", "Skill5B-tree3", "Skill5C-tree3", "Skill6-tree3" };
+        foreach (string id in all3)
+        {
+            var btn = ui.Q<Button>(id);
+            if (btn != null)
+            {
+                buttons3[id] = btn;
+                btn.clicked += () => OnSkillClicked_T3(id);
+                UpdateVisual_T3(id);
+            }
+        }
+
+    }
+
+
+    void OnSkillClicked_T3(string id)
+    {
+        if (learned3.Contains(id))
+            return;
+
+        if (!CanUnlock_T3(id))
+            return;
+
+        learned3.Add(id);
+        UpdateVisual_T3(id);
+    }
+
+    bool CanUnlock_T3(string id)
+    {
+        if (!dependencies3.ContainsKey(id)) return true;
+
+        
+        foreach (var prereq in dependencies3[id])
+        {
+            if (!learned3.Contains(prereq))
+                return false;
+        }
+
+        return true;
+    }
+
+    void UpdateVisual_T3(string id)
+    {
+        if (!buttons3.ContainsKey(id)) return;
+        var btn = buttons3[id];
+        btn.SetEnabled(true);
+
+        if (learned3.Contains(id))
+        {
+            btn.style.backgroundColor = learnedColor;
+            return;
+        }
+
+        if (CanUnlock_T3(id))
+            btn.style.backgroundColor = availableColor;
+        else
+        {
+            btn.style.backgroundColor = lockedColor;
+            btn.SetEnabled(false);
+        }
+    }
+
+
+
+
+    void OnSkillClicked_T2(string id)
+    {
+        if (learned2.Contains(id))
+            return;
+
+        if (!CanUnlock_T2(id))
+            return;
+
+        learned2.Add(id);
+        UpdateVisual_T2(id);
+    }
+
+    bool CanUnlock_T2(string id)
+    {
+        if (!dependencies2.ContainsKey(id)) return true;
+
+        
+        if (id == "Skill5-tree2")
+        {
+            foreach (var prereq in dependencies2[id])
+            {
+                if (learned2.Contains(prereq))
+                    return true;
+            }
+            return false;
+        }
+
+       
+        foreach (var prereq in dependencies2[id])
+        {
+            if (!learned2.Contains(prereq))
+                return false;
+        }
+
+        return true;
+    }
+
+    void UpdateVisual_T2(string id)
+    {
+        if (!buttons2.ContainsKey(id)) return;
+        var btn = buttons2[id];
+
+        btn.SetEnabled(true);
+
+        if (learned2.Contains(id))
+        {
+            btn.style.backgroundColor = learnedColor;
+            return;
+        }
+
+        if (CanUnlock_T2(id))
+            btn.style.backgroundColor = availableColor;
+        else
+        {
+            btn.style.backgroundColor = lockedColor;
+            btn.SetEnabled(false);
+        }
+    }
+
+
+
+
+
+
+    void OnSkillClicked(string id)
+    {
+        if (learned.Contains(id))
+            return; 
+
+        if (!CanUnlock(id))
+            return; 
+
+        if (id == "Skill6A" && learned.Contains("Skill6B"))
+            return;
+        if (id == "Skill6B" && learned.Contains("Skill6A"))
+            return;
+
+
+        learned.Add(id);
+        UpdateVisual(id);
+    }
+
+    bool CanUnlock(string id)
+    {
+        if (!dependencies.ContainsKey(id)) return true;
+
+        
+        if (id == "Skill5")
+        {
+            foreach (var prereq in dependencies[id])
+            {
+                if (learned.Contains(prereq))
+                    return true;
+            }
+            return false;
+        }
+
+        
+        foreach (var prereq in dependencies[id])
+        {
+            if (!learned.Contains(prereq))
+                return false;
+        }
+
+        return true;
+    }
+
+    void UpdateAll()
+    {
+        foreach (var id in buttons.Keys)
+            UpdateVisual(id);
+        foreach (var id in buttons2.Keys)
+            UpdateVisual_T2(id);
+        foreach (var id in buttons3.Keys)
+            UpdateVisual_T3(id);
+    }
+
+    void UpdateVisual(string id)
+    {
+        if (!buttons.ContainsKey(id)) return;
+        var btn = buttons[id];
+
+        btn.SetEnabled(true);
+
+
+        if (learned.Contains(id))
+        {
+            btn.style.backgroundColor = learnedColor;
+            return;
+        }
+
+        if ((learned.Contains("Skill6A") && id == "Skill6B") ||
+            (learned.Contains("Skill6B") && id == "Skill6A"))
+        {
+            btn.style.backgroundColor = lockedColor;
+            btn.SetEnabled(false);
+            return;
+        }
+       
+        if (CanUnlock(id))
+        {
+            btn.style.backgroundColor = availableColor;
+        }
+        else
+        {
+            btn.style.backgroundColor = lockedColor;
+            btn.SetEnabled(false);
+        }
+    }
+
+
+
+
+
+
+
+
+
+
 
     private void InitializeFactories()
     {
@@ -147,6 +590,8 @@ public class LayoutController : MonoBehaviour
         ContentPage1.style.display = DisplayStyle.Flex;
         ContentPage2.style.display = DisplayStyle.None;
         ContentPage3.style.display = DisplayStyle.None;
+        ContentPage4.style.display = DisplayStyle.None;
+        ContentPage5.style.display = DisplayStyle.None;
     }
     
     private void ClickBtn2()
@@ -155,6 +600,8 @@ public class LayoutController : MonoBehaviour
         ContentPage1.style.display = DisplayStyle.None;
         ContentPage2.style.display = DisplayStyle.Flex;
         ContentPage3.style.display = DisplayStyle.None;
+        ContentPage4.style.display = DisplayStyle.None;
+        ContentPage5.style.display = DisplayStyle.None;
     }
     
     private void ClickBtn3()
@@ -163,6 +610,27 @@ public class LayoutController : MonoBehaviour
         ContentPage1.style.display = DisplayStyle.None;
         ContentPage2.style.display = DisplayStyle.None;
         ContentPage3.style.display = DisplayStyle.Flex;
+        ContentPage4.style.display = DisplayStyle.None;
+        ContentPage5.style.display = DisplayStyle.None;
+    }
+    private void ClickBtn4()
+    {
+        audioSource.Play();
+        ContentPage1.style.display = DisplayStyle.None;
+        ContentPage2.style.display = DisplayStyle.None;
+        ContentPage3.style.display = DisplayStyle.None;
+        ContentPage4.style.display = DisplayStyle.Flex;
+        ContentPage5.style.display = DisplayStyle.None;
+    }
+    private void ClickBtn5()
+    {
+        audioSource.Play();
+        ContentPage1.style.display = DisplayStyle.None;
+        ContentPage2.style.display = DisplayStyle.None;
+        ContentPage3.style.display = DisplayStyle.None;
+        ContentPage4.style.display = DisplayStyle.None;
+        ContentPage5.style.display = DisplayStyle.Flex;
+
     }
 
     private void ClickSell1()
@@ -189,6 +657,9 @@ public class LayoutController : MonoBehaviour
         text.text = currencySlider.value.ToString() + "%";
         UpdateLvlBar();
         UpdateFactoryUI();
+
+        UpdateAll();
+
     }
 
     private void UpdateLvlBar()
@@ -378,4 +849,19 @@ public class LayoutController : MonoBehaviour
 
         return null;
     }
+
+    private void RegisterSkillHover(Button button, string description,Label label)
+    {
+        button.RegisterCallback<MouseEnterEvent>(evt =>
+        {
+            label.text = description;
+        });
+
+        button.RegisterCallback<MouseLeaveEvent>(evt =>
+        {
+            label.text = "Najedź na skill, aby zobaczyć opis";
+        });
+    }
+
+
 }
