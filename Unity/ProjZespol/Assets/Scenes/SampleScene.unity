@@ -866,6 +866,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2629494924822515725, guid: 74134571a0795ce4a840c2356e47dbbb, type: 3}
+      propertyPath: idleManager
+      value: 
+      objectReference: {fileID: 205226413}
+    - target: {fileID: 2629494924822515725, guid: 74134571a0795ce4a840c2356e47dbbb, type: 3}
       propertyPath: characterClass
       value: 
       objectReference: {fileID: 1162231167}
