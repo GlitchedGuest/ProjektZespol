@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
@@ -16,12 +18,18 @@ public class MainMenuController : MonoBehaviour
     private Button backButton;
     private Slider musicSlider;
     private Slider sfxSlider;
+    private Toggle fullScreen;
+    private DropdownField resolutionList;
+
+    private Resolution[] resolutions;
 
     #endregion
     #region Unity Methods
     private void Awake()
     {
+        resolutions = Screen.resolutions;
         mainMenu = GetComponent<UIDocument>().rootVisualElement;
+
     }
     private void OnEnable()
     {
@@ -35,6 +43,9 @@ public class MainMenuController : MonoBehaviour
         musicSlider = settingsContainer.Q<Slider>("MusicSlider");
         sfxSlider = settingsContainer.Q<Slider>("SFXSlider");
 
+        fullScreen = settingsContainer.Q<Toggle>("FullScreen");
+        resolutionList = settingsContainer.Q<DropdownField>("Res");
+
         startButton.clicked += OnStartButtonClicked;
         startButton.clicked += OnClick;
         settingsButton.clicked += OnSettingsButtonClicked;
@@ -46,6 +57,48 @@ public class MainMenuController : MonoBehaviour
 
         musicSlider.RegisterValueChangedCallback(OnMusicVolumeChanged);
         sfxSlider.RegisterValueChangedCallback(OnSfxVolumeChanged);
+
+        fullScreen.RegisterValueChangedCallback(evt =>
+        {
+            SetFullScreen(evt.newValue);
+        });
+
+        resolutionList.choices.Clear();
+        int currentRes = 0;
+
+        for (int i = 0; i < resolutions.Length; i++)
+        {
+            string option = $"{resolutions[i].width} x {resolutions[i].height}";
+
+            if (Screen.width == resolutions[i].width &&
+                Screen.height == resolutions[i].height)
+            {
+                currentRes = i;
+            }
+
+            resolutionList.choices.Add(option);
+        }
+
+        if (resolutionList.choices.Count > 0)
+        {
+            resolutionList.value = resolutionList.choices[currentRes];
+        }
+
+        resolutionList.RegisterValueChangedCallback(evt =>
+        {
+            int index = resolutionList.choices.IndexOf(evt.newValue);
+            SetResolution(index);
+        });
+
+        fullScreen.value = Screen.fullScreen;
+
+
+        musicSlider.value = PlayerPrefs.GetFloat("MusicVolume", 1f);
+        sfxSlider.value = PlayerPrefs.GetFloat("SfxVolume", 1f);
+
+        
+        musicSource.volume = musicSlider.value;
+        sfxSource.volume = sfxSlider.value;
     }
     #endregion
     #region Button And Slider Methods
@@ -81,13 +134,28 @@ public class MainMenuController : MonoBehaviour
     private void OnMusicVolumeChanged(ChangeEvent<float> evt)
     {
         musicSource.volume = evt.newValue;
+        PlayerPrefs.SetFloat("MusicVolume", evt.newValue);
+        PlayerPrefs.Save(); 
         Debug.Log($"Głośność muzyki: {evt.newValue}");
     }
 
     private void OnSfxVolumeChanged(ChangeEvent<float> evt)
     {
         sfxSource.volume = evt.newValue;
+        PlayerPrefs.SetFloat("SfxVolume", evt.newValue); 
+        PlayerPrefs.Save();
         Debug.Log($"Głośność sfx: {evt.newValue}");
+    }
+
+    private void SetResolution(int resIndex)
+    {
+        Resolution resolution = resolutions[resIndex];
+        Screen.SetResolution(resolution.width,resolution.height,Screen.fullScreen);
+
+    }
+    private void SetFullScreen(bool flag)
+    {
+        Screen.fullScreen = flag;
     }
     #endregion
 }

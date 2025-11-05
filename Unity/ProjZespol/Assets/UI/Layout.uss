@@ -146,3 +146,32 @@
 .f2color {
     background-color: rgba(255, 0, 0, 0.71);
 }
+.skill-node {
+    width: 90px;
+    height: 90px;
+    border-width: 2px;
+    border-color: black;
+    border-radius: 10px;
+    background-color: rgb(120, 120, 255);
+    transition: background-color 0.2s ease-in-out;
+    margin-top: 0;
+    margin-right: 20px;
+    margin-bottom: 40px;
+    margin-left: 20px;
+}
+
+.skill-node:hover {
+    transition-duration: 1s;
+    border-top-width: 2px;
+    border-right-width: 2px;
+    border-bottom-width: 2px;
+    border-left-width: 2px;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+    border-bottom-left-radius: 10px;
+    border-left-color: rgb(128, 111, 54);
+    border-right-color: rgb(128, 111, 54);
+    border-top-color: rgb(128, 111, 54);
+    border-bottom-color: rgb(128, 111, 54);
+}

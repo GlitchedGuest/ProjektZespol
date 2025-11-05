@@ -846,6 +846,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SceneChanger
       objectReference: {fileID: 0}
+    - target: {fileID: 738153743261871102, guid: 59a8a31270af9ad4195732946918baa3, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8817065077592867777, guid: 59a8a31270af9ad4195732946918baa3, type: 3}
       propertyPath: m_LocalPosition.x
       value: 367.00058
