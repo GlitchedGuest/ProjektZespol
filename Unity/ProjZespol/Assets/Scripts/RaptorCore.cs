@@ -4,22 +4,23 @@ using UnityEngine;
 public class RaptorCore : MonoBehaviour
 {
 
-    public QuarkType Currency = 0;
+    [AutoSave] public QuarkType Currency = 0;
 
     //Click based
-    QuarkType CBasevalue = 1;
-    QuarkType CMultiplier = 1;
+    [AutoSave] QuarkType CBasevalue = 1;
+    [AutoSave] QuarkType CMultiplier = 1;
 
 
     //Click based
-    QuarkType GBasevalue = 0;
-    QuarkType GMultiplier = 1;
+    [AutoSave] QuarkType GBasevalue = 0;
+    [AutoSave] QuarkType GMultiplier = 1;
 
 
+    int tickCount = 0;
 
     [SerializeField] private Animator anim;
     [SerializeField] private CharacterClass characterClass;
-    public double Gold = 0;
+    [AutoSave] public double Gold = 0;
 
     private void Awake()
     {
@@ -49,14 +50,18 @@ public class RaptorCore : MonoBehaviour
 
     void Start()
     {
+        
         Time.fixedDeltaTime = 0.05f; // 20 ticks a second
+        AutoSaveSystem.LoadGame();
     }
 
     void FixedUpdate()
     {
         Currency += (GBasevalue * GMultiplier); //.Pow(GPower);
 
-
+        tickCount++;
+        if (tickCount%600 == 0 )
+            AutoSaveSystem.SaveGame();
     }
 
     void Update()
