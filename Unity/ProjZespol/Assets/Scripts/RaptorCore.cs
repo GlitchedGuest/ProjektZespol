@@ -31,16 +31,18 @@ public class RaptorCore : MonoBehaviour
 
     private void OnMouseDown()
     {
-        this.click();
-        anim.SetTrigger("Clicked");
-        UpdateUI();
+        if (!skillCheck.activeSelf) //nie lubie jak to wygląda, ale czasu nie ma broski
+        {
+            this.click();
+            anim.SetTrigger("Clicked");
+            UpdateUI();
+        }
     }
     void click()
     {
-        if (!skillCheck.activeSelf)
-        {
+
             QuarkType value = 0;
-            SkillCheckManager();
+            SkillCheckManager();//bardzo temp rozwiązanie później raczej losowo w czasie będzie sie skill check pojawiać, a nie podczas klikania w obiekt
             float chance = UnityEngine.Random.Range(0.00f, 100.00f);
             if (chance < characterClass.GetCriticalChance())
             {
@@ -50,13 +52,13 @@ public class RaptorCore : MonoBehaviour
             else
                 value = (CBasevalue * CMultiplier);
             Currency += value;
-        }
+        
     }
 
     void SkillCheckManager()
     {
         float chance = UnityEngine.Random.Range(0.00f, 100.00f);
-        if (chance < 20.00f)
+        if (chance < characterClass.GetSkillCheckChance())
         {
             skillCheck.SetActive(true);
             skillCheck.GetComponent<SkillCheckScript>().StartSkillCheck();
@@ -93,6 +95,21 @@ public class RaptorCore : MonoBehaviour
         Currency -= tmp;
         UpdateUI();
         return (double)tmp; // tymczasowe rozwiazanie zwracanie ilosci exp
+    }
+
+    public void AddCurrency(QuarkType currency)
+    {
+        Currency += currency;
+        UpdateUI();
+    }
+
+    public void SubCurrency(QuarkType currency)
+    {
+        if (Currency < currency)
+            Currency = 0;
+        else
+            Currency -= currency;
+        UpdateUI();
     }
 
 }

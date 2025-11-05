@@ -878,6 +878,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   brickPrefab: {fileID: 1645613843695308339, guid: c571c9ed7bb1ec148bcf92a603cd4064, type: 3}
   flag: {fileID: 758673944}
+  raptorCore: {fileID: 186519293}
 --- !u!1 &1608527740
 GameObject:
   m_ObjectHideFlags: 0

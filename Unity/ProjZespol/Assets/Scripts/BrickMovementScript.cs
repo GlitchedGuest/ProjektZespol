@@ -2,8 +2,8 @@ using UnityEngine;
 
 public class BrickMovementScript : MonoBehaviour
 {
-    private float speed = 0f;
-    public int overlap = 0;
+    private float speed = 0f; //prêdkoœæ bloków
+    public int overlap = 0; //status overlapowania 0-nie dotkne³o 1-dotkne³o lewej strony 2-dotkne³o prawej strony 3-wysze³o poza granice
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -25,5 +25,12 @@ public class BrickMovementScript : MonoBehaviour
             overlap = 1;
         else if( collision.gameObject.name == "RightZone")
             overlap = 2;
+
+    }
+
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        if (collision.gameObject.name == "LeftZone" || collision.gameObject.name == "RightZone")
+            overlap = 3;
     }
 }
