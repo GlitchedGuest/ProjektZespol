@@ -6,7 +6,7 @@ using UnityEngine;
 public class RaptorCore : MonoBehaviour
 {
 
-    public QuarkType Currency
+    [AutoSave] public QuarkType Currency
     {
         get => GetResourceValue(currentResource);
         set
@@ -19,22 +19,23 @@ public class RaptorCore : MonoBehaviour
     }
 
     //Click based
-    QuarkType CBasevalue = 1;
-    QuarkType CMultiplier = 1;
+    [AutoSave] QuarkType CBasevalue = 1;
+    [AutoSave] QuarkType CMultiplier = 1;
 
 
     //Click based
-    QuarkType GBasevalue = 0;
-    QuarkType GMultiplier = 1;
+    [AutoSave] QuarkType GBasevalue = 0;
+    [AutoSave] QuarkType GMultiplier = 1;
 
 
+    int tickCount = 0;
 
     [SerializeField] private Animator anim;
     [SerializeField] private CharacterClass characterClass;
     [SerializeField] private IdleManager idleManager;
-    public double Gold = 0;
-    private Dictionary<string, Resource> resources = new Dictionary<string, Resource>();
-    private string currentResource = "Resource1";
+    [AutoSave] public double Gold = 0;
+    [AutoSave] private Dictionary<string, Resource> resources = new Dictionary<string, Resource>();
+    [AutoSave] private string currentResource = "Resource1";
     private enum ClickSource { None, Mouse, Space, Enter }
     private ClickSource activeClickSource = ClickSource.None;
     private float sourceBlockEndTime = 0f;
@@ -70,12 +71,18 @@ public class RaptorCore : MonoBehaviour
 
     void Start()
     {
+        
         Time.fixedDeltaTime = 0.05f; // 20 ticks a second
+        AutoSaveSystem.LoadGame();
     }
 
     void FixedUpdate()
     {
         Currency += (GBasevalue * GMultiplier); //.Pow(GPower);
+
+        tickCount++;
+        if (tickCount%600 == 0 )
+            AutoSaveSystem.SaveGame();
     }
 
     void Update()
