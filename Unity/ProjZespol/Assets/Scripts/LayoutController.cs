@@ -81,7 +81,7 @@ public class LayoutController : MonoBehaviour
         { "Skill3B", new List<string> { "Skill2B" } },
         { "Skill4A", new List<string> { "Skill3A" } },
         { "Skill4B", new List<string> { "Skill3B" } },
-        { "Skill5", new List<string> { "Skill4A", "Skill4B" } }, // OR logika
+        { "Skill5", new List<string> { "Skill4A", "Skill4B" } }, 
         { "Skill6A", new List<string> { "Skill5" } },
         { "Skill6B", new List<string> { "Skill5" } },
     };
@@ -97,7 +97,7 @@ public class LayoutController : MonoBehaviour
         { "Skill3C-tree2", new List<string> { "Skill2C-tree2" } },
         { "Skill3D-tree2", new List<string> { "Skill2C-tree2" } },
         { "Skill4-tree2", new List<string> { "Skill3D-tree2" } },
-        { "Skill5-tree2", new List<string> { "Skill4-tree2", "Skill3C-tree2", "Skill3B-tree2", "Skill3A-tree2" } }, // OR logika
+        { "Skill5-tree2", new List<string> { "Skill4-tree2", "Skill3C-tree2", "Skill3B-tree2", "Skill3A-tree2" } }, 
     };
 
     private Dictionary<string, List<string>> dependencies3 = new()
@@ -112,10 +112,15 @@ public class LayoutController : MonoBehaviour
         { "Skill5A-tree3", new List<string> { "Skill4A-tree3" } },
         { "Skill5B-tree3", new List<string> { "Skill4B-tree3" } },
         { "Skill5C-tree3", new List<string> { "Skill4B-tree3" } },
-        { "Skill6-tree3", new List<string> { "Skill5C-tree3" } }, // OR logika
+        { "Skill6-tree3", new List<string> { "Skill5C-tree3" } }, 
     };
 
-
+    private VisualElement skillTreeContainer;
+    private VisualElement lineLayer;
+    private VisualElement skillTreeContainer2;
+    private VisualElement lineLayer2;
+    private VisualElement skillTreeContainer3;
+    private VisualElement lineLayer3;
 
 
     void Awake()
@@ -166,6 +171,9 @@ public class LayoutController : MonoBehaviour
         scrollView.horizontalScrollerVisibility = ScrollerVisibility.Hidden;
         InitializeFactories();
 
+
+        //drzewka tego typu
+
         skillDescription = ui.Q<Label>("Describe");
         skillDescription2 = ui.Q<Label>("Describe2");
         skillDescription3 = ui.Q<Label>("Describe3");
@@ -173,15 +181,111 @@ public class LayoutController : MonoBehaviour
         OneClickArmyTreeInit();
         JackSkillTreeInit();
         AutomatronSkillTreeInit();
+
+
+        skillTreeContainer = ui.Q<VisualElement>("SkillTree");
+        skillTreeContainer2 = ui.Q<VisualElement>("SkillTree2");
+        skillTreeContainer3 = ui.Q<VisualElement>("SkillTree3");
+
+        lineLayer = new VisualElement();
+        LineLayerInit(lineLayer);
+        lineLayer2 = new VisualElement();
+        LineLayerInit(lineLayer2);
+        lineLayer3 = new VisualElement();
+        LineLayerInit(lineLayer3);
+        
+
+        skillTreeContainer.Insert(0, lineLayer);
+        skillTreeContainer2.Insert(0, lineLayer2);
+        skillTreeContainer3.Insert(0, lineLayer3);
+
+        DrawButtons();
+
+        
     }
 
+    void LineLayerInit(VisualElement lineLayer)
+    {
+        lineLayer.pickingMode = PickingMode.Ignore;
+        lineLayer.style.position = Position.Absolute;
+        lineLayer.style.left = 0;
+        lineLayer.style.top = 0;
+        lineLayer.style.right = 0;
+        lineLayer.style.bottom = 0;
+    }
+
+    void DrawButtons()
+    {
+        Color color = Color.yellow;
+
+        DrawLineBetweenButtons(ui.Q<Button>("Skill1"), ui.Q<Button>("Skill2A"), color, lineLayer);
+        DrawLineBetweenButtons(ui.Q<Button>("Skill1"), ui.Q<Button>("Skill2B"), color, lineLayer);
+        DrawLineBetweenButtons(ui.Q<Button>("Skill2A"), ui.Q<Button>("Skill3A"), color, lineLayer);
+        DrawLineBetweenButtons(ui.Q<Button>("Skill2B"), ui.Q<Button>("Skill3B"), color, lineLayer);
+        DrawLineBetweenButtons(ui.Q<Button>("Skill3A"), ui.Q<Button>("Skill4A"), color, lineLayer);
+        DrawLineBetweenButtons(ui.Q<Button>("Skill3B"), ui.Q<Button>("Skill4B"), color, lineLayer);
+        DrawLineBetweenButtons(ui.Q<Button>("Skill4A"), ui.Q<Button>("Skill5"), color, lineLayer);
+        DrawLineBetweenButtons(ui.Q<Button>("Skill4B"), ui.Q<Button>("Skill5"), color, lineLayer);
+        DrawLineBetweenButtons(ui.Q<Button>("Skill5"), ui.Q<Button>("Skill6A"), color, lineLayer);
+        DrawLineBetweenButtons(ui.Q<Button>("Skill5"), ui.Q<Button>("Skill6B"), color, lineLayer);
+
+        //drugie drzewko
+        DrawLineBetweenButtons(ui.Q<Button>("Skill1-tree2"), ui.Q<Button>("Skill2A-tree2"), color, lineLayer2);
+        DrawLineBetweenButtons(ui.Q<Button>("Skill1-tree2"), ui.Q<Button>("Skill2B-tree2"), color, lineLayer2);
+        DrawLineBetweenButtons(ui.Q<Button>("Skill1-tree2"), ui.Q<Button>("Skill2C-tree2"), color, lineLayer2);
+        DrawLineBetweenButtons(ui.Q<Button>("Skill2A-tree2"), ui.Q<Button>("Skill3A-tree2"), color, lineLayer2);
+        DrawLineBetweenButtons(ui.Q<Button>("Skill2B-tree2"), ui.Q<Button>("Skill3B-tree2"), color, lineLayer2);
+        DrawLineBetweenButtons(ui.Q<Button>("Skill2C-tree2"), ui.Q<Button>("Skill3C-tree2"), color, lineLayer2);
+        DrawLineBetweenButtons(ui.Q<Button>("Skill2C-tree2"), ui.Q<Button>("Skill3D-tree2"), color, lineLayer2);
+        DrawLineBetweenButtons(ui.Q<Button>("Skill3D-tree2"), ui.Q<Button>("Skill4-tree2"), color, lineLayer2);
+        DrawLineBetweenButtons(ui.Q<Button>("Skill4-tree2"), ui.Q<Button>("Skill5-tree2"), color, lineLayer2);
+        DrawLineBetweenButtons(ui.Q<Button>("Skill3C-tree2"), ui.Q<Button>("Skill5-tree2"), color, lineLayer2);
+        DrawLineBetweenButtons(ui.Q<Button>("Skill3B-tree2"), ui.Q<Button>("Skill5-tree2"), color, lineLayer2);
+        DrawLineBetweenButtons(ui.Q<Button>("Skill3A-tree2"), ui.Q<Button>("Skill5-tree2"), color, lineLayer2);
+
+        //trzecie drzewko
+        DrawLineBetweenButtons(ui.Q<Button>("Skill1-tree3"), ui.Q<Button>("Skill2-tree3"), color, lineLayer3);
+        DrawLineBetweenButtons(ui.Q<Button>("Skill2-tree3"), ui.Q<Button>("Skill3A-tree3"), color, lineLayer3);
+        DrawLineBetweenButtons(ui.Q<Button>("Skill2-tree3"), ui.Q<Button>("Skill3B-tree3"), color, lineLayer3);
+        DrawLineBetweenButtons(ui.Q<Button>("Skill3A-tree3"), ui.Q<Button>("Skill4A-tree3"), color, lineLayer3);
+        DrawLineBetweenButtons(ui.Q<Button>("Skill3B-tree3"), ui.Q<Button>("Skill4B-tree3"), color, lineLayer3);
+        DrawLineBetweenButtons(ui.Q<Button>("Skill4A-tree3"), ui.Q<Button>("Skill5A-tree3"), color, lineLayer3);
+        DrawLineBetweenButtons(ui.Q<Button>("Skill4B-tree3"), ui.Q<Button>("Skill5B-tree3"), color, lineLayer3);
+        DrawLineBetweenButtons(ui.Q<Button>("Skill4B-tree3"), ui.Q<Button>("Skill5C-tree3"), color, lineLayer3);
+        DrawLineBetweenButtons(ui.Q<Button>("Skill5C-tree3"), ui.Q<Button>("Skill6-tree3"), color, lineLayer3);
+
+
+    }
+
+    void DrawLineBetweenButtons(Button from, Button to, Color color, VisualElement targetLayer)
+    {
+        var line = new VisualElement();
+        line.pickingMode = PickingMode.Ignore;
+        line.generateVisualContent += ctx =>
+        {
+            if (from == null || to == null) return;
+
+            var start = from.worldBound.center;
+            var end = to.worldBound.center;
+
+            var localStart = targetLayer.WorldToLocal(start);
+            var localEnd = targetLayer.WorldToLocal(end);
+
+            ctx.painter2D.strokeColor = color;
+            ctx.painter2D.lineWidth = 3f;
+            ctx.painter2D.BeginPath();
+            ctx.painter2D.MoveTo(localStart);
+            ctx.painter2D.LineTo(localEnd);
+            ctx.painter2D.Stroke();
+        };
+
+        targetLayer.Add(line);
+    }
 
 
     private void OneClickArmyTreeInit()
     {
-        
-
-        
+       
         var skill1 = ui.Q<Button>("Skill1");
         var skill2A = ui.Q<Button>("Skill2A");
         var skill2B = ui.Q<Button>("Skill2B");
@@ -221,12 +325,114 @@ public class LayoutController : MonoBehaviour
             if (btn != null)
             {
                 buttons[id] = btn;
-                btn.clicked += () => OnSkillClicked(id);
+                btn.RegisterCallback<PointerUpEvent>(evt => {
+                    if (evt.button == 0) //tutaj bedzie trzeba inputa dac zamiast buttona0myszki
+                        OnSkillClicked(id);
+                    else if (evt.button == 1) //tutaj tez 
+                        OnSkillUnlearned(id);
+                });
                 UpdateVisual(id);
             }
         }
 
     }
+
+    void OnSkillUnlearned(string id)
+    {
+       
+        if (!learned.Contains(id))
+            return;
+
+        foreach (var kvp in dependencies)
+        {
+            if (kvp.Value.Contains(id) && learned.Contains(kvp.Key))
+            {
+                return;
+            }
+        }
+
+        learned.Remove(id);
+        UpdateAll();
+    }
+
+
+
+
+    void OnSkillClicked(string id)
+    {
+        if (learned.Contains(id))
+            return;
+
+        if (!CanUnlock(id))
+            return;
+
+        if (id == "Skill6A" && learned.Contains("Skill6B"))
+            return;
+        if (id == "Skill6B" && learned.Contains("Skill6A"))
+            return;
+
+
+        learned.Add(id);
+        UpdateVisual(id);
+    }
+
+    bool CanUnlock(string id)
+    {
+        if (!dependencies.ContainsKey(id)) return true;
+
+
+        if (id == "Skill5")
+        {
+            foreach (var prereq in dependencies[id])
+            {
+                if (learned.Contains(prereq))
+                    return true;
+            }
+            return false;
+        }
+
+
+        foreach (var prereq in dependencies[id])
+        {
+            if (!learned.Contains(prereq))
+                return false;
+        }
+
+        return true;
+    }
+
+    void UpdateVisual(string id)
+    {
+        if (!buttons.ContainsKey(id)) return;
+        var btn = buttons[id];
+
+        if (learned.Contains(id))
+        {
+            btn.style.backgroundColor = learnedColor;
+            return;
+        }
+
+        if ((learned.Contains("Skill6A") && id == "Skill6B") ||
+            (learned.Contains("Skill6B") && id == "Skill6A"))
+        {
+            btn.style.backgroundColor = lockedColor;
+            
+            return;
+        }
+
+        if (CanUnlock(id))
+        {
+            btn.style.backgroundColor = availableColor;
+        }
+        else
+        {
+            btn.style.backgroundColor = lockedColor;
+            
+
+        }
+    }
+
+
 
 
 
@@ -266,11 +472,92 @@ public class LayoutController : MonoBehaviour
             if (btn != null)
             {
                 buttons2[id] = btn;
-                btn.clicked += () => OnSkillClicked_T2(id);
+                btn.RegisterCallback<PointerUpEvent>(evt =>
+                {
+                    if (evt.button == 0) // input TODO
+                        OnSkillClicked_T2(id);
+                    else if (evt.button == 1) // input TODO
+                        OnSkillUnlearned_T2(id);
+                });
                 UpdateVisual_T2(id);
             }
         }
 
+    }
+
+    void OnSkillUnlearned_T2(string id)
+    {
+        if (!learned2.Contains(id))
+            return;
+
+        foreach (var kvp in dependencies2)
+        {
+            if (kvp.Value.Contains(id) && learned2.Contains(kvp.Key))
+            {
+                return;
+            }
+        }
+        learned2.Remove(id);
+        UpdateAll();
+    }
+
+    void OnSkillClicked_T2(string id)
+    {
+        if (learned2.Contains(id))
+            return;
+
+        if (!CanUnlock_T2(id))
+            return;
+
+        learned2.Add(id);
+        UpdateVisual_T2(id);
+    }
+
+    bool CanUnlock_T2(string id)
+    {
+        if (!dependencies2.ContainsKey(id)) return true;
+
+
+        if (id == "Skill5-tree2")
+        {
+            foreach (var prereq in dependencies2[id])
+            {
+                if (learned2.Contains(prereq))
+                    return true;
+            }
+            return false;
+        }
+
+
+        foreach (var prereq in dependencies2[id])
+        {
+            if (!learned2.Contains(prereq))
+                return false;
+        }
+
+        return true;
+    }
+
+    void UpdateVisual_T2(string id)
+    {
+        if (!buttons2.ContainsKey(id)) return;
+        var btn = buttons2[id];
+
+        
+
+        if (learned2.Contains(id))
+        {
+            btn.style.backgroundColor = learnedColor;
+            return;
+        }
+
+        if (CanUnlock_T2(id))
+            btn.style.backgroundColor = availableColor;
+        else
+        {
+            btn.style.backgroundColor = lockedColor;
+           
+        }
     }
 
 
@@ -311,7 +598,13 @@ public class LayoutController : MonoBehaviour
             if (btn != null)
             {
                 buttons3[id] = btn;
-                btn.clicked += () => OnSkillClicked_T3(id);
+                btn.RegisterCallback<PointerUpEvent>(evt =>
+                {
+                    if (evt.button == 0) // input TODO
+                        OnSkillClicked_T3(id);
+                    else if (evt.button == 1) // input TODO
+                        OnSkillUnlearned_T3(id);
+                });
                 UpdateVisual_T3(id);
             }
         }
@@ -331,6 +624,24 @@ public class LayoutController : MonoBehaviour
         UpdateVisual_T3(id);
     }
 
+    void OnSkillUnlearned_T3(string id)
+    {
+        if (!learned3.Contains(id))
+            return;
+
+        foreach (var kvp in dependencies3)
+        {
+            if (kvp.Value.Contains(id) && learned3.Contains(kvp.Key))
+            {
+                return;
+            }
+        }
+
+        learned3.Remove(id);
+        UpdateAll();
+    }
+
+
     bool CanUnlock_T3(string id)
     {
         if (!dependencies3.ContainsKey(id)) return true;
@@ -349,7 +660,7 @@ public class LayoutController : MonoBehaviour
     {
         if (!buttons3.ContainsKey(id)) return;
         var btn = buttons3[id];
-        btn.SetEnabled(true);
+        
 
         if (learned3.Contains(id))
         {
@@ -362,119 +673,11 @@ public class LayoutController : MonoBehaviour
         else
         {
             btn.style.backgroundColor = lockedColor;
-            btn.SetEnabled(false);
+            
         }
     }
 
 
-
-
-    void OnSkillClicked_T2(string id)
-    {
-        if (learned2.Contains(id))
-            return;
-
-        if (!CanUnlock_T2(id))
-            return;
-
-        learned2.Add(id);
-        UpdateVisual_T2(id);
-    }
-
-    bool CanUnlock_T2(string id)
-    {
-        if (!dependencies2.ContainsKey(id)) return true;
-
-        
-        if (id == "Skill5-tree2")
-        {
-            foreach (var prereq in dependencies2[id])
-            {
-                if (learned2.Contains(prereq))
-                    return true;
-            }
-            return false;
-        }
-
-       
-        foreach (var prereq in dependencies2[id])
-        {
-            if (!learned2.Contains(prereq))
-                return false;
-        }
-
-        return true;
-    }
-
-    void UpdateVisual_T2(string id)
-    {
-        if (!buttons2.ContainsKey(id)) return;
-        var btn = buttons2[id];
-
-        btn.SetEnabled(true);
-
-        if (learned2.Contains(id))
-        {
-            btn.style.backgroundColor = learnedColor;
-            return;
-        }
-
-        if (CanUnlock_T2(id))
-            btn.style.backgroundColor = availableColor;
-        else
-        {
-            btn.style.backgroundColor = lockedColor;
-            btn.SetEnabled(false);
-        }
-    }
-
-
-
-
-
-
-    void OnSkillClicked(string id)
-    {
-        if (learned.Contains(id))
-            return; 
-
-        if (!CanUnlock(id))
-            return; 
-
-        if (id == "Skill6A" && learned.Contains("Skill6B"))
-            return;
-        if (id == "Skill6B" && learned.Contains("Skill6A"))
-            return;
-
-
-        learned.Add(id);
-        UpdateVisual(id);
-    }
-
-    bool CanUnlock(string id)
-    {
-        if (!dependencies.ContainsKey(id)) return true;
-
-        
-        if (id == "Skill5")
-        {
-            foreach (var prereq in dependencies[id])
-            {
-                if (learned.Contains(prereq))
-                    return true;
-            }
-            return false;
-        }
-
-        
-        foreach (var prereq in dependencies[id])
-        {
-            if (!learned.Contains(prereq))
-                return false;
-        }
-
-        return true;
-    }
 
     void UpdateAll()
     {
@@ -485,46 +688,6 @@ public class LayoutController : MonoBehaviour
         foreach (var id in buttons3.Keys)
             UpdateVisual_T3(id);
     }
-
-    void UpdateVisual(string id)
-    {
-        if (!buttons.ContainsKey(id)) return;
-        var btn = buttons[id];
-
-        btn.SetEnabled(true);
-
-
-        if (learned.Contains(id))
-        {
-            btn.style.backgroundColor = learnedColor;
-            return;
-        }
-
-        if ((learned.Contains("Skill6A") && id == "Skill6B") ||
-            (learned.Contains("Skill6B") && id == "Skill6A"))
-        {
-            btn.style.backgroundColor = lockedColor;
-            btn.SetEnabled(false);
-            return;
-        }
-       
-        if (CanUnlock(id))
-        {
-            btn.style.backgroundColor = availableColor;
-        }
-        else
-        {
-            btn.style.backgroundColor = lockedColor;
-            btn.SetEnabled(false);
-        }
-    }
-
-
-
-
-
-
-
 
 
 

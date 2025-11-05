@@ -96,7 +96,7 @@
                     </ui:VisualElement>
                 </ui:ScrollView>
             </ui:VisualElement>
-            <ui:VisualElement name="Content3" style="flex-grow: 1; position: absolute; width: 78%; height: 100%; align-items: center; align-self: flex-end; align-content: flex-start; justify-content: flex-start; background-color: rgb(0, 0, 112); margin-left: 0; border-left-width: 1px; border-left-color: rgb(0, 0, 0); border-right-color: rgb(0, 0, 0); border-top-color: rgb(0, 0, 0); border-bottom-color: rgb(0, 0, 0); display: none; padding-top: 10%; padding-right: 0%; padding-bottom: 0%; padding-left: 0%; -unity-font-style: bold; color: rgb(255, 255, 255);">
+            <ui:VisualElement name="Content3" style="flex-grow: 1; position: absolute; width: 78%; height: 100%; align-items: center; align-self: flex-end; align-content: flex-start; justify-content: flex-start; background-color: rgb(0, 0, 112); margin-left: 0; border-left-width: 1px; border-left-color: rgb(0, 0, 0); border-right-color: rgb(0, 0, 0); border-top-color: rgb(0, 0, 0); border-bottom-color: rgb(0, 0, 0); display: none; padding-top: 5%; padding-right: 0%; padding-bottom: 0%; padding-left: 0%; -unity-font-style: bold; color: rgb(255, 255, 255);">
                 <ui:VisualElement name="SkillTree" style="flex-direction: column; align-items: center; justify-content: flex-start; gap: 50px; width: 100%; height: 80%;">
                     <ui:VisualElement style="flex-direction: row; justify-content: center; gap: 40px;">
                         <ui:Button text="Mortal &#10;Clicker" name="Skill6A" class="skill-node" />
@@ -111,7 +111,7 @@
                     </ui:VisualElement>
                     <ui:VisualElement style="flex-direction: row; justify-content: center; gap: 40px;">
                         <ui:Button text="Active &#10;Idle" name="Skill3A" class="skill-node" />
-                        <ui:Button text="Hungry &#10;For More" name="Skill3B" class="skill-node" />
+                        <ui:Button text="Hungry &#10;For More" name="Skill3B" class="skill-node" style="display: flex;" />
                     </ui:VisualElement>
                     <ui:VisualElement style="flex-direction: row; justify-content: center; gap: 40px;">
                         <ui:Button text="Critical &#10;Mass" name="Skill2A" class="skill-node" />
@@ -121,9 +121,9 @@
                         <ui:Button text="Skill Based &#10;Clicking" name="Skill1" tooltip="rrrr" class="skill-node" />
                     </ui:VisualElement>
                 </ui:VisualElement>
-                <ui:Label text="Label" name="Describe" style="background-color: rgb(0, 0, 0); width: 100%; color: rgb(255, 255, 255); -unity-font-style: bold; height: 20%; -unity-text-align: middle-center; white-space: normal;" />
+                <ui:Label text="Najedź na skill, aby zobaczyć opis" name="Describe" style="background-color: rgb(0, 0, 0); width: 100%; color: rgb(255, 255, 255); -unity-font-style: bold; height: 20%; -unity-text-align: middle-center; white-space: normal;" />
             </ui:VisualElement>
-            <ui:VisualElement name="Content4" style="flex-grow: 1; position: absolute; width: 78%; height: 100%; align-items: center; align-self: flex-end; align-content: flex-start; justify-content: flex-start; background-color: rgb(0, 0, 112); margin-left: 0; border-left-width: 1px; border-left-color: rgb(0, 0, 0); border-right-color: rgb(0, 0, 0); border-top-color: rgb(0, 0, 0); border-bottom-color: rgb(0, 0, 0); display: none; padding-top: 10%; padding-right: 0%; padding-bottom: 0%; padding-left: 0%; -unity-font-style: bold; color: rgb(255, 255, 255);">
+            <ui:VisualElement name="Content4" style="flex-grow: 1; position: absolute; width: 78%; height: 100%; align-items: center; align-self: flex-end; align-content: flex-start; justify-content: flex-start; background-color: rgb(0, 0, 112); margin-left: 0; border-left-width: 1px; border-left-color: rgb(0, 0, 0); border-right-color: rgb(0, 0, 0); border-top-color: rgb(0, 0, 0); border-bottom-color: rgb(0, 0, 0); display: none; padding-top: 5%; padding-right: 0%; padding-bottom: 0%; padding-left: 0%; -unity-font-style: bold; color: rgb(255, 255, 255);">
                 <ui:VisualElement name="SkillTree2" style="flex-direction: column; align-items: center; justify-content: flex-start; gap: 50px; width: 100%; height: 80%;">
                     <ui:VisualElement style="flex-direction: row; justify-content: center;">
                         <ui:Button text="Micheal &#10;Scott" name="Skill5-tree2" class="skill-node" />
@@ -146,9 +146,9 @@
                         <ui:Button text="Shark" name="Skill1-tree2" tooltip="rrrr" class="skill-node" />
                     </ui:VisualElement>
                 </ui:VisualElement>
-                <ui:Label text="Label" name="Describe2" style="background-color: rgb(0, 0, 0); width: 100%; color: rgb(255, 255, 255); -unity-font-style: bold; height: 20%; -unity-text-align: middle-center; white-space: normal;" />
+                <ui:Label text="Najedź na skill, aby zobaczyć opis" name="Describe2" style="background-color: rgb(0, 0, 0); width: 100%; color: rgb(255, 255, 255); -unity-font-style: bold; height: 20%; -unity-text-align: middle-center; white-space: normal;" />
             </ui:VisualElement>
-            <ui:VisualElement name="Content5" style="flex-grow: 1; position: absolute; width: 78%; height: 100%; align-items: center; align-self: flex-end; align-content: flex-start; justify-content: flex-start; background-color: rgb(0, 0, 112); margin-left: 0; border-left-width: 1px; border-left-color: rgb(0, 0, 0); border-right-color: rgb(0, 0, 0); border-top-color: rgb(0, 0, 0); border-bottom-color: rgb(0, 0, 0); display: none; padding-top: 10%; padding-right: 0%; padding-bottom: 0%; padding-left: 0%; -unity-font-style: bold; color: rgb(255, 255, 255);">
+            <ui:VisualElement name="Content5" style="flex-grow: 1; position: absolute; width: 78%; height: 100%; align-items: center; align-self: flex-end; align-content: flex-start; justify-content: flex-start; background-color: rgb(0, 0, 112); margin-left: 0; border-left-width: 1px; border-left-color: rgb(0, 0, 0); border-right-color: rgb(0, 0, 0); border-top-color: rgb(0, 0, 0); border-bottom-color: rgb(0, 0, 0); display: none; padding-top: 5%; padding-right: 0%; padding-bottom: 0%; padding-left: 0%; -unity-font-style: bold; color: rgb(255, 255, 255);">
                 <ui:VisualElement name="SkillTree3" style="flex-direction: column; align-items: center; justify-content: flex-start; gap: 50px; width: 100%; height: 80%;">
                     <ui:VisualElement style="flex-direction: row; justify-content: center;">
                         <ui:Button text="Hungry &#10;Wolf" name="Skill6-tree3" class="skill-node" style="left: 100%;" />
@@ -173,7 +173,7 @@
                         <ui:Button text="Entre-&#10;preneur" name="Skill1-tree3" tooltip="rrrr" class="skill-node" />
                     </ui:VisualElement>
                 </ui:VisualElement>
-                <ui:Label text="Label" name="Describe3" style="background-color: rgb(0, 0, 0); width: 100%; color: rgb(255, 255, 255); -unity-font-style: bold; height: 20%; -unity-text-align: middle-center; white-space: normal;" />
+                <ui:Label text="Najedź na skill, aby zobaczyć opis" name="Describe3" style="background-color: rgb(0, 0, 0); width: 100%; color: rgb(255, 255, 255); -unity-font-style: bold; height: 20%; -unity-text-align: middle-center; white-space: normal;" />
             </ui:VisualElement>
         </ui:VisualElement>
     </ui:VisualElement>
