@@ -536,6 +536,11 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!212 &1105491401 stripped
+SpriteRenderer:
+  m_CorrespondingSourceObject: {fileID: 3072934719231244098, guid: 74134571a0795ce4a840c2356e47dbbb, type: 3}
+  m_PrefabInstance: {fileID: 4314737264741379673}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &1162231167 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 1887176690689923182, guid: 9561ff019297a0e4a9b76f8571649e17, type: 3}
@@ -580,6 +585,10 @@ PrefabInstance:
       propertyPath: idleManager
       value: 
       objectReference: {fileID: 205226413}
+    - target: {fileID: 2595809473968715902, guid: fe1619c8ad742c24e8be78d6c285b517, type: 3}
+      propertyPath: clickerObject
+      value: 
+      objectReference: {fileID: 1105491401}
     - target: {fileID: 2595809473968715902, guid: fe1619c8ad742c24e8be78d6c285b517, type: 3}
       propertyPath: characterClass
       value: 
@@ -856,6 +865,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2629494924822515725, guid: 74134571a0795ce4a840c2356e47dbbb, type: 3}
+      propertyPath: idleManager
+      value: 
+      objectReference: {fileID: 205226413}
     - target: {fileID: 2629494924822515725, guid: 74134571a0795ce4a840c2356e47dbbb, type: 3}
       propertyPath: characterClass
       value: 

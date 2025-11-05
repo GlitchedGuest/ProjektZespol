@@ -6,18 +6,44 @@ using UnityEngine;
 public class IdleManager : MonoBehaviour
 {
     [SerializeField] private RaptorCore raptorCore;
-    [SerializeField] private float tickInterval = 1f; // 1 tick/sek
+    [SerializeField] private float tickInterval = 1f;
     private Coroutine tickCoroutine;
-    [SerializeField] private List<Factory> factories;
+    public List<Factory> factories;
+    public List<Resource> resources;
 
     private void Awake()
     {
-        if (factories == null) factories = new List<Factory>();
-        factories.Add(new Factory("Student", 15, 1.15, 1));
-        factories.Add(new Factory("Gornik", 100, 1.17, 10));
-        factories.Add(new Factory("Wiertlo", 1000, 1.2, 50));
+        InitResources();
+        InitFactories();
     }
 
+    private void InitResources()
+    {
+        if (resources == null) resources = new List<Resource>();
+
+        resources.Clear();
+        resources.Add(new Resource("Resource1"));
+        resources.Add(new Resource("Resource2"));
+        resources.Add(new Resource("Resource3"));
+
+        foreach (var res in resources)
+        {
+            raptorCore.RegisterResource(res);
+        }
+    }
+    private void InitFactories()
+    {
+        if (factories == null) factories = new List<Factory>();
+
+        factories.Clear();
+
+        //TODO: Adjust factory parameters as needed
+        factories.Add(new Factory(resources[0], "F1", 15, 1.15, 1, 0));
+
+        factories.Add(new Factory(resources[1], "F2", 15, 1.15, 5, 5000));
+
+        factories.Add(new Factory(resources[2], "F3", 15, 1.15, 10, 25000));
+    }
     private void OnEnable()
     {
         if (tickCoroutine == null)
@@ -52,41 +78,70 @@ public class IdleManager : MonoBehaviour
     {
         if (factories == null || factories.Count == 0) return;
 
-        double totalProduction = 0.0;
         foreach (var f in factories)
         {
-            if (f == null) continue;
-            totalProduction += f.GetProduction();
+            if (f == null || f.count <= 0) continue;
+            double production = f.GetProduction();
+            if (f.resource != null)
+            {
+                f.resource.value += (QuarkType)production;
+            }
         }
 
-        raptorCore.Currency += Math.Ceiling(totalProduction);
+        string currentResource = raptorCore.GetCurrentResourceName();
+        QuarkType currentResourceAmount = raptorCore.GetResourceValue(currentResource);
+        LayoutController.Instance?.SetCurrencyText(currentResourceAmount.ToString());
+    }
 
- 
+    public bool UnlockFactory(int index)
+    {
+        if (factories == null || index < 0 || index >= factories.Count)
+        {
+            return false;
+        }
 
-        LayoutController.Instance?.SetCurrencyText(raptorCore.Currency.ToString());
+        var f = factories[index];
+
+        if (raptorCore.Gold >= f.unlockCost)
+        {
+            raptorCore.Gold -= f.unlockCost;
+            f.isUnlocked = true;
+            
+            Debug.Log($"Odblokowano fabrykę '{f.name}' za {f.unlockCost} gold");
+            
+            LayoutController.Instance?.SetGoldText(raptorCore.Gold.ToString());
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
 
     public bool BuyFactory(int index)
     {
         if (factories == null || index < 0 || index >= factories.Count)
         {
-            Debug.LogWarning($"BuyFactory: nieprawidlowy indeks {index}");
             return false;
         }
 
         var f = factories[index];
+        
         double cost = f.currentCost;
+        
         if (raptorCore.Gold >= cost)
         {
             raptorCore.Gold -= cost;
             f.count++;
-            Debug.Log($"Kupiono fabryke '{f.name}' (nowy count = {f.count}), koszt = {cost}");
-            LayoutController.Instance?.SetCurrencyText(raptorCore.Currency.ToString());
+            
+            Debug.Log($"Kupiono fabrykę '{f.name}' (nowy count = {f.count}), koszt = {cost}");
+            
+            LayoutController.Instance?.SetGoldText(raptorCore.Gold.ToString("F2"));
             return true;
         }
         else
         {
-            Debug.Log("BuyFactory: brak wystarczajacych srodkow");
+            Debug.Log("BuyFactory: brak wystarczających środków");
             return false;
         }
     }
@@ -95,7 +150,6 @@ public class IdleManager : MonoBehaviour
     {
         if (factories == null || index < 0 || index >= factories.Count)
         {
-            Debug.LogWarning($"SellFactory: nieprawidlowy indeks {index}");
             return false;
         }
 
@@ -106,11 +160,36 @@ public class IdleManager : MonoBehaviour
             return false;
         }
 
-        double sellValue = f.GetSellValue(); // obliczane na podstawie (count - 1)
+        double sellValue = f.GetSellValue();
         f.count--;
         raptorCore.Gold += sellValue;
         Debug.Log($"Sprzedano fabryke '{f.name}' za {sellValue} (nowy count = {f.count})");
         LayoutController.Instance?.SetGoldText(raptorCore.Gold.ToString());
         return true;
     }
+
+    public Factory GetFactory(int index)
+    {
+        if (factories != null && index >= 0 && index < factories.Count)
+            return factories[index];
+        return null;
+    }
+
+    public List<Factory> GetFactories()
+    {
+        return factories;
+    }
+
+    public Resource GetResource(int index)
+    {
+        if (resources != null && index >= 0 && index < resources.Count)
+            return resources[index];
+        return null;
+    }
+
+    public int GetFactoryCount()
+    {
+        return factories != null ? factories.Count : 0;
+    }
+
 }
