@@ -34,6 +34,10 @@ public class RaptorCore : MonoBehaviour
     public double Gold = 0;
     private Dictionary<string, Resource> resources = new Dictionary<string, Resource>();
     private string currentResource = "Resource1";
+    private enum ClickSource { None, Mouse, Space, Enter }
+    private ClickSource activeClickSource = ClickSource.None;
+    private float sourceBlockEndTime = 0f;
+    private float clickCooldown = 0.5f; // jezeli gracz klika przycisk to wyłącza inne na czas cooldownu
 
     private void Awake()
     {
@@ -42,9 +46,11 @@ public class RaptorCore : MonoBehaviour
 
     private void OnMouseDown()
     {
-        this.click();
-        anim.SetTrigger("Clicked");
-        UpdateUI();
+        if (Time.time >= sourceBlockEndTime) activeClickSource = ClickSource.None;
+        if (activeClickSource != ClickSource.None && activeClickSource != ClickSource.Mouse && Time.time < sourceBlockEndTime) return;
+        activeClickSource = ClickSource.Mouse;
+        sourceBlockEndTime = Time.time + clickCooldown;
+        PerformClick();
     }
     void click()
     {
@@ -69,13 +75,38 @@ public class RaptorCore : MonoBehaviour
     void FixedUpdate()
     {
         Currency += (GBasevalue * GMultiplier); //.Pow(GPower);
-
-
     }
 
     void Update()
     {
-        
+        if (Time.time >= sourceBlockEndTime) activeClickSource = ClickSource.None;
+
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            if (activeClickSource != ClickSource.None && activeClickSource != ClickSource.Space && Time.time < sourceBlockEndTime) return;
+
+            activeClickSource = ClickSource.Space;
+            sourceBlockEndTime = Time.time + clickCooldown;
+            PerformClick();
+            return;
+        }
+
+        if (Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.KeypadEnter))
+        {
+            if (activeClickSource != ClickSource.None && activeClickSource != ClickSource.Enter && Time.time < sourceBlockEndTime)
+                return;
+
+            activeClickSource = ClickSource.Enter;
+            sourceBlockEndTime = Time.time + clickCooldown;
+            PerformClick();
+            return;
+        }
+    }
+    private void PerformClick()
+    {
+        click();
+        anim.SetTrigger("Clicked");
+        UpdateUI();
     }
     void UpdateUI()
     {

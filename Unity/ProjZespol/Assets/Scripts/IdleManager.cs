@@ -38,17 +38,17 @@ public class IdleManager : MonoBehaviour
         factories.Clear();
 
         //TODO: Adjust factory parameters as needed
-        factories.Add(new Factory(resources[0], "F1.1", 15, 1.15, 1));
-        factories.Add(new Factory(resources[0], "F1.2", 100, 1.17, 10));
-        factories.Add(new Factory(resources[0], "F1.3", 1000, 1.2, 50));
+        factories.Add(new Factory(resources[0], "F1.1", 15, 1.15, 1, 0));
+        factories.Add(new Factory(resources[0], "F1.2", 100, 1.17, 10, 500));
+        factories.Add(new Factory(resources[0], "F1.3", 1000, 1.2, 50, 2500));
 
-        factories.Add(new Factory(resources[1], "F2.1", 150, 1.13, 10));
-        factories.Add(new Factory(resources[1], "F2.2", 2000, 1.16, 30));
-        factories.Add(new Factory(resources[1], "F2.3", 5000, 1.2, 50));
+        factories.Add(new Factory(resources[1], "F2.1", 200, 1.15, 5, 5000));
+        factories.Add(new Factory(resources[1], "F2.2", 1500, 1.17, 25, 15000));
+        factories.Add(new Factory(resources[1], "F2.3", 10000, 1.2, 100, 50000));
 
-        factories.Add(new Factory(resources[2], "F3.1", 1000, 1.15, 100));
-        factories.Add(new Factory(resources[2], "F3.2", 3000, 1.18, 300));
-        factories.Add(new Factory(resources[2], "F3.3", 8000, 1.22, 700));
+        factories.Add(new Factory(resources[2], "F3.1", 500, 1.15, 10, 100000));
+        factories.Add(new Factory(resources[2], "F3.2", 3000, 1.17, 50, 250000));
+        factories.Add(new Factory(resources[2], "F3.3", 20000, 1.2, 200, 500000));
     }
     private void OnEnable()
     {
@@ -99,27 +99,55 @@ public class IdleManager : MonoBehaviour
         LayoutController.Instance?.SetCurrencyText(currentResourceAmount.ToString());
     }
 
-    public bool BuyFactory(int index)
+    public bool UnlockFactory(int index)
     {
         if (factories == null || index < 0 || index >= factories.Count)
         {
-            Debug.LogWarning($"BuyFactory: nieprawidlowy indeks {index}");
             return false;
         }
 
         var f = factories[index];
-        double cost = f.currentCost;
-        if (raptorCore.Gold >= cost)
+
+        if (raptorCore.Gold >= f.unlockCost)
         {
-            raptorCore.Gold -= cost;
-            f.count++;
-            Debug.Log($"Kupiono fabryke '{f.name}' (nowy count = {f.count}), koszt = {cost}");
-            LayoutController.Instance?.SetCurrencyText(raptorCore.Currency.ToString());
+            raptorCore.Gold -= f.unlockCost;
+            f.isUnlocked = true;
+            
+            Debug.Log($"Odblokowano fabrykę '{f.name}' za {f.unlockCost} gold");
+            
+            LayoutController.Instance?.SetGoldText(raptorCore.Gold.ToString());
             return true;
         }
         else
         {
-            Debug.Log("BuyFactory: brak wystarczajacych srodkow");
+            return false;
+        }
+    }
+
+    public bool BuyFactory(int index)
+    {
+        if (factories == null || index < 0 || index >= factories.Count)
+        {
+            return false;
+        }
+
+        var f = factories[index];
+        
+        double cost = f.currentCost;
+        
+        if (raptorCore.Gold >= cost)
+        {
+            raptorCore.Gold -= cost;
+            f.count++;
+            
+            Debug.Log($"Kupiono fabrykę '{f.name}' (nowy count = {f.count}), koszt = {cost}");
+            
+            LayoutController.Instance?.SetGoldText(raptorCore.Gold.ToString("F2"));
+            return true;
+        }
+        else
+        {
+            Debug.Log("BuyFactory: brak wystarczających środków");
             return false;
         }
     }
@@ -128,7 +156,6 @@ public class IdleManager : MonoBehaviour
     {
         if (factories == null || index < 0 || index >= factories.Count)
         {
-            Debug.LogWarning($"SellFactory: nieprawidlowy indeks {index}");
             return false;
         }
 

@@ -1,4 +1,5 @@
 using System;
+using NUnit.Framework;
 
 [Serializable]
 public class Factory
@@ -10,6 +11,8 @@ public class Factory
     public double baseProduction;
     public double productionMultiplier;
     // Number of factories of the same type owned by the player€
+    public bool isUnlocked;
+    public double unlockCost;
     public ulong count;
     public double currentCost => Math.Ceiling(baseCost * Math.Pow(costMultiplier, count));
     public double GetProduction() => baseProduction * count * productionMultiplier;
@@ -19,7 +22,7 @@ public class Factory
         double multiplier = costMultiplier > 0 ? costMultiplier : 1.0;
         return Math.Ceiling(baseCost * Math.Pow(multiplier, count - 1) * 0.5);
     }
-    public Factory(Resource _resource, string _name, double _baseCost, double _costMultiplier, double _baseProduction)
+    public Factory(Resource _resource, string _name, double _baseCost, double _costMultiplier, double _baseProduction, double _unlockCost)
     {
         resource = _resource;
         name = _name;
@@ -28,6 +31,8 @@ public class Factory
         baseProduction = _baseProduction;
         productionMultiplier = 1;
         count = 0;
+        unlockCost = _unlockCost;
+        isUnlocked = _unlockCost == 0;
     }
 
 }

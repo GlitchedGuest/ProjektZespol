@@ -39,6 +39,7 @@ public class LayoutController : MonoBehaviour
         public Label nameLabel;
         public Label countLabel;
         public Label costLabel;
+        public Button unlockButton;
         public Button[] buyButtons = new Button[4]; // 1, 5, 25, MAX
         public Button[] sellButtons = new Button[4]; // 1, 5, 25, MAX
         public bool isVisible = false;
@@ -115,8 +116,16 @@ public class LayoutController : MonoBehaviour
             factoryUI.sellButtons[2] = ui.Q<Button>($"Factory{i}Sell25");
             factoryUI.sellButtons[3] = ui.Q<Button>($"Factory{i}SellMax");
 
+            factoryUI.unlockButton = ui.Q<Button>($"Factory{i}Unlock");
 
             int factoryIndex = i - 1;
+            int factoryIndexCopy = factoryIndex;
+
+            if (factoryUI.unlockButton != null)
+            {
+                factoryUI.unlockButton.clicked += () => UnlockFactory(factoryIndexCopy);
+            }
+
             
             if (factoryUI.toggleButton != null)
             {
@@ -335,25 +344,64 @@ public class LayoutController : MonoBehaviour
         {
             var factoryUI = factoryUIs[i];
             var factory = GetFactory(i);
-            
+            if (factory == null) continue;
+
+
             if (factory == null || factoryUI.countLabel == null || factoryUI.costLabel == null)
                 continue;
 
             factoryUI.countLabel.text = $"Ilość: {factory.count}";
             factoryUI.costLabel.text = $"Koszt: {factory.currentCost}";
+            factoryUI.costLabel.text = factory.isUnlocked ? $"Koszt: {factory.currentCost}" : $"Odblokuj za: {factory.unlockCost}";
 
             double playerGold = raptorCore.Gold;
-            
-            UpdateButton(factoryUI.buyButtons[0], playerGold >= factory.currentCost);
-            UpdateButton(factoryUI.buyButtons[1], playerGold >= factory.currentCost * 5);
-            UpdateButton(factoryUI.buyButtons[2], playerGold >= factory.currentCost * 25);
-            UpdateButton(factoryUI.buyButtons[3], playerGold >= factory.currentCost);
 
-            UpdateButton(factoryUI.sellButtons[0], factory.count >= 1);
-            UpdateButton(factoryUI.sellButtons[1], factory.count >= 5);
-            UpdateButton(factoryUI.sellButtons[2], factory.count >= 25);
-            UpdateButton(factoryUI.sellButtons[3], factory.count > 0);
+            if (!factory.isUnlocked)
+            {
+                if (factoryUI.unlockButton != null)
+                {
+                    factoryUI.unlockButton.style.display = DisplayStyle.Flex;
+                    factoryUI.unlockButton.SetEnabled(playerGold >= factory.unlockCost);
+                }
+
+                foreach (var btn in factoryUI.buyButtons)
+                {
+                    if (btn != null) btn.style.display = DisplayStyle.None;
+                }
+                foreach (var btn in factoryUI.sellButtons)
+                {
+                    if (btn != null) btn.style.display = DisplayStyle.None;
+                }
+            }
+            else
+            {
+                if (factoryUI.unlockButton != null)
+                {
+                    factoryUI.unlockButton.style.display = DisplayStyle.None;
+                }
+
+                foreach (var btn in factoryUI.buyButtons)
+                {
+                    if (btn != null) btn.style.display = DisplayStyle.Flex;
+                }
+
+                foreach (var btn in factoryUI.sellButtons)
+                {
+                    if (btn != null) btn.style.display = DisplayStyle.Flex;
+                }
+
+                UpdateButton(factoryUI.buyButtons[0], playerGold >= factory.currentCost);
+                UpdateButton(factoryUI.buyButtons[1], playerGold >= factory.currentCost * 5);
+                UpdateButton(factoryUI.buyButtons[2], playerGold >= factory.currentCost * 25);
+                UpdateButton(factoryUI.buyButtons[3], playerGold >= factory.currentCost);
+
+                UpdateButton(factoryUI.sellButtons[0], factory.count >= 1);
+                UpdateButton(factoryUI.sellButtons[1], factory.count >= 5);
+                UpdateButton(factoryUI.sellButtons[2], factory.count >= 25);
+                UpdateButton(factoryUI.sellButtons[3], factory.count > 0);
+            }
         }
+        UpdateResourceLockState();
     }
 
     private void UpdateButton(Button button, bool enabled)
@@ -366,49 +414,165 @@ public class LayoutController : MonoBehaviour
 
     private Factory GetFactory(int index)
     {
-        if (idleManager == null)
-            return null;
+        if (idleManager == null) return null;
 
         return idleManager.GetFactory(index);
     }
 
     private void CycleCurrency()
     {
-        if (raptorCore == null || clickerObject == null)
+        if (raptorCore == null || clickerObject == null) return;
+
+        bool hasResource1Factory = true;
+        bool hasResource2Factory = false;
+        bool hasResource3Factory = false;
+
+        for (int i = 0; i < factoryUIs.Count; i++)
         {
-            return;
+            var factory = GetFactory(i);
+            if (factory == null) continue;
+
+            string resName = factory.resource?.name;
+            if (string.IsNullOrEmpty(resName)) continue;
+
+            else if (resName == "Resource2" && factory.count > 0)
+            {
+                hasResource2Factory = true;
+            }
+            else if (resName == "Resource3" && factory.count > 0)
+            {
+                hasResource3Factory = true;
+            }
         }
+
+        string current = raptorCore.GetCurrentResourceName();
+        string nextResource = current;
+
+        if (current == "Resource1")
+        {
+            if (hasResource2Factory) nextResource = "Resource2";
+            else if (hasResource3Factory) nextResource = "Resource3";
+        }
+        else if (current == "Resource2")
+        {
+            if (hasResource3Factory) nextResource = "Resource3";
+            else if (hasResource1Factory) nextResource = "Resource1";
+        }
+        else if (current == "Resource3")
+        {
+            nextResource = "Resource1";
+        }
+        else
+        {
+            nextResource = "Resource1";
+        }
+
+        if (nextResource == current) return;
+
+        raptorCore.SetCurrentResource(nextResource);
+        resourceBtn.text = nextResource;
+
         //Color change is temporary until it's decided on which icons will be used
-        switch (raptorCore.GetCurrentResourceName())
+        Color color;
+        switch (nextResource)
+        {
+            case "Resource1": color = Color.white; break;
+            case "Resource2": color = Color.red; break;
+            case "Resource3": color = Color.green; break;
+            default: color = Color.white; break;
+        }
+
+        currencyIcon.style.unityBackgroundImageTintColor = new StyleColor(color);
+        shopIcon.style.unityBackgroundImageTintColor = new StyleColor(color);
+        clickerObject.color = color;
+
+        UpdateResourceLockState();
+        UpdateFactoryUI();
+    }
+
+    private void UnlockFactory(int factoryIndex)
+    {
+        audioSource.Play();
+
+        if (idleManager == null) return;
+
+        bool success = idleManager.UnlockFactory(factoryIndex);
+
+        if (success)
+        {
+            Debug.Log($"Pomyślnie odblokowano fabrykę {factoryIndex}");
+        }
+        else
+        {
+            Debug.Log($"Brak kasy na odblokowanie fabryki {factoryIndex}");
+        }
+
+        UpdateFactoryUI();
+        SetGoldText(raptorCore.Gold.ToString());
+    }
+
+    private void UpdateResourceLockState()
+    {
+        if (idleManager == null || raptorCore == null) return;
+
+        bool hasResource2Factory = false;
+        bool hasResource3Factory = false;
+
+        for (int i = 0; i < factoryUIs.Count; i++)
+        {
+            var factory = GetFactory(i);
+            if (factory == null) continue;
+
+            string resName = factory.resource?.name;
+            if (string.IsNullOrEmpty(resName)) continue;
+
+
+            if (resName == "Resource2" && factory.count > 0)
+            {
+                hasResource2Factory = true;
+            }
+            else if (resName == "Resource3" && factory.count > 0)
+            {
+                hasResource3Factory = true;
+            }
+
+        }
+
+        bool canUseResource1 = true;
+        bool canUseResource2 = hasResource2Factory;
+        bool canUseResource3 = hasResource3Factory;
+        string currentResource = raptorCore.GetCurrentResourceName();
+
+        bool isLocked = false;
+        switch (currentResource)
         {
             case "Resource1":
-                currencyIcon.style.unityBackgroundImageTintColor = new StyleColor(Color.red);
-                shopIcon.style.unityBackgroundImageTintColor = new StyleColor(Color.red);
-                resourceBtn.text = "Resource2";
-                raptorCore.SetCurrentResource("Resource2");
-                clickerObject.color = Color.red;
+                isLocked = !canUseResource1;
                 break;
             case "Resource2":
-                currencyIcon.style.unityBackgroundImageTintColor = new StyleColor(Color.green);
-                shopIcon.style.unityBackgroundImageTintColor = new StyleColor(Color.green);
-                resourceBtn.text = "Resource3";
-                raptorCore.SetCurrentResource("Resource3");
-                clickerObject.color = Color.green;
+                isLocked = !canUseResource2;
                 break;
             case "Resource3":
-                currencyIcon.style.unityBackgroundImageTintColor = new StyleColor(Color.white);
-                shopIcon.style.unityBackgroundImageTintColor = new StyleColor(Color.white);
-                resourceBtn.text = "Resource1";
-                raptorCore.SetCurrentResource("Resource1");
-                clickerObject.color = Color.white;
-                break;
-            default:
-                currencyIcon.style.unityBackgroundImageTintColor = new StyleColor(Color.white);
-                shopIcon.style.unityBackgroundImageTintColor = new StyleColor(Color.white);
-                resourceBtn.text = "Resource1";
-                raptorCore.SetCurrentResource("Resource1");
-                clickerObject.color = Color.white;
+                isLocked = !canUseResource3;
                 break;
         }
+
+        if (resourceBtn != null)
+        {
+            resourceBtn.SetEnabled(!isLocked);
+
+            if (isLocked)
+            {
+                resourceBtn.text = $"{currentResource} (Zablokowany)";
+                resourceBtn.style.opacity = 0.5f;
+            }
+            else
+            {
+                resourceBtn.text = currentResource;
+                resourceBtn.style.opacity = 1f;
+            }
+        }
     }
+
+
 }
