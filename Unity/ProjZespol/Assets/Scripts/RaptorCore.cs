@@ -34,8 +34,12 @@ public class RaptorCore : MonoBehaviour
     [SerializeField] private CharacterClass characterClass;
     [SerializeField] private IdleManager idleManager;
     [AutoSave] public double Gold = 0;
-    [AutoSave] private Dictionary<string, Resource> resources = new Dictionary<string, Resource>();
-    [AutoSave] private string currentResource = "Resource1";
+    private Dictionary<string, Resource> resources = new Dictionary<string, Resource>();
+
+    [AutoSave] public QuarkType resource1Value = 0;
+    [AutoSave] public QuarkType resource2Value = 0;
+    [AutoSave] public QuarkType resource3Value = 0;
+    private string currentResource = "Resource1";
     private enum ClickSource { None, Mouse, Space, Enter }
     private ClickSource activeClickSource = ClickSource.None;
     private float sourceBlockEndTime = 0f;
@@ -71,9 +75,12 @@ public class RaptorCore : MonoBehaviour
 
     void Start()
     {
-        
         Time.fixedDeltaTime = 0.05f; // 20 ticks a second
         AutoSaveSystem.LoadGame();
+        if (resources.ContainsKey("Resource1")) resources["Resource1"].value = resource1Value;
+        if (resources.ContainsKey("Resource2")) resources["Resource2"].value = resource2Value;
+        if (resources.ContainsKey("Resource3")) resources["Resource3"].value = resource3Value;
+        UpdateUI();
     }
 
     void FixedUpdate()
@@ -81,7 +88,7 @@ public class RaptorCore : MonoBehaviour
         Currency += (GBasevalue * GMultiplier); //.Pow(GPower);
 
         tickCount++;
-        if (tickCount%600 == 0 )
+        if (tickCount % 600 == 0)
             AutoSaveSystem.SaveGame();
     }
 
@@ -156,7 +163,7 @@ public class RaptorCore : MonoBehaviour
         if (resources.ContainsKey(resource))
         {
             resources[resource].value += amount;
-
+            saveResourceValues();
             if (resource == currentResource)
             {
                 UpdateUI();
@@ -184,6 +191,7 @@ public class RaptorCore : MonoBehaviour
         if (HasResource(resource, amount))
         {
             resources[resource].value -= amount;
+            saveResourceValues();
 
             if (resource == currentResource)
             {
@@ -223,14 +231,20 @@ public class RaptorCore : MonoBehaviour
     {
         if (idleManager == null) return true;
 
-            foreach (var f in idleManager.factories)
+        foreach (var f in idleManager.factories)
+        {
+            if (f.resource.name == currentResource)
             {
-                if (f.resource.name == currentResource)
-                {
-                    return f.isUnlocked;
-                }
+                return f.isUnlocked;
             }
-        
-        return true; 
+        }
+
+        return true;
+    }
+    public void saveResourceValues()
+    {
+        if (resources.ContainsKey("Resource1")) resource1Value = resources["Resource1"].value;
+        if (resources.ContainsKey("Resource2")) resource2Value = resources["Resource2"].value;
+        if (resources.ContainsKey("Resource3")) resource3Value = resources["Resource3"].value;
     }
 }
