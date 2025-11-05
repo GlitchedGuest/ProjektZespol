@@ -1,5 +1,5 @@
 .color {
-    background-color: rgba(48, 48, 48, 0.71);
+    background-color: rgba(71, 71, 71, 0.71);
 }
 
 .text {
