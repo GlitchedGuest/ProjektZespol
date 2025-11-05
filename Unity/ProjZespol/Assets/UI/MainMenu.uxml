@@ -11,6 +11,8 @@
         </ui:VisualElement>
         <ui:VisualElement name="Settings" class="container hidden" style="flex-grow: 1; border-left-color: rgb(255, 255, 255); border-right-color: rgb(255, 255, 255); border-top-color: rgb(255, 255, 255); border-bottom-color: rgb(255, 255, 255); border-top-width: 10px; border-right-width: 10px; border-bottom-width: 10px; border-left-width: 10px; border-top-left-radius: 20px; border-top-right-radius: 20px; border-bottom-right-radius: 20px; border-bottom-left-radius: 20px; margin-top: 10%; margin-bottom: 10%;">
             <ui:Label text="Ustawienia" style="margin-bottom: 10%;" />
+            <ui:Toggle label="Fullscreen" name="FullScreen" />
+            <ui:DropdownField label="Rozdzielczość" name="Res" choices="1920x1080,1280x720,800x600" index="0" style="width: 50%;" />
             <ui:Slider label="Muzyka" value="42" high-value="1" enabled="true" name="MusicSlider" fill="true" show-input-field="false" direction="Horizontal" inverted="false" page-size="0" focusable="true" style="width: 435px; align-items: flex-start;" />
             <ui:Slider label="SFX" value="42" high-value="1" enabled="true" name="SFXSlider" show-input-field="false" fill="true" style="width: 435px; align-items: flex-start;" />
             <ui:Button text="Powrót" name="BackButton" />
