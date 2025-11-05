@@ -36,10 +36,3 @@ public class Factory
     }
 
 }
-/* 
-    Steps for correct Factory implementation:
-    1 - Create Resource instances in RaptorCore.cs and IdleManager.cs
-    2 - Add Factory instances in IdleManager.cs for each Resource
-    3 - Update Layout.uxml to display all Factories
-    4 - Change numberOfFactories variable in LayoutController.cs to match the number of Factory instances
-*/

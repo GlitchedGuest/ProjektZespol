@@ -8,8 +8,8 @@ public class IdleManager : MonoBehaviour
     [SerializeField] private RaptorCore raptorCore;
     [SerializeField] private float tickInterval = 1f;
     private Coroutine tickCoroutine;
-    [SerializeField] private List<Factory> factories;
-    [SerializeField] private List<Resource> resources;
+    public List<Factory> factories;
+    public List<Resource> resources;
 
     private void Awake()
     {
@@ -38,17 +38,11 @@ public class IdleManager : MonoBehaviour
         factories.Clear();
 
         //TODO: Adjust factory parameters as needed
-        factories.Add(new Factory(resources[0], "F1.1", 15, 1.15, 1, 0));
-        factories.Add(new Factory(resources[0], "F1.2", 100, 1.17, 10, 500));
-        factories.Add(new Factory(resources[0], "F1.3", 1000, 1.2, 50, 2500));
+        factories.Add(new Factory(resources[0], "F1", 15, 1.15, 1, 0));
 
-        factories.Add(new Factory(resources[1], "F2.1", 200, 1.15, 5, 5000));
-        factories.Add(new Factory(resources[1], "F2.2", 1500, 1.17, 25, 15000));
-        factories.Add(new Factory(resources[1], "F2.3", 10000, 1.2, 100, 50000));
+        factories.Add(new Factory(resources[1], "F2", 15, 1.15, 5, 5000));
 
-        factories.Add(new Factory(resources[2], "F3.1", 500, 1.15, 10, 100000));
-        factories.Add(new Factory(resources[2], "F3.2", 3000, 1.17, 50, 250000));
-        factories.Add(new Factory(resources[2], "F3.3", 20000, 1.2, 200, 500000));
+        factories.Add(new Factory(resources[2], "F3", 15, 1.15, 10, 25000));
     }
     private void OnEnable()
     {
@@ -197,4 +191,5 @@ public class IdleManager : MonoBehaviour
     {
         return factories != null ? factories.Count : 0;
     }
+
 }

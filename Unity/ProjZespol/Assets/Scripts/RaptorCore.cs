@@ -31,6 +31,7 @@ public class RaptorCore : MonoBehaviour
 
     [SerializeField] private Animator anim;
     [SerializeField] private CharacterClass characterClass;
+    [SerializeField] private IdleManager idleManager;
     public double Gold = 0;
     private Dictionary<string, Resource> resources = new Dictionary<string, Resource>();
     private string currentResource = "Resource1";
@@ -104,6 +105,11 @@ public class RaptorCore : MonoBehaviour
     }
     private void PerformClick()
     {
+        if (!CanClickCurrentResource())
+        {
+            Debug.LogWarning($"Nie można klikać zasobu '{currentResource}' — fabryka nie jest odblokowana!");
+            return;
+        }
         click();
         anim.SetTrigger("Clicked");
         UpdateUI();
@@ -198,11 +204,26 @@ public class RaptorCore : MonoBehaviour
         {
             return 0;
         }
-        
+
         double goldEarned = amountToSell * pricePerUnit;
         Gold += goldEarned;
         RemoveResource(resource, amountToSell);
         UpdateUI();
         return goldEarned;
+    }
+
+    private bool CanClickCurrentResource()
+    {
+        if (idleManager == null) return true;
+
+            foreach (var f in idleManager.factories)
+            {
+                if (f.resource.name == currentResource)
+                {
+                    return f.isUnlocked;
+                }
+            }
+        
+        return true; 
     }
 }
