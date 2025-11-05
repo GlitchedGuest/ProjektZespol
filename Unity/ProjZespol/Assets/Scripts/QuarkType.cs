@@ -3,7 +3,7 @@ using UnityEngine;
 using System.IO;
 
 
-public class QuarkType: IComparable<QuarkType>, IEquatable<QuarkType>
+public class QuarkType: IComparable<QuarkType>, IEquatable<QuarkType>, IBinarySaveable
 {
     public long Mantissa;
     public long Exponent;
@@ -17,6 +17,9 @@ public class QuarkType: IComparable<QuarkType>, IEquatable<QuarkType>
     public bool IsNegative => Mantissa < 0;
 
     //Construction section
+
+    public QuarkType() => new QuarkType(0, 0);
+
     public QuarkType(long mantissa, long exponent)
     {
         Mantissa = mantissa;
@@ -347,11 +350,10 @@ public class QuarkType: IComparable<QuarkType>, IEquatable<QuarkType>
         writer.Write(Exponent);       // 8 bytes
     }
 
-    public static QuarkType DeserializeFromStream(BinaryReader reader)
+    public void DeserializeFromStream(BinaryReader reader)
     {
-        long mantissa = reader.ReadInt64();
-        long exponent = reader.ReadInt64();
-        return new QuarkType(mantissa, exponent);
+        Mantissa = reader.ReadInt64();
+        Exponent = reader.ReadInt64();
     }
 
     public QuarkType Floor()

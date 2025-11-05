@@ -10,24 +10,27 @@
             <ui:Label text="Curr&#10;" name="Currency" class="text" style="height: 100%; width: auto; left: 10%; position: relative; justify-content: flex-start; align-self: center; top: auto; flex-direction: column; flex-wrap: nowrap; align-items: flex-start; align-content: flex-start; white-space: nowrap; -unity-text-align: middle-left; font-size: 40px;" />
             <ui:VisualElement name="goldicon" style="flex-grow: 0; background-image: url(&quot;project://database/Assets/Art/gold.png?fileID=2800000&amp;guid=813f44c4ede4bf84e92e2c3628633e97&amp;type=3#gold&quot;); height: 50%; width: 3%; align-self: center; justify-content: center; align-items: flex-start; flex-shrink: 0; left: 50%; position: absolute;" />
             <ui:Label text="Gold" name="Money" class="text" style="height: 100%; width: auto; left: 53.5%; position: absolute; justify-content: center; align-self: center; top: auto; flex-direction: column; flex-wrap: nowrap; align-items: flex-start; align-content: flex-start; white-space: nowrap; -unity-text-align: middle-left; font-size: 40px;" />
+            <ui:Button text="Fabryka" name="ResourceButton" class="btncolor text navbuttonborder" style="position: absolute; left: 80%; top: 30%; width: 150px; height: 40px;" />
         </ui:VisualElement>
         <ui:VisualElement name="Bottom" class="color" style="flex-grow: 1; height: 10%; width: 100%; position: absolute; top: 90%; border-left-color: rgb(0, 0, 72); border-right-color: rgb(0, 0, 72); border-top-color: rgb(0, 0, 72); border-bottom-color: rgb(0, 0, 72); border-top-width: 2px; border-top-left-radius: 10px; border-top-right-radius: 10px;" />
         <ui:VisualElement name="Stats" style="flex-grow: 1; position: absolute; top: 11%; left: 66%; width: 34%; height: 78%; background-color: rgb(0, 0, 76); border-top-left-radius: 10px; border-top-right-radius: 0; border-bottom-right-radius: 0; border-bottom-left-radius: 10px; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; justify-content: flex-start; flex-direction: column;">
             <ui:Button text="Zasoby" name="btn" emoji-fallback-support="false" class="text btncolor navbuttonborder" style="position: relative; top: 0%; left: 0%; width: 22%; margin-top: 0; margin-right: 0; margin-bottom: 5px; margin-left: 0; justify-content: flex-start; align-self: auto; align-content: flex-start; align-items: stretch; flex-direction: column; height: 10%;" />
             <ui:Button text="Fabryki" name="btn2" class="color text btncolor navbuttonborder" style="position: relative; top: 0%; left: 0%; width: 22%; margin-top: 0; margin-right: 0; margin-bottom: 5px; margin-left: 0; height: 10%;" />
-            <ui:Button text="Func3" name="btn3" class="color text btncolor navbuttonborder" style="position: relative; top: 0%; left: 0%; width: 22%; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; height: 10%;" />
-            <ui:VisualElement name="Content" style="flex-grow: 1; position: absolute; width: 78%; height: 100%; align-items: center; align-self: flex-end; align-content: flex-start; justify-content: flex-start; padding-top: 10%; padding-right: 10%; padding-bottom: 10%; padding-left: 10%; background-color: rgb(0, 0, 112); margin-left: 0; border-left-width: 1px; border-left-color: rgb(0, 0, 0); border-right-color: rgb(0, 0, 0); border-top-color: rgb(0, 0, 0); border-bottom-color: rgb(0, 0, 0); display: none;">
+            <ui:Button text="One &#10;Click &#10;Army" name="btn3" class="color text btncolor navbuttonborder" style="position: relative; top: 0%; left: 0%; width: 22%; margin-top: 0; margin-right: 0; margin-bottom: 5px; margin-left: 0; height: 10%;" />
+            <ui:Button text="Auto&#10;matron" name="btn5" class="color text btncolor navbuttonborder" style="position: relative; top: 0%; left: 0%; width: 22%; margin-top: 0; margin-right: 0; margin-bottom: 5px; margin-left: 0; height: 10%;" />
+            <ui:Button text="Jack &#10;of all &#10;Clicks" name="btn4" class="color text btncolor navbuttonborder" style="position: relative; top: 0%; left: 0%; width: 22%; margin-top: 0; margin-right: 0; margin-bottom: 5px; margin-left: 0; height: 10%;" />
+            <ui:VisualElement name="Content" style="flex-grow: 1; position: absolute; width: 78%; height: 100%; align-items: center; align-self: flex-end; align-content: flex-start; justify-content: flex-start; padding-top: 10%; padding-right: 10%; padding-bottom: 10%; padding-left: 10%; background-color: rgb(0, 0, 112); margin-left: 0; border-left-width: 1px; border-left-color: rgb(0, 0, 0); border-right-color: rgb(0, 0, 0); border-top-color: rgb(0, 0, 0); border-bottom-color: rgb(0, 0, 0); display: flex;">
                 <ui:VisualElement name="shopcbbleicon" style="flex-grow: 0; flex-direction: column; background-image: url(&quot;project://database/Assets/Art/MCCobblestone.png?fileID=2800000&amp;guid=842aca1794906e64eb8898b2b81fc18d&amp;type=3#MCCobblestone&quot;); height: 100px; width: 100px; justify-content: flex-start; position: relative; top: 0;" />
                 <ui:Label text="Napis" name="Napis" class="text" style="height: auto; width: auto; left: auto; position: relative; top: 0%; margin-top: 0; margin-right: 0; margin-bottom: 20px; margin-left: 0;" />
                 <ui:Slider label="Slider" value="0" high-value="100" name="AmoutSlider" style="background-size: 100% 100%; height: 30px; width: 100%; min-height: auto; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; border-top-width: 0; border-right-width: 0; border-bottom-width: 0; border-left-width: 0; border-top-left-radius: 0; border-top-right-radius: 0; border-bottom-right-radius: 0; border-bottom-left-radius: 0;" />
                 <ui:Button text="Sprzedaj" name="sell1" class="btncolor text mariginbottom10 navbuttonborder" style="top: auto; visibility: visible; display: flex; margin-top: 10%; padding-top: 20px; padding-right: 20px; padding-bottom: 20px; padding-left: 20px;" />
             </ui:VisualElement>
-            <ui:VisualElement name="Content2" style="flex-grow: 1; position: absolute; width: 78%; height: 100%; align-self: flex-end; background-color: rgb(0, 0, 112); margin-left: 0; border-left-width: 1px; border-left-color: rgb(0, 0, 0); border-right-color: rgb(0, 0, 0); border-top-color: rgb(0, 0, 0); border-bottom-color: rgb(0, 0, 0); display: flex;">
+            <ui:VisualElement name="Content2" style="flex-grow: 1; position: absolute; width: 78%; height: 100%; align-self: flex-end; background-color: rgb(0, 0, 112); margin-left: 0; border-left-width: 1px; border-left-color: rgb(0, 0, 0); border-right-color: rgb(0, 0, 0); border-top-color: rgb(0, 0, 0); border-bottom-color: rgb(0, 0, 0); display: none;">
                 <ui:ScrollView name="ScrollView" style="flex-grow: 1; padding-top: 10px; padding-right: 10px; padding-bottom: 10px; padding-left: 10px;">
                     <ui:VisualElement name="FactoriesContainer" style="flex-direction: column;">
-                        <ui:Button text="Student" name="Factory1Btn" class="btncolor text mariginbottom10 navbuttonborder" style="visibility: visible; display: flex; margin-bottom: 10px; padding-top: 15px; padding-right: 20px; padding-bottom: 15px; padding-left: 20px;" />
+                        <ui:Button text="F1" name="Factory1Btn" class="btncolor text mariginbottom10 navbuttonborder" style="visibility: visible; display: flex; margin-bottom: 10px; padding-top: 15px; padding-right: 20px; padding-bottom: 15px; padding-left: 20px;" />
                         <ui:VisualElement name="Factory1Details" style="flex-grow: 0; background-color: rgb(0, 0, 50); padding-top: 15px; padding-right: 15px; padding-bottom: 15px; padding-left: 15px; border-top-width: 1px; border-right-width: 1px; border-bottom-width: 1px; border-left-width: 1px; border-left-color: rgb(0, 0, 0); border-right-color: rgb(0, 0, 0); border-top-color: rgb(0, 0, 0); border-bottom-color: rgb(0, 0, 0); border-top-left-radius: 5px; border-top-right-radius: 5px; border-bottom-right-radius: 5px; border-bottom-left-radius: 5px; display: none; margin-bottom: 10px;">
-                            <ui:Label text="Student" name="Factory1Name" class="text" style="font-size: 18px; margin-bottom: 10px; -unity-text-align: upper-center; -unity-font-style: bold;" />
+                            <ui:Label text="F1" name="Factory1Name" class="text" style="font-size: 18px; margin-bottom: 10px; -unity-text-align: upper-center; -unity-font-style: bold;" />
                             <ui:Label text="Ilość: 0" name="Factory1Count" class="text" style="font-size: 16px; margin-bottom: 10px; -unity-text-align: upper-center;" />
                             <ui:Label text="Koszt: 0" name="Factory1Cost" class="text" style="font-size: 16px; margin-bottom: 15px; -unity-text-align: upper-center;" />
                             <ui:VisualElement style="height: 2px; background-color: rgb(100, 100, 100); margin-bottom: 15px; margin-top: 5px;" />
@@ -46,10 +49,26 @@
                                 <ui:Button text="25" name="Factory1Sell25" class="btncolor text navbuttonborder" style="padding-top: 8px; padding-right: 15px; padding-bottom: 8px; padding-left: 15px; flex-grow: 1; margin-right: 5px;" />
                                 <ui:Button text="MAX" name="Factory1SellMax" class="btncolor text navbuttonborder" style="padding-top: 8px; padding-right: 15px; padding-bottom: 8px; padding-left: 15px; flex-grow: 1;" />
                             </ui:VisualElement>
+                            <ui:VisualElement style="height: 2px; background-color: rgb(100, 100, 100); margin-bottom: 15px; margin-top: 5px;" />
+                            <ui:VisualElement name="Factory1Upgrades" style="display: flex; flex-direction: column; margin-top: 5px;">
+                                <ui:Button name="Factory1UpgradeBtn" text="Ulepszenia" class="btncolor text navbuttonborder" style="padding-top: 10px; padding-right: 15px; padding-bottom: 10px; padding-left: 15px; margin-bottom: 10px;" />
+                                <ui:VisualElement name="Factory1UpgradePanel" style="display: none; flex-direction: column; background-color: rgb(0, 0, 40); padding: 10px; border-top-left-radius: 5px; border-top-right-radius: 5px; border-bottom-right-radius: 5px; border-bottom-left-radius: 5px; border-top-width: 1px; border-right-width: 1px; border-bottom-width: 1px; border-left-width: 1px; border-left-color: rgb(50, 50, 100); border-right-color: rgb(50, 50, 100); border-top-color: rgb(50, 50, 100); border-bottom-color: rgb(50, 50, 100);">
+                                    <ui:VisualElement style="margin-bottom: 15px;">
+                                        <ui:Label text="Poziom: 0" name="Factory1ProductionLevel" class="text" style="font-size: 14px; margin-bottom: 5px; -unity-text-align: upper-left; color: rgb(200, 200, 255);" />
+                                        <ui:Button name="Factory1UpgradeProduction" text="Zwiększ produkcję (+10%)" class="btncolor text navbuttonborder" style="padding-top: 8px; padding-right: 15px; padding-bottom: 8px; padding-left: 15px;"/>
+                                    </ui:VisualElement>
+                                    <ui:VisualElement style="height: 1px; background-color: rgb(80, 80, 120); margin-bottom: 15px;" />
+                                    <ui:VisualElement>
+                                        <ui:Label text="Poziom: 0" name="Factory1MultiplierLevel" class="text" style="font-size: 14px; margin-bottom: 5px; -unity-text-align: upper-left; color: rgb(200, 200, 255);" />
+                                        <ui:Button name="Factory1UpgradeMultiplier" text="Zwiększ mnożnik (+0.1x)" class="btncolor text navbuttonborder" style="padding-top: 8px; padding-right: 15px; padding-bottom: 8px; padding-left: 15px;"/>
+                                    </ui:VisualElement>
+                                </ui:VisualElement>
+                            </ui:VisualElement>
                         </ui:VisualElement>
-                        <ui:Button name="Factory2Btn" text="Górnik" class="btncolor text mariginbottom10 navbuttonborder" style="visibility: visible; display: flex; margin-bottom: 10px; padding-top: 15px; padding-right: 20px; padding-bottom: 15px; padding-left: 20px;" />
+                        <ui:Button name="Factory2Btn" text="F2" class="btncolor text mariginbottom10 navbuttonborder" style="visibility: visible; display: flex; margin-bottom: 10px; padding-top: 15px; padding-right: 20px; padding-bottom: 15px; padding-left: 20px;" />
                         <ui:VisualElement name="Factory2Details" style="flex-grow: 0; background-color: rgb(0, 0, 50); padding-top: 15px; padding-right: 15px; padding-bottom: 15px; padding-left: 15px; border-top-width: 1px; border-right-width: 1px; border-bottom-width: 1px; border-left-width: 1px; border-left-color: rgb(0, 0, 0); border-right-color: rgb(0, 0, 0); border-top-color: rgb(0, 0, 0); border-bottom-color: rgb(0, 0, 0); border-top-left-radius: 5px; border-top-right-radius: 5px; border-bottom-right-radius: 5px; border-bottom-left-radius: 5px; display: none; margin-bottom: 10px;">
-                            <ui:Label text="Górnik" name="Factory2Name" class="text" style="font-size: 18px; margin-bottom: 10px; -unity-text-align: upper-center; -unity-font-style: bold;" />
+                            <ui:Label text="F2" name="Factory2Name" class="text" style="font-size: 18px; margin-bottom: 10px; -unity-text-align: upper-center; -unity-font-style: bold;" />
+                            <ui:Button name="Factory2Unlock" text="Odblokuj" class="btncolor text navbuttonborder" style="padding-top: 8px; padding-right: 15px; padding-bottom: 8px; padding-left: 15px; flex-grow: 1; margin-right: 5px;" />
                             <ui:Label text="Ilość: 0" name="Factory2Count" class="text" style="font-size: 16px; margin-bottom: 10px; -unity-text-align: upper-center;" />
                             <ui:Label text="Koszt: 0" name="Factory2Cost" class="text" style="font-size: 16px; margin-bottom: 15px; -unity-text-align: upper-center;" />
                             <ui:VisualElement style="height: 2px; background-color: rgb(100, 100, 100); margin-bottom: 15px; margin-top: 5px;" />
@@ -68,10 +87,26 @@
                                 <ui:Button text="25" name="Factory2Sell25" class="btncolor text navbuttonborder" style="padding-top: 8px; padding-right: 15px; padding-bottom: 8px; padding-left: 15px; flex-grow: 1; margin-right: 5px;" />
                                 <ui:Button text="MAX" name="Factory2SellMax" class="btncolor text navbuttonborder" style="padding-top: 8px; padding-right: 15px; padding-bottom: 8px; padding-left: 15px; flex-grow: 1;" />
                             </ui:VisualElement>
+                            <ui:VisualElement style="height: 2px; background-color: rgb(100, 100, 100); margin-bottom: 15px; margin-top: 5px;" />
+                            <ui:VisualElement name="Factory2Upgrades" style="display: flex; flex-direction: column; margin-top: 5px;">
+                                <ui:Button name="Factory2UpgradeBtn" text="Ulepszenia" class="btncolor text navbuttonborder" style="padding-top: 10px; padding-right: 15px; padding-bottom: 10px; padding-left: 15px; margin-bottom: 10px;" />
+                                <ui:VisualElement name="Factory2UpgradePanel" style="display: none; flex-direction: column; background-color: rgb(0, 0, 40); padding: 10px; border-top-left-radius: 5px; border-top-right-radius: 5px; border-bottom-right-radius: 5px; border-bottom-left-radius: 5px; border-top-width: 1px; border-right-width: 1px; border-bottom-width: 1px; border-left-width: 1px; border-left-color: rgb(50, 50, 100); border-right-color: rgb(50, 50, 100); border-top-color: rgb(50, 50, 100); border-bottom-color: rgb(50, 50, 100);">
+                                    <ui:VisualElement style="margin-bottom: 15px;">
+                                        <ui:Label text="Poziom: 0" name="Factory2ProductionLevel" class="text" style="font-size: 14px; margin-bottom: 5px; -unity-text-align: upper-left; color: rgb(200, 200, 255);" />
+                                        <ui:Button name="Factory2UpgradeProduction" text="Zwiększ produkcję (+10%)" class="btncolor text navbuttonborder" style="padding-top: 8px; padding-right: 15px; padding-bottom: 8px; padding-left: 15px;"/>
+                                    </ui:VisualElement>
+                                    <ui:VisualElement style="height: 1px; background-color: rgb(80, 80, 120); margin-bottom: 15px;" />
+                                    <ui:VisualElement>
+                                        <ui:Label text="Poziom: 0" name="Factory2MultiplierLevel" class="text" style="font-size: 14px; margin-bottom: 5px; -unity-text-align: upper-left; color: rgb(200, 200, 255);" />
+                                        <ui:Button name="Factory2UpgradeMultiplier" text="Zwiększ mnożnik (+0.1x)" class="btncolor text navbuttonborder" style="padding-top: 8px; padding-right: 15px; padding-bottom: 8px; padding-left: 15px;"/>
+                                    </ui:VisualElement>
+                                </ui:VisualElement>
+                            </ui:VisualElement>
                         </ui:VisualElement>
-                        <ui:Button text="Wiertło" name="Factory3Btn" class="btncolor text mariginbottom10 navbuttonborder" style="visibility: visible; display: flex; margin-bottom: 10px; padding-top: 15px; padding-right: 20px; padding-bottom: 15px; padding-left: 20px;" />
+                        <ui:Button text="F3" name="Factory3Btn" class="btncolor text mariginbottom10 navbuttonborder" style="visibility: visible; display: flex; margin-bottom: 10px; padding-top: 15px; padding-right: 20px; padding-bottom: 15px; padding-left: 20px;" />
                         <ui:VisualElement name="Factory3Details" style="flex-grow: 0; background-color: rgb(0, 0, 50); padding-top: 15px; padding-right: 15px; padding-bottom: 15px; padding-left: 15px; border-top-width: 1px; border-right-width: 1px; border-bottom-width: 1px; border-left-width: 1px; border-left-color: rgb(0, 0, 0); border-right-color: rgb(0, 0, 0); border-top-color: rgb(0, 0, 0); border-bottom-color: rgb(0, 0, 0); border-top-left-radius: 5px; border-top-right-radius: 5px; border-bottom-right-radius: 5px; border-bottom-left-radius: 5px; display: none; margin-bottom: 10px;">
-                            <ui:Label text="Wiertło" name="Factory3Name" class="text" style="font-size: 18px; margin-bottom: 10px; -unity-text-align: upper-center; -unity-font-style: bold;" />
+                            <ui:Label text="F3" name="Factory3Name" class="text" style="font-size: 18px; margin-bottom: 10px; -unity-text-align: upper-center; -unity-font-style: bold;" />
+                            <ui:Button name="Factory3Unlock" text="Odblokuj" class="btncolor text navbuttonborder" style="padding-top: 8px; padding-right: 15px; padding-bottom: 8px; padding-left: 15px; flex-grow: 1; margin-right: 5px;" />
                             <ui:Label text="Ilość: 0" name="Factory3Count" class="text" style="font-size: 16px; margin-bottom: 10px; -unity-text-align: upper-center;" />
                             <ui:Label text="Koszt: 0" name="Factory3Cost" class="text" style="font-size: 16px; margin-bottom: 15px; -unity-text-align: upper-center;" />
                             <ui:VisualElement style="height: 2px; background-color: rgb(100, 100, 100); margin-bottom: 15px; margin-top: 5px;" />
@@ -90,12 +125,103 @@
                                 <ui:Button text="25" name="Factory3Sell25" class="btncolor text navbuttonborder" style="padding-top: 8px; padding-right: 15px; padding-bottom: 8px; padding-left: 15px; flex-grow: 1; margin-right: 5px;" />
                                 <ui:Button text="MAX" name="Factory3SellMax" class="btncolor text navbuttonborder" style="padding-top: 8px; padding-right: 15px; padding-bottom: 8px; padding-left: 15px; flex-grow: 1;" />
                             </ui:VisualElement>
+                            <ui:VisualElement style="height: 2px; background-color: rgb(100, 100, 100); margin-bottom: 15px; margin-top: 5px;" />
+                            <ui:VisualElement name="Factory3Upgrades" style="display: flex; flex-direction: column; margin-top: 5px;">
+                                <ui:Button name="Factory3UpgradeBtn" text="Ulepszenia" class="btncolor text navbuttonborder" style="padding-top: 10px; padding-right: 15px; padding-bottom: 10px; padding-left: 15px; margin-bottom: 10px;" />
+                                <ui:VisualElement name="Factory3UpgradePanel" style="display: none; flex-direction: column; background-color: rgb(0, 0, 40); padding: 10px; border-top-left-radius: 5px; border-top-right-radius: 5px; border-bottom-right-radius: 5px; border-bottom-left-radius: 5px; border-top-width: 1px; border-right-width: 1px; border-bottom-width: 1px; border-left-width: 1px; border-left-color: rgb(50, 50, 100); border-right-color: rgb(50, 50, 100); border-top-color: rgb(50, 50, 100); border-bottom-color: rgb(50, 50, 100);">
+                                    <ui:VisualElement style="margin-bottom: 15px;">
+                                        <ui:Label text="Poziom: 0" name="Factory1ProductionLevel" class="text" style="font-size: 14px; margin-bottom: 5px; -unity-text-align: upper-left; color: rgb(200, 200, 255);" />
+                                        <ui:Button name="Factory3UpgradeProduction" text="Zwiększ produkcję (+10%)" class="btncolor text navbuttonborder" style="padding-top: 8px; padding-right: 15px; padding-bottom: 8px; padding-left: 15px;"/>
+                                    </ui:VisualElement>
+                                    <ui:VisualElement style="height: 1px; background-color: rgb(80, 80, 120); margin-bottom: 15px;" />
+                                    <ui:VisualElement>
+                                        <ui:Label text="Poziom: 0" name="Factory3MultiplierLevel" class="text" style="font-size: 14px; margin-bottom: 5px; -unity-text-align: upper-left; color: rgb(200, 200, 255);" />
+                                        <ui:Button name="Factory3UpgradeMultiplier" text="Zwiększ mnożnik (+0.1x)" class="btncolor text navbuttonborder" style="padding-top: 8px; padding-right: 15px; padding-bottom: 8px; padding-left: 15px;"/>
+                                    </ui:VisualElement>
+                                </ui:VisualElement>
+                            </ui:VisualElement>
                         </ui:VisualElement>
                     </ui:VisualElement>
                 </ui:ScrollView>
             </ui:VisualElement>
-            <ui:VisualElement name="Content3" style="flex-grow: 1; position: absolute; width: 78%; height: 100%; align-items: center; align-self: flex-end; align-content: flex-start; justify-content: flex-start; padding-top: 10%; padding-right: 10%; padding-bottom: 10%; padding-left: 10%; background-color: rgb(0, 0, 112); margin-left: 0; border-left-width: 1px; border-left-color: rgb(0, 0, 0); border-right-color: rgb(0, 0, 0); border-top-color: rgb(0, 0, 0); border-bottom-color: rgb(0, 0, 0); display: none;">
-                <ui:Label text="żelo" name="Napis2" class="text" style="height: auto; width: auto; left: auto; position: relative; top: 0%; margin-top: 0; margin-right: 0; margin-bottom: 20px; margin-left: 0;" />
+            <ui:VisualElement name="Content3" style="flex-grow: 1; position: absolute; width: 78%; height: 100%; align-items: center; align-self: flex-end; align-content: flex-start; justify-content: flex-start; background-color: rgb(0, 0, 112); margin-left: 0; border-left-width: 1px; border-left-color: rgb(0, 0, 0); border-right-color: rgb(0, 0, 0); border-top-color: rgb(0, 0, 0); border-bottom-color: rgb(0, 0, 0); display: none; padding-top: 5%; padding-right: 0%; padding-bottom: 0%; padding-left: 0%; -unity-font-style: bold; color: rgb(255, 255, 255);">
+                <ui:VisualElement name="SkillTree" style="flex-direction: column; align-items: center; justify-content: flex-start; gap: 50px; width: 100%; height: 80%;">
+                    <ui:VisualElement style="flex-direction: row; justify-content: center; gap: 40px;">
+                        <ui:Button text="Mortal &#10;Clicker" name="Skill6A" class="skill-node" />
+                        <ui:Button text="Champion &#10;Of Clicks" name="Skill6B" class="skill-node" />
+                    </ui:VisualElement>
+                    <ui:VisualElement style="flex-direction: row; justify-content: center;">
+                        <ui:Button text="Symbiosis" name="Skill5" class="skill-node" />
+                    </ui:VisualElement>
+                    <ui:VisualElement style="flex-direction: row; justify-content: center; gap: 40px;">
+                        <ui:Button text="No Matter &#10;What" name="Skill4A" class="skill-node" />
+                        <ui:Button text="Always &#10;Winner" name="Skill4B" class="skill-node" />
+                    </ui:VisualElement>
+                    <ui:VisualElement style="flex-direction: row; justify-content: center; gap: 40px;">
+                        <ui:Button text="Active &#10;Idle" name="Skill3A" class="skill-node" />
+                        <ui:Button text="Hungry &#10;For More" name="Skill3B" class="skill-node" style="display: flex;" />
+                    </ui:VisualElement>
+                    <ui:VisualElement style="flex-direction: row; justify-content: center; gap: 40px;">
+                        <ui:Button text="Critical &#10;Mass" name="Skill2A" class="skill-node" />
+                        <ui:Button text="Chicken &#10;Dinner" name="Skill2B" tooltip="placeholder" class="skill-node" />
+                    </ui:VisualElement>
+                    <ui:VisualElement style="flex-direction: row; justify-content: center;">
+                        <ui:Button text="Skill Based &#10;Clicking" name="Skill1" tooltip="rrrr" class="skill-node" />
+                    </ui:VisualElement>
+                </ui:VisualElement>
+                <ui:Label text="Najedź na skill, aby zobaczyć opis" name="Describe" style="background-color: rgb(0, 0, 0); width: 100%; color: rgb(255, 255, 255); -unity-font-style: bold; height: 20%; -unity-text-align: middle-center; white-space: normal;" />
+            </ui:VisualElement>
+            <ui:VisualElement name="Content4" style="flex-grow: 1; position: absolute; width: 78%; height: 100%; align-items: center; align-self: flex-end; align-content: flex-start; justify-content: flex-start; background-color: rgb(0, 0, 112); margin-left: 0; border-left-width: 1px; border-left-color: rgb(0, 0, 0); border-right-color: rgb(0, 0, 0); border-top-color: rgb(0, 0, 0); border-bottom-color: rgb(0, 0, 0); display: none; padding-top: 5%; padding-right: 0%; padding-bottom: 0%; padding-left: 0%; -unity-font-style: bold; color: rgb(255, 255, 255);">
+                <ui:VisualElement name="SkillTree2" style="flex-direction: column; align-items: center; justify-content: flex-start; gap: 50px; width: 100%; height: 80%;">
+                    <ui:VisualElement style="flex-direction: row; justify-content: center;">
+                        <ui:Button text="Micheal &#10;Scott" name="Skill5-tree2" class="skill-node" />
+                    </ui:VisualElement>
+                    <ui:VisualElement style="flex-direction: row; justify-content: flex-start; gap: 40px;">
+                        <ui:Button text="Failure &#10;Grind" name="Skill4-tree2" class="skill-node" style="align-self: auto; left: 150%;" />
+                    </ui:VisualElement>
+                    <ui:VisualElement style="flex-direction: row; justify-content: center; gap: 40px;">
+                        <ui:Button text="Hard &#10;Worker" name="Skill3A-tree2" class="skill-node" />
+                        <ui:Button text="Death &#10;Dose" name="Skill3B-tree2" class="skill-node" />
+                        <ui:Button text="Just &#10;Bastard" name="Skill3C-tree2" class="skill-node" />
+                        <ui:Button text="Fail To &#10;Win" name="Skill3D-tree2" class="skill-node" />
+                    </ui:VisualElement>
+                    <ui:VisualElement style="flex-direction: row; justify-content: center; gap: 40px;">
+                        <ui:Button text="Market-&#10;place &#10;Genius" name="Skill2A-tree2" class="skill-node" />
+                        <ui:Button text="Addict" name="Skill2B-tree2" tooltip="placeholder" class="skill-node" />
+                        <ui:Button text="Lucky &#10;Bastard" name="Skill2C-tree2" class="skill-node" />
+                    </ui:VisualElement>
+                    <ui:VisualElement style="flex-direction: row; justify-content: center;">
+                        <ui:Button text="Shark" name="Skill1-tree2" tooltip="rrrr" class="skill-node" />
+                    </ui:VisualElement>
+                </ui:VisualElement>
+                <ui:Label text="Najedź na skill, aby zobaczyć opis" name="Describe2" style="background-color: rgb(0, 0, 0); width: 100%; color: rgb(255, 255, 255); -unity-font-style: bold; height: 20%; -unity-text-align: middle-center; white-space: normal;" />
+            </ui:VisualElement>
+            <ui:VisualElement name="Content5" style="flex-grow: 1; position: absolute; width: 78%; height: 100%; align-items: center; align-self: flex-end; align-content: flex-start; justify-content: flex-start; background-color: rgb(0, 0, 112); margin-left: 0; border-left-width: 1px; border-left-color: rgb(0, 0, 0); border-right-color: rgb(0, 0, 0); border-top-color: rgb(0, 0, 0); border-bottom-color: rgb(0, 0, 0); display: none; padding-top: 5%; padding-right: 0%; padding-bottom: 0%; padding-left: 0%; -unity-font-style: bold; color: rgb(255, 255, 255);">
+                <ui:VisualElement name="SkillTree3" style="flex-direction: column; align-items: center; justify-content: flex-start; gap: 50px; width: 100%; height: 80%;">
+                    <ui:VisualElement style="flex-direction: row; justify-content: center;">
+                        <ui:Button text="Hungry &#10;Wolf" name="Skill6-tree3" class="skill-node" style="left: 100%;" />
+                    </ui:VisualElement>
+                    <ui:VisualElement style="flex-direction: row; justify-content: center;">
+                        <ui:Button text="One for &#10;Everyone" name="Skill5A-tree3" class="skill-node" />
+                        <ui:Button text="Multi-&#10;tasking" name="Skill5B-tree3" class="skill-node" />
+                        <ui:Button text="Christmas &#10;Bonus" name="Skill5C-tree3" class="skill-node" />
+                    </ui:VisualElement>
+                    <ui:VisualElement style="flex-direction: row; justify-content: flex-start; gap: 40px;">
+                        <ui:Button text="Unskilled &#10;Predator" name="Skill4A-tree3" class="skill-node" />
+                        <ui:Button text="Passive &#10;Agressive" name="Skill4B-tree3" class="skill-node" />
+                    </ui:VisualElement>
+                    <ui:VisualElement style="flex-direction: row; justify-content: center; gap: 40px;">
+                        <ui:Button text="Reaction&#10;Test" name="Skill3A-tree3" class="skill-node" />
+                        <ui:Button text="What&#10;Eyes &#10;Don’t See" name="Skill3B-tree3" class="skill-node" />
+                    </ui:VisualElement>
+                    <ui:VisualElement style="flex-direction: row; justify-content: center; gap: 40px;">
+                        <ui:Button text="Push &#10;to the &#10;limit" name="Skill2-tree3" class="skill-node" />
+                    </ui:VisualElement>
+                    <ui:VisualElement style="flex-direction: row; justify-content: center;">
+                        <ui:Button text="Entre-&#10;preneur" name="Skill1-tree3" tooltip="rrrr" class="skill-node" />
+                    </ui:VisualElement>
+                </ui:VisualElement>
+                <ui:Label text="Najedź na skill, aby zobaczyć opis" name="Describe3" style="background-color: rgb(0, 0, 0); width: 100%; color: rgb(255, 255, 255); -unity-font-style: bold; height: 20%; -unity-text-align: middle-center; white-space: normal;" />
             </ui:VisualElement>
         </ui:VisualElement>
     </ui:VisualElement>
