@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Xml.Serialization;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using static UnityEngine.Rendering.DebugUI;
 
 public class RaptorCore : MonoBehaviour
 {
@@ -32,6 +34,7 @@ public class RaptorCore : MonoBehaviour
 
     [SerializeField] private Animator anim;
     [SerializeField] private CharacterClass characterClass;
+    [SerializeField] private GameObject skillCheck;
     [SerializeField] private IdleManager idleManager;
     [AutoSave] public double Gold = 0;
     private Dictionary<string, Resource> resources = new Dictionary<string, Resource>();
@@ -60,17 +63,29 @@ public class RaptorCore : MonoBehaviour
     }
     void click()
     {
-        QuarkType value = 0;
+
+            QuarkType value = 0;
+            SkillCheckManager();//bardzo temp rozwiązanie później raczej losowo w czasie będzie sie skill check pojawiać, a nie podczas klikania w obiekt
+            float chance = UnityEngine.Random.Range(0.00f, 100.00f);
+            if (chance < characterClass.GetCriticalChance())
+            {
+                value += (CBasevalue * CMultiplier * 3); //to do zmiany gdy będzie wchodzić temat balansu
+                Debug.Log("Kryt " + chance);
+            }
+            else
+                value = (CBasevalue * CMultiplier);
+            Currency += value;
         
+    }
+
+    void SkillCheckManager()
+    {
         float chance = UnityEngine.Random.Range(0.00f, 100.00f);
-        if (chance < characterClass.GetCriticalChance())
+        if (chance < characterClass.GetSkillCheckChance())
         {
-            value += (CBasevalue * CMultiplier * 3); //to do zmiany gdy będzie wchodzić temat balansu
-            Debug.Log("Kryt " + chance);
-        }
-        else
-            value = (CBasevalue * CMultiplier);
-        AddResource(currentResource, value);
+            skillCheck.SetActive(true);
+            skillCheck.GetComponent<SkillCheckScript>().StartSkillCheck();
+        }      
     }
 
     void Start()
@@ -124,9 +139,12 @@ public class RaptorCore : MonoBehaviour
             Debug.LogWarning($"Nie można klikać zasobu '{currentResource}' — fabryka nie jest odblokowana!");
             return;
         }
-        click();
-        anim.SetTrigger("Clicked");
-        UpdateUI();
+        if (!skillCheck.activeSelf) //nie lubie jak to wygląda, ale czasu nie ma broski
+        {
+            click();
+            anim.SetTrigger("Clicked");
+            UpdateUI();
+        }
     }
     void UpdateUI()
     {
@@ -148,6 +166,21 @@ public class RaptorCore : MonoBehaviour
             default:
                 return 0;
         }
+    }
+
+    public void AddCurrency(QuarkType currency)
+    {
+        Currency += currency;
+        UpdateUI();
+    }
+
+    public void SubCurrency(QuarkType currency)
+    {
+        if (Currency < currency)
+            Currency = 0;
+        else
+            Currency -= currency;
+        UpdateUI();
     }
 
     public void RegisterResource(Resource resource)
