@@ -11,7 +11,9 @@ public class LayoutController : MonoBehaviour
     [SerializeField] private RaptorCore raptorCore;
     [SerializeField] private CharacterClass characterClass;
     [SerializeField] private IdleManager idleManager;
-    
+
+    public Sprite[] images;
+
     public VisualElement ui;
     public Button btn1;
     public Button btn2;
@@ -1163,18 +1165,18 @@ public class LayoutController : MonoBehaviour
         raptorCore.SetCurrentResource(factory.resource.name);
         resourceBtn.text = factory.name;
 
-        Color color;
+        Sprite Tex; 
         switch (factory.name)
         {
-            case "F1": color = Color.white; break;
-            case "F2": color = Color.red; break;
-            case "F3": color = Color.green; break;
-            default: color = Color.white; break;
+            case "F1": Tex = images[0]; break;
+            case "F2": Tex = images[1]; break;
+            case "F3": Tex = images[2]; break;
+            default: Tex = images[0]; break;
         }
 
-        currencyIcon.style.unityBackgroundImageTintColor = new StyleColor(color);
-        shopIcon.style.unityBackgroundImageTintColor = new StyleColor(color);
-        clickerObject.color = color;
+        currencyIcon.style.backgroundImage = new StyleBackground(Tex);
+        shopIcon.style.backgroundImage = new StyleBackground(Tex);
+        clickerObject.sprite = Tex;
 
         UpdateFactoryUI();
     }
