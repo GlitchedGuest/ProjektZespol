@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
-using UnityEditor.IMGUI.Controls;
 using UnityEngine;
 
 public class SkillCheckScript : MonoBehaviour
@@ -52,7 +51,7 @@ public class SkillCheckScript : MonoBehaviour
                 ResetSkillCheck(-5);
 
     }
-
+    
     public void StartSkillCheck()
     {
         StartCoroutine(SpawnBricks(10, 0.9f));

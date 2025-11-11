@@ -98,6 +98,7 @@ public class MainMenuController : MonoBehaviour
 
         
         musicSource.volume = musicSlider.value;
+        Debug.Log("wartosc w manu: "+ sfxSlider.value);
         sfxSource.volume = sfxSlider.value;
     }
     #endregion
