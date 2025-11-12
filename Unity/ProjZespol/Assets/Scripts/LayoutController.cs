@@ -11,7 +11,9 @@ public class LayoutController : MonoBehaviour
     [SerializeField] private RaptorCore raptorCore;
     [SerializeField] private CharacterClass characterClass;
     [SerializeField] private IdleManager idleManager;
-    
+
+    public Sprite[] images;
+
     public VisualElement ui;
     public Button btn1;
     public Button btn2;
@@ -33,9 +35,10 @@ public class LayoutController : MonoBehaviour
     public VisualElement ContentPage5;
 
     //Lvlbar
-    public ProgressBar LvlBar;
+    public VisualElement BarMask;
     public Label LvlNumber;
-
+    public VisualElement ExpBarContainer;
+    public VisualElement BarTexture;
 
     //Menu
     public VisualElement Menu;
@@ -206,7 +209,10 @@ public class LayoutController : MonoBehaviour
 
         // lvlbar
         LvlNumber = ui.Q<Label>("lvlNumber");
-        LvlBar = ui.Q<ProgressBar>("lvlprog");
+        BarMask = ui.Q<VisualElement>("BarMask");
+        ExpBarContainer = ui.Q<VisualElement>("ExpBarContainer");
+        BarTexture = ui.Q<VisualElement>("BarTexture");
+
 
         scrollView = ui.Q<ScrollView>("ScrollView");
         scrollView.verticalScrollerVisibility = ScrollerVisibility.Hidden;
@@ -976,8 +982,17 @@ public class LayoutController : MonoBehaviour
     private void UpdateLvlBar()
     {
         LvlNumber.text = characterClass.GetLevel().ToString();
-        LvlBar.value = characterClass.GetCurrentExp();
-        LvlBar.highValue = characterClass.GetMaxExpCap();
+
+        BarTexture.style.minWidth = ExpBarContainer.resolvedStyle.width;
+        BarTexture.style.maxWidth = ExpBarContainer.resolvedStyle.width;
+        BarTexture.style.width = ExpBarContainer.resolvedStyle.width;
+
+
+        float currentExp = characterClass.GetCurrentExp();
+        float maxExp = characterClass.GetMaxExpCap();
+        float progress = Mathf.Clamp01(currentExp / maxExp);
+
+        BarMask.style.width = new Length(progress * 100f, LengthUnit.Percent);
     }
 
     private void ToggleFactoryDetails(int factoryIndex)
@@ -1245,18 +1260,18 @@ public class LayoutController : MonoBehaviour
         raptorCore.SetCurrentResource(factory.resource.name);
         resourceBtn.text = factory.name;
 
-        Color color;
+        Sprite Tex; 
         switch (factory.name)
         {
-            case "F1": color = Color.white; break;
-            case "F2": color = Color.red; break;
-            case "F3": color = Color.green; break;
-            default: color = Color.white; break;
+            case "F1": Tex = images[0]; break;
+            case "F2": Tex = images[1]; break;
+            case "F3": Tex = images[2]; break;
+            default: Tex = images[0]; break;
         }
 
-        currencyIcon.style.unityBackgroundImageTintColor = new StyleColor(color);
-        shopIcon.style.unityBackgroundImageTintColor = new StyleColor(color);
-        clickerObject.color = color;
+        currencyIcon.style.backgroundImage = new StyleBackground(Tex);
+        shopIcon.style.backgroundImage = new StyleBackground(Tex);
+        clickerObject.sprite = Tex;
 
         UpdateFactoryUI();
     }

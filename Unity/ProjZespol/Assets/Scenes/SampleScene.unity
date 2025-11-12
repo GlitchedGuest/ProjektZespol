@@ -672,6 +672,34 @@ PrefabInstance:
       propertyPath: characterClass
       value: 
       objectReference: {fileID: 1162231167}
+    - target: {fileID: 2595809473968715902, guid: fe1619c8ad742c24e8be78d6c285b517, type: 3}
+      propertyPath: images.Array.size
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 2595809473968715902, guid: fe1619c8ad742c24e8be78d6c285b517, type: 3}
+      propertyPath: 'images.Array.data[0]'
+      value: 
+      objectReference: {fileID: 913905730683509248, guid: e3ab5210c258eb848b9793c60efc4f62, type: 3}
+    - target: {fileID: 2595809473968715902, guid: fe1619c8ad742c24e8be78d6c285b517, type: 3}
+      propertyPath: 'images.Array.data[1]'
+      value: 
+      objectReference: {fileID: -3599275236525399043, guid: 3d2262f35d9fc8049a0983fd9496a264, type: 3}
+    - target: {fileID: 2595809473968715902, guid: fe1619c8ad742c24e8be78d6c285b517, type: 3}
+      propertyPath: 'images.Array.data[2]'
+      value: 
+      objectReference: {fileID: -4585739647236981084, guid: 5754e76dbafcf5845898cbf568aed56a, type: 3}
+    - target: {fileID: 2595809473968715902, guid: fe1619c8ad742c24e8be78d6c285b517, type: 3}
+      propertyPath: 'images.Array.data[3]'
+      value: 
+      objectReference: {fileID: -2966297229612881710, guid: 987ea55cf80e41b4d883ec33df976547, type: 3}
+    - target: {fileID: 2595809473968715902, guid: fe1619c8ad742c24e8be78d6c285b517, type: 3}
+      propertyPath: 'images.Array.data[4]'
+      value: 
+      objectReference: {fileID: 8983643543938955854, guid: 86c3dc25dce8bad4faab49c104ed3bcb, type: 3}
+    - target: {fileID: 2595809473968715902, guid: fe1619c8ad742c24e8be78d6c285b517, type: 3}
+      propertyPath: 'images.Array.data[5]'
+      value: 
+      objectReference: {fileID: 4857087209879925418, guid: d861403f5cd46654c83d7f7834d3afef, type: 3}
     - target: {fileID: 4866407436474807139, guid: fe1619c8ad742c24e8be78d6c285b517, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -956,6 +984,10 @@ PrefabInstance:
       propertyPath: characterClass
       value: 
       objectReference: {fileID: 1162231167}
+    - target: {fileID: 3072934719231244098, guid: 74134571a0795ce4a840c2356e47dbbb, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 913905730683509248, guid: e3ab5210c258eb848b9793c60efc4f62, type: 3}
     - target: {fileID: 8409902104913310546, guid: 74134571a0795ce4a840c2356e47dbbb, type: 3}
       propertyPath: m_Name
       value: ClickerObject
