@@ -40,6 +40,23 @@ public class LayoutController : MonoBehaviour
     public VisualElement ExpBarContainer;
     public VisualElement BarTexture;
 
+    //Menu
+    public VisualElement Menu;
+    public VisualElement Options;
+    public VisualElement MainMenu;
+    public Button Optionbtn;
+    public Button Resume;
+    public Button Settings;
+    public Button Exit;
+    public Button BackSettings;
+
+    private Slider musicSlider;
+    private Slider sfxSlider;
+    private Toggle fullScreen;
+    private DropdownField resolutionList;
+    private Resolution[] resolutions;
+
+
     private class FactoryUI
     {
         public Button toggleButton;
@@ -153,8 +170,7 @@ public class LayoutController : MonoBehaviour
     {
         Instance = this;
         ui = GetComponent<UIDocument>().rootVisualElement;
-        var value = PlayerPrefs.GetFloat("SfxVolume", 1f);
-        audioSource.volume = value;
+        resolutions = Screen.resolutions;
 
     }
 
@@ -233,7 +249,73 @@ public class LayoutController : MonoBehaviour
 
         DrawButtons();
 
+
+        //menu 
+        Menu = ui.Q<VisualElement>("Menu");
+        MainMenu = ui.Q<VisualElement>("Main");
+        Options = ui.Q<VisualElement>("Options");
+        Optionbtn = ui.Q<Button>("Optionbtn");
+        Optionbtn.clicked += EnableOptions;
+        Resume = ui.Q<Button>("Resume");
+        Resume.clicked += ResumeGame;
+        Settings= ui.Q<Button>("Settings");
+        Exit = ui.Q<Button>("Exit");
+        Exit.clicked += ExitGame;
+        Settings.clicked+=LoadSettings;
+        BackSettings = ui.Q<Button>("Back");
+        BackSettings.clicked += ReturnSettings;
+
+        musicSlider = ui.Q<Slider>("Music");
+        sfxSlider = ui.Q<Slider>("Sfx");
+
+        fullScreen = ui.Q<Toggle>("Fullscreen");
+        resolutionList = ui.Q<DropdownField>("Res");
+
+
+
+        fullScreen.RegisterValueChangedCallback(evt =>
+        {
+            SetFullScreen(evt.newValue);
+        });
+
+        resolutionList.choices.Clear();
+        int currentRes = 0;
+
+        for (int i = 0; i < resolutions.Length; i++)
+        {
+            string option = $"{resolutions[i].width} x {resolutions[i].height}";
+
+            if (Screen.width == resolutions[i].width &&
+                Screen.height == resolutions[i].height)
+            {
+                currentRes = i;
+            }
+
+            resolutionList.choices.Add(option);
+        }
+
+        if (resolutionList.choices.Count > 0)
+        {
+            resolutionList.value = resolutionList.choices[currentRes];
+        }
+
+        resolutionList.RegisterValueChangedCallback(evt =>
+        {
+            int index = resolutionList.choices.IndexOf(evt.newValue);
+            SetResolution(index);
+        });
+
+        fullScreen.value = Screen.fullScreen;
+
+
+        sfxSlider.RegisterValueChangedCallback(OnSfxVolumeChanged);
+        musicSlider.RegisterValueChangedCallback(OnMusicVolumeChanged);
+
+        musicSlider.value = PlayerPrefs.GetFloat("MusicVolume", 1f);
+        sfxSlider.value = PlayerPrefs.GetFloat("SfxVolume", 1f);
         
+        audioSource.volume = sfxSlider.value;
+
     }
 
     void LineLayerInit(VisualElement lineLayer)
@@ -1281,6 +1363,60 @@ public class LayoutController : MonoBehaviour
             label.text = "Najedź na skill, aby zobaczyć opis";
         });
     }
+    
+    private void EnableOptions()
+    {
+        audioSource.Play();
+        Menu.style.display = DisplayStyle.Flex;
+    }
+    private void ResumeGame()
+    {
+        audioSource.Play();
+        Menu.style.display = DisplayStyle.None;
+    }
+    private void ExitGame()
+    {
+        audioSource.Play();
+        Application.Quit();
+    }
+    private void LoadSettings()
+    {
+        MainMenu.style.display = DisplayStyle.None;
+        Options.style.display = DisplayStyle.Flex;
+        audioSource.Play();
+    }
+    private void ReturnSettings()
+    {
+        MainMenu.style.display = DisplayStyle.Flex;
+        Options.style.display = DisplayStyle.None;
+        audioSource.Play();
+    }
 
+    private void OnSfxVolumeChanged(ChangeEvent<float> evt)
+    {
+        
+        Debug.Log($"Głośność sfx: {evt.newValue}");
+        audioSource.volume = evt.newValue;
+        PlayerPrefs.SetFloat("SfxVolume", evt.newValue);
+        PlayerPrefs.Save();
+    }
+    private void OnMusicVolumeChanged(ChangeEvent<float> evt)
+    {
+        //musicSource.volume = evt.newValue;
+        PlayerPrefs.SetFloat("MusicVolume", evt.newValue);
+        PlayerPrefs.Save();
+        Debug.Log($"Głośność muzyki: {evt.newValue}");
+    }
+    private void SetResolution(int resIndex)
+    {
+        Resolution resolution = resolutions[resIndex];
+        Screen.SetResolution(resolution.width, resolution.height, Screen.fullScreen);
+        
 
+    }
+    private void SetFullScreen(bool flag)
+    {
+        Screen.fullScreen = flag;
+        
+    }
 }
