@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
-using UnityEditor.IMGUI.Controls;
 using UnityEngine;
 
 public class SkillCheckScript : MonoBehaviour
@@ -72,7 +71,7 @@ public class SkillCheckScript : MonoBehaviour
     void ClearBricks()
     {
         bricks.Clear();
-        foreach (var brick in this.gameObject.GetComponentsInChildren<BrickMovementScript>()) //broski nie ma czasu na ³adny kod trzeba wypuszczaæ szybko pronto
+        foreach (var brick in this.gameObject.GetComponentsInChildren<BrickMovementScript>()) //broski nie ma czasu na ï¿½adny kod trzeba wypuszczaï¿½ szybko pronto
         {
             Destroy(brick.gameObject);
         }
@@ -83,7 +82,7 @@ public class SkillCheckScript : MonoBehaviour
         for(int i = 0; i<3; i++)
         {
             yield return new WaitForSeconds(1f);
-            switch (i)//temp rozwi¹zanie na danie czasu graczowi na ograniêcie siê œwiat³a ostrzegawcze moment
+            switch (i)//temp rozwiï¿½zanie na danie czasu graczowi na ograniï¿½cie siï¿½ ï¿½wiatï¿½a ostrzegawcze moment
             {
                 case 0: flag.color = Color.yellow; break;
                 case 1: flag.color = Color.green; break;
