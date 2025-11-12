@@ -51,7 +51,7 @@ public class SkillCheckScript : MonoBehaviour
                 ResetSkillCheck(-5);
 
     }
-
+    
     public void StartSkillCheck()
     {
         StartCoroutine(SpawnBricks(10, 0.9f));
