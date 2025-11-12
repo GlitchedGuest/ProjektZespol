@@ -35,9 +35,10 @@ public class LayoutController : MonoBehaviour
     public VisualElement ContentPage5;
 
     //Lvlbar
-    public ProgressBar LvlBar;
+    public VisualElement BarMask;
     public Label LvlNumber;
-
+    public VisualElement ExpBarContainer;
+    public VisualElement BarTexture;
 
     private class FactoryUI
     {
@@ -192,7 +193,10 @@ public class LayoutController : MonoBehaviour
 
         // lvlbar
         LvlNumber = ui.Q<Label>("lvlNumber");
-        LvlBar = ui.Q<ProgressBar>("lvlprog");
+        BarMask = ui.Q<VisualElement>("BarMask");
+        ExpBarContainer = ui.Q<VisualElement>("ExpBarContainer");
+        BarTexture = ui.Q<VisualElement>("BarTexture");
+
 
         scrollView = ui.Q<ScrollView>("ScrollView");
         scrollView.verticalScrollerVisibility = ScrollerVisibility.Hidden;
@@ -896,8 +900,17 @@ public class LayoutController : MonoBehaviour
     private void UpdateLvlBar()
     {
         LvlNumber.text = characterClass.GetLevel().ToString();
-        LvlBar.value = characterClass.GetCurrentExp();
-        LvlBar.highValue = characterClass.GetMaxExpCap();
+
+        BarTexture.style.minWidth = ExpBarContainer.resolvedStyle.width;
+        BarTexture.style.maxWidth = ExpBarContainer.resolvedStyle.width;
+        BarTexture.style.width = ExpBarContainer.resolvedStyle.width;
+
+
+        float currentExp = characterClass.GetCurrentExp();
+        float maxExp = characterClass.GetMaxExpCap();
+        float progress = Mathf.Clamp01(currentExp / maxExp);
+
+        BarMask.style.width = new Length(progress * 100f, LengthUnit.Percent);
     }
 
     private void ToggleFactoryDetails(int factoryIndex)

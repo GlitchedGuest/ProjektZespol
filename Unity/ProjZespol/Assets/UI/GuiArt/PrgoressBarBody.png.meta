@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 90cb9410b2e2e8047a7398421fec4ec9
+guid: 9061a3b1b5dae2249bf394dc4768685c
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -1528323810568053388
-    second: BorderStyle2_0
+      213: -3841116717542396509
+    second: PrgoressBarBody_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -113,23 +113,23 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: BorderStyle2_0
+      name: PrgoressBarBody_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 1330
-        height: 1079
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        width: 2108
+        height: 612
+      alignment: 4
+      pivot: {x: 0, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 47dd159779d4acae0800000000000000
-      internalID: -1528323810568053388
+      spriteID: 3ad221e42bc91bac0800000000000000
+      internalID: -3841116717542396509
       vertices: []
       indices: 
       edges: []
@@ -138,7 +138,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: 8ecc2eecb25bf9649a47b736772bdfcf
     internalID: 0
     vertices: []
     indices: 
@@ -148,7 +148,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      BorderStyle2_0: -1528323810568053388
+      PrgoressBarBody_0: -3841116717542396509
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
