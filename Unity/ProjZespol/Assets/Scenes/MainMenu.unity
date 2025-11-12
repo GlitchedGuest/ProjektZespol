@@ -119,6 +119,11 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!224 &600765521 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 7180422096842505100, guid: 1ad9efa65be02144daac6892ae7b04f8, type: 3}
+  m_PrefabInstance: {fileID: 9055086463048545124}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &868310797
 GameObject:
   m_ObjectHideFlags: 0
@@ -850,6 +855,14 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 2176771257365399154, guid: 59a8a31270af9ad4195732946918baa3, type: 3}
+      propertyPath: m_VertexColorAlwaysGammaSpace
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4401619462439719808, guid: 59a8a31270af9ad4195732946918baa3, type: 3}
+      propertyPath: backgroundTransform
+      value: 
+      objectReference: {fileID: 600765521}
     - target: {fileID: 8817065077592867777, guid: 59a8a31270af9ad4195732946918baa3, type: 3}
       propertyPath: m_LocalPosition.x
       value: 367.00058

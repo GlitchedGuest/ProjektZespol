@@ -4,9 +4,21 @@ using UnityEngine.UI;
 public class SceneFade : MonoBehaviour
 {
     private Image sceneImage;
+    private RectTransform rectTransform;
+    [SerializeField] private RectTransform backgroundTransform;
     private void Awake()
     {
         sceneImage = GetComponent<Image>();
+        rectTransform = GetComponent<RectTransform>();
+    }
+
+    private void LateUpdate()
+    {
+        if (backgroundTransform != null && gameObject.activeSelf)
+        {
+            rectTransform.localScale = backgroundTransform.localScale;
+            rectTransform.sizeDelta = backgroundTransform.sizeDelta;
+        }
     }
 
     public IEnumerator FadeInCoroutine(float duration)
