@@ -56,6 +56,9 @@ public class LayoutController : MonoBehaviour
     private DropdownField resolutionList;
     private Resolution[] resolutions;
 
+    //AutoSave
+    private Button DeleteSaveButton;
+    private Toggle AutoSavetoggle;
 
     private class FactoryUI
     {
@@ -316,6 +319,17 @@ public class LayoutController : MonoBehaviour
         
         audioSource.volume = sfxSlider.value;
 
+        DeleteSaveButton = ui.Q<Button>("DeleteSaveButton");
+        AutoSavetoggle = ui.Q<Toggle>("AutoSavetoggle");
+
+        DeleteSaveButton.clicked += AutoSaveSystem.DeleteSave;
+        DeleteSaveButton.clicked += () => { audioSource.Play(); };
+        AutoSavetoggle.value = AutoSaveSystem.AutoSave;
+        AutoSavetoggle.RegisterValueChangedCallback(evt =>
+        {
+            AutoSaveSystem.AutoSave = evt.newValue;
+            audioSource.Play();
+        });
     }
 
     void LineLayerInit(VisualElement lineLayer)
@@ -900,6 +914,7 @@ public class LayoutController : MonoBehaviour
             factoryUIs.Add(factoryUI);
         }
     }
+
 
     private void ClickBtn1()
     {

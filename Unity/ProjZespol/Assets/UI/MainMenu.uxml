@@ -1,7 +1,7 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
     <Style src="project://database/Assets/UI/MainMenu.uss?fileID=7433441132597879392&amp;guid=d90b63a1271321f4682975c65f5a3b7b&amp;type=3#MainMenu" />
     <ui:VisualElement name="Panel" class="panel" style="flex-grow: 1;">
-        <ui:VisualElement name="Main" class="container" style="flex-grow: 1; margin-top: 10%; margin-left: 0; margin-bottom: 10%; border-left-color: rgb(255, 255, 255); border-right-color: rgb(255, 255, 255); border-top-color: rgb(255, 255, 255); border-bottom-color: rgb(255, 255, 255); border-top-left-radius: 20px; border-top-right-radius: 20px; border-bottom-right-radius: 20px; border-bottom-left-radius: 20px; border-top-width: 10px; border-right-width: 10px; border-bottom-width: 10px; border-left-width: 10px; align-items: center; transform-origin: top;">
+        <ui:VisualElement name="Main" class="container" style="flex-grow: 1; margin-top: 10%; margin-left: 0; margin-bottom: 10%; border-left-color: rgb(255, 255, 255); border-right-color: rgb(255, 255, 255); border-top-color: rgb(255, 255, 255); border-bottom-color: rgb(255, 255, 255); border-top-left-radius: 20px; border-top-right-radius: 20px; border-bottom-right-radius: 20px; border-bottom-left-radius: 20px; border-top-width: 10px; border-right-width: 10px; border-bottom-width: 10px; border-left-width: 10px; align-items: center; transform-origin: top; display: flex; visibility: visible;">
             <ui:VisualElement name="ButtonContainer" class="buttoncontainer" style="flex-grow: 1; width: 100%; height: auto; color: rgba(0, 0, 0, 0); background-color: rgba(0, 0, 0, 0); -unity-text-align: upper-left; align-items: center; transform-origin: center;">
                 <ui:Label text="Clicker" style="margin-bottom: 4px; font-size: 68px; margin-top: 4%;" />
                 <ui:Button text="Graj" name="StartButton" />
@@ -9,12 +9,18 @@
                 <ui:Button text="Wyjdź do pulpitu" parse-escape-sequences="false" name="QuitButton" />
             </ui:VisualElement>
         </ui:VisualElement>
-        <ui:VisualElement name="Settings" class="container hidden" style="flex-grow: 1; border-left-color: rgb(255, 255, 255); border-right-color: rgb(255, 255, 255); border-top-color: rgb(255, 255, 255); border-bottom-color: rgb(255, 255, 255); border-top-width: 10px; border-right-width: 10px; border-bottom-width: 10px; border-left-width: 10px; border-top-left-radius: 20px; border-top-right-radius: 20px; border-bottom-right-radius: 20px; border-bottom-left-radius: 20px; margin-top: 10%; margin-bottom: 10%;">
+        <ui:VisualElement name="Settings" class="container hidden" style="flex-grow: 1; border-left-color: rgb(255, 255, 255); border-right-color: rgb(255, 255, 255); border-top-color: rgb(255, 255, 255); border-bottom-color: rgb(255, 255, 255); border-top-width: 10px; border-right-width: 10px; border-bottom-width: 10px; border-left-width: 10px; border-top-left-radius: 20px; border-top-right-radius: 20px; border-bottom-right-radius: 20px; border-bottom-left-radius: 20px; margin-top: 10%; margin-bottom: 10%; display: none; visibility: hidden;">
             <ui:Label text="Ustawienia" style="margin-bottom: 10%;" />
             <ui:Toggle label="Fullscreen" name="FullScreen" />
             <ui:DropdownField label="Rozdzielczość" name="Res" choices="1920x1080,1280x720,800x600" index="0" style="width: 50%;" />
             <ui:Slider label="Muzyka" value="42" high-value="1" enabled="true" name="MusicSlider" fill="true" show-input-field="false" direction="Horizontal" inverted="false" page-size="0" focusable="true" style="width: 435px; align-items: flex-start;" />
             <ui:Slider label="SFX" value="42" high-value="1" enabled="true" name="SFXSlider" show-input-field="false" fill="true" style="width: 435px; align-items: flex-start;" />
+            <ui:VisualElement style="flex-grow: 1; flex-direction: row; width: 50%; height: 15%; min-height: 15%; max-height: 15%;">
+                <ui:VisualElement style="flex-grow: 1; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; padding-top: 5%; padding-right: 4px; padding-bottom: 5%; padding-left: 4px; top: 0; bottom: 0; left: 0; right: 0; width: 50%; height: 100%; min-width: 50%; max-width: 50%; max-height: 100%; min-height: 100%; align-self: center;">
+                    <ui:Button text="Usuń Save" name="DeleteSaveButton" style="height: 100%; margin-top: 0%; margin-right: 0%; margin-bottom: 0%; margin-left: 0%; width: 100%; top: 0; left: 0; right: 0; bottom: 0; position: relative; align-items: center; justify-content: space-between; align-self: center; align-content: center; background-color: rgb(101, 0, 26);" />
+                </ui:VisualElement>
+                <ui:Toggle label="AutoSave&#10;" name="AutoSavetoggle" value="true" style="width: 50%; height: 100%; align-items: center; right: 0; left: 0; justify-content: flex-start; align-content: flex-start; align-self: center; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; padding-left: 5%;" />
+            </ui:VisualElement>
             <ui:Button text="Powrót" name="BackButton" />
         </ui:VisualElement>
     </ui:VisualElement>

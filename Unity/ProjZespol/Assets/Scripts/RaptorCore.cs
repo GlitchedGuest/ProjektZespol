@@ -104,7 +104,8 @@ public class RaptorCore : MonoBehaviour
 
         tickCount++;
         if (tickCount % 600 == 0)
-            AutoSaveSystem.SaveGame();
+            if(AutoSaveSystem.AutoSave)
+                AutoSaveSystem.SaveGame();
     }
 
     void Update()
