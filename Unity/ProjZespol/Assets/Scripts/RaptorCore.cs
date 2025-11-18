@@ -66,7 +66,7 @@ public class RaptorCore : MonoBehaviour
     {
 
             QuarkType value = 0;
-            //SkillCheckManager();//bardzo temp rozwiązanie później raczej losowo w czasie będzie sie skill check pojawiać, a nie podczas klikania w obiekt
+            SkillCheckManager();//bardzo temp rozwiązanie później raczej losowo w czasie będzie sie skill check pojawiać, a nie podczas klikania w obiekt
             float chance = UnityEngine.Random.Range(0.00f, 100.00f);
             if (chance < characterClass.GetCriticalChance())
             {
