@@ -247,7 +247,7 @@ public class IdleManager : MonoBehaviour
                 QuarkType resource2Amount = raptorCore.GetResourceValueDirect("Resource2");
                 if(resource2Amount >= p.cost)
                 {
-                    raptorCore.SetResourceValueDirect("Resource1", resource2Amount - p.cost);
+                    raptorCore.SetResourceValueDirect("Resource2", resource2Amount - p.cost);
                 }
                 else
                 {
@@ -262,7 +262,7 @@ public class IdleManager : MonoBehaviour
                 QuarkType resource3Amount = raptorCore.GetResourceValueDirect("Resource3");
                 if(resource3Amount >= p.cost)
                 {
-                    raptorCore.SetResourceValueDirect("Resource1", resource3Amount - p.cost);
+                    raptorCore.SetResourceValueDirect("Resource3", resource3Amount - p.cost);
                 }
                 else
                 {
