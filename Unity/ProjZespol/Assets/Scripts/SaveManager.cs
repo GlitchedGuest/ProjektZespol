@@ -1,4 +1,5 @@
 using System;
+using System.Data;
 using System.IO;
 using System.Reflection;
 using UnityEngine;
@@ -17,11 +18,60 @@ public static class AutoSaveSystem
     //default path for save.
     public static string SaveFileName { get; set; } = "autosave.dat";
 
+    private static readonly string path =
+       Path.Combine(Application.persistentDataPath, "MetaData.dat");
+
+    private static bool loaded = false;
+    private static bool _AutoSave;
+    
     private static string SavePath => Path.Combine(Application.persistentDataPath, SaveFileName);
     private static string SavePathS(string FileName) => Path.Combine(Application.persistentDataPath, FileName);
 
-    // Exposed Save and load
+    public static bool AutoSave
+    {
+        get
+        {
+            LazyGetAutoSave();
+            return _AutoSave;
+        }
+        set
+        {
+            _AutoSave = value;
+            SetAutoSave(_AutoSave);
+        }
+    }
 
+    public static void LazyGetAutoSave()
+    {
+        if (loaded) return;
+        loaded = true;
+        _AutoSave = GetAutoSave();
+    }
+
+    private static bool GetAutoSave()
+    {
+        if (!File.Exists(path))
+            return true;               
+
+        byte b = File.ReadAllBytes(path)[0];
+        return b == 1;
+    }
+
+    private static void SetAutoSave(bool state)
+    {
+        byte value = state ? (byte)1 : (byte)0;
+        File.WriteAllBytes(path, new byte[] { value });
+    }
+
+    public static void DeleteSave()
+    {
+        File.Delete(SavePath);
+    }
+
+
+
+
+    // Exposed Save and load
     public static void SaveGame()
     {
         using (var stream = File.Create(SavePath))
