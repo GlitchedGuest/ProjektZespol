@@ -66,7 +66,6 @@ public class RaptorCore : MonoBehaviour
     }
     void click()
     {
-
         QuarkType value = 0;          
         float chance = UnityEngine.Random.Range(0.00f, 100.00f);
         if (chance < characterClass.GetCriticalChance())
@@ -372,9 +371,10 @@ public class RaptorCore : MonoBehaviour
     public IEnumerator ChickenDinnerEffect(bool effect)
     {
         int mode = 1;
-        if(!characterClass.alwaysWinner)
-            if (!effect)
-                mode = -1;
+        if (!effect)
+            mode = -1;
+        if (!characterClass.alwaysWinner)
+            mode = 0;
         SkillMultiplier += 10 * mode;
         yield return new WaitForSeconds(6f);
         SkillMultiplier -= 10 * mode;

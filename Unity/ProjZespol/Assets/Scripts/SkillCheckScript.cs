@@ -74,7 +74,11 @@ public class SkillCheckScript : MonoBehaviour
             {
                 kombo++;
                 if (characterClass.mortalClicker)
+                {
+                    raptorCore.SkillMultiplier -= 10 * (kombo - 1);
                     raptorCore.SkillMultiplier += 10 * kombo;
+                }
+                    
                 if(characterClass.championOfClicks && kombo == 3)
                 {
                     kombo = 0;
@@ -86,7 +90,11 @@ public class SkillCheckScript : MonoBehaviour
             
         }
         else
-        {
+        {          
+            if (characterClass.mortalClicker)
+            {
+                raptorCore.SkillMultiplier -= 10 * kombo;
+            }
             kombo = 0;
             raptorCore.SubCurrency(-value);
             raptorCore.EnableChickenDinner(false);

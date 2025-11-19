@@ -762,6 +762,10 @@ PrefabInstance:
       propertyPath: raptorCore
       value: 
       objectReference: {fileID: 186519293}
+    - target: {fileID: 584734889972888974, guid: 70a5672d9d0f58249b6e0cc4fe72adf4, type: 3}
+      propertyPath: characterClass
+      value: 
+      objectReference: {fileID: 1162231167}
     - target: {fileID: 957699937614834498, guid: 70a5672d9d0f58249b6e0cc4fe72adf4, type: 3}
       propertyPath: m_Enabled
       value: 0
