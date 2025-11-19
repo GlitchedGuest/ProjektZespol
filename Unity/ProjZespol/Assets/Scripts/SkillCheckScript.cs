@@ -10,8 +10,13 @@ public class SkillCheckScript : MonoBehaviour
     [SerializeField] private GameObject brickPrefab;
     [SerializeField] private SpriteRenderer flag;
     [SerializeField] private RaptorCore raptorCore;
+    [SerializeField] private CharacterClass characterClass;
     private Queue<GameObject> bricks = new Queue<GameObject>();
 
+    private int kombo = 0;
+    private int Bonus = 5;
+    private float waitTime = 0.9f;
+    private int brickCount = 10;
 
     void Update()
     {
@@ -20,7 +25,7 @@ public class SkillCheckScript : MonoBehaviour
             CheckMouse0();
             CheckMouse1();
             if (bricks.Count != 0 && bricks.Peek().GetComponent<BrickMovementScript>().overlap == 3)
-                ResetSkillCheck(-5);
+                ResetSkillCheck(-Bonus);
         }
     }
 
@@ -31,10 +36,10 @@ public class SkillCheckScript : MonoBehaviour
             {
                 Destroy(bricks.Dequeue());
                 if (bricks.Count == 0)
-                    ResetSkillCheck(5);
+                    ResetSkillCheck(Bonus);
             }
             else
-                ResetSkillCheck(-5);       
+                ResetSkillCheck(-Bonus);       
 
     }
 
@@ -45,25 +50,47 @@ public class SkillCheckScript : MonoBehaviour
             {
                 Destroy(bricks.Dequeue());
                 if (bricks.Count == 0)
-                    ResetSkillCheck(5);
+                    ResetSkillCheck(Bonus);
             }
             else
-                ResetSkillCheck(-5);
+                ResetSkillCheck(-Bonus);
 
     }
     
     public void StartSkillCheck()
     {
-        StartCoroutine(SpawnBricks(10, 0.9f));
+        if(characterClass.mortalClicker)
+            StartCoroutine(SpawnBricks(brickCount + kombo, waitTime - (0.05f * kombo)));
+        else
+            StartCoroutine(SpawnBricks(brickCount, waitTime));
     }
 
     private void ResetSkillCheck(int value)
     {
         flag.enabled = true;
-        if(value > 0)
+        if (value > 0)
+        {
+            if (characterClass.mortalClicker || characterClass.championOfClicks)
+            {
+                kombo++;
+                if (characterClass.mortalClicker)
+                    raptorCore.SkillMultiplier += 10 * kombo;
+                if(characterClass.championOfClicks && kombo == 3)
+                {
+                    kombo = 0;
+                    characterClass.EnableAlanWake();
+                }
+            }      
             raptorCore.AddCurrency(value);
+            raptorCore.EnableChickenDinner(true);
+            
+        }
         else
+        {
+            kombo = 0;
             raptorCore.SubCurrency(-value);
+            raptorCore.EnableChickenDinner(false);
+        }
         ClearBricks();
         this.gameObject.SetActive(false);
     }

@@ -466,6 +466,7 @@ public class LayoutController : MonoBehaviour
         }
 
         learned.Remove(id);
+        characterClass.ApplySkillChanges(id, true);
         UpdateAll();
     }
 
@@ -487,6 +488,7 @@ public class LayoutController : MonoBehaviour
 
 
         learned.Add(id);
+        characterClass.ApplySkillChanges(id, false);
         UpdateVisual(id);
     }
 

@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using UnityEngine;
 
 public class CharacterClass:MonoBehaviour
@@ -11,8 +12,17 @@ public class CharacterClass:MonoBehaviour
     private uint maxLvlCap = 20;
     //there will be other statistics like critical chance later etc
     private float criticalChance = 15.5f;
-    private float skillCheckChance = 20.0f;
-
+    public float boostedChance = 0.00f;
+    private float skillCheckChance = -1.0f;
+    public int skillCheckReduce = 0;
+    //Important Skill Variables
+    public bool activeIdle = false;
+    public bool noMatterWhat = false;
+    public bool chickenDinner = false;
+    public bool alwaysWinner = false;
+    public bool symbiosis = false;
+    public bool mortalClicker = false;
+    public bool championOfClicks = false;
     //Use this to gain exp from activities
     public void GainExp(ulong exp)
     {
@@ -51,7 +61,7 @@ public class CharacterClass:MonoBehaviour
     //use this to display current level
     public uint GetLevel() { return level; }
     //If you need to set character to specific level
-    public float GetCriticalChance() { return criticalChance; }
+    public float GetCriticalChance() { return criticalChance + boostedChance; }
     //If you need critical chance
     public float GetSkillCheckChance() { return skillCheckChance; }
     //If you need skillCheck chance
@@ -67,5 +77,77 @@ public class CharacterClass:MonoBehaviour
         }
     }
 
-    //more methods for "rpg" character here
+    public void ApplySkillChanges(string id, bool revert)
+    {
+        switch (id)
+        {
+            case "Skill1": SkillBasedClicking(revert); break;
+            case "Skill2A": CriticalMass(revert); break;
+            case "Skill3A": ActiveIdle(revert); break;
+            case "Skill4A": NoMatterWhat(revert); break;
+            case "Skill2B": ChickenDinner(revert); break;
+            case "Skill3B": HungryForMore(revert); break;
+            case "Skill4B": AlwaysWinner(revert); break;
+            case "Skill5": Symbiosis(revert); break;
+            case "Skill6A": MortalClicker(revert); break;
+            case "Skill6B": ChampionOfClicks(revert); break;
+        }
+
+    }
+
+    private void SkillBasedClicking(bool revert)
+    {
+        skillCheckChance = revert ? -1.0f : 10.0f;
+    }
+    private void CriticalMass(bool revert)
+    {
+        criticalChance = revert ? 15.5f : 30.0f;
+    }
+    private void ActiveIdle(bool revert)
+    {
+        activeIdle = !revert;
+    }
+    private void NoMatterWhat(bool revert)
+    {
+        noMatterWhat = !revert;
+    }
+    private void ChickenDinner(bool revert)
+    {
+        chickenDinner = !revert;
+    }
+    private void HungryForMore(bool revert)
+    {
+        skillCheckReduce = revert ? 0 : 300;
+    }
+    private void AlwaysWinner(bool revert)
+    {
+        alwaysWinner = !revert;
+    }
+    private void Symbiosis(bool revert)
+    {
+        skillCheckChance = revert ? 10.0f : 30.0f;
+    }
+    private void MortalClicker(bool revert)
+    {
+        mortalClicker = !revert;
+    }
+    private void ChampionOfClicks(bool revert)
+    {
+        championOfClicks = !revert;
+    }
+
+    public void EnableAlanWake()
+    {
+        StartCoroutine(AlanWake());
+        championOfClicks = false;
+    }
+
+    private IEnumerator AlanWake()
+    {
+        float prevChance = criticalChance;
+        criticalChance = 100.0f;
+        yield return new WaitForSeconds(6f);
+        criticalChance = prevChance;
+        championOfClicks = true;
+    }
 }
