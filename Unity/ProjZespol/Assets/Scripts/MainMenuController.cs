@@ -16,9 +16,11 @@ public class MainMenuController : MonoBehaviour
     private Button settingsButton;
     private Button quitButton;
     private Button backButton;
+    private Button DeleteSaveButton;
+    private Toggle fullScreen;
     private Slider musicSlider;
     private Slider sfxSlider;
-    private Toggle fullScreen;
+    private Toggle AutoSavetoggle;
     private DropdownField resolutionList;
 
     private Resolution[] resolutions;
@@ -54,6 +56,21 @@ public class MainMenuController : MonoBehaviour
         quitButton.clicked += OnClick;
         backButton.clicked += OnBackButtonClicked;
         backButton.clicked += OnClick;
+
+        //Delete button and autosave function overload
+        DeleteSaveButton = settingsContainer.Q<Button>("DeleteSaveButton");
+        AutoSavetoggle = settingsContainer.Q<Toggle>("AutoSavetoggle");
+
+        DeleteSaveButton.clicked += AutoSaveSystem.DeleteSave;
+        DeleteSaveButton.clicked += OnClick;
+        AutoSavetoggle.value = AutoSaveSystem.AutoSave;
+        AutoSavetoggle.RegisterValueChangedCallback(evt =>
+        {
+            AutoSaveSystem.AutoSave = evt.newValue;
+            OnClick();
+        });
+
+
 
         musicSlider.RegisterValueChangedCallback(OnMusicVolumeChanged);
         sfxSlider.RegisterValueChangedCallback(OnSfxVolumeChanged);

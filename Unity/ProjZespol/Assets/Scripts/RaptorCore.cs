@@ -125,9 +125,10 @@ public class RaptorCore : MonoBehaviour
 
         tickCount++;
         if (tickCount % 600 == 0)
-            AutoSaveSystem.SaveGame();
+            if(AutoSaveSystem.AutoSave)
+                AutoSaveSystem.SaveGame();
         if (tickCount % (600-characterClass.skillCheckReduce) == 0) //zmienic przy balansie
-            SkillCheckManager();
+            SkillCheckManager();  
     }
 
     void Update()
