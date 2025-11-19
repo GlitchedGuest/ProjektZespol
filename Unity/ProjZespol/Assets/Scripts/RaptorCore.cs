@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using static UnityEngine.Rendering.DebugUI;
+using System.Collections;
 
 public class RaptorCore : MonoBehaviour
 {
@@ -23,6 +24,7 @@ public class RaptorCore : MonoBehaviour
     //Click based
     [AutoSave] QuarkType CBasevalue = 1;
     [AutoSave] QuarkType CMultiplier = 1;
+    public QuarkType SkillMultiplier = 0;
 
 
     //Click based
@@ -64,33 +66,43 @@ public class RaptorCore : MonoBehaviour
     }
     void click()
     {
-
-            QuarkType value = 0;
-            SkillCheckManager();//bardzo temp rozwiązanie później raczej losowo w czasie będzie sie skill check pojawiać, a nie podczas klikania w obiekt
-            float chance = UnityEngine.Random.Range(0.00f, 100.00f);
-            if (chance < characterClass.GetCriticalChance())
-            {
-                if(idleManager.potions[0].isActive && idleManager.potions[0].linkedFactory.name == GetCurrentFactory().name)
-                    value += (CBasevalue * CMultiplier) + potionClickBonus;
-                else
-                {
-                    value += (CBasevalue * CMultiplier * 3); //to do zmiany gdy będzie wchodzić temat balansu
-                    Debug.Log("Kryt " + chance);
-                }
-            }
+        QuarkType value = 0;          
+        float chance = UnityEngine.Random.Range(0.00f, 100.00f);
+        if (chance < characterClass.GetCriticalChance())
+        {
+            if(idleManager.potions[0].isActive && idleManager.potions[0].linkedFactory.name == GetCurrentFactory().name)
+                    value += (((CBasevalue * CMultiplier * 3) + (CBasevalue * SkillMultiplier))) + potionClickBonus;
             else
-                if(idleManager.potions[0].isActive && idleManager.potions[0].linkedFactory.name == GetCurrentFactory().name)
-                    value += (CBasevalue * CMultiplier) + potionClickBonus;
-                else
-                    value = (CBasevalue * CMultiplier);
-            Currency += value;
+            {
+                value += ((CBasevalue * CMultiplier * 3) + (CBasevalue * SkillMultiplier)); //to do zmiany gdy będzie wchodzić temat balansu
+            }
+
+            if (characterClass.activeIdle)
+                StartCoroutine(EnableActiveIdle());
+            if (characterClass.noMatterWhat)
+                characterClass.boostedChance = 0.00f;
+            Debug.Log("Kryt " + chance);
+        }
+        else
+        {
+            if(idleManager.potions[0].isActive && idleManager.potions[0].linkedFactory.name == GetCurrentFactory().name)
+                value += (((CBasevalue * CMultiplier) + (CBasevalue * SkillMultiplier))) + potionClickBonus;
+            else
+                value += ((CBasevalue * CMultiplier) + (CBasevalue * SkillMultiplier));
+            if (characterClass.noMatterWhat)
+                characterClass.boostedChance += 1.00f;
+        }
+        Currency += value;
         
     }
 
     void SkillCheckManager()
     {
         float chance = UnityEngine.Random.Range(0.00f, 100.00f);
-        if (chance < characterClass.GetSkillCheckChance())
+        float boostChance = 0;
+        if (characterClass.symbiosis)
+            boostChance = characterClass.GetCriticalChance();
+        if (chance < characterClass.GetSkillCheckChance() + boostChance)
         {
             skillCheck.SetActive(true);
             skillCheck.GetComponent<SkillCheckScript>().StartSkillCheck();
@@ -115,6 +127,8 @@ public class RaptorCore : MonoBehaviour
         if (tickCount % 600 == 0)
             if(AutoSaveSystem.AutoSave)
                 AutoSaveSystem.SaveGame();
+        if (tickCount % (600-characterClass.skillCheckReduce) == 0) //zmienic przy balansie
+            SkillCheckManager();  
     }
 
     void Update()
@@ -186,10 +200,13 @@ public class RaptorCore : MonoBehaviour
 
     public void SubCurrency(QuarkType currency)
     {
-        if (Currency < currency)
-            Currency = 0;
-        else
-            Currency -= currency;
+        if (!characterClass.alwaysWinner)
+        {
+            if (Currency < currency)
+                Currency = 0;
+            else
+                Currency -= currency;
+        }
         UpdateUI();
     }
 
@@ -331,10 +348,42 @@ public class RaptorCore : MonoBehaviour
         if (resources.ContainsKey("Resource3")) resource3Value = resources["Resource3"].value;
     }
 
+    private IEnumerator EnableActiveIdle()
+    {
+        foreach (var f in idleManager.factories)
+        {
+            if (f.resource.name == currentResource)
+            {
+                f.productionMultiplier += 3;
+                f.count += 4;
+                yield return new WaitForSeconds(6f);
+                f.productionMultiplier -= 3;
+                f.count -= 4;
+            }
+        }       
+    }
+
+    public void EnableChickenDinner(bool effect)
+    {
+        if(characterClass.chickenDinner)
+            StartCoroutine(ChickenDinnerEffect(effect));
+    }
+
+    public IEnumerator ChickenDinnerEffect(bool effect)
+    {
+        int mode = 1;
+        if (!effect)
+            mode = -1;
+        if (!characterClass.alwaysWinner)
+            mode = 0;
+        SkillMultiplier += 10 * mode;
+        yield return new WaitForSeconds(6f);
+        SkillMultiplier -= 10 * mode;
+    }
     public Factory GetCurrentFactory()
     {
         if (idleManager == null) return null;
-
+        
         foreach (var f in idleManager.factories)
         {
             if (f.resource.name == currentResource)
