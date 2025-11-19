@@ -44,12 +44,13 @@ public class RaptorCore : MonoBehaviour
     [AutoSave] public QuarkType resource1Value = 0;
     [AutoSave] public QuarkType resource2Value = 0;
     [AutoSave] public QuarkType resource3Value = 0;
-    private string currentResource = "Resource1";
+    public string currentResource = "Resource1";
     private enum ClickSource { None, Mouse, Space, Enter }
     private ClickSource activeClickSource = ClickSource.None;
     private float sourceBlockEndTime = 0f;
     private float clickCooldown = 0.5f; // jezeli gracz klika przycisk to wyłącza inne na czas cooldownu
-
+    public QuarkType potionClickBonus = 0;
+    public QuarkType potionSellBonus = 1;
     private void Awake()
     {
         UpdateUI();
@@ -70,8 +71,13 @@ public class RaptorCore : MonoBehaviour
         float chance = UnityEngine.Random.Range(0.00f, 100.00f);
         if (chance < characterClass.GetCriticalChance())
         {
-            value += ((CBasevalue * CMultiplier * 3) + (CBasevalue * SkillMultiplier)); //to do zmiany gdy będzie wchodzić temat balansu
-                                                     //tu wywolac zwiekszenie idle u konkretnej fabryki
+            if(idleManager.potions[0].isActive && idleManager.potions[0].linkedFactory.name == GetCurrentFactory().name)
+                    value += (((CBasevalue * CMultiplier * 3) + (CBasevalue * SkillMultiplier))) + potionClickBonus;
+            else
+            {
+                value += ((CBasevalue * CMultiplier * 3) + (CBasevalue * SkillMultiplier)); //to do zmiany gdy będzie wchodzić temat balansu
+            }
+
             if (characterClass.activeIdle)
                 StartCoroutine(EnableActiveIdle());
             if (characterClass.noMatterWhat)
@@ -80,7 +86,10 @@ public class RaptorCore : MonoBehaviour
         }
         else
         {
-            value = ((CBasevalue * CMultiplier) + (CBasevalue * SkillMultiplier));
+            if(idleManager.potions[0].isActive && idleManager.potions[0].linkedFactory.name == GetCurrentFactory().name)
+                value += (((CBasevalue * CMultiplier) + (CBasevalue * SkillMultiplier))) + potionClickBonus;
+            else
+                value += ((CBasevalue * CMultiplier) + (CBasevalue * SkillMultiplier));
             if (characterClass.noMatterWhat)
                 characterClass.boostedChance += 1.00f;
         }
@@ -229,10 +238,24 @@ public class RaptorCore : MonoBehaviour
         }
         return 0;
     }
-    public string GetCurrentResourceName()
+
+    public QuarkType GetResourceValueDirect(string resourceName)
     {
-        return currentResource;
+        saveResourceValues();
+        
+        switch(resourceName)
+        {
+            case "Resource1":
+                return resource1Value;
+            case "Resource2":
+                return resource2Value;
+            case "Resource3":
+                return resource3Value;
+            default:
+                return GetResourceValue(resourceName);
+        }
     }
+
     public bool HasResource(string resource, QuarkType amount)
     {
         return GetResourceValue(resource) >= amount;
@@ -260,6 +283,32 @@ public class RaptorCore : MonoBehaviour
             UpdateUI();
         }
     }
+    public void SetResourceValueDirect(string resourceName, QuarkType value)
+    {
+        switch(resourceName)
+        {
+            case "Resource1":
+                resource1Value = value;
+                if (resources.ContainsKey("Resource1"))
+                    resources["Resource1"].value = value;
+                break;
+            case "Resource2":
+                resource2Value = value;
+                if (resources.ContainsKey("Resource2"))
+                    resources["Resource2"].value = value;
+                break;
+            case "Resource3":
+                resource3Value = value;
+                if (resources.ContainsKey("Resource3"))
+                    resources["Resource3"].value = value;
+                break;
+        }
+        
+        if (resourceName == currentResource)
+        {
+            UpdateUI();
+        }
+    }
 
     public double SellResource(string resource, float sellvalue, double pricePerUnit = 1.0)
     {
@@ -271,7 +320,7 @@ public class RaptorCore : MonoBehaviour
             return 0;
         }
 
-        double goldEarned = amountToSell * pricePerUnit;
+        double goldEarned = amountToSell * pricePerUnit * potionSellBonus;
         Gold += goldEarned;
         RemoveResource(resource, amountToSell);
         UpdateUI();
@@ -329,5 +378,19 @@ public class RaptorCore : MonoBehaviour
         SkillMultiplier += 10 * mode;
         yield return new WaitForSeconds(6f);
         SkillMultiplier -= 10 * mode;
+    }
+    public Factory GetCurrentFactory()
+    {
+        if (idleManager == null) return null;
+        
+        foreach (var f in idleManager.factories)
+        {
+            if (f.resource.name == currentResource)
+            {
+                return f;
+            }
+        }
+
+        return null;
     }
 }

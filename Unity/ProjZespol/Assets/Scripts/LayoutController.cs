@@ -21,6 +21,7 @@ public class LayoutController : MonoBehaviour
     public Button resourceBtn;
     public Button btn4;
     public Button btn5;
+    public Button btn6;
     public Label text;
     public VisualElement currencyIcon;
     public Label currencyLabel;
@@ -33,6 +34,7 @@ public class LayoutController : MonoBehaviour
     public VisualElement ContentPage3;
     public VisualElement ContentPage4;
     public VisualElement ContentPage5;
+    public VisualElement ContentPage6;
 
     //Lvlbar
     public VisualElement BarMask;
@@ -77,6 +79,15 @@ public class LayoutController : MonoBehaviour
         public Label multiplierLevelLabel;
         public bool upgradesVisible = false;
     }
+
+    private class PotionUI
+    {
+        public VisualElement potionPanel;
+        public Label nameLabel;
+        public Label costLabel;
+        public Label effectLabel;
+        public Button buyButton;
+    }
     private Dictionary<int, FactoryUpgradeLevels> factoryUpgradeLevels = new Dictionary<int, FactoryUpgradeLevels>();
 
     private class FactoryUpgradeLevels
@@ -88,8 +99,11 @@ public class LayoutController : MonoBehaviour
     }
 
     public ScrollView scrollView;
+    public ScrollView scrollView2;
     private List<FactoryUI> factoryUIs = new List<FactoryUI>();
+    private List<PotionUI> potionUIs = new List<PotionUI>();
     private int numberOfFactories = 3;
+    private int numberOfPotions = 3;
     private int currentFactoryIndex = 0;
 
     [SerializeField] private AudioSource audioSource;
@@ -165,7 +179,6 @@ public class LayoutController : MonoBehaviour
     private VisualElement skillTreeContainer3;
     private VisualElement lineLayer3;
 
-
     void Awake()
     {
         Instance = this;
@@ -194,6 +207,8 @@ public class LayoutController : MonoBehaviour
         btn4.clicked += ClickBtn4;
         btn5 = ui.Q<Button>("btn5");
         btn5.clicked += ClickBtn5;
+        btn6 = ui.Q<Button>("btn6");
+        btn6.clicked += ClickBtn6;
 
 
         // zasoby
@@ -206,6 +221,7 @@ public class LayoutController : MonoBehaviour
         ContentPage3 = ui.Q<VisualElement>("Content3");
         ContentPage4 = ui.Q<VisualElement>("Content4");
         ContentPage5 = ui.Q<VisualElement>("Content5");
+        ContentPage6 = ui.Q<VisualElement>("Content6");
 
         // lvlbar
         LvlNumber = ui.Q<Label>("lvlNumber");
@@ -213,12 +229,17 @@ public class LayoutController : MonoBehaviour
         ExpBarContainer = ui.Q<VisualElement>("ExpBarContainer");
         BarTexture = ui.Q<VisualElement>("BarTexture");
 
-
-        scrollView = ui.Q<ScrollView>("ScrollView");
+        //fabryki
+        scrollView = ui.Q<ScrollView>("ScrollView1");
         scrollView.verticalScrollerVisibility = ScrollerVisibility.Hidden;
         scrollView.horizontalScrollerVisibility = ScrollerVisibility.Hidden;
         InitializeFactories();
 
+        //potiki
+        scrollView2 = ui.Q<ScrollView>("ScrollView2");
+        scrollView2.verticalScrollerVisibility = ScrollerVisibility.Hidden;
+        scrollView2.horizontalScrollerVisibility = ScrollerVisibility.Hidden;
+        InitializePotions();
 
         //drzewka tego typu
 
@@ -903,6 +924,47 @@ public class LayoutController : MonoBehaviour
         }
     }
 
+    private void InitializePotions()
+    {
+        for (int i = 1; i <= numberOfPotions; i++)
+        {
+            PotionUI potionUI = new PotionUI();
+
+            potionUI.buyButton = ui.Q<Button>($"Potion{i}Buy");
+            potionUI.nameLabel = ui.Q<Label>($"Potion{i}Name");
+            potionUI.effectLabel = ui.Q<Label>($"Potion{i}Effect");
+            potionUI.costLabel = ui.Q<Label>($"Potion{i}Cost");
+
+            if (potionUI.nameLabel != null)
+            {
+                potionUI.nameLabel.style.whiteSpace = WhiteSpace.Normal;
+                potionUI.nameLabel.style.flexWrap = Wrap.Wrap;
+            }
+            
+            if (potionUI.effectLabel != null)
+            {
+                potionUI.effectLabel.style.whiteSpace = WhiteSpace.Normal;
+                potionUI.effectLabel.style.flexWrap = Wrap.Wrap;
+            }
+            
+            if (potionUI.costLabel != null)
+            {
+                potionUI.costLabel.style.whiteSpace = WhiteSpace.Normal;
+                potionUI.costLabel.style.flexWrap = Wrap.Wrap;
+            }
+
+            int potionIndex = i - 1;
+            int potionIndexCopy = potionIndex;
+
+            if (potionUI.buyButton != null)
+            {
+                potionUI.buyButton.clicked += () => BuyPotion(potionIndexCopy);
+            }
+
+            potionUIs.Add(potionUI);
+        }
+    }
+
     private void ClickBtn1()
     {
         audioSource.Play();
@@ -911,6 +973,7 @@ public class LayoutController : MonoBehaviour
         ContentPage3.style.display = DisplayStyle.None;
         ContentPage4.style.display = DisplayStyle.None;
         ContentPage5.style.display = DisplayStyle.None;
+        ContentPage6.style.display = DisplayStyle.None;
     }
     
     private void ClickBtn2()
@@ -921,6 +984,7 @@ public class LayoutController : MonoBehaviour
         ContentPage3.style.display = DisplayStyle.None;
         ContentPage4.style.display = DisplayStyle.None;
         ContentPage5.style.display = DisplayStyle.None;
+        ContentPage6.style.display = DisplayStyle.None;
     }
     
     private void ClickBtn3()
@@ -931,6 +995,7 @@ public class LayoutController : MonoBehaviour
         ContentPage3.style.display = DisplayStyle.Flex;
         ContentPage4.style.display = DisplayStyle.None;
         ContentPage5.style.display = DisplayStyle.None;
+        ContentPage6.style.display = DisplayStyle.None;
     }
     private void ClickBtn4()
     {
@@ -940,6 +1005,7 @@ public class LayoutController : MonoBehaviour
         ContentPage3.style.display = DisplayStyle.None;
         ContentPage4.style.display = DisplayStyle.Flex;
         ContentPage5.style.display = DisplayStyle.None;
+        ContentPage6.style.display = DisplayStyle.None;
     }
     private void ClickBtn5()
     {
@@ -949,7 +1015,17 @@ public class LayoutController : MonoBehaviour
         ContentPage3.style.display = DisplayStyle.None;
         ContentPage4.style.display = DisplayStyle.None;
         ContentPage5.style.display = DisplayStyle.Flex;
-
+        ContentPage6.style.display = DisplayStyle.None;
+    }
+    private void ClickBtn6()
+    {
+        audioSource.Play();
+        ContentPage1.style.display = DisplayStyle.None;
+        ContentPage2.style.display = DisplayStyle.None;
+        ContentPage3.style.display = DisplayStyle.None;
+        ContentPage4.style.display = DisplayStyle.None;
+        ContentPage5.style.display = DisplayStyle.None;
+        ContentPage6.style.display = DisplayStyle.Flex;
     }
 
     private void ClickSell1()
@@ -976,9 +1052,8 @@ public class LayoutController : MonoBehaviour
         text.text = currencySlider.value.ToString() + "%";
         UpdateLvlBar();
         UpdateFactoryUI();
-
+        UpdatePotionUI();
         UpdateAll();
-
     }
 
     private void UpdateLvlBar()
@@ -1420,5 +1495,63 @@ public class LayoutController : MonoBehaviour
     {
         Screen.fullScreen = flag;
         
+    }
+
+    private void UpdatePotionUI()
+    {
+        if (idleManager == null || raptorCore == null) return;
+
+        for (int i = 0; i < potionUIs.Count; i++)
+        {
+            var potionUI = potionUIs[i];
+            var potion = idleManager.GetPotion(i);
+            if (potion == null) continue;
+
+            if (potionUI.nameLabel != null)
+                potionUI.nameLabel.text = potion.name;
+            if (potionUI.effectLabel != null)
+                potionUI.effectLabel.text = potion.effectDescription;
+            if (potionUI.costLabel != null)
+                potionUI.costLabel.text = $"Koszt: {potion.cost} szt. zasobu {potion.resourceType.name}";
+
+            if (potionUI.buyButton != null)
+            {
+                QuarkType playerResourceAmount = raptorCore.GetResourceValueDirect(potion.resourceType.name);
+                bool canAfford = playerResourceAmount >= potion.cost;
+                bool isNotActive = !potion.isActive;
+                potionUI.buyButton.SetEnabled(canAfford && isNotActive);
+                if (potion.isActive)
+                {
+                    potionUI.buyButton.text = "Aktywna";
+                }
+                else
+                {
+                    potionUI.buyButton.text = "Kup";
+                }
+            }
+        }
+    }
+
+    private void BuyPotion(int potionIndex)
+    {
+        audioSource.Play();
+        
+        if (idleManager == null)
+        {
+            Debug.LogError("IdleManager nie jest przypisany!");
+            return;
+        }
+
+        bool success = idleManager.BuyPotion(potionIndex);
+        if (!success)
+        {
+            Debug.Log($"Brak środków na zakup mikstury {potionIndex}");
+        }
+        else
+        {
+            Debug.Log($"Zakupiono miksturę {potionIndex}");
+        }
+
+        UpdatePotionUI();
     }
 }
