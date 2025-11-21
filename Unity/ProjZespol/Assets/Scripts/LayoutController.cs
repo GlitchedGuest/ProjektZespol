@@ -18,7 +18,6 @@ public class LayoutController : MonoBehaviour
     public Button btn1;
     public Button btn2;
     public Button btn3;
-    public Button resourceBtn;
     public Button btn4;
     public Button btn5;
     public Button btn6;
@@ -182,6 +181,15 @@ public class LayoutController : MonoBehaviour
     private VisualElement skillTreeContainer3;
     private VisualElement lineLayer3;
 
+    //zmiana fabryk
+    public Button prevFactoryBtn;
+    public Button nextFactoryBtn;
+    public Label factoryLabel;
+
+    //przyciski do odblokowania fabryk
+    private Button unlockFactory2Btn;
+    private Button unlockFactory3Btn;
+
     void Awake()
     {
         Instance = this;
@@ -204,8 +212,6 @@ public class LayoutController : MonoBehaviour
         btn2.clicked += ClickBtn2;
         btn3 = ui.Q<Button>("btn3");
         btn3.clicked += ClickBtn3;
-        resourceBtn = ui.Q<Button>("ResourceButton");
-        resourceBtn.clicked += CycleCurrency;
         btn4 = ui.Q<Button>("btn4");
         btn4.clicked += ClickBtn4;
         btn5 = ui.Q<Button>("btn5");
@@ -351,6 +357,30 @@ public class LayoutController : MonoBehaviour
             AutoSaveSystem.AutoSave = evt.newValue;
             audioSource.Play();
         });
+
+        //zmiana fabryk
+        prevFactoryBtn = ui.Q<Button>("PrevFactoryBtn");
+        nextFactoryBtn = ui.Q<Button>("NextFactoryBtn");
+        factoryLabel = ui.Q<Label>("FactoryLabel");
+        if (prevFactoryBtn != null)
+        {
+            prevFactoryBtn.clicked += CycleToPreviousFactory;
+        }
+            
+        if (nextFactoryBtn != null)
+        {
+            nextFactoryBtn.clicked += CycleToNextFactory;
+        }
+
+        //przyciski do odblokowania fabryk
+        unlockFactory2Btn = ui.Q<Button>("UnlockFactory2Btn");
+        unlockFactory3Btn = ui.Q<Button>("UnlockFactory3Btn");
+
+        if (unlockFactory2Btn != null)
+            unlockFactory2Btn.clicked += () => UnlockFactoryFromButton(1);
+
+        if (unlockFactory3Btn != null)
+            unlockFactory3Btn.clicked += () => UnlockFactoryFromButton(2);
     }
 
     void LineLayerInit(VisualElement lineLayer)
@@ -402,7 +432,6 @@ public class LayoutController : MonoBehaviour
         DrawLineBetweenButtons(ui.Q<Button>("Skill4B-tree3"), ui.Q<Button>("Skill5B-tree3"), color, lineLayer3);
         DrawLineBetweenButtons(ui.Q<Button>("Skill4B-tree3"), ui.Q<Button>("Skill5C-tree3"), color, lineLayer3);
         DrawLineBetweenButtons(ui.Q<Button>("Skill5C-tree3"), ui.Q<Button>("Skill6-tree3"), color, lineLayer3);
-
 
     }
 
@@ -1068,6 +1097,8 @@ public class LayoutController : MonoBehaviour
         UpdateFactoryUI();
         UpdatePotionUI();
         UpdateAll();
+        UpdateNavigationButtons();
+        UpdateUnlockButtons();
     }
 
     private void UpdateLvlBar()
@@ -1250,7 +1281,6 @@ public class LayoutController : MonoBehaviour
                 var upgradeLevels = factoryUpgradeLevels[i];
 
                 double productionCost = CalculateUpgradeCost(upgradeLevels.baseProductionCost, upgradeLevels.productionLevel);
-                //double multiplierCost = CalculateUpgradeCost(upgradeLevels.baseMultiplierCost, upgradeLevels.multiplierLevel);
 
                 if (!factory.isUnlocked)
                 {
@@ -1268,8 +1298,6 @@ public class LayoutController : MonoBehaviour
                     
                 
                 factoryUI.multiplierLevelLabel.style.display = DisplayStyle.None;
-                //if (factoryUI.multiplierLevelLabel != null)
-                //    factoryUI.multiplierLevelLabel.text = $"Poziom: {upgradeLevels.multiplierLevel}";
 
                 if (factoryUI.upgradeProductionBtn != null && factory.isUnlocked)
                 {
@@ -1277,21 +1305,13 @@ public class LayoutController : MonoBehaviour
                     factoryUI.upgradeProductionBtn.SetEnabled(playerGold >= productionCost);
                 }
                 factoryUI.upgradeMultiplierBtn.style.display = DisplayStyle.None;
-                //if (factoryUI.upgradeMultiplierBtn != null)
-                //{
-                //    factoryUI.upgradeMultiplierBtn.text = $"Zwiększ mnożnik (+0.1x) - {multiplierCost:F0} G";
-                //    factoryUI.upgradeMultiplierBtn.SetEnabled(playerGold >= multiplierCost);
-                //}
             }
 
 
             if (!factory.isUnlocked)
             {
                 if (factoryUI.unlockButton != null)
-                {
-                    factoryUI.unlockButton.style.display = DisplayStyle.Flex;
-                    factoryUI.unlockButton.SetEnabled(playerGold >= factory.unlockCost);
-                }
+                    factoryUI.unlockButton.style.display = DisplayStyle.None;
 
                 foreach (var btn in factoryUI.buyButtons)
                     if (btn != null) btn.style.display = DisplayStyle.None;
@@ -1335,36 +1355,6 @@ public class LayoutController : MonoBehaviour
         if (idleManager == null) return null;
 
         return idleManager.GetFactory(index);
-    }
-    
-    private void CycleCurrency()
-    {
-         if (idleManager == null || idleManager.GetFactoryCount() == 0) return;
-
-        currentFactoryIndex++;
-        if (currentFactoryIndex >= idleManager.GetFactoryCount())
-            currentFactoryIndex = 0;
-
-        var factory = GetFactory(currentFactoryIndex);
-        if (factory == null) return;
-
-        raptorCore.SetCurrentResource(factory.resource.name);
-        resourceBtn.text = factory.name;
-
-        Sprite Tex; 
-        switch (factory.name)
-        {
-            case "F1": Tex = images[0]; break;
-            case "F2": Tex = images[1]; break;
-            case "F3": Tex = images[2]; break;
-            default: Tex = images[0]; break;
-        }
-
-        currencyIcon.style.backgroundImage = new StyleBackground(Tex);
-        shopIcon.style.backgroundImage = new StyleBackground(Tex);
-        clickerObject.sprite = Tex;
-
-        UpdateFactoryUI();
     }
 
     private void UnlockFactory(int factoryIndex)
@@ -1567,5 +1557,186 @@ public class LayoutController : MonoBehaviour
         }
 
         UpdatePotionUI();
+    }
+
+    //guzik lewy górny róg
+    private void CycleToPreviousFactory()
+    {
+        if (idleManager == null || idleManager.GetFactoryCount() == 0) return;
+
+        audioSource.Play();
+        int startIndex = currentFactoryIndex;
+        int attempts = 0;
+        
+        do
+        {
+            currentFactoryIndex--;
+            if (currentFactoryIndex < 0)
+                currentFactoryIndex = idleManager.GetFactoryCount() - 1;
+            
+            attempts++;
+            
+            if (attempts >= idleManager.GetFactoryCount())
+            {
+                currentFactoryIndex = startIndex;
+                return;
+            }
+            
+        } while (!IsFactoryUnlocked(currentFactoryIndex));
+
+        SwitchToFactory(currentFactoryIndex);
+    }
+
+    //guzik prawy górny róg
+    private void CycleToNextFactory()
+    {
+        if (idleManager == null || idleManager.GetFactoryCount() == 0) return;
+
+        audioSource.Play();
+        int startIndex = currentFactoryIndex;
+        int attempts = 0;
+        
+        do
+        {
+            currentFactoryIndex++;
+            if (currentFactoryIndex >= idleManager.GetFactoryCount())
+                currentFactoryIndex = 0;
+            
+            attempts++;
+            
+            if (attempts >= idleManager.GetFactoryCount())
+            {
+                currentFactoryIndex = startIndex;
+                return;
+            }
+            
+        } while (!IsFactoryUnlocked(currentFactoryIndex));
+        
+        SwitchToFactory(currentFactoryIndex);
+    }
+
+    private bool IsFactoryUnlocked(int factoryIndex)
+    {
+        var factory = GetFactory(factoryIndex);
+        return factory != null && factory.isUnlocked;
+    }
+
+    private void SwitchToFactory(int factoryIndex)
+    {
+        var factory = GetFactory(factoryIndex);
+        if (factory == null) return;
+
+        raptorCore.SetCurrentResource(factory.resource.name);
+
+        if (factoryLabel != null) factoryLabel.text = factory.name;
+
+        Sprite Tex; 
+        switch (factory.name)
+        {
+            case "F1": Tex = images[0]; break;
+            case "F2": Tex = images[1]; break;
+            case "F3": Tex = images[2]; break;
+            default: Tex = images[0]; break;
+        }
+
+        currencyIcon.style.backgroundImage = new StyleBackground(Tex);
+        shopIcon.style.backgroundImage = new StyleBackground(Tex);
+        clickerObject.sprite = Tex;
+
+        UpdateFactoryUI();
+        UpdateNavigationButtons();
+    }
+
+    private void UpdateNavigationButtons()
+    {
+        if (prevFactoryBtn == null || nextFactoryBtn == null || idleManager == null) return;
+
+        int unlockedCount = 0;
+        for (int i = 0; i < idleManager.GetFactoryCount(); i++)
+        {
+            if (IsFactoryUnlocked(i))
+                unlockedCount++;
+        }
+
+        bool hasMultipleUnlocked = unlockedCount > 1;
+        
+        prevFactoryBtn.SetEnabled(hasMultipleUnlocked);
+        prevFactoryBtn.style.display = hasMultipleUnlocked ? DisplayStyle.Flex : DisplayStyle.None;
+        nextFactoryBtn.SetEnabled(hasMultipleUnlocked);
+        nextFactoryBtn.style.display = hasMultipleUnlocked ? DisplayStyle.Flex : DisplayStyle.None;
+    }
+
+    private void UpdateUnlockButtons()
+    {
+        if (idleManager == null || raptorCore == null) return;
+
+        if (unlockFactory2Btn != null)
+        {
+            var factory2 = GetFactory(1);
+            if (factory2 != null)
+            {
+                if (factory2.isUnlocked)
+                {
+                    unlockFactory2Btn.style.display = DisplayStyle.None;
+                }
+                else
+                {
+                    unlockFactory2Btn.style.display = DisplayStyle.Flex;
+                    unlockFactory2Btn.text = $"Odblokuj {factory2.name}\n{factory2.unlockCost} Gold";
+                    unlockFactory2Btn.SetEnabled(raptorCore.Gold >= factory2.unlockCost);
+                }
+            }
+        }
+
+        if (unlockFactory3Btn != null)
+        {
+            var factory3 = GetFactory(2);
+            if (factory3 != null)
+            {
+                if (factory3.isUnlocked)
+                {
+                    unlockFactory3Btn.style.display = DisplayStyle.None;
+                }
+                else
+                {
+                    unlockFactory3Btn.style.display = DisplayStyle.Flex;
+                    unlockFactory3Btn.text = $"Odblokuj {factory3.name}\n{factory3.unlockCost} Gold";
+                    unlockFactory3Btn.SetEnabled(raptorCore.Gold >= factory3.unlockCost);
+                }
+            }
+        }
+    }
+    private void UnlockFactoryFromButton(int factoryIndex)
+    {
+        audioSource.Play();
+
+        if (idleManager == null) return;
+
+        var factory = GetFactory(factoryIndex);
+        if (factory == null) return;
+
+        if (factory.isUnlocked)
+        {
+            Debug.Log($"Fabryka {factory.name} jest już odblokowana!");
+            return;
+        }
+
+        bool success = idleManager.UnlockFactory(factoryIndex);
+
+        if (success)
+        {
+            Debug.Log($"Pomyślnie odblokowano fabrykę {factory.name}");
+             currentFactoryIndex = factoryIndex;
+            SwitchToFactory(factoryIndex);
+        }
+        else
+        {
+            Debug.Log($"Brak złota na odblokowanie fabryki {factory.name}");
+        }
+
+        UpdateFactoryUI();
+        UpdateUnlockButtons();
+        UpdateNavigationButtons();
+        SetGoldText(raptorCore.Gold.ToString("F0"));
     }
 }
