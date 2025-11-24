@@ -15,6 +15,7 @@ public class CharacterClass:MonoBehaviour
     public float boostedChance = 0.00f;
     private float skillCheckChance = -1.0f;
     public int skillCheckReduce = 0;
+    public double productionIdleBonus = 0;
     //Important Skill Variables
     public bool activeIdle = false;
     public bool noMatterWhat = false;
@@ -91,6 +92,7 @@ public class CharacterClass:MonoBehaviour
             case "Skill5": Symbiosis(revert); break;
             case "Skill6A": MortalClicker(revert); break;
             case "Skill6B": ChampionOfClicks(revert); break;
+            case "Skill1-tree3": Entrepreneur(revert); break;
         }
 
     }
@@ -149,5 +151,10 @@ public class CharacterClass:MonoBehaviour
         yield return new WaitForSeconds(6f);
         criticalChance = prevChance;
         championOfClicks = true;
+    }
+
+    private void Entrepreneur(bool revert)
+    {
+        productionIdleBonus = revert ? 0f : 30.0f;
     }
 }

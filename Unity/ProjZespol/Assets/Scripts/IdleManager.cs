@@ -6,6 +6,7 @@ using UnityEngine;
 public class IdleManager : MonoBehaviour
 {
     [SerializeField] private RaptorCore raptorCore;
+    [SerializeField] private CharacterClass characterClass;
     [SerializeField] private float tickInterval = 1f;
     private Coroutine tickCoroutine;
     public List<Factory> factories;
@@ -115,7 +116,7 @@ public class IdleManager : MonoBehaviour
             }
             if (f.resource != null)
             {
-                f.resource.value += (QuarkType)production;
+                f.resource.value += (QuarkType)(production + (GetUnlockedFactoryCount(f.resource.name) * characterClass.productionIdleBonus));
             }
         }
 
@@ -336,5 +337,18 @@ public class IdleManager : MonoBehaviour
             default:
                 break;
         }
+    }
+
+    private int GetUnlockedFactoryCount(string resource)
+    {
+        if (raptorCore.currentResource != resource)
+            return 0;
+        int sum = -1;
+        foreach(var f in factories)
+        {
+            if(f.isUnlocked)
+                sum++;
+        }
+        return sum;
     }
 }

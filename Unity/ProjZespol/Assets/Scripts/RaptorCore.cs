@@ -359,6 +359,7 @@ public class RaptorCore : MonoBehaviour
                 yield return new WaitForSeconds(6f);
                 f.productionMultiplier -= 3;
                 f.count -= 4;
+                break;
             }
         }       
     }
