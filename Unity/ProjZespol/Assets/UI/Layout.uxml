@@ -1,5 +1,8 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
     <Style src="project://database/Assets/UI/Layout.uss?fileID=7433441132597879392&amp;guid=7ea33738955c9e342a0a8527e76837e4&amp;type=3#Layout" />
+    <ui:VisualElement name="combo-container" style="flex-grow: 1; position: absolute; display: flex; top: auto; left: auto;">
+        <ui:Label name="combolabel" text="eloo" style="-unity-font-style: bold; -unity-font-definition: url(&quot;project://database/Assets/Font/NotJamBlkltr13.ttf?fileID=12800000&amp;guid=a804de353129fb54aa1904922ecd93d6&amp;type=3#NotJamBlkltr13&quot;); font-size: 40%; color: rgb(255, 192, 0); top: 13%; left: 5%;" />
+    </ui:VisualElement>
     <ui:VisualElement name="crit-container" picking-mode="Ignore" />
     <ui:VisualElement name="Background" style="flex-grow: 1; -unity-background-scale-mode: stretch-to-fill; transform-origin: left;">
         <ui:VisualElement name="ActivePotionsPanel" style="position: absolute; left: 10px; top: 120px; width: 150px; flex-direction: column; z-index: 100;" />
@@ -31,9 +34,6 @@
             <ui:VisualElement name="BottomContainer" style="flex-grow: 1; position: absolute; width: 100%; height: 50%; bottom: 50%; flex-direction: row; align-items: flex-start; flex-wrap: nowrap;">
                 <ui:VisualElement name="OptionContainer" style="flex-grow: 0; width: 20%; height: 100%; align-items: flex-start;">
                     <ui:Button text="Opcje" name="Optionbtn" class="text btncolor color navbuttonborder" style="right: auto; width: 70%; margin-left: 2%; height: 50%; top: 25px; left: 15%; background-color: rgb(27, 36, 46);" />
-                </ui:VisualElement>
-                <ui:VisualElement name="combo-container" style="flex-grow: 1; position: relative; display: flex; justify-content: center;">
-                    <ui:Label name="combolabel" text="eloo" style="-unity-font-style: bold; -unity-font-definition: url(&quot;project://database/Assets/Font/NotJamBlkltr13.ttf?fileID=12800000&amp;guid=a804de353129fb54aa1904922ecd93d6&amp;type=3#NotJamBlkltr13&quot;); font-size: 40%; color: rgb(255, 192, 0);" />
                 </ui:VisualElement>
             </ui:VisualElement>
         </ui:VisualElement>

@@ -138,10 +138,10 @@ public class RaptorCore : MonoBehaviour
         Currency += (GBasevalue * GMultiplier); //.Pow(GPower);
 
         tickCount++;
-        if (tickCount % 200 == 0)
+        if (tickCount % 600 == 0)
             if(AutoSaveSystem.AutoSave)
                 AutoSaveSystem.SaveGame();
-        if (tickCount % (200-characterClass.skillCheckReduce) == 0) //zmienic przy balansie
+        if (tickCount % (600-characterClass.skillCheckReduce) == 0) //zmienic przy balansie
             SkillCheckManager();  
     }
 

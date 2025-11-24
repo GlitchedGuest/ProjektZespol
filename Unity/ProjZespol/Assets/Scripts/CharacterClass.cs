@@ -125,7 +125,7 @@ public class CharacterClass:MonoBehaviour
     }
     private void Symbiosis(bool revert)
     {
-        skillCheckChance = revert ? 101.0f : 30.0f;
+        skillCheckChance = revert ? 10.0f : 30.0f;
     }
     private void MortalClicker(bool revert)
     {
