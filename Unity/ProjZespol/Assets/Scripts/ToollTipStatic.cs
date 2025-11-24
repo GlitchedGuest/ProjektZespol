@@ -10,6 +10,7 @@ public static class Tooltip
     private static VisualElement Frame;
     private static Label Tittle;
     private static Label Content;
+    private static Label Lore;
 
     public static void Init(VisualElement uiRoot, VisualTreeAsset tooltipAsset)
     {
@@ -19,6 +20,7 @@ public static class Tooltip
         Frame = root.Q<VisualElement>("Frame");
         Tittle = root.Q<Label>("Title");
         Content = root.Q<Label>("Content");
+        Lore = root.Q<Label>("Lore");
 
         uiRoot.Add(root);
 
@@ -39,10 +41,11 @@ public static class Tooltip
         root.contentContainer.style.height = new StyleLength(newHeight);
     }
 
-    public static void Show(string title,string content, Vector2 position)
+    public static void Show(string title,string content, Vector2 position, string lore = "Lorem ipsum dolor sit amet consectetur adipiscing elit. Consectetur adipiscing elit quisque faucibus ex sapien vitae. Ex sapien vitae pellentesque sem placerat in id. Placerat in id cursus mi pretium tellus duis. Pretium tellus duis convallis tempus leo eu aenean.")
     {
         Tittle.text = title;
         Content.text = content;
+        Lore.text = lore;
         Frame.visible = true;
         Frame.style.width = StyleKeyword.Auto;
         Frame.style.height = StyleKeyword.Auto;
