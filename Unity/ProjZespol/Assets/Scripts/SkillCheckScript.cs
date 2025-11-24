@@ -18,6 +18,12 @@ public class SkillCheckScript : MonoBehaviour
     private float waitTime = 0.9f;
     private int brickCount = 10;
 
+    [SerializeField] private GameObject Layout;
+    private ComboVisual combovisual;
+    private void Start()
+    {
+        combovisual = Layout.GetComponent<ComboVisual>();
+    }
     void Update()
     {
         if (this.gameObject.activeSelf && !flag.enabled)
@@ -73,6 +79,7 @@ public class SkillCheckScript : MonoBehaviour
             if (characterClass.mortalClicker || characterClass.championOfClicks)
             {
                 kombo++;
+                
                 if (characterClass.mortalClicker)
                 {
                     raptorCore.SkillMultiplier -= 10 * (kombo - 1);
@@ -84,6 +91,7 @@ public class SkillCheckScript : MonoBehaviour
                     kombo = 0;
                     characterClass.EnableAlanWake();
                 }
+                combovisual.UpdateCombo(kombo);
             }      
             raptorCore.AddCurrency(value);
             raptorCore.EnableChickenDinner(true);
@@ -96,6 +104,7 @@ public class SkillCheckScript : MonoBehaviour
                 raptorCore.SkillMultiplier -= 10 * kombo;
             }
             kombo = 0;
+            combovisual.UpdateCombo(kombo);
             raptorCore.SubCurrency(-value);
             raptorCore.EnableChickenDinner(false);
         }

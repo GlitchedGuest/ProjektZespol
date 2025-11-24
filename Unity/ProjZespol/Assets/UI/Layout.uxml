@@ -1,5 +1,6 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
     <Style src="project://database/Assets/UI/Layout.uss?fileID=7433441132597879392&amp;guid=7ea33738955c9e342a0a8527e76837e4&amp;type=3#Layout" />
+    <ui:VisualElement name="crit-container" picking-mode="Ignore" />
     <ui:VisualElement name="Background" style="flex-grow: 1; -unity-background-scale-mode: stretch-to-fill; transform-origin: left;">
         <ui:VisualElement name="ActivePotionsPanel" style="position: absolute; left: 10px; top: 120px; width: 150px; flex-direction: column; z-index: 100;" />
         <ui:VisualElement name="Top" class="color" style="flex-grow: 1; position: absolute; height: 100%; width: 100%; border-left-color: rgb(0, 0, 72); border-right-color: rgb(0, 0, 72); border-top-color: rgb(0, 0, 72); border-bottom-color: rgb(0, 0, 72); border-bottom-width: 0; border-bottom-left-radius: 10px; border-bottom-right-radius: 10px; flex-direction: row; align-items: center; justify-content: flex-start; flex-wrap: nowrap; max-height: 20%; top: auto; padding-top: 5%; padding-right: 0%; padding-bottom: 0%; padding-left: 0%; background-color: rgba(0, 0, 0, 0.71); background-image: url(&quot;project://database/Assets/UI/GuiArt/BorderStyle1.png?fileID=2800000&amp;guid=55b0fd22875fad945891e5d09bce7254&amp;type=3#BorderStyle1&quot;); -unity-slice-left: 300; -unity-slice-top: 300; -unity-slice-right: 300; -unity-slice-bottom: 300; -unity-slice-scale: 0.2px; left: 0; border-top-width: 0; border-right-width: 0; border-left-width: 0; bottom: 90%; right: auto;">
@@ -27,9 +28,12 @@
             </ui:VisualElement>
         </ui:VisualElement>
         <ui:VisualElement name="Bottom" class="color" style="flex-grow: 1; height: 80%; width: 100%; position: absolute; top: 90%; border-left-color: rgba(255, 255, 255, 0); border-right-color: rgba(255, 255, 255, 0); border-top-color: rgba(255, 255, 255, 0); border-bottom-color: rgba(255, 255, 255, 0); border-top-width: 2px; border-top-left-radius: 0; border-top-right-radius: 0; background-image: url(&quot;project://database/Assets/UI/GuiArt/BorderStyle1.png?fileID=2800000&amp;guid=55b0fd22875fad945891e5d09bce7254&amp;type=3#BorderStyle1&quot;); -unity-slice-left: 300; -unity-slice-top: 300; -unity-slice-right: 300; -unity-slice-bottom: 300; -unity-slice-scale: 0.2px; -unity-slice-type: sliced; max-height: 20%; background-size: 100% 100%; -unity-background-scale-mode: stretch-to-fill; background-color: rgba(0, 0, 0, 0.71); border-bottom-right-radius: 0; border-bottom-left-radius: 0; justify-content: flex-end;">
-            <ui:VisualElement name="BottomContainer" style="flex-grow: 1; position: absolute; width: 100%; height: 50%; bottom: 50%;">
-                <ui:VisualElement name="OptionContainer" style="flex-grow: 1; width: 20%; height: 100%;">
+            <ui:VisualElement name="BottomContainer" style="flex-grow: 1; position: absolute; width: 100%; height: 50%; bottom: 50%; flex-direction: row; align-items: flex-start; flex-wrap: nowrap;">
+                <ui:VisualElement name="OptionContainer" style="flex-grow: 0; width: 20%; height: 100%; align-items: flex-start;">
                     <ui:Button text="Opcje" name="Optionbtn" class="text btncolor color navbuttonborder" style="right: auto; width: 70%; margin-left: 2%; height: 50%; top: 25px; left: 15%; background-color: rgb(27, 36, 46);" />
+                </ui:VisualElement>
+                <ui:VisualElement name="combo-container" style="flex-grow: 1; position: relative; display: flex; justify-content: center;">
+                    <ui:Label name="combolabel" text="eloo" style="-unity-font-style: bold; -unity-font-definition: url(&quot;project://database/Assets/Font/NotJamBlkltr13.ttf?fileID=12800000&amp;guid=a804de353129fb54aa1904922ecd93d6&amp;type=3#NotJamBlkltr13&quot;); font-size: 40%; color: rgb(255, 192, 0);" />
                 </ui:VisualElement>
             </ui:VisualElement>
         </ui:VisualElement>
