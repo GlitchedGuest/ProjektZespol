@@ -93,6 +93,7 @@ public class CharacterClass:MonoBehaviour
             case "Skill6A": MortalClicker(revert); break;
             case "Skill6B": ChampionOfClicks(revert); break;
             case "Skill1-tree3": Entrepreneur(revert); break;
+            case "Skill2-tree3": PushToTheLimit(revert); break;
         }
 
     }
@@ -156,5 +157,10 @@ public class CharacterClass:MonoBehaviour
     private void Entrepreneur(bool revert)
     {
         productionIdleBonus = revert ? 0f : 30.0f;
+    }
+
+    private void PushToTheLimit(bool revert)
+    {
+        return; //nie ma mechaniki xd
     }
 }

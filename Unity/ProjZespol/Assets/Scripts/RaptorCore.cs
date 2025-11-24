@@ -51,6 +51,10 @@ public class RaptorCore : MonoBehaviour
     private float clickCooldown = 0.5f; // jezeli gracz klika przycisk to wyłącza inne na czas cooldownu
     public QuarkType potionClickBonus = 0;
     public QuarkType potionSellBonus = 1;
+
+    private bool skillCheckCooldown = false;
+    int skillCheckCooldownCount = 0;
+
     private void Awake()
     {
         UpdateUI();
@@ -68,6 +72,7 @@ public class RaptorCore : MonoBehaviour
     {
         QuarkType value = 0;          
         float chance = UnityEngine.Random.Range(0.00f, 100.00f);
+        if (!skillCheckCooldown) SkillCheckManager();
         if (chance < characterClass.GetCriticalChance())
         {
             if(idleManager.potions[0].isActive && idleManager.potions[0].linkedFactory.name == GetCurrentFactory().name)
@@ -106,6 +111,7 @@ public class RaptorCore : MonoBehaviour
         {
             skillCheck.SetActive(true);
             skillCheck.GetComponent<SkillCheckScript>().StartSkillCheck();
+            skillCheckCooldown = true;
         }      
     }
 
@@ -123,12 +129,17 @@ public class RaptorCore : MonoBehaviour
     {
         Currency += (GBasevalue * GMultiplier); //.Pow(GPower);
 
+        if(skillCheckCooldown)
+            skillCheckCooldownCount++;
         tickCount++;
         if (tickCount % 600 == 0)
             if(AutoSaveSystem.AutoSave)
                 AutoSaveSystem.SaveGame();
-        if (tickCount % (600-characterClass.skillCheckReduce) == 0) //zmienic przy balansie
-            SkillCheckManager();  
+        if (skillCheckCooldownCount % (600 - characterClass.skillCheckReduce) == 0)//zmienic przy balansie
+        { 
+            skillCheckCooldown = false;
+            skillCheckCooldownCount = 0;
+        }
     }
 
     void Update()
