@@ -214,6 +214,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 3704218510316252961, guid: 1ad9efa65be02144daac6892ae7b04f8, type: 3}
+      propertyPath: m_Texture
+      value: 
+      objectReference: {fileID: 2800000, guid: 0c4f7a407ef7cc2479895179a9e5977b, type: 3}
     - target: {fileID: 4563431600689381672, guid: 1ad9efa65be02144daac6892ae7b04f8, type: 3}
       propertyPath: m_Camera
       value: 
@@ -658,7 +662,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1101170802}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 41e792a4fe97c8c46904c23a5d30f7dc, type: 3}
   m_Name: 
