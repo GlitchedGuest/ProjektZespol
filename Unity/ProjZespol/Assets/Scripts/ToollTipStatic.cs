@@ -57,7 +57,7 @@ public static class Tooltip
     public static void Move(Vector2 position)
     {
         float X_initial = position.x - (Frame.resolvedStyle.width * 0.5f);
-        float X_clamped = Mathf.Min(X_initial, (Screen.width - Frame.resolvedStyle.width)*2);
+        float X_clamped = Mathf.Min(X_initial, root.resolvedStyle.width - Frame.resolvedStyle.width);
         Frame.style.left = new StyleLength(X_clamped);
         Frame.style.top = new StyleLength(position.y + 10);
     }
