@@ -200,3 +200,25 @@
     border-top-right-radius: 10px;
     border-bottom-right-radius: 10px;
 }
+
+#crit-container {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    pointer-events: none; 
+}
+#combo-container {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+	opacity: 0;
+    scale: 0.9;
+    transition: opacity 150ms ease-out, scale 150ms ease-out;
+}
+
+#combolabel {
+    font-size: 32px;
+    color: yellow;
+    unity-font-style: bold;
+}

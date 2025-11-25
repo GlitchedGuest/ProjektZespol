@@ -37,6 +37,7 @@ public class RaptorCore : MonoBehaviour
     [SerializeField] private Animator anim;
     [SerializeField] private CharacterClass characterClass;
     [SerializeField] private GameObject skillCheck;
+    
     [SerializeField] private IdleManager idleManager;
     [AutoSave] public double Gold = 0;
     private Dictionary<string, Resource> resources = new Dictionary<string, Resource>();
@@ -51,8 +52,15 @@ public class RaptorCore : MonoBehaviour
     private float clickCooldown = 0.5f; // jezeli gracz klika przycisk to wyłącza inne na czas cooldownu
     public QuarkType potionClickBonus = 0;
     public QuarkType potionSellBonus = 1;
+
+    //Crit Generator
+    [SerializeField] private GameObject CritGenerator;
+    private CritVisualGenerator critGen;
+    [SerializeField] private AudioSource audioSource;
+    [SerializeField] private AudioSource critSource;
     private void Awake()
     {
+        critGen = CritGenerator.GetComponent<CritVisualGenerator>();
         UpdateUI();
     }
 
@@ -82,9 +90,15 @@ public class RaptorCore : MonoBehaviour
             if (characterClass.noMatterWhat)
                 characterClass.boostedChance = 0.00f;
             Debug.Log("Kryt " + chance);
+            Vector2 mousePos = Input.mousePosition;
+            critGen.SpawnCrit(mousePos);
+            critSource.Stop();
+            critSource.Play();
         }
         else
         {
+            audioSource.Stop();
+            audioSource.Play();
             if(idleManager.potions[0].isActive && idleManager.potions[0].linkedFactory.name == GetCurrentFactory().name)
                 value += (((CBasevalue * CMultiplier) + (CBasevalue * SkillMultiplier))) + potionClickBonus;
             else

@@ -112,7 +112,7 @@ public class LayoutController : MonoBehaviour
     private int currentFactoryIndex = 0;
 
     [SerializeField] private AudioSource audioSource;
-
+    [SerializeField] private AudioSource critSource;
 
     //drzewka
     private Dictionary<string, Button> buttons = new();
@@ -336,6 +336,7 @@ public class LayoutController : MonoBehaviour
         sfxSlider.value = PlayerPrefs.GetFloat("SfxVolume", 1f);
         
         audioSource.volume = sfxSlider.value;
+        critSource.volume= sfxSlider.value;
 
         DeleteSaveButton = ui.Q<Button>("DeleteSaveButton");
         AutoSavetoggle = ui.Q<Toggle>("AutoSavetoggle");
@@ -1502,6 +1503,7 @@ public class LayoutController : MonoBehaviour
         
         Debug.Log($"Głośność sfx: {evt.newValue}");
         audioSource.volume = evt.newValue;
+        critSource.volume = evt.newValue;
         PlayerPrefs.SetFloat("SfxVolume", evt.newValue);
         PlayerPrefs.Save();
     }
