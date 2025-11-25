@@ -16,6 +16,7 @@ public class CharacterClass:MonoBehaviour
     private float skillCheckChance = -1.0f;
     public int skillCheckReduce = 0;
     public double productionIdleBonus = 0;
+    public double productionIdlePedatorBonus = 0;
     //Important Skill Variables
     public bool activeIdle = false;
     public bool noMatterWhat = false;
@@ -24,6 +25,9 @@ public class CharacterClass:MonoBehaviour
     public bool symbiosis = false;
     public bool mortalClicker = false;
     public bool championOfClicks = false;
+    public bool reactionTest = false;
+    public bool unskilledPredator = false;
+    public bool oneForEveryone = false;
     //Use this to gain exp from activities
     public void GainExp(ulong exp)
     {
@@ -94,13 +98,16 @@ public class CharacterClass:MonoBehaviour
             case "Skill6B": ChampionOfClicks(revert); break;
             case "Skill1-tree3": Entrepreneur(revert); break;
             case "Skill2-tree3": PushToTheLimit(revert); break;
+            case "Skill3A-tree3": ReactionTest(revert); break;
+            case "Skill4A-tree3": UnskilledPredator(revert); break;
+            case "Skill5A-tree3": OneForEveryone(revert); break;
         }
 
     }
 
     private void SkillBasedClicking(bool revert)
     {
-        skillCheckChance = revert ? -1.0f : 10.0f;
+        skillCheckChance = revert ? -1.0f : 101.0f;
     }
     private void CriticalMass(bool revert)
     {
@@ -138,13 +145,11 @@ public class CharacterClass:MonoBehaviour
     {
         championOfClicks = !revert;
     }
-
     public void EnableAlanWake()
     {
         StartCoroutine(AlanWake());
         championOfClicks = false;
     }
-
     private IEnumerator AlanWake()
     {
         float prevChance = criticalChance;
@@ -153,14 +158,34 @@ public class CharacterClass:MonoBehaviour
         criticalChance = prevChance;
         championOfClicks = true;
     }
-
     private void Entrepreneur(bool revert)
     {
-        productionIdleBonus = revert ? 0f : 30.0f;
+        productionIdleBonus = revert ? 0f : 5.0f;
     }
-
     private void PushToTheLimit(bool revert)
     {
         return; //nie ma mechaniki xd
+    }
+    private void ReactionTest(bool revert)
+    {
+        reactionTest = !revert;
+    }
+    private void UnskilledPredator(bool revert)
+    {
+        unskilledPredator = !revert;
+        if (!revert) productionIdlePedatorBonus = 0f;
+    }
+    public void Pedator(bool reset)
+    {
+        if (unskilledPredator)
+        {
+            if (!reset) productionIdlePedatorBonus += 5.0f;
+            else productionIdlePedatorBonus = 0f;
+        }
+    }
+    private void OneForEveryone(bool revert)
+    {
+        unskilledPredator = !revert;
+        if (!revert) productionIdleBonus = 5.0f;
     }
 }

@@ -116,7 +116,10 @@ public class IdleManager : MonoBehaviour
             }
             if (f.resource != null)
             {
-                f.resource.value += (QuarkType)(production + (GetUnlockedFactoryCount(f.resource.name) * characterClass.productionIdleBonus));
+                if(characterClass.oneForEveryone)
+                    f.resource.value += (QuarkType)(production + (GetUnlockedFactoryCount(f.resource.name) * (characterClass.productionIdleBonus + characterClass.productionIdlePedatorBonus)));
+                else
+                    f.resource.value += (QuarkType)(production + (GetUnlockedFactoryCount(f.resource.name) * characterClass.productionIdleBonus) + characterClass.productionIdlePedatorBonus);
             }
         }
 
@@ -343,7 +346,7 @@ public class IdleManager : MonoBehaviour
     {
         if (raptorCore.currentResource != resource)
             return 0;
-        int sum = -1;
+        int sum = 0;
         foreach(var f in factories)
         {
             if(f.isUnlocked)

@@ -72,7 +72,7 @@ public class RaptorCore : MonoBehaviour
     {
         QuarkType value = 0;          
         float chance = UnityEngine.Random.Range(0.00f, 100.00f);
-        if (!skillCheckCooldown) SkillCheckManager();
+        if (!skillCheckCooldown && !characterClass.reactionTest) SkillCheckManager();
         if (chance < characterClass.GetCriticalChance())
         {
             if(idleManager.potions[0].isActive && idleManager.potions[0].linkedFactory.name == GetCurrentFactory().name)
@@ -103,6 +103,7 @@ public class RaptorCore : MonoBehaviour
 
     void SkillCheckManager()
     {
+        Debug.Log("SKILL CHECK");
         float chance = UnityEngine.Random.Range(0.00f, 100.00f);
         float boostChance = 0;
         if (characterClass.symbiosis)
@@ -140,6 +141,9 @@ public class RaptorCore : MonoBehaviour
             skillCheckCooldown = false;
             skillCheckCooldownCount = 0;
         }
+        if (characterClass.reactionTest && !skillCheckCooldown)
+            if (tickCount % 200 == 0)
+                SkillCheckManager();
     }
 
     void Update()
@@ -385,9 +389,11 @@ public class RaptorCore : MonoBehaviour
     {
         int mode = 1;
         if (!effect)
+        {
             mode = -1;
-        if (!characterClass.alwaysWinner)
-            mode = 0;
+            if (characterClass.alwaysWinner)
+                mode = 0;
+        }
         SkillMultiplier += 10 * mode;
         yield return new WaitForSeconds(6f);
         SkillMultiplier -= 10 * mode;
