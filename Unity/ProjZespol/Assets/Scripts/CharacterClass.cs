@@ -17,6 +17,7 @@ public class CharacterClass:MonoBehaviour
     public int skillCheckReduce = 0;
     public double productionIdleBonus = 0;
     public double productionIdlePedatorBonus = 0;
+    public double productionIdleAgressiveBonus = 0;
     //Important Skill Variables
     public bool activeIdle = false;
     public bool noMatterWhat = false;
@@ -28,6 +29,9 @@ public class CharacterClass:MonoBehaviour
     public bool reactionTest = false;
     public bool unskilledPredator = false;
     public bool oneForEveryone = false;
+    public bool whatEyesDontSee = false;
+    public bool passiveAgressive = false;
+    public bool multitasking = false;
     //Use this to gain exp from activities
     public void GainExp(ulong exp)
     {
@@ -101,6 +105,9 @@ public class CharacterClass:MonoBehaviour
             case "Skill3A-tree3": ReactionTest(revert); break;
             case "Skill4A-tree3": UnskilledPredator(revert); break;
             case "Skill5A-tree3": OneForEveryone(revert); break;
+            case "Skill3B-tree3": WhatEyesDontSee(revert); break;
+            case "Skill4B-tree3": PassiveAgressive(revert); break;
+            case "Skill5B-tree3": Multitasking(revert); break;
         }
 
     }
@@ -187,5 +194,18 @@ public class CharacterClass:MonoBehaviour
     {
         unskilledPredator = !revert;
         if (!revert) productionIdleBonus = 5.0f;
+    }
+    private void WhatEyesDontSee(bool revert)
+    {
+        whatEyesDontSee = !revert;
+    }
+    private void PassiveAgressive(bool revert)
+    {
+        passiveAgressive = !revert;
+        productionIdleAgressiveBonus = 0;
+    }
+    private void Multitasking(bool revert)
+    {
+        multitasking = !revert;
     }
 }

@@ -116,7 +116,12 @@ public class IdleManager : MonoBehaviour
             }
             if (f.resource != null)
             {
-                if(characterClass.oneForEveryone)
+                if (!GetFocusedFactory(f.resource.name) && characterClass.whatEyesDontSee)
+                    f.resource.value += production / 2 + 100;
+                if (GetFocusedFactory(f.resource.name) && characterClass.passiveAgressive)
+                    f.resource.value += characterClass.productionIdleAgressiveBonus;
+
+                if (characterClass.oneForEveryone)
                     f.resource.value += (QuarkType)(production + (GetUnlockedFactoryCount(f.resource.name) * (characterClass.productionIdleBonus + characterClass.productionIdlePedatorBonus)));
                 else
                     f.resource.value += (QuarkType)(production + (GetUnlockedFactoryCount(f.resource.name) * characterClass.productionIdleBonus) + characterClass.productionIdlePedatorBonus);
@@ -354,4 +359,12 @@ public class IdleManager : MonoBehaviour
         }
         return sum;
     }
+
+    private bool GetFocusedFactory(string resource)
+    {
+        if (raptorCore.currentResource != resource)
+            return false;
+        return true;
+    }
+
 }

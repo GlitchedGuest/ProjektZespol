@@ -54,6 +54,7 @@ public class RaptorCore : MonoBehaviour
 
     private bool skillCheckCooldown = false;
     int skillCheckCooldownCount = 0;
+    public int clickingDebuff = 0;
 
     private void Awake()
     {
@@ -144,6 +145,12 @@ public class RaptorCore : MonoBehaviour
         if (characterClass.reactionTest && !skillCheckCooldown)
             if (tickCount % 200 == 0)
                 SkillCheckManager();
+        if (characterClass.passiveAgressive)
+            if (tickCount % 300 == 0)
+            {
+                characterClass.productionIdleAgressiveBonus += 10 - clickingDebuff;
+                clickingDebuff = 0;
+            }
     }
 
     void Update()
@@ -182,6 +189,10 @@ public class RaptorCore : MonoBehaviour
         {
             click();
             anim.SetTrigger("Clicked");
+            if(characterClass.passiveAgressive)
+                characterClass.productionIdleAgressiveBonus = 0;
+            if (characterClass.multitasking)
+                clickingDebuff = 2;
             UpdateUI();
         }
     }
