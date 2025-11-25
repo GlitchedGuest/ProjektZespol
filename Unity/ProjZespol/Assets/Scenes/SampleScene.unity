@@ -1011,6 +1011,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 205226413}
     - target: {fileID: 2595809473968715902, guid: fe1619c8ad742c24e8be78d6c285b517, type: 3}
+      propertyPath: tooltipAsset
+      value: 
+      objectReference: {fileID: 9197481963319205126, guid: ddebe575c2091144ea52da55091fc62a, type: 3}
+    - target: {fileID: 2595809473968715902, guid: fe1619c8ad742c24e8be78d6c285b517, type: 3}
       propertyPath: clickerObject
       value: 
       objectReference: {fileID: 1105491401}
