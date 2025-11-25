@@ -214,6 +214,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 3704218510316252961, guid: 1ad9efa65be02144daac6892ae7b04f8, type: 3}
+      propertyPath: m_Texture
+      value: 
+      objectReference: {fileID: 2800000, guid: 0c4f7a407ef7cc2479895179a9e5977b, type: 3}
     - target: {fileID: 4563431600689381672, guid: 1ad9efa65be02144daac6892ae7b04f8, type: 3}
       propertyPath: m_Camera
       value: 
@@ -310,10 +314,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 5457033118011723923, guid: 1ad9efa65be02144daac6892ae7b04f8, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 3880573588267992144, guid: 1ad9efa65be02144daac6892ae7b04f8, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1101170806}
   m_SourcePrefab: {fileID: 100100000, guid: 1ad9efa65be02144daac6892ae7b04f8, type: 3}
 --- !u!224 &60750632 stripped
 RectTransform:
@@ -647,6 +655,28 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 3346408856576058725, guid: 70a5672d9d0f58249b6e0cc4fe72adf4, type: 3}
   m_PrefabInstance: {fileID: 1661866803}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1101170802 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3880573588267992144, guid: 1ad9efa65be02144daac6892ae7b04f8, type: 3}
+  m_PrefabInstance: {fileID: 60750631}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1101170806
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1101170802}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 41e792a4fe97c8c46904c23a5d30f7dc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  backgrounds:
+  - {fileID: 2800000, guid: 0c4f7a407ef7cc2479895179a9e5977b, type: 3}
+  - {fileID: 2800000, guid: 0dae48ce2b5e6144aa9b7f0aa43a5299, type: 3}
+  - {fileID: 2800000, guid: c912d8547effe2942aaddb639682ebde, type: 3}
+  raptorCore: {fileID: 186519293}
 --- !u!212 &1105491401 stripped
 SpriteRenderer:
   m_CorrespondingSourceObject: {fileID: 3072934719231244098, guid: 74134571a0795ce4a840c2356e47dbbb, type: 3}
