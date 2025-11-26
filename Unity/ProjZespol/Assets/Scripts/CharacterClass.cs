@@ -32,6 +32,8 @@ public class CharacterClass:MonoBehaviour
     public bool whatEyesDontSee = false;
     public bool passiveAgressive = false;
     public bool multitasking = false;
+    public bool christmasBonus = false;
+    public bool hungryWolf = false;
     //Use this to gain exp from activities
     public void GainExp(ulong exp)
     {
@@ -108,6 +110,8 @@ public class CharacterClass:MonoBehaviour
             case "Skill3B-tree3": WhatEyesDontSee(revert); break;
             case "Skill4B-tree3": PassiveAgressive(revert); break;
             case "Skill5B-tree3": Multitasking(revert); break;
+            case "Skill5C-tree3": ChristmasBonus(revert); break;
+            case "Skill6-tree3": HungryWolf(revert); break;
         }
 
     }
@@ -207,5 +211,13 @@ public class CharacterClass:MonoBehaviour
     private void Multitasking(bool revert)
     {
         multitasking = !revert;
+    }
+    private void ChristmasBonus(bool revert)
+    {
+        christmasBonus = !revert;
+    }
+    private void HungryWolf(bool revert)
+    {
+        hungryWolf = !revert;
     }
 }

@@ -118,8 +118,12 @@ public class IdleManager : MonoBehaviour
             {
                 if (!GetFocusedFactory(f.resource.name) && characterClass.whatEyesDontSee)
                     f.resource.value += production / 2 + 100;
-                if (GetFocusedFactory(f.resource.name) && characterClass.passiveAgressive)
+                if (GetFocusedFactory(f.resource.name) && characterClass.passiveAgressive && !characterClass.christmasBonus)
                     f.resource.value += characterClass.productionIdleAgressiveBonus;
+                if (characterClass.passiveAgressive && characterClass.christmasBonus)
+                    f.resource.value += characterClass.productionIdleAgressiveBonus;
+                if (characterClass.hungryWolf)
+                    f.resource.value += 0; // do implementacji jak będzie limit punktów
 
                 if (characterClass.oneForEveryone)
                     f.resource.value += (QuarkType)(production + (GetUnlockedFactoryCount(f.resource.name) * (characterClass.productionIdleBonus + characterClass.productionIdlePedatorBonus)));
