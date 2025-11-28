@@ -45,6 +45,9 @@ public class RaptorCore : MonoBehaviour
     [AutoSave] public QuarkType resource1Value = 0;
     [AutoSave] public QuarkType resource2Value = 0;
     [AutoSave] public QuarkType resource3Value = 0;
+    [AutoSave] public QuarkType resource4Value = 0;
+    [AutoSave] public QuarkType resource5Value = 0;
+    [AutoSave] public QuarkType resource6Value = 0;
     public string currentResource = "Resource1";
     private enum ClickSource { None, Mouse, Space, Enter }
     private ClickSource activeClickSource = ClickSource.None;
@@ -130,7 +133,12 @@ public class RaptorCore : MonoBehaviour
         if (resources.ContainsKey("Resource1")) resources["Resource1"].value = resource1Value;
         if (resources.ContainsKey("Resource2")) resources["Resource2"].value = resource2Value;
         if (resources.ContainsKey("Resource3")) resources["Resource3"].value = resource3Value;
+        if (resources.ContainsKey("Resource4")) resources["Resource4"].value = resource1Value;
+        if (resources.ContainsKey("Resource5")) resources["Resource5"].value = resource2Value;
+        if (resources.ContainsKey("Resource6")) resources["Resource6"].value = resource3Value;
+        //Gold = 10000000000000000000000000000000.0f;
         UpdateUI();
+
     }
 
     void FixedUpdate()
@@ -201,6 +209,12 @@ public class RaptorCore : MonoBehaviour
                 return SellResource("Resource2", sellValue, 2.0);
             case "Resource3":
                 return SellResource("Resource3", sellValue, 3.0);
+            case "Resource4":
+                return SellResource("Resource4", sellValue, 4.0);
+            case "Resource5":
+                return SellResource("Resource5", sellValue, 5.0);
+            case "Resource6":
+                return SellResource("Resource6", sellValue, 6.0);
             default:
                 return 0;
         }
@@ -265,6 +279,12 @@ public class RaptorCore : MonoBehaviour
                 return resource2Value;
             case "Resource3":
                 return resource3Value;
+            case "Resource4":
+                return resource4Value;
+            case "Resource5":
+                return resource5Value;
+            case "Resource6":
+                return resource6Value;
             default:
                 return GetResourceValue(resourceName);
         }
@@ -316,6 +336,21 @@ public class RaptorCore : MonoBehaviour
                 if (resources.ContainsKey("Resource3"))
                     resources["Resource3"].value = value;
                 break;
+            case "Resource4":
+                resource3Value = value;
+                if (resources.ContainsKey("Resource4"))
+                    resources["Resource4"].value = value;
+                break;
+            case "Resource5":
+                resource3Value = value;
+                if (resources.ContainsKey("Resource5"))
+                    resources["Resource5"].value = value;
+                break;
+            case "Resource6":
+                resource3Value = value;
+                if (resources.ContainsKey("Resource6"))
+                    resources["Resource6"].value = value;
+                break;
         }
         
         if (resourceName == currentResource)
@@ -360,6 +395,9 @@ public class RaptorCore : MonoBehaviour
         if (resources.ContainsKey("Resource1")) resource1Value = resources["Resource1"].value;
         if (resources.ContainsKey("Resource2")) resource2Value = resources["Resource2"].value;
         if (resources.ContainsKey("Resource3")) resource3Value = resources["Resource3"].value;
+        if (resources.ContainsKey("Resource4")) resource1Value = resources["Resource4"].value;
+        if (resources.ContainsKey("Resource5")) resource1Value = resources["Resource5"].value;
+        if (resources.ContainsKey("Resource6")) resource1Value = resources["Resource6"].value;
     }
 
     private IEnumerator EnableActiveIdle()

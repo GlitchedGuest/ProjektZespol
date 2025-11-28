@@ -106,7 +106,7 @@ public class LayoutController : MonoBehaviour
     public ScrollView scrollView2;
     private List<FactoryUI> factoryUIs = new List<FactoryUI>();
     private List<PotionUI> potionUIs = new List<PotionUI>();
-    private int numberOfFactories = 3;
+    private int numberOfFactories = 6;
     private int numberOfPotions = 3;
     private int currentFactoryIndex = 0;
 
@@ -187,6 +187,9 @@ public class LayoutController : MonoBehaviour
     //przyciski do odblokowania fabryk
     private Button unlockFactory2Btn;
     private Button unlockFactory3Btn;
+    private Button unlockFactory4Btn;
+    private Button unlockFactory5Btn;
+    private Button unlockFactory6Btn;
 
     void Awake()
     {
@@ -377,12 +380,24 @@ public class LayoutController : MonoBehaviour
         //przyciski do odblokowania fabryk
         unlockFactory2Btn = ui.Q<Button>("UnlockFactory2Btn");
         unlockFactory3Btn = ui.Q<Button>("UnlockFactory3Btn");
+        unlockFactory4Btn = ui.Q<Button>("UnlockFactory4Btn");
+        unlockFactory5Btn = ui.Q<Button>("UnlockFactory5Btn");
+        unlockFactory6Btn = ui.Q<Button>("UnlockFactory6Btn");
 
         if (unlockFactory2Btn != null)
             unlockFactory2Btn.clicked += () => UnlockFactoryFromButton(1);
 
         if (unlockFactory3Btn != null)
             unlockFactory3Btn.clicked += () => UnlockFactoryFromButton(2);
+
+        if (unlockFactory4Btn != null)
+            unlockFactory4Btn.clicked += () => UnlockFactoryFromButton(3);
+
+        if (unlockFactory5Btn != null)
+            unlockFactory5Btn.clicked += () => UnlockFactoryFromButton(4);
+
+        if (unlockFactory6Btn != null)
+            unlockFactory6Btn.clicked += () => UnlockFactoryFromButton(5);
     }
 
     void LineLayerInit(VisualElement lineLayer)
@@ -1651,6 +1666,9 @@ public class LayoutController : MonoBehaviour
             case "F1": Tex = images[0]; break;
             case "F2": Tex = images[1]; break;
             case "F3": Tex = images[2]; break;
+            case "F4": Tex = images[3]; break;
+            case "F5": Tex = images[4]; break;
+            case "F6": Tex = images[5]; break;
             default: Tex = images[0]; break;
         }
 
@@ -1717,6 +1735,60 @@ public class LayoutController : MonoBehaviour
                     unlockFactory3Btn.style.display = DisplayStyle.Flex;
                     unlockFactory3Btn.text = $"Odblokuj {factory3.name}\n{factory3.unlockCost} Gold";
                     unlockFactory3Btn.SetEnabled(raptorCore.Gold >= factory3.unlockCost);
+                }
+            }
+        }
+
+        if (unlockFactory4Btn != null)
+        {
+            var factory4 = GetFactory(3);
+            if (factory4 != null)
+            {
+                if (factory4.isUnlocked)
+                {
+                    unlockFactory4Btn.style.display = DisplayStyle.None;
+                }
+                else
+                {
+                    unlockFactory4Btn.style.display = DisplayStyle.Flex;
+                    unlockFactory4Btn.text = $"Odblokuj {factory4.name}\n{factory4.unlockCost} Gold";
+                    unlockFactory4Btn.SetEnabled(raptorCore.Gold >= factory4.unlockCost);
+                }
+            }
+        }
+
+        if (unlockFactory5Btn != null)
+        {
+            var factory5 = GetFactory(4);
+            if (factory5 != null)
+            {
+                if (factory5.isUnlocked)
+                {
+                    unlockFactory5Btn.style.display = DisplayStyle.None;
+                }
+                else
+                {
+                    unlockFactory5Btn.style.display = DisplayStyle.Flex;
+                    unlockFactory5Btn.text = $"Odblokuj {factory5.name}\n{factory5.unlockCost} Gold";
+                    unlockFactory5Btn.SetEnabled(raptorCore.Gold >= factory5.unlockCost);
+                }
+            }
+        }
+
+        if (unlockFactory6Btn != null)
+        {
+            var factory6 = GetFactory(5);
+            if (factory6 != null)
+            {
+                if (factory6.isUnlocked)
+                {
+                    unlockFactory6Btn.style.display = DisplayStyle.None;
+                }
+                else
+                {
+                    unlockFactory6Btn.style.display = DisplayStyle.Flex;
+                    unlockFactory6Btn.text = $"Odblokuj {factory6.name}\n{factory6.unlockCost} Gold";
+                    unlockFactory6Btn.SetEnabled(raptorCore.Gold >= factory6.unlockCost);
                 }
             }
         }
