@@ -53,8 +53,10 @@ public class RaptorCore : MonoBehaviour
     private ClickSource activeClickSource = ClickSource.None;
     private float sourceBlockEndTime = 0f;
     private float clickCooldown = 0.5f; // jezeli gracz klika przycisk to wyłącza inne na czas cooldownu
-    public QuarkType potionClickBonus = 0;
-    public QuarkType potionSellBonus = 1;
+    public QuarkType potionClickBonus1 = 0;
+    public QuarkType potionSellBonus1 = 1;
+    public QuarkType potionClickBonus2 = 0;
+    public QuarkType potionSellBonus2 = 1;
 
     //Crit Generator
     [SerializeField] private GameObject CritGenerator;
@@ -77,16 +79,19 @@ public class RaptorCore : MonoBehaviour
     }
     void click()
     {
-        QuarkType value = 0;          
+        QuarkType value = 0;
         float chance = UnityEngine.Random.Range(0.00f, 100.00f);
         if (chance < characterClass.GetCriticalChance())
         {
             if(idleManager.potions[0].isActive && idleManager.potions[0].linkedFactory.name == GetCurrentFactory().name)
-                    value += (((CBasevalue * CMultiplier * 3) + (CBasevalue * SkillMultiplier))) + potionClickBonus;
-            else
             {
-                value += ((CBasevalue * CMultiplier * 3) + (CBasevalue * SkillMultiplier)); //to do zmiany gdy będzie wchodzić temat balansu
+                value += potionClickBonus1;
             }
+            if(idleManager.potions[3].isActive && idleManager.potions[3].linkedFactory.name == GetCurrentFactory().name)
+            {
+                value += potionClickBonus2;
+            }
+            value += ((CBasevalue * CMultiplier * 3) + (CBasevalue * SkillMultiplier)); //to do zmiany gdy będzie wchodzić temat balansu
 
             if (characterClass.activeIdle)
                 StartCoroutine(EnableActiveIdle());
@@ -102,10 +107,17 @@ public class RaptorCore : MonoBehaviour
         {
             audioSource.Stop();
             audioSource.Play();
+
             if(idleManager.potions[0].isActive && idleManager.potions[0].linkedFactory.name == GetCurrentFactory().name)
-                value += (((CBasevalue * CMultiplier) + (CBasevalue * SkillMultiplier))) + potionClickBonus;
-            else
-                value += ((CBasevalue * CMultiplier) + (CBasevalue * SkillMultiplier));
+            {
+                value += potionClickBonus1;
+            }
+            if(idleManager.potions[3].isActive && idleManager.potions[3].linkedFactory.name == GetCurrentFactory().name)
+            {
+                value += potionClickBonus2;
+            }
+            value += ((CBasevalue * CMultiplier) + (CBasevalue * SkillMultiplier));
+
             if (characterClass.noMatterWhat)
                 characterClass.boostedChance += 1.00f;
         }
@@ -133,9 +145,9 @@ public class RaptorCore : MonoBehaviour
         if (resources.ContainsKey("Resource1")) resources["Resource1"].value = resource1Value;
         if (resources.ContainsKey("Resource2")) resources["Resource2"].value = resource2Value;
         if (resources.ContainsKey("Resource3")) resources["Resource3"].value = resource3Value;
-        if (resources.ContainsKey("Resource4")) resources["Resource4"].value = resource1Value;
-        if (resources.ContainsKey("Resource5")) resources["Resource5"].value = resource2Value;
-        if (resources.ContainsKey("Resource6")) resources["Resource6"].value = resource3Value;
+        if (resources.ContainsKey("Resource4")) resources["Resource4"].value = resource4Value;
+        if (resources.ContainsKey("Resource5")) resources["Resource5"].value = resource5Value;
+        if (resources.ContainsKey("Resource6")) resources["Resource6"].value = resource6Value;
         //Gold = 10000000000000000000000000000000.0f;
         UpdateUI();
 
@@ -337,17 +349,17 @@ public class RaptorCore : MonoBehaviour
                     resources["Resource3"].value = value;
                 break;
             case "Resource4":
-                resource3Value = value;
+                resource4Value = value;
                 if (resources.ContainsKey("Resource4"))
                     resources["Resource4"].value = value;
                 break;
             case "Resource5":
-                resource3Value = value;
+                resource5Value = value;
                 if (resources.ContainsKey("Resource5"))
                     resources["Resource5"].value = value;
                 break;
             case "Resource6":
-                resource3Value = value;
+                resource6Value = value;
                 if (resources.ContainsKey("Resource6"))
                     resources["Resource6"].value = value;
                 break;
@@ -369,7 +381,17 @@ public class RaptorCore : MonoBehaviour
             return 0;
         }
 
-        double goldEarned = amountToSell * pricePerUnit * potionSellBonus;
+
+        double goldEarned = amountToSell * pricePerUnit;
+        if(idleManager.potions[2].isActive && idleManager.potions[2].linkedFactory.name == GetCurrentFactory().name)
+        {
+            goldEarned += potionSellBonus1;
+        }
+        if(idleManager.potions[5].isActive && idleManager.potions[5].linkedFactory.name == GetCurrentFactory().name)
+        {
+            goldEarned += potionSellBonus2;
+        }
+        
         Gold += goldEarned;
         RemoveResource(resource, amountToSell);
         UpdateUI();
@@ -395,9 +417,9 @@ public class RaptorCore : MonoBehaviour
         if (resources.ContainsKey("Resource1")) resource1Value = resources["Resource1"].value;
         if (resources.ContainsKey("Resource2")) resource2Value = resources["Resource2"].value;
         if (resources.ContainsKey("Resource3")) resource3Value = resources["Resource3"].value;
-        if (resources.ContainsKey("Resource4")) resource1Value = resources["Resource4"].value;
-        if (resources.ContainsKey("Resource5")) resource1Value = resources["Resource5"].value;
-        if (resources.ContainsKey("Resource6")) resource1Value = resources["Resource6"].value;
+        if (resources.ContainsKey("Resource4")) resource4Value = resources["Resource4"].value;
+        if (resources.ContainsKey("Resource5")) resource5Value = resources["Resource5"].value;
+        if (resources.ContainsKey("Resource6")) resource6Value = resources["Resource6"].value;
     }
 
     private IEnumerator EnableActiveIdle()

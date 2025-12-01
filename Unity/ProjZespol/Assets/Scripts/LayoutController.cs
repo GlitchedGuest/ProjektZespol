@@ -107,7 +107,7 @@ public class LayoutController : MonoBehaviour
     private List<FactoryUI> factoryUIs = new List<FactoryUI>();
     private List<PotionUI> potionUIs = new List<PotionUI>();
     private int numberOfFactories = 6;
-    private int numberOfPotions = 3;
+    private int numberOfPotions = 6;
     private int currentFactoryIndex = 0;
 
     [SerializeField] private AudioSource audioSource;
@@ -1546,12 +1546,13 @@ public class LayoutController : MonoBehaviour
             if (potionUI.effectLabel != null)
                 potionUI.effectLabel.text = potion.effectDescription;
             if (potionUI.costLabel != null)
-                potionUI.costLabel.text = $"Koszt: {potion.cost} szt. zasobu {potion.resourceType.name}";
+                potionUI.costLabel.text = $"Koszt: {potion.cost1} szt. zasobu {potion.resourceType1.name}\n\t   {potion.cost2} szt. zasobu {potion.resourceType2.name}";
 
             if (potionUI.buyButton != null)
             {
-                QuarkType playerResourceAmount = raptorCore.GetResourceValueDirect(potion.resourceType.name);
-                bool canAfford = playerResourceAmount >= potion.cost;
+                QuarkType playerResourceAmount1 = raptorCore.GetResourceValueDirect(potion.resourceType1.name);
+                QuarkType playerResourceAmount2 = raptorCore.GetResourceValueDirect(potion.resourceType2.name);
+                bool canAfford = (playerResourceAmount1 >= potion.cost1) && (playerResourceAmount2 >= potion.cost2);
                 bool isNotActive = !potion.isActive;
                 potionUI.buyButton.SetEnabled(canAfford && isNotActive);
                 if (potion.isActive)

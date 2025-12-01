@@ -949,6 +949,9 @@ MonoBehaviour:
   unoPotionSprite: {fileID: -2991176499343437113, guid: bcdc097886ffa0f429579b2974c236f4, type: 3}
   dosPotionSprite: {fileID: -4063282911688051274, guid: 9c81041dddc99394c8476589a62eb75a, type: 3}
   tresPotionSprite: {fileID: -396636676558010057, guid: ebea6c9607d0be1428624b408f70d854, type: 3}
+  cuatroPotionSprite: {fileID: -1646119596323929938, guid: b661ac3e989f4b840864655b82b9fc3e, type: 3}
+  cincoPotionSprite: {fileID: 4944645665347049430, guid: c85a9276588bee7488344905abd66be1, type: 3}
+  seisPotionSprite: {fileID: 7086565518490525865, guid: 7a1342c27591d3e49a6ba6bf85ee718b, type: 3}
 --- !u!114 &1895339687
 MonoBehaviour:
   m_ObjectHideFlags: 0
