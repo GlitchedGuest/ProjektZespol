@@ -1,8 +1,7 @@
 using System;
 using UnityEngine;
 using UnityEngine.UIElements;
-using static TMPro.SpriteAssetUtilities.TexturePacker_JsonArray;
-using static UnityEditor.PlayerSettings;
+
 
 public static class Tooltip
 {

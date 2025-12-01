@@ -71,3 +71,109 @@
     visibility: hidden;
     overflow: visible;
 }
+
+.stylprzyciskow {
+    background-image: url("project://database/Assets/UI/GuiArt/BorderStyle1.png?fileID=2800000&guid=55b0fd22875fad945891e5d09bce7254&type=3#BorderStyle1");
+    border-top-width: 0;
+    border-right-width: 0;
+    border-bottom-width: 0;
+    border-left-width: 0;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    border-bottom-left-radius: 0;
+    background-color: rgb(56, 56, 56);
+    width: 40%;
+    height: 15%;
+    -unity-slice-left: 300;
+    -unity-slice-top: 300;
+    -unity-slice-right: 300;
+    -unity-slice-bottom: 300;
+    -unity-slice-scale: 0.1px;
+}
+
+.slider Label {
+    display: none;
+    padding-top: 0;
+    padding-right: 0;
+    padding-bottom: 0;
+    padding-left: 0;
+    border-top-width: 0;
+    border-right-width: 0;
+    border-bottom-width: 0;
+    border-left-width: 0;
+}
+
+.slider #unity-dragger {
+    background-color: rgb(255, 255, 255);
+    border-top-width: 0;
+    border-right-width: 0;
+    border-bottom-width: 0;
+    border-left-width: 0;
+    border-top-left-radius: 10%;
+    border-top-right-radius: 10%;
+    border-bottom-right-radius: 10%;
+    border-bottom-left-radius: 10%;
+    top: -20%;
+    padding-top: 0;
+    padding-right: 0;
+    padding-bottom: 0;
+    padding-left: 0;
+    flex-grow: 1;
+    margin-top: 0;
+    margin-right: 0;
+    margin-bottom: 0;
+    margin-left: 0;
+    height: 140%;
+    width: 6%;
+}
+
+.slider #unity-tracker {
+    background-color: rgb(36, 36, 36);
+    width: auto;
+    height: 100%;
+    justify-content: flex-start;
+    align-self: auto;
+    flex-grow: 1;
+    top: 0;
+    left: auto;
+    right: auto;
+    bottom: auto;
+    align-items: stretch;
+    position: relative;
+    margin-top: 0;
+    margin-right: 0;
+    margin-bottom: 0;
+    margin-left: 0;
+    border-top-width: 0;
+    border-right-width: 0;
+    border-bottom-width: 0;
+    border-left-width: 0;
+    border-bottom-left-radius: 10px;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+}
+
+.stylprzyciskow:hover {
+    transition-duration: 0.5s;
+    background-color: rgb(147, 91, 12);
+    transition-property: all;
+}
+
+#DeleteSaveButton {
+    border-left-color: rgb(0, 0, 0);
+    border-right-color: rgb(0, 0, 0);
+    border-top-color: rgb(0, 0, 0);
+    border-bottom-color: rgb(0, 0, 0);
+    background-color: rgb(101, 0, 26);
+}
+
+#DeleteSaveButton:hover {
+    transition-duration: 0.25s;
+    border-left-color: rgb(204, 1, 1);
+    border-right-color: rgb(204, 1, 1);
+    border-top-color: rgb(204, 1, 1);
+    border-bottom-color: rgb(204, 1, 1);
+    background-color: rgb(255, 0, 0);
+}
