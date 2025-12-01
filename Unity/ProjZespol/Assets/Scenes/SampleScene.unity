@@ -1181,6 +1181,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1887176690689923182, guid: 9561ff019297a0e4a9b76f8571649e17, type: 3}
+      propertyPath: Raptorcore
+      value: 
+      objectReference: {fileID: 186519293}
     - target: {fileID: 2776007197646290079, guid: 9561ff019297a0e4a9b76f8571649e17, type: 3}
       propertyPath: m_Name
       value: CharacterProgression
