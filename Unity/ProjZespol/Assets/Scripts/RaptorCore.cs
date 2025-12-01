@@ -1,10 +1,11 @@
-﻿using System;
-using System.Xml.Serialization;
+﻿using Mono.Cecil;
+using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Xml.Serialization;
 using Unity.VisualScripting;
 using UnityEngine;
 using static UnityEngine.Rendering.DebugUI;
-using System.Collections;
 
 public class RaptorCore : MonoBehaviour
 {
@@ -48,6 +49,13 @@ public class RaptorCore : MonoBehaviour
     [AutoSave] public QuarkType resource4Value = 0;
     [AutoSave] public QuarkType resource5Value = 0;
     [AutoSave] public QuarkType resource6Value = 0;
+
+    [AutoSave] public QuarkType resource1Limit = 1000;
+    [AutoSave] public QuarkType resource2Limit = 2500;
+    [AutoSave] public QuarkType resource3Limit = 5000;
+    [AutoSave] public QuarkType resource4Limit = 10000;
+    [AutoSave] public QuarkType resource5Limit = 25000;
+    [AutoSave] public QuarkType resource6Limit = 50000;
     public string currentResource = "Resource1";
     private enum ClickSource { None, Mouse, Space, Enter }
     private ClickSource activeClickSource = ClickSource.None;
@@ -126,17 +134,30 @@ public class RaptorCore : MonoBehaviour
         }      
     }
 
+    void LoadResource(string name)
+    {
+        if (!resources.TryGetValue(name, out var res)) return;
+
+        string p = char.ToLower(name[0]) + name[1..];
+        var t = GetType();
+
+        res.Limit = (QuarkType)t.GetField(p + "Limit").GetValue(this);
+        res.value = (QuarkType)t.GetField(p + "Value").GetValue(this);
+    }
+
+
+
     void Start()
     {
         Time.fixedDeltaTime = 0.05f; // 20 ticks a second
         AutoSaveSystem.LoadGame();
-        if (resources.ContainsKey("Resource1")) resources["Resource1"].value = resource1Value;
-        if (resources.ContainsKey("Resource2")) resources["Resource2"].value = resource2Value;
-        if (resources.ContainsKey("Resource3")) resources["Resource3"].value = resource3Value;
-        if (resources.ContainsKey("Resource4")) resources["Resource4"].value = resource1Value;
-        if (resources.ContainsKey("Resource5")) resources["Resource5"].value = resource2Value;
-        if (resources.ContainsKey("Resource6")) resources["Resource6"].value = resource3Value;
-        //Gold = 10000000000000000000000000000000.0f;
+        LoadResource("Resource1");
+        LoadResource("Resource2");
+        LoadResource("Resource3");
+        LoadResource("Resource4");
+        LoadResource("Resource5");
+        LoadResource("Resource6");
+        // Gold = 10000000000000000000000000000000.0f;
         UpdateUI();
 
     }
@@ -358,6 +379,51 @@ public class RaptorCore : MonoBehaviour
             UpdateUI();
         }
     }
+    public void SetLimitResource(string resource, QuarkType limitvalue) {
+        if (resources.ContainsKey(resource))
+        {
+            resources[resource].Limit = limitvalue;
+        }
+    }
+
+    public QuarkType GetLimitResource(string resource)
+    {
+        if (resources.ContainsKey(resource))
+        {
+            return resources[resource].Limit;
+        }
+        return default;
+    }
+
+    //Incirement + add in to limit
+    public void IncrementLimitResourceAll(QuarkType AddValue)
+    {
+        IncrementLimitResource("Resource1", AddValue);
+        IncrementLimitResource("Resource2", AddValue);
+        IncrementLimitResource("Resource3", AddValue);
+        IncrementLimitResource("Resource4", AddValue);
+        IncrementLimitResource("Resource5", AddValue);
+        IncrementLimitResource("Resource6", AddValue);
+    }
+
+    //Incirement * multiply the limit
+    public void MullLimitResourceAll(QuarkType MullValue)
+    {
+        SetLimitResource("Resource1", MullValue * GetLimitResource("Resource1"));
+        SetLimitResource("Resource2", MullValue * GetLimitResource("Resource2"));
+        SetLimitResource("Resource3", MullValue * GetLimitResource("Resource3"));
+        SetLimitResource("Resource4", MullValue * GetLimitResource("Resource4"));
+        SetLimitResource("Resource5", MullValue * GetLimitResource("Resource5"));
+        SetLimitResource("Resource6", MullValue * GetLimitResource("Resource6"));
+    }
+
+    public void IncrementLimitResource(string resource, QuarkType AddValue)
+    {
+        if (resources.ContainsKey(resource))
+        {
+            resources[resource].Limit += AddValue;
+        }
+    }
 
     public double SellResource(string resource, float sellvalue, double pricePerUnit = 1.0)
     {
@@ -392,12 +458,23 @@ public class RaptorCore : MonoBehaviour
     }
     public void saveResourceValues()
     {
-        if (resources.ContainsKey("Resource1")) resource1Value = resources["Resource1"].value;
-        if (resources.ContainsKey("Resource2")) resource2Value = resources["Resource2"].value;
-        if (resources.ContainsKey("Resource3")) resource3Value = resources["Resource3"].value;
-        if (resources.ContainsKey("Resource4")) resource1Value = resources["Resource4"].value;
-        if (resources.ContainsKey("Resource5")) resource1Value = resources["Resource5"].value;
-        if (resources.ContainsKey("Resource6")) resource1Value = resources["Resource6"].value;
+        SaveResource("Resource1");
+        SaveResource("Resource2");
+        SaveResource("Resource3");
+        SaveResource("Resource4");
+        SaveResource("Resource5");
+        SaveResource("Resource6");
+    }
+
+    void SaveResource(string name)
+    {
+        if (!resources.TryGetValue(name, out var res)) return;
+
+        string p = char.ToLower(name[0]) + name[1..];
+        var t = GetType();
+
+        t.GetField(p + "Limit")?.SetValue(this, res.Limit);
+        t.GetField(p + "Value")?.SetValue(this, res.value);
     }
 
     private IEnumerator EnableActiveIdle()
