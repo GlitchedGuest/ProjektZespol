@@ -10,7 +10,7 @@
 }
 
 .btncolor:hover {
-    background-color: rgb(0, 35, 152);
+    background-color: rgb(94, 66, 11);
     transition-duration: 0.25s;
 }
 
@@ -205,14 +205,15 @@
     position: absolute;
     width: 100%;
     height: 100%;
-    pointer-events: none; 
+    pointer-events: none;
 }
+
 #combo-container {
     position: absolute;
     width: 100%;
     height: 100%;
     pointer-events: none;
-	opacity: 0;
+    opacity: 0;
     scale: 0.9;
     transition: opacity 150ms ease-out, scale 150ms ease-out;
 }
@@ -221,4 +222,35 @@
     font-size: 32px;
     color: yellow;
     unity-font-style: bold;
+}
+
+.btnNewStyle {
+    background-image: url("project://database/Assets/UI/GuiArt/BorderStyle1.png?fileID=2800000&guid=55b0fd22875fad945891e5d09bce7254&type=3#BorderStyle1");
+    border-top-width: 0;
+    border-right-width: 0;
+    border-bottom-width: 0;
+    border-left-width: 0;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    border-bottom-left-radius: 0;
+    border-left-color: rgb(0, 0, 0);
+    border-right-color: rgb(0, 0, 0);
+    border-top-color: rgb(0, 0, 0);
+    border-bottom-color: rgb(0, 0, 0);
+    background-color: rgb(33, 33, 33);
+    -unity-background-image-tint-color: rgb(149, 106, 0);
+    -unity-slice-left: 300;
+    -unity-slice-top: 300;
+    -unity-slice-right: 300;
+    -unity-slice-bottom: 300;
+    -unity-slice-scale: 0.1px;
+}
+
+#DeleteSaveButton:hover {
+    background-color: rgb(241, 0, 0);
+}
+
+#DeleteSaveButton {
+    background-color: rgb(89, 0, 0);
 }
