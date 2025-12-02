@@ -177,7 +177,8 @@ public class CharacterClass:MonoBehaviour
     }
     private void PushToTheLimit(bool revert)
     {
-        return; //nie ma mechaniki xd
+        if (!revert) Raptorcore.IncrementSkillBoostResourceAll(true);
+        else Raptorcore.IncrementSkillBoostResourceAll(false);
     }
     private void ReactionTest(bool revert)
     {
