@@ -451,11 +451,11 @@ public class RaptorCore : MonoBehaviour
         double goldEarned = amountToSell * pricePerUnit;
         if(idleManager.potions[2].isActive && idleManager.potions[2].linkedFactory.name == GetCurrentFactory().name)
         {
-            goldEarned += potionSellBonus1;
+            goldEarned *= potionSellBonus1;
         }
         if(idleManager.potions[5].isActive && idleManager.potions[5].linkedFactory.name == GetCurrentFactory().name)
         {
-            goldEarned += potionSellBonus2;
+            goldEarned *= potionSellBonus2;
         }
         
         Gold += goldEarned;
