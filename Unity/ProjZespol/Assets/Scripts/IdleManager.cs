@@ -28,6 +28,10 @@ public class IdleManager : MonoBehaviour
         resources.Add(new Resource("Resource1"));
         resources.Add(new Resource("Resource2"));
         resources.Add(new Resource("Resource3"));
+        resources.Add(new Resource("Resource4"));
+        resources.Add(new Resource("Resource5"));
+        resources.Add(new Resource("Resource6"));
+
 
         foreach (var res in resources)
         {
@@ -46,6 +50,12 @@ public class IdleManager : MonoBehaviour
         factories.Add(new Factory(resources[1], "F2", 15, 1.15, 5, 5000));
 
         factories.Add(new Factory(resources[2], "F3", 15, 1.15, 10, 25000));
+
+        factories.Add(new Factory(resources[3], "F4", 15, 1.15, 15, 125000));
+
+        factories.Add(new Factory(resources[4], "F5", 15, 1.15, 20, 625000));
+
+        factories.Add(new Factory(resources[5], "F6", 15, 1.15, 25, 3125000));
     }
 
     private void InitPotions()

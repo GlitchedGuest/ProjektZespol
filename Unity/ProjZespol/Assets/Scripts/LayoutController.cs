@@ -1,11 +1,13 @@
+using System;
+using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
-using System.Collections.Generic;
-using System;
 
 public class LayoutController : MonoBehaviour
 {
     public static LayoutController Instance { get; private set; }
+    public VisualTreeAsset tooltipAsset;
 
     [SerializeField] private SpriteRenderer clickerObject;
     [SerializeField] private RaptorCore raptorCore;
@@ -18,7 +20,6 @@ public class LayoutController : MonoBehaviour
     public Button btn1;
     public Button btn2;
     public Button btn3;
-    public Button resourceBtn;
     public Button btn4;
     public Button btn5;
     public Button btn6;
@@ -105,24 +106,20 @@ public class LayoutController : MonoBehaviour
     public ScrollView scrollView2;
     private List<FactoryUI> factoryUIs = new List<FactoryUI>();
     private List<PotionUI> potionUIs = new List<PotionUI>();
-    private int numberOfFactories = 3;
+    private int numberOfFactories = 6;
     private int numberOfPotions = 3;
     private int currentFactoryIndex = 0;
 
     [SerializeField] private AudioSource audioSource;
-
+    [SerializeField] private AudioSource critSource;
 
     //drzewka
-    private Label skillDescription;
     private Dictionary<string, Button> buttons = new();
     private HashSet<string> learned = new();
 
-    private Label skillDescription2;
     private Dictionary<string, Button> buttons2 = new();
     private HashSet<string> learned2 = new();
 
-
-    private Label skillDescription3;
     private Dictionary<string, Button> buttons3 = new();
     private HashSet<string> learned3 = new();
 
@@ -182,6 +179,18 @@ public class LayoutController : MonoBehaviour
     private VisualElement skillTreeContainer3;
     private VisualElement lineLayer3;
 
+    //zmiana fabryk
+    public Button prevFactoryBtn;
+    public Button nextFactoryBtn;
+    public Label factoryLabel;
+
+    //przyciski do odblokowania fabryk
+    private Button unlockFactory2Btn;
+    private Button unlockFactory3Btn;
+    private Button unlockFactory4Btn;
+    private Button unlockFactory5Btn;
+    private Button unlockFactory6Btn;
+
     void Awake()
     {
         Instance = this;
@@ -192,6 +201,8 @@ public class LayoutController : MonoBehaviour
 
     private void OnEnable()
     {
+
+        
         currencyIcon = ui.Q<VisualElement>("cbbleicon");
         currencyLabel = ui.Q<Label>("Currency");
         goldLabel = ui.Q<Label>("Money");
@@ -204,8 +215,6 @@ public class LayoutController : MonoBehaviour
         btn2.clicked += ClickBtn2;
         btn3 = ui.Q<Button>("btn3");
         btn3.clicked += ClickBtn3;
-        resourceBtn = ui.Q<Button>("ResourceButton");
-        resourceBtn.clicked += CycleCurrency;
         btn4 = ui.Q<Button>("btn4");
         btn4.clicked += ClickBtn4;
         btn5 = ui.Q<Button>("btn5");
@@ -246,9 +255,6 @@ public class LayoutController : MonoBehaviour
 
         //drzewka tego typu
 
-        skillDescription = ui.Q<Label>("Describe");
-        skillDescription2 = ui.Q<Label>("Describe2");
-        skillDescription3 = ui.Q<Label>("Describe3");
 
         OneClickArmyTreeInit();
         JackSkillTreeInit();
@@ -339,6 +345,7 @@ public class LayoutController : MonoBehaviour
         sfxSlider.value = PlayerPrefs.GetFloat("SfxVolume", 1f);
         
         audioSource.volume = sfxSlider.value;
+        critSource.volume= sfxSlider.value;
 
         DeleteSaveButton = ui.Q<Button>("DeleteSaveButton");
         AutoSavetoggle = ui.Q<Toggle>("AutoSavetoggle");
@@ -351,6 +358,46 @@ public class LayoutController : MonoBehaviour
             AutoSaveSystem.AutoSave = evt.newValue;
             audioSource.Play();
         });
+
+
+        Tooltip.Init(ui, tooltipAsset);
+        
+        ui.RegisterCallback<GeometryChangedEvent>(Tooltip.SizeRefresh);
+        //zmiana fabryk
+        prevFactoryBtn = ui.Q<Button>("PrevFactoryBtn");
+        nextFactoryBtn = ui.Q<Button>("NextFactoryBtn");
+        factoryLabel = ui.Q<Label>("FactoryLabel");
+        if (prevFactoryBtn != null)
+        {
+            prevFactoryBtn.clicked += CycleToPreviousFactory;
+        }
+            
+        if (nextFactoryBtn != null)
+        {
+            nextFactoryBtn.clicked += CycleToNextFactory;
+        }
+
+        //przyciski do odblokowania fabryk
+        unlockFactory2Btn = ui.Q<Button>("UnlockFactory2Btn");
+        unlockFactory3Btn = ui.Q<Button>("UnlockFactory3Btn");
+        unlockFactory4Btn = ui.Q<Button>("UnlockFactory4Btn");
+        unlockFactory5Btn = ui.Q<Button>("UnlockFactory5Btn");
+        unlockFactory6Btn = ui.Q<Button>("UnlockFactory6Btn");
+
+        if (unlockFactory2Btn != null)
+            unlockFactory2Btn.clicked += () => UnlockFactoryFromButton(1);
+
+        if (unlockFactory3Btn != null)
+            unlockFactory3Btn.clicked += () => UnlockFactoryFromButton(2);
+
+        if (unlockFactory4Btn != null)
+            unlockFactory4Btn.clicked += () => UnlockFactoryFromButton(3);
+
+        if (unlockFactory5Btn != null)
+            unlockFactory5Btn.clicked += () => UnlockFactoryFromButton(4);
+
+        if (unlockFactory6Btn != null)
+            unlockFactory6Btn.clicked += () => UnlockFactoryFromButton(5);
     }
 
     void LineLayerInit(VisualElement lineLayer)
@@ -403,7 +450,6 @@ public class LayoutController : MonoBehaviour
         DrawLineBetweenButtons(ui.Q<Button>("Skill4B-tree3"), ui.Q<Button>("Skill5C-tree3"), color, lineLayer3);
         DrawLineBetweenButtons(ui.Q<Button>("Skill5C-tree3"), ui.Q<Button>("Skill6-tree3"), color, lineLayer3);
 
-
     }
 
     void DrawLineBetweenButtons(Button from, Button to, Color color, VisualElement targetLayer)
@@ -450,21 +496,21 @@ public class LayoutController : MonoBehaviour
         var skill6A = ui.Q<Button>("Skill6A");
         var skill6B = ui.Q<Button>("Skill6B");
 
+        Tooltip.Register(skill1, "Skill Based Clicking", "Umożliwia pojawienie się skill checków(nie udany kosztuje gracza zwolnieniem idle produkcji)");
         
-        RegisterSkillHover(skill1, "Umożliwia pojawienie się skill checków(nie udany kosztuje gracza zwolnieniem idle produkcji)",skillDescription);
-        RegisterSkillHover(skill2A, "Zwiększa szanse na kliki krytyczne", skillDescription);
-        RegisterSkillHover(skill2B, "Udany skill check zwiększa ilość zbieranych punktów na chwilę(nie udany zmniejsza)", skillDescription);
+        Tooltip.Register(skill2A, "Critical Mass", "Zwiększa szanse na kliki krytyczne");
+        Tooltip.Register(skill2B, "Chicken Dinner", "Udany skill check zwiększa ilość zbieranych punktów na chwilę(nie udany zmniejsza)");
 
-        RegisterSkillHover(skill3A, "Każdy klik krytyczny chwilowo zwiększa idle produkcje", skillDescription);
-        RegisterSkillHover(skill3B, "Skill checki częściej się pojawiają", skillDescription);
+        Tooltip.Register(skill3A, "Active Idle", "Każdy klik krytyczny chwilowo zwiększa idle produkcje");
+        Tooltip.Register(skill3B, "Hungry For More", "Skill checki częściej się pojawiają");
 
-        RegisterSkillHover(skill4A, "Stakuje szanse na klik krytyczny(każde kliknięcie niekrytyczne zwiększa szanse na krytyczne)", skillDescription);
-        RegisterSkillHover(skill4B, "Skill checki nie mają negatywnych skutków po przegraniu", skillDescription);
+        Tooltip.Register(skill4A, "No Matter What", "Stakuje szanse na klik krytyczny(każde kliknięcie niekrytyczne zwiększa szanse na krytyczne)");
+        Tooltip.Register(skill4B, "Always Winner", "Skill checki nie mają negatywnych skutków po przegraniu");
 
-        RegisterSkillHover(skill5, "Częstotliwość skill checka jest zależna od ilości klików krytycznych(im częściej są tym częściej skill checki)", skillDescription);
+        Tooltip.Register(skill5, "Symbiosis", "Częstotliwość skill checka jest zależna od ilości klików krytycznych(im częściej są tym częściej skill checki)");
 
-        RegisterSkillHover(skill6A, "Każdy kolejny skill check łączy się w kombos. Im większy kombos tym więcej punktów za klik(im większy kombos też trudniejsze skill checki)", skillDescription);
-        RegisterSkillHover(skill6B, "Po trzech udanych skill checkach z rzędu przez krótki moment są same kliki krytyczne", skillDescription);
+        Tooltip.Register(skill6A, "Mortal Clicker", "Każdy kolejny skill check łączy się w kombos. Im większy kombos tym więcej punktów za klik(im większy kombos też trudniejsze skill checki)");
+        Tooltip.Register(skill6B, "Champion Of Clicks", "Po trzech udanych skill checkach z rzędu przez krótki moment są same kliki krytyczne");
 
         string[] all = { "Skill1", "Skill2A", "Skill2B", "Skill3A", "Skill3B", "Skill4A", "Skill4B", "Skill5", "Skill6A", "Skill6B" };
 
@@ -591,30 +637,35 @@ public class LayoutController : MonoBehaviour
     {
 
         var skill1 = ui.Q<Button>("Skill1-tree2");
+
         var skill2 = ui.Q<Button>("Skill2A-tree2");
         var skill3 = ui.Q<Button>("Skill2B-tree2");
-
         var skill4 = ui.Q<Button>("Skill2C-tree2");
+        
         var skill5 = ui.Q<Button>("Skill3A-tree2");
-
         var skill6 = ui.Q<Button>("Skill3B-tree2");
         var skill7 = ui.Q<Button>("Skill3C-tree2");
-
         var skill8 = ui.Q<Button>("Skill3D-tree2");
 
         var skill9 = ui.Q<Button>("Skill4-tree2");
+        
         var skill10 = ui.Q<Button>("Skill5-tree2");
 
-        RegisterSkillHover(skill1, "Można sprzedawać po wyższych cenach „punkty", skillDescription2);
-        RegisterSkillHover(skill2, "Udany skill check chwilowo podwyższa ceny sprzedaży w sklepie", skillDescription2);
-        RegisterSkillHover(skill3, "Potki mają zwiększoną skuteczność", skillDescription2);
-        RegisterSkillHover(skill4, "Nieudany skill check daje możliwość zdobycia jednej losowej potki", skillDescription2);
-        RegisterSkillHover(skill5, "Im więcej udanych skill checków tym ceny będą wyższe", skillDescription2);
-        RegisterSkillHover(skill6, "Efekty potek się stakują", skillDescription2);
-        RegisterSkillHover(skill7, "Nieudany skill check gwarantuje zdobycie jednej losowej potki", skillDescription2);
-        RegisterSkillHover(skill8, "Nieudany skill check zwiększa chwilowo przyrost exp z akcji", skillDescription2);
-        RegisterSkillHover(skill9, "im więcej nieudanych skill checków tym bonus jest większy", skillDescription2);
-        RegisterSkillHover(skill10, "Automatyczna sprzedaż wszystkich punktów po osiągnięciu limitu fabryki", skillDescription2);
+        Tooltip.Register(skill1, "Shark", "Można sprzedawać po wyższych cenach „punkty”");
+
+        Tooltip.Register(skill2, "Market-place Genius", "Udany skill check chwilowo podwyższa ceny sprzedaży w sklepie");
+        Tooltip.Register(skill3, "Addict", "Potki mają zwiększoną skuteczność");
+        Tooltip.Register(skill4, "Lucky Bastard", "Nieudany skill check daje możliwość zdobycia jednej losowej potki");
+       
+        Tooltip.Register(skill5, "Hard Worker", "Im więcej udanych skill checków tym ceny będą wyższe");
+        Tooltip.Register(skill6, "Death Dose", "Efekty potek się stakują");
+        Tooltip.Register(skill7, "Just Bastard", "Nieudany skill check gwarantuje zdobycie jednej losowej potki");
+        Tooltip.Register(skill8, "Fail To Win", "Nieudany skill check zwiększa chwilowo przyrost exp z akcji");
+        
+        Tooltip.Register(skill9, "Failure Grind", "im więcej nieudanych skill checków tym bonus jest większy");
+        
+        Tooltip.Register(skill10, "Micheal Scott", "Automatyczna sprzedaż wszystkich punktów po osiągnięciu limitu fabryki");
+
 
         var all2 = new[] { "Skill1-tree2", "Skill2A-tree2", "Skill2B-tree2", "Skill2C-tree2","Skill3A-tree2", "Skill3B-tree2", "Skill3C-tree2", "Skill3D-tree2", "Skill4-tree2","Skill5-tree2"   };
         foreach (string id in all2)
@@ -689,6 +740,8 @@ public class LayoutController : MonoBehaviour
         return true;
     }
 
+
+
     void UpdateVisual_T2(string id)
     {
         if (!buttons2.ContainsKey(id)) return;
@@ -716,31 +769,36 @@ public class LayoutController : MonoBehaviour
     {
 
         var skill1 = ui.Q<Button>("Skill1-tree3");
-        var skill2 = ui.Q<Button>("Skill2-tree3");
-        var skill3 = ui.Q<Button>("Skill3A-tree3");
 
+        var skill2 = ui.Q<Button>("Skill2-tree3");
+
+        var skill3 = ui.Q<Button>("Skill3A-tree3");
         var skill4 = ui.Q<Button>("Skill3B-tree3");
         
         var skill5 = ui.Q<Button>("Skill4A-tree3");
-
         var skill6 = ui.Q<Button>("Skill4B-tree3");
+
         var skill7 = ui.Q<Button>("Skill5A-tree3");
-
         var skill8 = ui.Q<Button>("Skill5B-tree3");
-
         var skill9 = ui.Q<Button>("Skill5C-tree3");
+
         var skill10 = ui.Q<Button>("Skill6-tree3");
 
-        RegisterSkillHover(skill1, "Im więcej fabryk gracz posiada tym większy bonus do idle dla fabryki in focus", skillDescription3);
-        RegisterSkillHover(skill2, "Limit punktów na fabrykę zostaje zwiększony", skillDescription3);
-        RegisterSkillHover(skill3, "Skill checki mogą się pojawiać w solowym momencie niezależnie od tego czy gracz kilka czy nie", skillDescription3);
-        RegisterSkillHover(skill4, "Fabryki not in Focus mają większy bonus do produkcji Idle", skillDescription3);
-        RegisterSkillHover(skill5, "Nieudany skill check zwiększa produkcje idle do momentu udanego skill checka(stackuje się)", skillDescription3);
-        RegisterSkillHover(skill6, "Im dłużej gracz nie wykona akcji myszką tym więcej punktów zacznie się naliczać", skillDescription3);
-        RegisterSkillHover(skill7, "Nieudany skill check zwiększa produkcje wszystkich fabryk", skillDescription3);
-        RegisterSkillHover(skill8, "Gracz może robić inne akcje poza klikanie w obiekt", skillDescription3);
-        RegisterSkillHover(skill9, "Bonus aplikuje się do każdej fabryki not in focus", skillDescription3);
-        RegisterSkillHover(skill10, "Bonus zależy od ilość posiadanych już puntków(im mniej tym większy bonus)", skillDescription3);
+        Tooltip.Register(skill1, "Entre-preneur", "Im więcej fabryk gracz posiada tym większy bonus do idle dla fabryki in focus");
+
+        Tooltip.Register(skill2, "Push to the limit", "Limit punktów na fabrykę zostaje zwiększony");
+
+        Tooltip.Register(skill3, "Reaction Test", "Skill checki mogą się pojawiać w solowym momencie niezależnie od tego czy gracz kilka czy nie");
+        Tooltip.Register(skill4, "What Eyes Don’t See", "Fabryki not in Focus mają większy bonus do produkcji Idle");
+
+        Tooltip.Register(skill5, "Unskilled Predator", "Nieudany skill check zwiększa produkcje idle do momentu udanego skill checka(stackuje się)");
+        Tooltip.Register(skill6, "Passive Agressive", "Im dłużej gracz nie wykona akcji myszką tym więcej punktów zacznie się naliczać");
+
+        Tooltip.Register(skill7, "One for Everyone", "Nieudany skill check zwiększa produkcje wszystkich fabryk");
+        Tooltip.Register(skill8, "Multi-tasking", "Gracz może robić inne akcje poza klikanie w obiekt");
+        Tooltip.Register(skill9, "Christmas Bonus", "Bonus aplikuje się do każdej fabryki not in focus");
+
+        Tooltip.Register(skill10, "Hungry Wolf", "Bonus zależy od ilość posiadanych już puntków(im mniej tym większy bonus)");
 
         var all3 = new[] { "Skill1-tree3", "Skill2-tree3", "Skill3A-tree3", "Skill3B-tree3", "Skill4A-tree3", "Skill4B-tree3", "Skill5A-tree3", "Skill5B-tree3", "Skill5C-tree3", "Skill6-tree3" };
         foreach (string id in all3)
@@ -1070,6 +1128,8 @@ public class LayoutController : MonoBehaviour
         UpdateFactoryUI();
         UpdatePotionUI();
         UpdateAll();
+        UpdateNavigationButtons();
+        UpdateUnlockButtons();
     }
 
     private void UpdateLvlBar()
@@ -1252,7 +1312,6 @@ public class LayoutController : MonoBehaviour
                 var upgradeLevels = factoryUpgradeLevels[i];
 
                 double productionCost = CalculateUpgradeCost(upgradeLevels.baseProductionCost, upgradeLevels.productionLevel);
-                //double multiplierCost = CalculateUpgradeCost(upgradeLevels.baseMultiplierCost, upgradeLevels.multiplierLevel);
 
                 if (!factory.isUnlocked)
                 {
@@ -1270,8 +1329,6 @@ public class LayoutController : MonoBehaviour
                     
                 
                 factoryUI.multiplierLevelLabel.style.display = DisplayStyle.None;
-                //if (factoryUI.multiplierLevelLabel != null)
-                //    factoryUI.multiplierLevelLabel.text = $"Poziom: {upgradeLevels.multiplierLevel}";
 
                 if (factoryUI.upgradeProductionBtn != null && factory.isUnlocked)
                 {
@@ -1279,21 +1336,13 @@ public class LayoutController : MonoBehaviour
                     factoryUI.upgradeProductionBtn.SetEnabled(playerGold >= productionCost);
                 }
                 factoryUI.upgradeMultiplierBtn.style.display = DisplayStyle.None;
-                //if (factoryUI.upgradeMultiplierBtn != null)
-                //{
-                //    factoryUI.upgradeMultiplierBtn.text = $"Zwiększ mnożnik (+0.1x) - {multiplierCost:F0} G";
-                //    factoryUI.upgradeMultiplierBtn.SetEnabled(playerGold >= multiplierCost);
-                //}
             }
 
 
             if (!factory.isUnlocked)
             {
                 if (factoryUI.unlockButton != null)
-                {
-                    factoryUI.unlockButton.style.display = DisplayStyle.Flex;
-                    factoryUI.unlockButton.SetEnabled(playerGold >= factory.unlockCost);
-                }
+                    factoryUI.unlockButton.style.display = DisplayStyle.None;
 
                 foreach (var btn in factoryUI.buyButtons)
                     if (btn != null) btn.style.display = DisplayStyle.None;
@@ -1337,36 +1386,6 @@ public class LayoutController : MonoBehaviour
         if (idleManager == null) return null;
 
         return idleManager.GetFactory(index);
-    }
-    
-    private void CycleCurrency()
-    {
-         if (idleManager == null || idleManager.GetFactoryCount() == 0) return;
-
-        currentFactoryIndex++;
-        if (currentFactoryIndex >= idleManager.GetFactoryCount())
-            currentFactoryIndex = 0;
-
-        var factory = GetFactory(currentFactoryIndex);
-        if (factory == null) return;
-
-        raptorCore.SetCurrentResource(factory.resource.name);
-        resourceBtn.text = factory.name;
-
-        Sprite Tex; 
-        switch (factory.name)
-        {
-            case "F1": Tex = images[0]; break;
-            case "F2": Tex = images[1]; break;
-            case "F3": Tex = images[2]; break;
-            default: Tex = images[0]; break;
-        }
-
-        currencyIcon.style.backgroundImage = new StyleBackground(Tex);
-        shopIcon.style.backgroundImage = new StyleBackground(Tex);
-        clickerObject.sprite = Tex;
-
-        UpdateFactoryUI();
     }
 
     private void UnlockFactory(int factoryIndex)
@@ -1490,6 +1509,7 @@ public class LayoutController : MonoBehaviour
         
         Debug.Log($"Głośność sfx: {evt.newValue}");
         audioSource.volume = evt.newValue;
+        critSource.volume = evt.newValue;
         PlayerPrefs.SetFloat("SfxVolume", evt.newValue);
         PlayerPrefs.Save();
     }
@@ -1569,5 +1589,243 @@ public class LayoutController : MonoBehaviour
         }
 
         UpdatePotionUI();
+    }
+
+    //guzik lewy górny róg
+    private void CycleToPreviousFactory()
+    {
+        if (idleManager == null || idleManager.GetFactoryCount() == 0) return;
+
+        audioSource.Play();
+        int startIndex = currentFactoryIndex;
+        int attempts = 0;
+        
+        do
+        {
+            currentFactoryIndex--;
+            if (currentFactoryIndex < 0)
+                currentFactoryIndex = idleManager.GetFactoryCount() - 1;
+            
+            attempts++;
+            
+            if (attempts >= idleManager.GetFactoryCount())
+            {
+                currentFactoryIndex = startIndex;
+                return;
+            }
+            
+        } while (!IsFactoryUnlocked(currentFactoryIndex));
+
+        SwitchToFactory(currentFactoryIndex);
+    }
+
+    //guzik prawy górny róg
+    private void CycleToNextFactory()
+    {
+        if (idleManager == null || idleManager.GetFactoryCount() == 0) return;
+
+        audioSource.Play();
+        int startIndex = currentFactoryIndex;
+        int attempts = 0;
+        
+        do
+        {
+            currentFactoryIndex++;
+            if (currentFactoryIndex >= idleManager.GetFactoryCount())
+                currentFactoryIndex = 0;
+            
+            attempts++;
+            
+            if (attempts >= idleManager.GetFactoryCount())
+            {
+                currentFactoryIndex = startIndex;
+                return;
+            }
+            
+        } while (!IsFactoryUnlocked(currentFactoryIndex));
+        
+        SwitchToFactory(currentFactoryIndex);
+    }
+
+    private bool IsFactoryUnlocked(int factoryIndex)
+    {
+        var factory = GetFactory(factoryIndex);
+        return factory != null && factory.isUnlocked;
+    }
+
+    private void SwitchToFactory(int factoryIndex)
+    {
+        var factory = GetFactory(factoryIndex);
+        if (factory == null) return;
+
+        raptorCore.SetCurrentResource(factory.resource.name);
+
+        if (factoryLabel != null) factoryLabel.text = factory.name;
+
+        Sprite Tex; 
+        switch (factory.name)
+        {
+            case "F1": Tex = images[0]; break;
+            case "F2": Tex = images[1]; break;
+            case "F3": Tex = images[2]; break;
+            case "F4": Tex = images[3]; break;
+            case "F5": Tex = images[4]; break;
+            case "F6": Tex = images[5]; break;
+            default: Tex = images[0]; break;
+        }
+
+        currencyIcon.style.backgroundImage = new StyleBackground(Tex);
+        shopIcon.style.backgroundImage = new StyleBackground(Tex);
+        clickerObject.sprite = Tex;
+
+        UpdateFactoryUI();
+        UpdateNavigationButtons();
+    }
+
+    private void UpdateNavigationButtons()
+    {
+        if (prevFactoryBtn == null || nextFactoryBtn == null || idleManager == null) return;
+
+        int unlockedCount = 0;
+        for (int i = 0; i < idleManager.GetFactoryCount(); i++)
+        {
+            if (IsFactoryUnlocked(i))
+                unlockedCount++;
+        }
+
+        bool hasMultipleUnlocked = unlockedCount > 1;
+        
+        prevFactoryBtn.SetEnabled(hasMultipleUnlocked);
+        prevFactoryBtn.style.display = hasMultipleUnlocked ? DisplayStyle.Flex : DisplayStyle.None;
+        nextFactoryBtn.SetEnabled(hasMultipleUnlocked);
+        nextFactoryBtn.style.display = hasMultipleUnlocked ? DisplayStyle.Flex : DisplayStyle.None;
+    }
+
+    private void UpdateUnlockButtons()
+    {
+        if (idleManager == null || raptorCore == null) return;
+
+        if (unlockFactory2Btn != null)
+        {
+            var factory2 = GetFactory(1);
+            if (factory2 != null)
+            {
+                if (factory2.isUnlocked)
+                {
+                    unlockFactory2Btn.style.display = DisplayStyle.None;
+                }
+                else
+                {
+                    unlockFactory2Btn.style.display = DisplayStyle.Flex;
+                    unlockFactory2Btn.text = $"Odblokuj {factory2.name}\n{factory2.unlockCost} Gold";
+                    unlockFactory2Btn.SetEnabled(raptorCore.Gold >= factory2.unlockCost);
+                }
+            }
+        }
+
+        if (unlockFactory3Btn != null)
+        {
+            var factory3 = GetFactory(2);
+            if (factory3 != null)
+            {
+                if (factory3.isUnlocked)
+                {
+                    unlockFactory3Btn.style.display = DisplayStyle.None;
+                }
+                else
+                {
+                    unlockFactory3Btn.style.display = DisplayStyle.Flex;
+                    unlockFactory3Btn.text = $"Odblokuj {factory3.name}\n{factory3.unlockCost} Gold";
+                    unlockFactory3Btn.SetEnabled(raptorCore.Gold >= factory3.unlockCost);
+                }
+            }
+        }
+
+        if (unlockFactory4Btn != null)
+        {
+            var factory4 = GetFactory(3);
+            if (factory4 != null)
+            {
+                if (factory4.isUnlocked)
+                {
+                    unlockFactory4Btn.style.display = DisplayStyle.None;
+                }
+                else
+                {
+                    unlockFactory4Btn.style.display = DisplayStyle.Flex;
+                    unlockFactory4Btn.text = $"Odblokuj {factory4.name}\n{factory4.unlockCost} Gold";
+                    unlockFactory4Btn.SetEnabled(raptorCore.Gold >= factory4.unlockCost);
+                }
+            }
+        }
+
+        if (unlockFactory5Btn != null)
+        {
+            var factory5 = GetFactory(4);
+            if (factory5 != null)
+            {
+                if (factory5.isUnlocked)
+                {
+                    unlockFactory5Btn.style.display = DisplayStyle.None;
+                }
+                else
+                {
+                    unlockFactory5Btn.style.display = DisplayStyle.Flex;
+                    unlockFactory5Btn.text = $"Odblokuj {factory5.name}\n{factory5.unlockCost} Gold";
+                    unlockFactory5Btn.SetEnabled(raptorCore.Gold >= factory5.unlockCost);
+                }
+            }
+        }
+
+        if (unlockFactory6Btn != null)
+        {
+            var factory6 = GetFactory(5);
+            if (factory6 != null)
+            {
+                if (factory6.isUnlocked)
+                {
+                    unlockFactory6Btn.style.display = DisplayStyle.None;
+                }
+                else
+                {
+                    unlockFactory6Btn.style.display = DisplayStyle.Flex;
+                    unlockFactory6Btn.text = $"Odblokuj {factory6.name}\n{factory6.unlockCost} Gold";
+                    unlockFactory6Btn.SetEnabled(raptorCore.Gold >= factory6.unlockCost);
+                }
+            }
+        }
+    }
+    private void UnlockFactoryFromButton(int factoryIndex)
+    {
+        audioSource.Play();
+
+        if (idleManager == null) return;
+
+        var factory = GetFactory(factoryIndex);
+        if (factory == null) return;
+
+        if (factory.isUnlocked)
+        {
+            Debug.Log($"Fabryka {factory.name} jest już odblokowana!");
+            return;
+        }
+
+        bool success = idleManager.UnlockFactory(factoryIndex);
+
+        if (success)
+        {
+            Debug.Log($"Pomyślnie odblokowano fabrykę {factory.name}");
+             currentFactoryIndex = factoryIndex;
+            SwitchToFactory(factoryIndex);
+        }
+        else
+        {
+            Debug.Log($"Brak złota na odblokowanie fabryki {factory.name}");
+        }
+
+        UpdateFactoryUI();
+        UpdateUnlockButtons();
+        UpdateNavigationButtons();
+        SetGoldText(raptorCore.Gold.ToString("F0"));
     }
 }

@@ -1,22 +1,16 @@
 fileFormatVersion: 2
-guid: d861403f5cd46654c83d7f7834d3afef
+guid: 681fffdc84fdd324793e5c59b7d90ecc
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 4857087209879925418
-    second: TimeRemnant_0
+      213: -4090138587581203339
+    second: champion-of-clicks_0
   - first:
-      213: 7826766526880524115
-    second: TimeRemnant_1
+      213: -6897596627057658738
+    second: champion-of-clicks_1
   - first:
-      213: -385135259897905211
-    second: TimeRemnant_2
-  - first:
-      213: 9179442607888080009
-    second: TimeRemnant_3
-  - first:
-      213: -3736656214239694557
-    second: TimeRemnant_4
+      213: 681286363580247850
+    second: champion-of-clicks_2
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -108,128 +102,71 @@ TextureImporter:
     ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
-  - serializedVersion: 4
-    buildTarget: Android
-    maxTextureSize: 2048
-    resizeAlgorithm: 0
-    textureFormat: -1
-    textureCompression: 1
-    compressionQuality: 50
-    crunchedCompression: 0
-    allowsAlphaSplitting: 0
-    overridden: 0
-    ignorePlatformSupport: 0
-    androidETC2FallbackOverride: 0
-    forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: TimeRemnant_0
+      name: champion-of-clicks_0
       rect:
         serializedVersion: 2
-        x: 42
-        y: 80
-        width: 428
-        height: 367
+        x: 41
+        y: 245
+        width: 127
+        height: 127
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: aa27cfb5517d76340800000000000000
-      internalID: 4857087209879925418
+      spriteID: 57cba1500a8ec37c0800000000000000
+      internalID: -4090138587581203339
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: TimeRemnant_1
+      name: champion-of-clicks_1
       rect:
         serializedVersion: 2
-        x: 49
-        y: 85
-        width: 421
-        height: 362
+        x: 95
+        y: 51
+        width: 333
+        height: 264
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 357a1ae20b24e9c60800000000000000
-      internalID: 7826766526880524115
+      spriteID: e84bb48a960d640a0800000000000000
+      internalID: -6897596627057658738
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: TimeRemnant_2
+      name: champion-of-clicks_2
       rect:
         serializedVersion: 2
-        x: 42
-        y: 222
-        width: 7
-        height: 7
+        x: 174
+        y: 225
+        width: 327
+        height: 217
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 5cfbe4b8589b7aaf0800000000000000
-      internalID: -385135259897905211
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: TimeRemnant_3
-      rect:
-        serializedVersion: 2
-        x: 169
-        y: 84
-        width: 8
-        height: 9
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 98c1147ca6ee36f70800000000000000
-      internalID: 9179442607888080009
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: TimeRemnant_4
-      rect:
-        serializedVersion: 2
-        x: 197
-        y: 82
-        width: 12
-        height: 12
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 321bc7688fab42cc0800000000000000
-      internalID: -3736656214239694557
+      spriteID: a2fa48b865a647900800000000000000
+      internalID: 681286363580247850
       vertices: []
       indices: 
       edges: []
@@ -238,7 +175,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: cdef434bd1d2bcc4a84abf16b68040f0
+    spriteID: 
     internalID: 0
     vertices: []
     indices: 
@@ -248,11 +185,9 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      TimeRemnant_0: 4857087209879925418
-      TimeRemnant_1: 7826766526880524115
-      TimeRemnant_2: -385135259897905211
-      TimeRemnant_3: 9179442607888080009
-      TimeRemnant_4: -3736656214239694557
+      champion-of-clicks_0: -4090138587581203339
+      champion-of-clicks_1: -6897596627057658738
+      champion-of-clicks_2: 681286363580247850
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

@@ -1,0 +1,11 @@
+.ToolTipRoot {
+    position: absolute;
+    border-top-left-radius: 50px;
+    border-top-right-radius: 50px;
+    border-bottom-right-radius: 50px;
+    border-bottom-left-radius: 50px;
+    background-color: rgb(0, 0, 0);
+    transition-delay: 0.5s, 0s;
+    transition-duration: 0.5s, 0.5s;
+    transition-property: width, height;
+}

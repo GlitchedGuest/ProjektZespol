@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class CharacterClass:MonoBehaviour
 {
+    public RaptorCore Raptorcore;
     //this is class for the "rpg" character
 
     private uint level = 1;
@@ -43,6 +44,7 @@ public class CharacterClass:MonoBehaviour
             while(currentExp > maxExpCap && level < maxLvlCap)
             {
                 level++;
+                Raptorcore.MullLimitResourceAll((QuarkType)1.2);
                 currentExp -= maxExpCap;
                 NewLevelCap();
             }

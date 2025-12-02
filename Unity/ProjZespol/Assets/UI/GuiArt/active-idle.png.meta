@@ -1,22 +1,13 @@
 fileFormatVersion: 2
-guid: d861403f5cd46654c83d7f7834d3afef
+guid: 829ffbe7e408ade41bd7153c7527f343
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 4857087209879925418
-    second: TimeRemnant_0
+      213: 4826619697038504054
+    second: active-idle_0
   - first:
-      213: 7826766526880524115
-    second: TimeRemnant_1
-  - first:
-      213: -385135259897905211
-    second: TimeRemnant_2
-  - first:
-      213: 9179442607888080009
-    second: TimeRemnant_3
-  - first:
-      213: -3736656214239694557
-    second: TimeRemnant_4
+      213: 8613009775516691893
+    second: active-idle_1
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -108,128 +99,49 @@ TextureImporter:
     ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
-  - serializedVersion: 4
-    buildTarget: Android
-    maxTextureSize: 2048
-    resizeAlgorithm: 0
-    textureFormat: -1
-    textureCompression: 1
-    compressionQuality: 50
-    crunchedCompression: 0
-    allowsAlphaSplitting: 0
-    overridden: 0
-    ignorePlatformSupport: 0
-    androidETC2FallbackOverride: 0
-    forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: TimeRemnant_0
+      name: active-idle_0
       rect:
         serializedVersion: 2
-        x: 42
-        y: 80
-        width: 428
-        height: 367
+        x: 41
+        y: 329
+        width: 432
+        height: 183
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: aa27cfb5517d76340800000000000000
-      internalID: 4857087209879925418
+      spriteID: 67032ebba099bf240800000000000000
+      internalID: 4826619697038504054
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: TimeRemnant_1
+      name: active-idle_1
       rect:
         serializedVersion: 2
-        x: 49
-        y: 85
-        width: 421
-        height: 362
+        x: 31
+        y: 31
+        width: 450
+        height: 290
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 357a1ae20b24e9c60800000000000000
-      internalID: 7826766526880524115
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: TimeRemnant_2
-      rect:
-        serializedVersion: 2
-        x: 42
-        y: 222
-        width: 7
-        height: 7
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 5cfbe4b8589b7aaf0800000000000000
-      internalID: -385135259897905211
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: TimeRemnant_3
-      rect:
-        serializedVersion: 2
-        x: 169
-        y: 84
-        width: 8
-        height: 9
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 98c1147ca6ee36f70800000000000000
-      internalID: 9179442607888080009
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: TimeRemnant_4
-      rect:
-        serializedVersion: 2
-        x: 197
-        y: 82
-        width: 12
-        height: 12
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 321bc7688fab42cc0800000000000000
-      internalID: -3736656214239694557
+      spriteID: 5bda3a4d1ce878770800000000000000
+      internalID: 8613009775516691893
       vertices: []
       indices: 
       edges: []
@@ -238,7 +150,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: cdef434bd1d2bcc4a84abf16b68040f0
+    spriteID: 
     internalID: 0
     vertices: []
     indices: 
@@ -248,11 +160,8 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      TimeRemnant_0: 4857087209879925418
-      TimeRemnant_1: 7826766526880524115
-      TimeRemnant_2: -385135259897905211
-      TimeRemnant_3: 9179442607888080009
-      TimeRemnant_4: -3736656214239694557
+      active-idle_0: 4826619697038504054
+      active-idle_1: 8613009775516691893
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
