@@ -11,6 +11,10 @@ public class ActivePotionsUI : MonoBehaviour
     [SerializeField] private Sprite unoPotionSprite;
     [SerializeField] private Sprite dosPotionSprite;
     [SerializeField] private Sprite tresPotionSprite;
+    [SerializeField] private Sprite cuatroPotionSprite;
+    [SerializeField] private Sprite cincoPotionSprite;
+    [SerializeField] private Sprite seisPotionSprite;
+
 
     private VisualElement activePotionsPanel;
     private List<VisualElement> activePotionDisplays = new List<VisualElement>();
@@ -91,26 +95,38 @@ public class ActivePotionsUI : MonoBehaviour
         potionDisplay.style.borderTopColor = borderColor;
         potionDisplay.style.borderBottomColor = borderColor;
 
-        Sprite potionSprite = GetPotionSprite(potion.name);
-
+        int activeCount = 0;
+        foreach (var p in idleManager.potions)
+        {
+            if (p.isActive) activeCount++;
+        }
         var icon = new VisualElement();
-        icon.style.width = 80;
-        icon.style.height = 80;
-        icon.style.marginBottom = 5;
-
-        if (potionSprite != null)
+        if (activeCount < 5)
         {
-            icon.style.backgroundImage = new StyleBackground(potionSprite);
-        }
-        else
-        {
-            icon.style.backgroundColor = borderColor;
-        }
+            Sprite potionSprite = GetPotionSprite(potion.name);
 
-        icon.style.borderTopLeftRadius = 5;
-        icon.style.borderTopRightRadius = 5;
-        icon.style.borderBottomLeftRadius = 5;
-        icon.style.borderBottomRightRadius = 5;
+            icon = new VisualElement();
+            icon.style.width = 80;
+            icon.style.height = 80;
+            icon.style.marginBottom = 5;
+
+            if (potionSprite != null)
+            {
+                icon.style.backgroundImage = new StyleBackground(potionSprite);
+                icon.style.backgroundSize = new BackgroundSize(BackgroundSizeType.Contain);
+            }
+            else
+            {
+                icon.style.backgroundColor = borderColor;
+            }
+
+            icon.style.borderTopLeftRadius = 5;
+            icon.style.borderTopRightRadius = 5;
+            icon.style.borderBottomLeftRadius = 5;
+            icon.style.borderBottomRightRadius = 5;
+
+            potionDisplay.Add(icon);
+        }
 
         var nameLabel = new Label(potion.name);
         nameLabel.style.fontSize = 16;
@@ -176,6 +192,12 @@ public class ActivePotionsUI : MonoBehaviour
                 return dosPotionSprite;
             case "Tres":
                 return tresPotionSprite;
+            case "Cuatro":
+                return cuatroPotionSprite;
+            case "Cinco":
+                return cincoPotionSprite;
+            case "Seis":
+                return seisPotionSprite;
             default:
                 return null;
         }
@@ -190,6 +212,12 @@ public class ActivePotionsUI : MonoBehaviour
             case "Dos":
                 return new Color(0.3f, 0.3f, 1f);
             case "Tres":
+                return new Color(0.3f, 1f, 0.3f);
+            case "Cuatro":
+                return new Color(1f, 0.3f, 0.3f);
+            case "Cinco":
+                return new Color(0.3f, 0.3f, 1f);
+            case "Seis":
                 return new Color(0.3f, 1f, 0.3f);
             default:
                 return new Color(0.8f, 0.3f, 0.8f);
