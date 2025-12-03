@@ -133,7 +133,7 @@ public class IdleManager : MonoBehaviour
                 if (characterClass.passiveAgressive && characterClass.christmasBonus)
                     f.resource.value += characterClass.productionIdleAgressiveBonus;
                 if (characterClass.hungryWolf)
-                    f.resource.value += production * (2 - (f.resource.value / f.resource.Limit));
+                    f.resource.value += (production * (2 - (f.resource.value / f.resource.Limit))).Ceil();
                    
 
                 if (characterClass.oneForEveryone)
