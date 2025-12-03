@@ -6,6 +6,7 @@ using UnityEngine;
 public class IdleManager : MonoBehaviour
 {
     [SerializeField] private RaptorCore raptorCore;
+    [SerializeField] private CharacterClass characterClass;
     [SerializeField] private float tickInterval = 1f;
     private Coroutine tickCoroutine;
     [NonSerialized]public List<Factory> factories;
@@ -136,7 +137,20 @@ public class IdleManager : MonoBehaviour
 
             if (f.resource != null)
             {
-                f.resource.value += (QuarkType)production;
+                if (!GetFocusedFactory(f.resource.name) && characterClass.whatEyesDontSee)
+                    f.resource.value += production / 2 + 100;
+                if (GetFocusedFactory(f.resource.name) && characterClass.passiveAgressive && !characterClass.christmasBonus)
+                    f.resource.value += characterClass.productionIdleAgressiveBonus;
+                if (characterClass.passiveAgressive && characterClass.christmasBonus)
+                    f.resource.value += characterClass.productionIdleAgressiveBonus;
+                if (characterClass.hungryWolf)
+                    f.resource.value += (production * (2 - (f.resource.value / f.resource.Limit))).Ceil();
+                   
+
+                if (characterClass.oneForEveryone)
+                    f.resource.value += (QuarkType)(production + (GetUnlockedFactoryCount(f.resource.name) * (characterClass.productionIdleBonus + characterClass.productionIdlePedatorBonus)));
+                else
+                    f.resource.value += (QuarkType)(production + (GetUnlockedFactoryCount(f.resource.name) * characterClass.productionIdleBonus) + characterClass.productionIdlePedatorBonus);
             }
         }
 
@@ -432,4 +446,25 @@ public class IdleManager : MonoBehaviour
                 break;
         }
     }
+
+    private int GetUnlockedFactoryCount(string resource)
+    {
+        if (raptorCore.currentResource != resource)
+            return 0;
+        int sum = 0;
+        foreach(var f in factories)
+        {
+            if(f.isUnlocked)
+                sum++;
+        }
+        return sum;
+    }
+
+    private bool GetFocusedFactory(string resource)
+    {
+        if (raptorCore.currentResource != resource)
+            return false;
+        return true;
+    }
+
 }

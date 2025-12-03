@@ -19,12 +19,21 @@ public class Resource
 
         }
     }
-    public QuarkType Limit;
+    public QuarkType Limit
+    {
+        get => (BaseLimit * LvlBoost) + SkillBoost;
+    }
+
+    public QuarkType BaseLimit;
+    public QuarkType LvlBoost;
+    public QuarkType SkillBoost;
 
     public Resource(string _name)
     {
         name = _name;
         _value = 0;
-        Limit = 10000;
-    }
+        BaseLimit = 10000;
+        LvlBoost = 1;
+        SkillBoost = 0;
+}
 }

@@ -16,6 +16,9 @@ public class CharacterClass:MonoBehaviour
     public float boostedChance = 0.00f;
     private float skillCheckChance = -1.0f;
     public int skillCheckReduce = 0;
+    public double productionIdleBonus = 0;
+    public double productionIdlePedatorBonus = 0;
+    public double productionIdleAgressiveBonus = 0;
     //Important Skill Variables
     public bool activeIdle = false;
     public bool noMatterWhat = false;
@@ -24,6 +27,14 @@ public class CharacterClass:MonoBehaviour
     public bool symbiosis = false;
     public bool mortalClicker = false;
     public bool championOfClicks = false;
+    public bool reactionTest = false;
+    public bool unskilledPredator = false;
+    public bool oneForEveryone = false;
+    public bool whatEyesDontSee = false;
+    public bool passiveAgressive = false;
+    public bool multitasking = false;
+    public bool christmasBonus = false;
+    public bool hungryWolf = false;
     //Use this to gain exp from activities
     public void GainExp(ulong exp)
     {
@@ -93,13 +104,23 @@ public class CharacterClass:MonoBehaviour
             case "Skill5": Symbiosis(revert); break;
             case "Skill6A": MortalClicker(revert); break;
             case "Skill6B": ChampionOfClicks(revert); break;
+            case "Skill1-tree3": Entrepreneur(revert); break;
+            case "Skill2-tree3": PushToTheLimit(revert); break;
+            case "Skill3A-tree3": ReactionTest(revert); break;
+            case "Skill4A-tree3": UnskilledPredator(revert); break;
+            case "Skill5A-tree3": OneForEveryone(revert); break;
+            case "Skill3B-tree3": WhatEyesDontSee(revert); break;
+            case "Skill4B-tree3": PassiveAgressive(revert); break;
+            case "Skill5B-tree3": Multitasking(revert); break;
+            case "Skill5C-tree3": ChristmasBonus(revert); break;
+            case "Skill6-tree3": HungryWolf(revert); break;
         }
 
     }
 
     private void SkillBasedClicking(bool revert)
     {
-        skillCheckChance = revert ? -1.0f : 10.0f;
+        skillCheckChance = revert ? -1.0f : 101.0f;
     }
     private void CriticalMass(bool revert)
     {
@@ -137,13 +158,11 @@ public class CharacterClass:MonoBehaviour
     {
         championOfClicks = !revert;
     }
-
     public void EnableAlanWake()
     {
         StartCoroutine(AlanWake());
         championOfClicks = false;
     }
-
     private IEnumerator AlanWake()
     {
         float prevChance = criticalChance;
@@ -151,5 +170,57 @@ public class CharacterClass:MonoBehaviour
         yield return new WaitForSeconds(6f);
         criticalChance = prevChance;
         championOfClicks = true;
+    }
+    private void Entrepreneur(bool revert)
+    {
+        productionIdleBonus = revert ? 0f : 5.0f;
+    }
+    private void PushToTheLimit(bool revert)
+    {
+        if (!revert) Raptorcore.IncrementSkillBoostResourceAll(true);
+        else Raptorcore.IncrementSkillBoostResourceAll(false);
+    }
+    private void ReactionTest(bool revert)
+    {
+        reactionTest = !revert;
+    }
+    private void UnskilledPredator(bool revert)
+    {
+        unskilledPredator = !revert;
+        if (!revert) productionIdlePedatorBonus = 0f;
+    }
+    public void Pedator(bool reset)
+    {
+        if (unskilledPredator)
+        {
+            if (!reset) productionIdlePedatorBonus += 5.0f;
+            else productionIdlePedatorBonus = 0f;
+        }
+    }
+    private void OneForEveryone(bool revert)
+    {
+        unskilledPredator = !revert;
+        if (!revert) productionIdleBonus = 5.0f;
+    }
+    private void WhatEyesDontSee(bool revert)
+    {
+        whatEyesDontSee = !revert;
+    }
+    private void PassiveAgressive(bool revert)
+    {
+        passiveAgressive = !revert;
+        productionIdleAgressiveBonus = 0;
+    }
+    private void Multitasking(bool revert)
+    {
+        multitasking = !revert;
+    }
+    private void ChristmasBonus(bool revert)
+    {
+        christmasBonus = !revert;
+    }
+    private void HungryWolf(bool revert)
+    {
+        hungryWolf = !revert;
     }
 }

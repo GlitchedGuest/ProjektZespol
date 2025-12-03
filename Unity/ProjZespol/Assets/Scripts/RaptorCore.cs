@@ -45,12 +45,13 @@ public class RaptorCore : MonoBehaviour
     [AutoSave] public QuarkType resource5Value = 0;
     [AutoSave] public QuarkType resource6Value = 0;
 
-    [AutoSave] public QuarkType resource1Limit = 1000;
-    [AutoSave] public QuarkType resource2Limit = 2500;
-    [AutoSave] public QuarkType resource3Limit = 5000;
-    [AutoSave] public QuarkType resource4Limit = 10000;
-    [AutoSave] public QuarkType resource5Limit = 25000;
-    [AutoSave] public QuarkType resource6Limit = 50000;
+    public QuarkType resource1Limit = 1000;
+    public QuarkType resource2Limit = 2500;
+    public QuarkType resource3Limit = 5000;
+    public QuarkType resource4Limit = 10000;
+    public QuarkType resource5Limit = 25000;
+    public QuarkType resource6Limit = 50000;
+
     public string currentResource = "Resource1";
     private enum ClickSource { None, Mouse, Space, Enter }
     private ClickSource activeClickSource = ClickSource.None;
@@ -60,6 +61,10 @@ public class RaptorCore : MonoBehaviour
     public QuarkType potionSellBonus1 = 1;
     public QuarkType potionClickBonus2 = 0;
     public QuarkType potionSellBonus2 = 1;
+
+    private bool skillCheckCooldown = false;
+    int skillCheckCooldownCount = 0;
+    public int clickingDebuff = 0;
 
     //Crit Generator
     [SerializeField] private GameObject CritGenerator;
@@ -84,6 +89,7 @@ public class RaptorCore : MonoBehaviour
     {
         QuarkType value = 0;
         float chance = UnityEngine.Random.Range(0.00f, 100.00f);
+        if (!skillCheckCooldown && !characterClass.reactionTest) SkillCheckManager();
         if (chance < characterClass.GetCriticalChance())
         {
             if(idleManager.potions[0].isActive && idleManager.potions[0].linkedFactory.name == GetCurrentFactory().name)
@@ -130,6 +136,7 @@ public class RaptorCore : MonoBehaviour
 
     void SkillCheckManager()
     {
+        Debug.Log("SKILL CHECK");
         float chance = UnityEngine.Random.Range(0.00f, 100.00f);
         float boostChance = 0;
         if (characterClass.symbiosis)
@@ -138,6 +145,7 @@ public class RaptorCore : MonoBehaviour
         {
             skillCheck.SetActive(true);
             skillCheck.GetComponent<SkillCheckScript>().StartSkillCheck();
+            skillCheckCooldown = true;
         }      
     }
 
@@ -148,7 +156,7 @@ public class RaptorCore : MonoBehaviour
         string p = char.ToLower(name[0]) + name[1..];
         var t = GetType();
 
-        res.Limit = (QuarkType)t.GetField(p + "Limit").GetValue(this);
+        res.BaseLimit = (QuarkType)t.GetField(p + "Limit").GetValue(this);
         res.value = (QuarkType)t.GetField(p + "Value").GetValue(this);
     }
 
@@ -173,12 +181,26 @@ public class RaptorCore : MonoBehaviour
     {
         Currency += (GBasevalue * GMultiplier); //.Pow(GPower);
 
+        if(skillCheckCooldown)
+            skillCheckCooldownCount++;
         tickCount++;
         if (tickCount % 600 == 0)
             if(AutoSaveSystem.AutoSave)
                 AutoSaveSystem.SaveGame();
-        if (tickCount % (600-characterClass.skillCheckReduce) == 0) //zmienic przy balansie
-            SkillCheckManager();  
+        if (skillCheckCooldownCount % (600 - characterClass.skillCheckReduce) == 0)//zmienic przy balansie
+        { 
+            skillCheckCooldown = false;
+            skillCheckCooldownCount = 0;
+        }
+        if (characterClass.reactionTest && !skillCheckCooldown)
+            if (tickCount % 200 == 0)
+                SkillCheckManager();
+        if (characterClass.passiveAgressive)
+            if (tickCount % 300 == 0)
+            {
+                characterClass.productionIdleAgressiveBonus += 10 - clickingDebuff;
+                clickingDebuff = 0;
+            }
     }
 
     void Update()
@@ -217,6 +239,10 @@ public class RaptorCore : MonoBehaviour
         {
             click();
             anim.SetTrigger("Clicked");
+            if(characterClass.passiveAgressive)
+                characterClass.productionIdleAgressiveBonus = 0;
+            if (characterClass.multitasking)
+                clickingDebuff = 2;
             UpdateUI();
         }
     }
@@ -386,10 +412,10 @@ public class RaptorCore : MonoBehaviour
             UpdateUI();
         }
     }
-    public void SetLimitResource(string resource, QuarkType limitvalue) {
+    public void SetLvlBoostResource(string resource, QuarkType limitvalue) {
         if (resources.ContainsKey(resource))
         {
-            resources[resource].Limit = limitvalue;
+            resources[resource].LvlBoost *= limitvalue;
         }
     }
 
@@ -401,34 +427,49 @@ public class RaptorCore : MonoBehaviour
         }
         return default;
     }
+    public QuarkType GetBaseLimitResource(string resource)
+    {
+        if (resources.ContainsKey(resource))
+        {
+            return resources[resource].BaseLimit;
+        }
+        return default;
+    }
 
     //Incirement + add in to limit
-    public void IncrementLimitResourceAll(QuarkType AddValue)
+    public void IncrementSkillBoostResourceAll(bool mode)
     {
-        IncrementLimitResource("Resource1", AddValue);
-        IncrementLimitResource("Resource2", AddValue);
-        IncrementLimitResource("Resource3", AddValue);
-        IncrementLimitResource("Resource4", AddValue);
-        IncrementLimitResource("Resource5", AddValue);
-        IncrementLimitResource("Resource6", AddValue);
+        IncrementSkillBoostResource("Resource1", (GetBaseLimitResource("Resource1") /2), mode);
+        IncrementSkillBoostResource("Resource2", (GetBaseLimitResource("Resource2") / 2), mode);
+        IncrementSkillBoostResource("Resource3", (GetBaseLimitResource("Resource3") / 2), mode);
+        IncrementSkillBoostResource("Resource4", (GetBaseLimitResource("Resource4") / 2), mode);
+        IncrementSkillBoostResource("Resource5", (GetBaseLimitResource("Resource5") / 2), mode);
+        IncrementSkillBoostResource("Resource6", (GetBaseLimitResource("Resource6") / 2), mode);
     }
 
     //Incirement * multiply the limit
     public void MullLimitResourceAll(QuarkType MullValue)
     {
-        SetLimitResource("Resource1", MullValue * GetLimitResource("Resource1"));
-        SetLimitResource("Resource2", MullValue * GetLimitResource("Resource2"));
-        SetLimitResource("Resource3", MullValue * GetLimitResource("Resource3"));
-        SetLimitResource("Resource4", MullValue * GetLimitResource("Resource4"));
-        SetLimitResource("Resource5", MullValue * GetLimitResource("Resource5"));
-        SetLimitResource("Resource6", MullValue * GetLimitResource("Resource6"));
+        SetLvlBoostResource("Resource1", MullValue);
+        SetLvlBoostResource("Resource2", MullValue);
+        SetLvlBoostResource("Resource3", MullValue);
+        SetLvlBoostResource("Resource4", MullValue);
+        SetLvlBoostResource("Resource5", MullValue);
+        SetLvlBoostResource("Resource6", MullValue);
     }
 
-    public void IncrementLimitResource(string resource, QuarkType AddValue)
+    public void IncrementSkillBoostResource(string resource, QuarkType AddValue, bool mode)
     {
         if (resources.ContainsKey(resource))
         {
-            resources[resource].Limit += AddValue;
+            if(mode)
+                resources[resource].SkillBoost += AddValue;
+            else
+            {
+                resources[resource].SkillBoost -= AddValue;
+                if (resources[resource].value > resources[resource].Limit)
+                    resources[resource].value = resources[resource].Limit;
+            }
         }
     }
 
@@ -505,6 +546,7 @@ public class RaptorCore : MonoBehaviour
                 yield return new WaitForSeconds(6f);
                 f.productionMultiplier -= 3;
                 f.count -= 4;
+                break;
             }
         }       
     }
@@ -519,9 +561,11 @@ public class RaptorCore : MonoBehaviour
     {
         int mode = 1;
         if (!effect)
+        {
             mode = -1;
-        if (!characterClass.alwaysWinner)
-            mode = 0;
+            if (characterClass.alwaysWinner)
+                mode = 0;
+        }
         SkillMultiplier += 10 * mode;
         yield return new WaitForSeconds(6f);
         SkillMultiplier -= 10 * mode;

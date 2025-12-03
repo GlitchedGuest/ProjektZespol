@@ -1306,6 +1306,10 @@ PrefabInstance:
       propertyPath: raptorCore
       value: 
       objectReference: {fileID: 186519293}
+    - target: {fileID: 3636859431018551311, guid: ae537e34a29247e40aa9187fa465bb27, type: 3}
+      propertyPath: characterClass
+      value: 
+      objectReference: {fileID: 1162231167}
     - target: {fileID: 5096202571370728670, guid: ae537e34a29247e40aa9187fa465bb27, type: 3}
       propertyPath: m_Name
       value: IdleManager
