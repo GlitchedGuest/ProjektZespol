@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.U2D;
 using UnityEngine.UIElements;
 
 public class LayoutController : MonoBehaviour
@@ -196,6 +197,7 @@ public class LayoutController : MonoBehaviour
         Instance = this;
         ui = GetComponent<UIDocument>().rootVisualElement;
         resolutions = Screen.resolutions;
+        
 
     }
 
@@ -398,6 +400,8 @@ public class LayoutController : MonoBehaviour
 
         if (unlockFactory6Btn != null)
             unlockFactory6Btn.clicked += () => UnlockFactoryFromButton(5);
+
+        SwitchToFactory(currentFactoryIndex);
     }
 
     void LineLayerInit(VisualElement lineLayer)
