@@ -14,6 +14,7 @@ public class LayoutController : MonoBehaviour
     [SerializeField] private IdleManager idleManager;
     [SerializeField] private AudioSource audioSource;
     [SerializeField] private AudioSource critSource;
+    [SerializeField] private SkillPointsLimit skillPointsLimit;
 
     public Sprite[] images;
     public VisualElement ui;
@@ -62,7 +63,7 @@ public class LayoutController : MonoBehaviour
         resourceShopManager = new ResourceShopManager(ui, raptorCore, characterClass, audioSource);
         resourceShopManager.Initialize();
 
-        skillTreesUIManager = new SkillTreesUIManager(ui, characterClass, learnedOneClickArmy, learnedJackOfAllClicks, learnedAutomatron);
+        skillTreesUIManager = new SkillTreesUIManager(ui, characterClass, learnedOneClickArmy, learnedJackOfAllClicks, learnedAutomatron, skillPointsLimit);
         skillTreesUIManager.InitializeAllTrees();
     }
 

@@ -19,12 +19,15 @@ public abstract class SkillTreeManager
     protected Color availableColor = new Color(0.8f, 0.6f, 0.3f);
     protected Color learnedColor = new Color(0.2f, 0.8f, 0.2f);
 
+    protected SkillPointsLimit skillPointsLimit;
+
     public SkillTreeManager(
         VisualElement root,
         CharacterClass charClass,
         Dictionary<string, List<string>> treeDependencies,
         string containerName,
-        HashSet<string> learnedSet)
+        HashSet<string> learnedSet,
+        SkillPointsLimit skillPointsLimit)
     {
         ui = root;
         characterClass = charClass;
@@ -37,6 +40,7 @@ public abstract class SkillTreeManager
         lineLayer = new VisualElement();
         InitializeLineLayer(lineLayer);
         skillTreeContainer.Insert(0, lineLayer);
+        this.skillPointsLimit = skillPointsLimit;
     }
 
     private void InitializeLineLayer(VisualElement layer)
@@ -139,7 +143,7 @@ public abstract class SkillTreeManager
         }
 
         learned.Remove(id);
-
+        skillPointsLimit.IncSkillPoints();
         if (characterClass != null)
             characterClass.ApplySkillChanges(id, true);
 
@@ -156,7 +160,7 @@ public abstract class SkillTreeManager
 #region OneClickArmySkillTree
 public class OneClickArmySkillTree : SkillTreeManager
 {
-    public OneClickArmySkillTree(VisualElement root, CharacterClass charClass, HashSet<string> learnedSet): base(root, charClass, GetDependencies(), "SkillTree", learnedSet) { }
+    public OneClickArmySkillTree(VisualElement root, CharacterClass charClass, HashSet<string> learnedSet,SkillPointsLimit skillPointsLimit): base(root, charClass, GetDependencies(), "SkillTree", learnedSet,skillPointsLimit) { }
 
     private static Dictionary<string, List<string>> GetDependencies()
     {
@@ -177,12 +181,13 @@ public class OneClickArmySkillTree : SkillTreeManager
 
     protected override void OnSkillClicked(string id)
     {
+        if (characterClass.skillpoints < 1)return;
         if (learned.Contains(id)) return;
         if (!CanUnlock(id)) return;
 
         if (id == "Skill6A" && learned.Contains("Skill6B")) return;
         if (id == "Skill6B" && learned.Contains("Skill6A")) return;
-
+        skillPointsLimit.DecSkillPoints();
         learned.Add(id);
         characterClass.ApplySkillChanges(id, false);
         UpdateVisual(id);
@@ -222,14 +227,29 @@ public class OneClickArmySkillTree : SkillTreeManager
             return;
         }
 
-        btn.style.backgroundColor = CanUnlock(id) ? availableColor : lockedColor;
+        if (CanUnlock(id))
+        {
+            if (characterClass.skillpoints < 1)
+            {
+                btn.style.backgroundColor = lockedColor;
+
+            }
+            else
+            {
+                btn.style.backgroundColor = availableColor;
+            }
+        }
+        else
+        {
+            btn.style.backgroundColor = lockedColor;
+        }
     }
 }
 #endregion
 #region JackOfAllClicksSkillTree
 public class JackSkillTree : SkillTreeManager
 {
-    public JackSkillTree(VisualElement root, CharacterClass charClass, HashSet<string> learnedSet): base(root, charClass, GetDependencies(), "SkillTree2", learnedSet) { }
+    public JackSkillTree(VisualElement root, CharacterClass charClass, HashSet<string> learnedSet, SkillPointsLimit skillPointsLimit) : base(root, charClass, GetDependencies(), "SkillTree2", learnedSet, skillPointsLimit) { }
     private static Dictionary<string, List<string>> GetDependencies()
     {
         return new Dictionary<string, List<string>>
@@ -249,11 +269,13 @@ public class JackSkillTree : SkillTreeManager
 
     protected override void OnSkillClicked(string id)
     {
+        if (characterClass.skillpoints < 1) return;
         if (learned.Contains(id)) return;
         if (!CanUnlock(id)) return;
 
+        skillPointsLimit.DecSkillPoints();
         learned.Add(id);
-
+        
         if (characterClass != null)
             characterClass.ApplySkillChanges(id, false);
 
@@ -291,16 +313,27 @@ public class JackSkillTree : SkillTreeManager
         }
 
         if (CanUnlock(id))
-            btn.style.backgroundColor = availableColor;
+        {
+            if (characterClass.skillpoints < 1)
+            {
+                btn.style.backgroundColor = lockedColor;
+            }
+            else
+            {
+                btn.style.backgroundColor = availableColor;
+            }
+        }
         else
+        {
             btn.style.backgroundColor = lockedColor;
+        }
     }
 }
 #endregion
 #region AutomatronSkillTree
 public class AutomatronSkillTree : SkillTreeManager
 {
-    public AutomatronSkillTree(VisualElement root, CharacterClass charClass, HashSet<string> learnedSet): base(root, charClass, GetDependencies(), "SkillTree3", learnedSet) { }
+    public AutomatronSkillTree(VisualElement root, CharacterClass charClass, HashSet<string> learnedSet, SkillPointsLimit skillPointsLimit) : base(root, charClass, GetDependencies(), "SkillTree3", learnedSet, skillPointsLimit) { }
     private static Dictionary<string, List<string>> GetDependencies()
     {
         return new Dictionary<string, List<string>>
@@ -320,9 +353,11 @@ public class AutomatronSkillTree : SkillTreeManager
 
     protected override void OnSkillClicked(string id)
     {
+        if (characterClass.skillpoints < 1) return;
         if (learned.Contains(id)) return;
         if (!CanUnlock(id)) return;
 
+        skillPointsLimit.DecSkillPoints();
         learned.Add(id);
 
         if (characterClass != null)
@@ -353,9 +388,20 @@ public class AutomatronSkillTree : SkillTreeManager
         }
 
         if (CanUnlock(id))
-            btn.style.backgroundColor = availableColor;
+        {
+            if (characterClass.skillpoints < 1)
+            {
+                btn.style.backgroundColor = lockedColor;
+            }
+            else
+            {
+                btn.style.backgroundColor = availableColor;
+            }
+        }
         else
+        {
             btn.style.backgroundColor = lockedColor;
+        }
     }
 }
 #endregion

@@ -5,8 +5,9 @@ using UnityEngine;
 public class CharacterClass:MonoBehaviour
 {
     public RaptorCore Raptorcore;
+    [SerializeField] private SkillPointsLimit skillPointsLimit;
     //this is class for the "rpg" character
-
+    public uint skillpoints = 0;
     private uint level = 1;
     private ulong currentExp = 0;
     private ulong maxExpCap = 100;
@@ -43,12 +44,17 @@ public class CharacterClass:MonoBehaviour
             currentExp += exp;
             while(currentExp > maxExpCap && level < maxLvlCap)
             {
-                //MullValueFix  please use QUARKTYPE if we want no problems in conversion if you must then use ceil function
-
+                
                 level++;
+                skillpoints++;
+                skillPointsLimit.UpdateButton();
+                
+                //MullValueFix  please use QUARKTYPE if we want no problems in conversion if you must then use ceil function
                 Raptorcore.MullLimitResourceAll(new QuarkType(120000000, 0));
+
                 currentExp -= maxExpCap;
                 NewLevelCap();
+                
             }
         }
 
