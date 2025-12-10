@@ -976,6 +976,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 532d7ee1abffb93418e186f479d5af4c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1895339693
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1895339682}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ba77468e62f29d34faef6f93fc72851d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  characterClass: {fileID: 1162231167}
 --- !u!4 &2037142311 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2796310969368875986, guid: 70a5672d9d0f58249b6e0cc4fe72adf4, type: 3}
@@ -1025,6 +1038,10 @@ PrefabInstance:
       propertyPath: characterClass
       value: 
       objectReference: {fileID: 1162231167}
+    - target: {fileID: 2595809473968715902, guid: fe1619c8ad742c24e8be78d6c285b517, type: 3}
+      propertyPath: skillPointsLimit
+      value: 
+      objectReference: {fileID: 1895339693}
     - target: {fileID: 2595809473968715902, guid: fe1619c8ad742c24e8be78d6c285b517, type: 3}
       propertyPath: images.Array.size
       value: 6
@@ -1110,6 +1127,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 1778371534835708829, guid: fe1619c8ad742c24e8be78d6c285b517, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1895339690}
+    - targetCorrespondingSourceObject: {fileID: 1778371534835708829, guid: fe1619c8ad742c24e8be78d6c285b517, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1895339693}
   m_SourcePrefab: {fileID: 100100000, guid: fe1619c8ad742c24e8be78d6c285b517, type: 3}
 --- !u!1001 &1455931434473245013
 PrefabInstance:
@@ -1188,6 +1208,10 @@ PrefabInstance:
       propertyPath: Raptorcore
       value: 
       objectReference: {fileID: 186519293}
+    - target: {fileID: 1887176690689923182, guid: 9561ff019297a0e4a9b76f8571649e17, type: 3}
+      propertyPath: skillPointsLimit
+      value: 
+      objectReference: {fileID: 1895339693}
     - target: {fileID: 2776007197646290079, guid: 9561ff019297a0e4a9b76f8571649e17, type: 3}
       propertyPath: m_Name
       value: CharacterProgression

@@ -16,7 +16,9 @@ public class SkillTreesUIManager
     private HashSet<string> learnedJack;
     private HashSet<string> learnedAutomatron;
 
-    public SkillTreesUIManager(VisualElement ui, CharacterClass characterClass, HashSet<string> learnedOneClick, HashSet<string> learnedJack, HashSet<string> learnedAutomatron)
+    private SkillPointsLimit skillPointsLimit;
+
+    public SkillTreesUIManager(VisualElement ui, CharacterClass characterClass, HashSet<string> learnedOneClick, HashSet<string> learnedJack, HashSet<string> learnedAutomatron, SkillPointsLimit skillPointsLimit)
     {
         this.ui = ui;
         this.characterClass = characterClass;
@@ -24,6 +26,7 @@ public class SkillTreesUIManager
         this.learnedOneClick = learnedOneClick;
         this.learnedJack = learnedJack;
         this.learnedAutomatron = learnedAutomatron;
+        this.skillPointsLimit = skillPointsLimit;
     }
 
     public void InitializeAllTrees()
@@ -42,7 +45,7 @@ public class SkillTreesUIManager
 
     private void InitializeOneClickArmyTree()
     {
-        oneClickArmyTree = new OneClickArmySkillTree(ui, characterClass, learnedOneClick);
+        oneClickArmyTree = new OneClickArmySkillTree(ui, characterClass, learnedOneClick, skillPointsLimit);
 
         string[] skills =
         {
@@ -78,7 +81,7 @@ public class SkillTreesUIManager
 
     private void InitializeJackTree()
     {
-        jackTree = new JackSkillTree(ui, characterClass, learnedJack);
+        jackTree = new JackSkillTree(ui, characterClass, learnedJack, skillPointsLimit);
 
         string[] skills =
         {
@@ -116,7 +119,7 @@ public class SkillTreesUIManager
     }
     private void InitializeAutomatronTree()
     {
-        automatronTree = new AutomatronSkillTree(ui, characterClass, learnedAutomatron);
+        automatronTree = new AutomatronSkillTree(ui, characterClass, learnedAutomatron, skillPointsLimit);
 
         string[] skills =
         {
