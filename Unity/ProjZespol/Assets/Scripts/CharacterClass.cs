@@ -20,7 +20,8 @@ public class CharacterClass:MonoBehaviour
     public double productionIdleBonus = 0;
     public double productionIdlePedatorBonus = 0;
     public double productionIdleAgressiveBonus = 0;
-    public double sellingBonus = 0.0f;
+    public double sellingBonus = 1;
+    public double sellingHardBonus = 0.0d;
     //Important Skill Variables
     public bool activeIdle = false;
     public bool noMatterWhat = false;
@@ -37,6 +38,13 @@ public class CharacterClass:MonoBehaviour
     public bool multitasking = false;
     public bool christmasBonus = false;
     public bool hungryWolf = false;
+    public bool marketplaceGenius = false;
+
+    private void Start()
+    {
+        sellingBonus = 1;
+    }
+
     //Use this to gain exp from activities
     public void GainExp(ulong exp)
     {
@@ -236,6 +244,17 @@ public class CharacterClass:MonoBehaviour
     }
     private void MarketplaceGenius(bool revert)
     {
-        sellingBonus = revert ? 1f : 1.5f;
+        marketplaceGenius = !revert;
+    }
+    public void EnableGenius()
+    {
+        if(marketplaceGenius)
+        StartCoroutine(Genius());
+    }
+    private IEnumerator Genius()
+    {
+        sellingBonus += 1.0f;
+        yield return new WaitForSeconds(6f);
+        sellingBonus -= 1.0f;
     }
 }

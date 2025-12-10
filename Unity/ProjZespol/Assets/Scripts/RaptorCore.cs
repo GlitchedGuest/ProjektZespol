@@ -1,5 +1,7 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class RaptorCore : MonoBehaviour
@@ -493,8 +495,8 @@ public class RaptorCore : MonoBehaviour
         {
             goldEarned *= potionSellBonus2;
         }
-        
-        Gold += goldEarned * characterClass.sellingBonus;
+        Debug.Log(characterClass.sellingBonus);
+        Gold += Math.Ceiling(goldEarned * characterClass.sellingBonus * characterClass.sellingHardBonus);
         RemoveResource(resource, amountToSell);
         UpdateUI();
         return goldEarned;
