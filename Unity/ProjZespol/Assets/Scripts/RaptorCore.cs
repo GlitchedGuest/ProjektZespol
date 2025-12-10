@@ -172,7 +172,6 @@ public class RaptorCore : MonoBehaviour
         LoadResource("Resource4");
         LoadResource("Resource5");
         LoadResource("Resource6");
-        // Gold = 10000000000000000000000000000000.0f;
         UpdateUI();
 
     }

@@ -356,6 +356,7 @@ public class QuarkType: IComparable<QuarkType>, IEquatable<QuarkType>, IBinarySa
         Exponent = reader.ReadInt64();
     }
 
+    [Obsolete("Floor is depricated and not valid")]
     public QuarkType Floor()
     {
         if (Mantissa == 0) return new QuarkType(0, 0);

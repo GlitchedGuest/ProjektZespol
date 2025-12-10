@@ -44,10 +44,14 @@ public class CharacterClass:MonoBehaviour
             currentExp += exp;
             while(currentExp > maxExpCap && level < maxLvlCap)
             {
+                
                 level++;
                 skillpoints++;
                 skillPointsLimit.UpdateButton();
-                Raptorcore.MullLimitResourceAll((QuarkType)1.2);
+                
+                //MullValueFix  please use QUARKTYPE if we want no problems in conversion if you must then use ceil function
+                Raptorcore.MullLimitResourceAll(new QuarkType(120000000, 0));
+
                 currentExp -= maxExpCap;
                 NewLevelCap();
                 
