@@ -43,8 +43,10 @@ public class CharacterClass:MonoBehaviour
             currentExp += exp;
             while(currentExp > maxExpCap && level < maxLvlCap)
             {
+                //MullValueFix to use proper value
+
                 level++;
-                Raptorcore.MullLimitResourceAll((QuarkType)1.2);
+                Raptorcore.MullLimitResourceAll(new QuarkType(120000000, 0));
                 currentExp -= maxExpCap;
                 NewLevelCap();
             }
