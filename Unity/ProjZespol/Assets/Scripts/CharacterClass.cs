@@ -20,6 +20,7 @@ public class CharacterClass:MonoBehaviour
     public double productionIdleBonus = 0;
     public double productionIdlePedatorBonus = 0;
     public double productionIdleAgressiveBonus = 0;
+    public double sellingBonus = 0.0f;
     //Important Skill Variables
     public bool activeIdle = false;
     public bool noMatterWhat = false;
@@ -118,6 +119,8 @@ public class CharacterClass:MonoBehaviour
             case "Skill5B-tree3": Multitasking(revert); break;
             case "Skill5C-tree3": ChristmasBonus(revert); break;
             case "Skill6-tree3": HungryWolf(revert); break;
+            case "Skill1-tree2": Shark(revert); break;
+            case "Skill2A-tree2": MarketplaceGenius(revert); break;
         }
 
     }
@@ -226,5 +229,13 @@ public class CharacterClass:MonoBehaviour
     private void HungryWolf(bool revert)
     {
         hungryWolf = !revert;
+    }
+    private void Shark(bool revert)
+    {
+        sellingBonus = revert ? 1f : 1.5f;
+    }
+    private void MarketplaceGenius(bool revert)
+    {
+        sellingBonus = revert ? 1f : 1.5f;
     }
 }

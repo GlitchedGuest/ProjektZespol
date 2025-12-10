@@ -494,7 +494,7 @@ public class RaptorCore : MonoBehaviour
             goldEarned *= potionSellBonus2;
         }
         
-        Gold += goldEarned;
+        Gold += goldEarned * characterClass.sellingBonus;
         RemoveResource(resource, amountToSell);
         UpdateUI();
         return goldEarned;
