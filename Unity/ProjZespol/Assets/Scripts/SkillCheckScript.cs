@@ -94,7 +94,7 @@ public class SkillCheckScript : MonoBehaviour
                 combovisual.UpdateCombo(kombo);
             }      
             raptorCore.AddCurrency(value);
-            raptorCore.EnableChickenDinner(true);
+            raptorCore.SkillManager.EnableChickenDinner(true);
             characterClass.Pedator(true);
         }
         else
@@ -106,7 +106,7 @@ public class SkillCheckScript : MonoBehaviour
             kombo = 0;
             combovisual.UpdateCombo(kombo);
             raptorCore.SubCurrency(-value);
-            raptorCore.EnableChickenDinner(false);
+            raptorCore.SkillManager.EnableChickenDinner(false);
             characterClass.Pedator(false);
         }
         ClearBricks();

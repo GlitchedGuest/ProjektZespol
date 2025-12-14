@@ -577,7 +577,7 @@ public class FactoryUIManager
         var factory = GetFactory(factoryIndex);
         if (factory == null) return;
 
-        raptorCore.SetCurrentResource(factory.resource.name);
+        raptorCore.ResourceManager.SetCurrentResource(factory.resource.name);
 
         if (factoryLabel != null) factoryLabel.text = factory.name;
 

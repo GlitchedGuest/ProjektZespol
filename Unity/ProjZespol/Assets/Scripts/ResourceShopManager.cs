@@ -41,7 +41,7 @@ public class ResourceShopManager
 
     private void ClickSell1()
     {
-        double exp = raptorCore.SellMaterials(currencySlider.value);
+        double exp = raptorCore.SellManager.SellMaterials(currencySlider.value);
         characterClass.GainExp((ulong)exp);
         audioSource.Play();
     }

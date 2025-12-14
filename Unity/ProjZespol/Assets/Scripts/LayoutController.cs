@@ -91,4 +91,10 @@ public class LayoutController : MonoBehaviour
     {
         resourceShopManager?.SetGoldText(value);
     }
+    public void UpdateUI()
+    {
+        QuarkType currentResourceAmount = raptorCore.ResourceManager.GetResourceValue(raptorCore.ResourceManager.currentResource);
+        LayoutController.Instance?.SetCurrencyText(currentResourceAmount.ToString());
+        LayoutController.Instance?.SetGoldText(raptorCore.Gold.ToString());
+    }
 }

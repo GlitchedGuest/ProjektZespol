@@ -14,8 +14,10 @@ public class IdleManager : MonoBehaviour
     [NonSerialized]public List<Potion> potions;
     public QuarkType potionFactoryBonus1 = 1;
     public QuarkType potionFactoryBonus2 = 1;
-    private void Awake()
+    private void Start()
     {
+        if (raptorCore == null)
+            raptorCore = FindAnyObjectByType<RaptorCore>();
         InitResources();
         InitFactories();
         InitPotions();
@@ -36,7 +38,7 @@ public class IdleManager : MonoBehaviour
 
         foreach (var res in resources)
         {
-            raptorCore.RegisterResource(res);
+            raptorCore.ResourceManager.RegisterResource(res);
         }
     }
     private void InitFactories()
@@ -154,8 +156,8 @@ public class IdleManager : MonoBehaviour
             }
         }
 
-        string currentResource = raptorCore.currentResource;
-        QuarkType currentResourceAmount = raptorCore.GetResourceValue(currentResource);
+        string currentResource = raptorCore.ResourceManager.currentResource;
+        QuarkType currentResourceAmount = raptorCore.ResourceManager.GetResourceValue(currentResource);
         LayoutController.Instance?.SetCurrencyText(currentResourceAmount.ToString());
     }
 
@@ -266,12 +268,12 @@ public class IdleManager : MonoBehaviour
         switch((p.resourceType1.name, p.resourceType2.name))
         {
             case ("Resource1","Resource2"):
-                resource1Amount = raptorCore.GetResourceValueDirect("Resource1");
-                resource2Amount = raptorCore.GetResourceValueDirect("Resource2");
+                resource1Amount = raptorCore.ResourceManager.GetResourceValueDirect("Resource1");
+                resource2Amount = raptorCore.ResourceManager.GetResourceValueDirect("Resource2");
                 if((resource1Amount >= p.cost1) && (resource2Amount >= p.cost2))
                 {
-                    raptorCore.SetResourceValueDirect("Resource1", resource1Amount - p.cost1);
-                    raptorCore.SetResourceValueDirect("Resource2", resource2Amount - p.cost2);
+                    raptorCore.ResourceManager.SetResourceValueDirect("Resource1", resource1Amount - p.cost1);
+                    raptorCore.ResourceManager.SetResourceValueDirect("Resource2", resource2Amount - p.cost2);
                 }
                 else
                 {
@@ -279,16 +281,16 @@ public class IdleManager : MonoBehaviour
                 }
                 p.isActive = true;
                 p.timeRemaining = p.duration;
-                p.linkedFactory = raptorCore.GetCurrentFactory();
+                p.linkedFactory = raptorCore.ResourceManager.GetCurrentFactory();
                 EnablePotionEffect(p);
                 return true;
             case ("Resource2","Resource3"):
-                resource1Amount = raptorCore.GetResourceValueDirect("Resource2");
-                resource2Amount = raptorCore.GetResourceValueDirect("Resource3");
+                resource1Amount = raptorCore.ResourceManager.GetResourceValueDirect("Resource2");
+                resource2Amount = raptorCore.ResourceManager.GetResourceValueDirect("Resource3");
                 if((resource1Amount >= p.cost1) && (resource2Amount >= p.cost2))
                 {
-                    raptorCore.SetResourceValueDirect("Resource2", resource1Amount - p.cost1);
-                    raptorCore.SetResourceValueDirect("Resource3", resource2Amount - p.cost2);
+                    raptorCore.ResourceManager.SetResourceValueDirect("Resource2", resource1Amount - p.cost1);
+                    raptorCore.ResourceManager.SetResourceValueDirect("Resource3", resource2Amount - p.cost2);
                 }
                 else
                 {
@@ -296,16 +298,16 @@ public class IdleManager : MonoBehaviour
                 }
                 p.isActive = true;
                 p.timeRemaining = p.duration;
-                p.linkedFactory = raptorCore.GetCurrentFactory();
+                p.linkedFactory = raptorCore.ResourceManager.GetCurrentFactory();
                 EnablePotionEffect(p);
                 return true;
             case ("Resource1","Resource3"):
-                resource1Amount = raptorCore.GetResourceValueDirect("Resource1");
-                resource2Amount = raptorCore.GetResourceValueDirect("Resource3");
+                resource1Amount = raptorCore.ResourceManager.GetResourceValueDirect("Resource1");
+                resource2Amount = raptorCore.ResourceManager.GetResourceValueDirect("Resource3");
                 if((resource1Amount >= p.cost1) && (resource2Amount >= p.cost2))
                 {
-                    raptorCore.SetResourceValueDirect("Resource1", resource1Amount - p.cost1);
-                    raptorCore.SetResourceValueDirect("Resource3", resource2Amount - p.cost2);
+                    raptorCore.ResourceManager.SetResourceValueDirect("Resource1", resource1Amount - p.cost1);
+                    raptorCore.ResourceManager.SetResourceValueDirect("Resource3", resource2Amount - p.cost2);
                 }
                 else
                 {
@@ -313,16 +315,16 @@ public class IdleManager : MonoBehaviour
                 }
                 p.isActive = true;
                 p.timeRemaining = p.duration;
-                p.linkedFactory = raptorCore.GetCurrentFactory();
+                p.linkedFactory = raptorCore.ResourceManager.GetCurrentFactory();
                 EnablePotionEffect(p);
                 return true;
             case ("Resource4","Resource5"):
-                resource1Amount = raptorCore.GetResourceValueDirect("Resource4");
-                resource2Amount = raptorCore.GetResourceValueDirect("Resource5");
+                resource1Amount = raptorCore.ResourceManager.GetResourceValueDirect("Resource4");
+                resource2Amount = raptorCore.ResourceManager.GetResourceValueDirect("Resource5");
                 if((resource1Amount >= p.cost1) && (resource2Amount >= p.cost2))
                 {
-                    raptorCore.SetResourceValueDirect("Resource4", resource1Amount - p.cost1);
-                    raptorCore.SetResourceValueDirect("Resource5", resource2Amount - p.cost2);
+                    raptorCore.ResourceManager.SetResourceValueDirect("Resource4", resource1Amount - p.cost1);
+                    raptorCore.ResourceManager.SetResourceValueDirect("Resource5", resource2Amount - p.cost2);
                 }
                 else
                 {
@@ -330,16 +332,16 @@ public class IdleManager : MonoBehaviour
                 }
                 p.isActive = true;
                 p.timeRemaining = p.duration;
-                p.linkedFactory = raptorCore.GetCurrentFactory();
+                p.linkedFactory = raptorCore.ResourceManager.GetCurrentFactory();
                 EnablePotionEffect(p);
                 return true;
             case ("Resource4","Resource6"):
-                resource1Amount = raptorCore.GetResourceValueDirect("Resource4");
-                resource2Amount = raptorCore.GetResourceValueDirect("Resource6");
+                resource1Amount = raptorCore.ResourceManager.GetResourceValueDirect("Resource4");
+                resource2Amount = raptorCore.ResourceManager.GetResourceValueDirect("Resource6");
                 if((resource1Amount >= p.cost1) && (resource2Amount >= p.cost2))
                 {
-                    raptorCore.SetResourceValueDirect("Resource4", resource1Amount - p.cost1);
-                    raptorCore.SetResourceValueDirect("Resource6", resource2Amount - p.cost2);
+                    raptorCore.ResourceManager.SetResourceValueDirect("Resource4", resource1Amount - p.cost1);
+                    raptorCore.ResourceManager.SetResourceValueDirect("Resource6", resource2Amount - p.cost2);
                 }
                 else
                 {
@@ -347,16 +349,16 @@ public class IdleManager : MonoBehaviour
                 }
                 p.isActive = true;
                 p.timeRemaining = p.duration;
-                p.linkedFactory = raptorCore.GetCurrentFactory();
+                p.linkedFactory = raptorCore.ResourceManager.GetCurrentFactory();
                 EnablePotionEffect(p);
                 return true;
             case ("Resource5","Resource6"):
-                resource1Amount = raptorCore.GetResourceValueDirect("Resource5");
-                resource2Amount = raptorCore.GetResourceValueDirect("Resource6");
+                resource1Amount = raptorCore.ResourceManager.GetResourceValueDirect("Resource5");
+                resource2Amount = raptorCore.ResourceManager.GetResourceValueDirect("Resource6");
                 if((resource1Amount >= p.cost1) && (resource2Amount >= p.cost2))
                 {
-                    raptorCore.SetResourceValueDirect("Resource5", resource1Amount - p.cost1);
-                    raptorCore.SetResourceValueDirect("Resource6", resource2Amount - p.cost2);
+                    raptorCore.ResourceManager.SetResourceValueDirect("Resource5", resource1Amount - p.cost1);
+                    raptorCore.ResourceManager.SetResourceValueDirect("Resource6", resource2Amount - p.cost2);
                 }
                 else
                 {
@@ -364,7 +366,7 @@ public class IdleManager : MonoBehaviour
                 }
                 p.isActive = true;
                 p.timeRemaining = p.duration;
-                p.linkedFactory = raptorCore.GetCurrentFactory();
+                p.linkedFactory = raptorCore.ResourceManager.GetCurrentFactory();
                 EnablePotionEffect(p);
                 return true;
             default:
@@ -377,40 +379,40 @@ public class IdleManager : MonoBehaviour
         switch (potion.effect)
         {
             case "click1":
-                if(potion.linkedFactory.name == raptorCore.GetCurrentFactory().name)
+                if(potion.linkedFactory.name == raptorCore.ResourceManager.GetCurrentFactory().name)
                 {
                     raptorCore.potionClickBonus1 += 5;
                 }
                 break;
             case "idle1":
-                if(potion.linkedFactory.name == raptorCore.GetCurrentFactory().name)
+                if(potion.linkedFactory.name == raptorCore.ResourceManager.GetCurrentFactory().name)
                 {
                     potionFactoryBonus1 *= 2;
                 }
                 break;
             case "sell1":
-                if(potion.linkedFactory.name == raptorCore.GetCurrentFactory().name)
+                if(potion.linkedFactory.name == raptorCore.ResourceManager.GetCurrentFactory().name)
                 {
-                    raptorCore.potionSellBonus1 *= 2;
+                    raptorCore.SellManager.potionSellBonus1 *= 2;
                 }
                 break;
 
             case "click2":
-                if(potion.linkedFactory.name == raptorCore.GetCurrentFactory().name)
+                if(potion.linkedFactory.name == raptorCore.ResourceManager.GetCurrentFactory().name)
                 {
                     raptorCore.potionClickBonus2 += 10;
                 }
                 break;
             case "idle2":
-                if(potion.linkedFactory.name == raptorCore.GetCurrentFactory().name)
+                if(potion.linkedFactory.name == raptorCore.ResourceManager.GetCurrentFactory().name)
                 {
                     potionFactoryBonus2 *= 4;
                 }
                 break;
             case "sell2":
-                if(potion.linkedFactory.name == raptorCore.GetCurrentFactory().name)
+                if(potion.linkedFactory.name == raptorCore.ResourceManager.GetCurrentFactory().name)
                 {
-                    raptorCore.potionSellBonus2 *= 4;
+                    raptorCore.SellManager.potionSellBonus2 *= 4;
                 }
                 break;
             default:
@@ -431,7 +433,7 @@ public class IdleManager : MonoBehaviour
                 potionFactoryBonus1 /= 2;
                 break;
             case "sell1":
-                raptorCore.potionSellBonus1 /= 2;
+                raptorCore.SellManager.potionSellBonus1 /= 2;
                 break;
             case "click2":
                 raptorCore.potionClickBonus2 -= 10;
@@ -440,7 +442,7 @@ public class IdleManager : MonoBehaviour
                 potionFactoryBonus2 /= 4;
                 break;
             case "sell2":
-                raptorCore.potionSellBonus2 /= 4;
+                raptorCore.SellManager.potionSellBonus2 /= 4;
                 break;
             default:
                 break;
@@ -449,7 +451,7 @@ public class IdleManager : MonoBehaviour
 
     private int GetUnlockedFactoryCount(string resource)
     {
-        if (raptorCore.currentResource != resource)
+        if (raptorCore.ResourceManager.currentResource != resource)
             return 0;
         int sum = 0;
         foreach(var f in factories)
@@ -462,7 +464,7 @@ public class IdleManager : MonoBehaviour
 
     private bool GetFocusedFactory(string resource)
     {
-        if (raptorCore.currentResource != resource)
+        if (raptorCore.ResourceManager.currentResource != resource)
             return false;
         return true;
     }
