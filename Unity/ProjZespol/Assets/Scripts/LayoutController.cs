@@ -48,7 +48,7 @@ public class LayoutController : MonoBehaviour
         factoryUIManager = new FactoryUIManager(ui, raptorCore, idleManager, audioSource, clickerObject, images);
         factoryUIManager.Initialize();
 
-        potionUIManager = new PotionUIManager(ui, raptorCore, idleManager, audioSource);
+        potionUIManager = new PotionUIManager(ui, raptorCore, idleManager, audioSource, characterClass);
         potionUIManager.Initialize();
 
         optionsManager = new OptionsManager(ui, audioSource, critSource);

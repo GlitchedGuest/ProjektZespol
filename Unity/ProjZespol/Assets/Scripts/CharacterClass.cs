@@ -41,6 +41,7 @@ public class CharacterClass:MonoBehaviour
     public bool hungryWolf = false;
     public bool marketplaceGenius = false;
     public bool hardWorker = false;
+    public bool deathDose = false;
 
     private void Start()
     {
@@ -146,6 +147,7 @@ public class CharacterClass:MonoBehaviour
             case "Skill2A-tree2": MarketplaceGenius(revert); break;
             case "Skill3A-tree2": HardWorker(revert); break;
             case "Skill2B-tree2": Addict(revert); break;
+            case "Skill3B-tree2": DeathDose(revert); break;
         }
 
     }
@@ -285,5 +287,9 @@ public class CharacterClass:MonoBehaviour
     private void Addict(bool revert)
     {
         potionBoost = revert ? 1 : 2;
+    }
+    private void DeathDose(bool revert)
+    {
+        deathDose = !revert;
     }
 }

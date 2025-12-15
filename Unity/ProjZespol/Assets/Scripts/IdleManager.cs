@@ -278,7 +278,7 @@ public class IdleManager : MonoBehaviour
                     return false;
                 }
                 p.isActive = true;
-                p.timeRemaining = p.duration;
+                p.timeRemaining += p.duration;
                 p.linkedFactory = raptorCore.GetCurrentFactory();
                 EnablePotionEffect(p);
                 return true;
@@ -425,22 +425,22 @@ public class IdleManager : MonoBehaviour
         switch (potion.effect)
         {
             case "click1":
-                raptorCore.potionClickBonus1 -= 5;
+                raptorCore.potionClickBonus1 = 0;
                 break;
             case "idle1":
-                potionFactoryBonus1 /= 2;
+                potionFactoryBonus1 = 1;
                 break;
             case "sell1":
-                raptorCore.potionSellBonus1 /= 2;
+                raptorCore.potionSellBonus1 = 1;
                 break;
             case "click2":
-                raptorCore.potionClickBonus2 -= 10;
+                raptorCore.potionClickBonus2 = 0;
                 break;
             case "idle2":
-                potionFactoryBonus2 /= 4;
+                potionFactoryBonus2 = 1;
                 break;
             case "sell2":
-                raptorCore.potionSellBonus2 /= 4;
+                raptorCore.potionSellBonus2 = 1;
                 break;
             default:
                 break;
