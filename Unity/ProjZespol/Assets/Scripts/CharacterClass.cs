@@ -13,15 +13,16 @@ public class CharacterClass:MonoBehaviour
     private ulong maxExpCap = 100;
     private uint maxLvlCap = 20;
     //there will be other statistics like critical chance later etc
-    private float criticalChance = 15.5f;
-    public float boostedChance = 0.00f;
-    private float skillCheckChance = -1.0f;
-    public int skillCheckReduce = 0;
-    public double productionIdleBonus = 0;
-    public double productionIdlePedatorBonus = 0;
-    public double productionIdleAgressiveBonus = 0;
-    public double sellingBonus = 1;
-    public double sellingHardBonus = 0.0d;
+    private float criticalChance;
+    public float boostedChance;
+    private float skillCheckChance;
+    public int skillCheckReduce;
+    public double productionIdleBonus;
+    public double productionIdlePedatorBonus;
+    public double productionIdleAgressiveBonus;
+    public double sellingBonus;
+    public double sellingHardBonus;
+    public double potionBoost;
     //Important Skill Variables
     public bool activeIdle = false;
     public bool noMatterWhat = false;
@@ -39,10 +40,20 @@ public class CharacterClass:MonoBehaviour
     public bool christmasBonus = false;
     public bool hungryWolf = false;
     public bool marketplaceGenius = false;
+    public bool hardWorker = false;
 
     private void Start()
     {
+        criticalChance = 15.5f;
+        boostedChance = 0.00f;
+        skillCheckChance = -1.0f;
+        skillCheckReduce = 0;
+        productionIdleBonus = 0;
+        productionIdlePedatorBonus = 0;
+        productionIdleAgressiveBonus = 0;
         sellingBonus = 1;
+        sellingHardBonus = 1;
+        potionBoost = 1;
     }
 
     //Use this to gain exp from activities
@@ -133,6 +144,8 @@ public class CharacterClass:MonoBehaviour
             case "Skill6-tree3": HungryWolf(revert); break;
             case "Skill1-tree2": Shark(revert); break;
             case "Skill2A-tree2": MarketplaceGenius(revert); break;
+            case "Skill3A-tree2": HardWorker(revert); break;
+            case "Skill2B-tree2": Addict(revert); break;
         }
 
     }
@@ -250,15 +263,27 @@ public class CharacterClass:MonoBehaviour
     {
         marketplaceGenius = !revert;
     }
-    public void EnableGenius()
+    public void EnableGenius(bool reset)
     {
-        if(marketplaceGenius)
-        StartCoroutine(Genius());
+        if (reset)
+            sellingHardBonus = 1;
+        else if (!reset && hardWorker)
+            sellingHardBonus += 1;
+        if (marketplaceGenius && !reset)
+            StartCoroutine(Genius());
     }
     private IEnumerator Genius()
     {
         sellingBonus += 1.0f;
         yield return new WaitForSeconds(6f);
         sellingBonus -= 1.0f;
+    }
+    private void HardWorker(bool revert)
+    {
+        hardWorker = !revert;
+    }
+    private void Addict(bool revert)
+    {
+        potionBoost = revert ? 1 : 2;
     }
 }

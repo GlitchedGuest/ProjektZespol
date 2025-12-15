@@ -127,12 +127,12 @@ public class IdleManager : MonoBehaviour
             double production = f.GetProduction();
             if(potions[1].isActive && potions[1].linkedFactory.name == f.name)
             {
-                production *= potionFactoryBonus1;
+                production *= potionFactoryBonus1 * characterClass.potionBoost;
             }
             
             if(potions[4].isActive && potions[4].linkedFactory.name == f.name)
             {
-                production *= potionFactoryBonus2;
+                production *= potionFactoryBonus2 * characterClass.potionBoost;
             }
 
             if (f.resource != null)

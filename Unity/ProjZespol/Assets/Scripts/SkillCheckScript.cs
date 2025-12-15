@@ -95,8 +95,7 @@ public class SkillCheckScript : MonoBehaviour
             }      
             raptorCore.AddCurrency(value);
             raptorCore.EnableChickenDinner(true);
-            characterClass.EnableGenius();
-            characterClass.sellingHardBonus += 1.0d;
+            characterClass.EnableGenius(false);
             characterClass.Pedator(true);
         }
         else
@@ -109,8 +108,8 @@ public class SkillCheckScript : MonoBehaviour
             combovisual.UpdateCombo(kombo);
             raptorCore.SubCurrency(-value);
             raptorCore.EnableChickenDinner(false);
-            characterClass.Pedator(false);
-            characterClass.sellingHardBonus =0.0d;
+            characterClass.Pedator(false); 
+            characterClass.EnableGenius(true);
         }
         ClearBricks();
         this.gameObject.SetActive(false);

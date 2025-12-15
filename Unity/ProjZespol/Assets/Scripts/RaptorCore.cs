@@ -96,11 +96,11 @@ public class RaptorCore : MonoBehaviour
         {
             if(idleManager.potions[0].isActive && idleManager.potions[0].linkedFactory.name == GetCurrentFactory().name)
             {
-                value += potionClickBonus1;
+                value += potionClickBonus1 * characterClass.potionBoost;
             }
             if(idleManager.potions[3].isActive && idleManager.potions[3].linkedFactory.name == GetCurrentFactory().name)
             {
-                value += potionClickBonus2;
+                value += potionClickBonus2 * characterClass.potionBoost;
             }
             value += ((CBasevalue * CMultiplier * 3) + (CBasevalue * SkillMultiplier)); //to do zmiany gdy będzie wchodzić temat balansu
 
@@ -121,11 +121,11 @@ public class RaptorCore : MonoBehaviour
 
             if(idleManager.potions[0].isActive && idleManager.potions[0].linkedFactory.name == GetCurrentFactory().name)
             {
-                value += potionClickBonus1;
+                value += potionClickBonus1 * characterClass.potionBoost;
             }
             if(idleManager.potions[3].isActive && idleManager.potions[3].linkedFactory.name == GetCurrentFactory().name)
             {
-                value += potionClickBonus2;
+                value += potionClickBonus2 * characterClass.potionBoost;
             }
             value += ((CBasevalue * CMultiplier) + (CBasevalue * SkillMultiplier));
 
@@ -488,14 +488,14 @@ public class RaptorCore : MonoBehaviour
         double goldEarned = amountToSell * pricePerUnit;
         if(idleManager.potions[2].isActive && idleManager.potions[2].linkedFactory.name == GetCurrentFactory().name)
         {
-            goldEarned *= potionSellBonus1;
+            goldEarned *= potionSellBonus1 * characterClass.potionBoost;
         }
         if(idleManager.potions[5].isActive && idleManager.potions[5].linkedFactory.name == GetCurrentFactory().name)
         {
-            goldEarned *= potionSellBonus2;
+            goldEarned *= potionSellBonus2 * characterClass.potionBoost;
         }
-        Debug.Log(characterClass.sellingBonus);
-        Gold += Math.Ceiling(goldEarned * characterClass.sellingBonus * characterClass.sellingHardBonus);
+        Debug.Log(characterClass.sellingHardBonus);
+        Gold += Math.Floor(goldEarned * characterClass.sellingBonus * characterClass.sellingHardBonus);
         RemoveResource(resource, amountToSell);
         UpdateUI();
         return goldEarned;
