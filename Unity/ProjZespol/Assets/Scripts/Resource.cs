@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-
+using UnityEngine;
 [Serializable]
 public class Resource
 {
@@ -21,7 +21,12 @@ public class Resource
     }
     public QuarkType Limit
     {
-        get => (BaseLimit * LvlBoost) + SkillBoost;
+        get
+        {
+            QuarkType limit = (BaseLimit * LvlBoost) + SkillBoost;
+            //Debug.Log($"{name} Limit: {limit}");
+            return limit;
+        }
     }
 
     public QuarkType BaseLimit;

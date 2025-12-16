@@ -40,6 +40,7 @@ public class IdleManager : MonoBehaviour
         {
             raptorCore.ResourceManager.RegisterResource(res);
         }
+        raptorCore.ResourceManager.LoadAllResources();
     }
     private void InitFactories()
     {

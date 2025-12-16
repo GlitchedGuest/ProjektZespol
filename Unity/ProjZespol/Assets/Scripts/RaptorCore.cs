@@ -69,7 +69,6 @@ public class RaptorCore : MonoBehaviour
         SkillManager.Initialize(this, characterClass, idleManager, skillCheck);
         Time.fixedDeltaTime = 0.05f; // 20 ticks a second
         AutoSaveSystem.LoadGame();
-        ResourceManager.LoadAllResources();
         LayoutController.Instance?.UpdateUI();
     }
 
