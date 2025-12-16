@@ -585,4 +585,18 @@ public class RaptorCore : MonoBehaviour
 
         return null;
     }
+
+    public void RandomPotionEffect()
+    {
+        var chance = UnityEngine.Random.Range(0.00f, 100.00f);
+        if (chance < characterClass.potionRandomChance)
+        {
+            var potionIndex = (int)UnityEngine.Random.Range(0f, 6f);
+            var potion = idleManager.potions[potionIndex];
+            potion.isActive = true;
+            potion.timeRemaining += potion.duration;
+            potion.linkedFactory = GetCurrentFactory();
+            idleManager.EnablePotionEffect(potion);
+        }
+    }
 }

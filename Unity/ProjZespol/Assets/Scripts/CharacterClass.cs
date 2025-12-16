@@ -23,6 +23,9 @@ public class CharacterClass:MonoBehaviour
     public double sellingBonus;
     public double sellingHardBonus;
     public double potionBoost;
+    public double potionRandomChance;
+    public ulong expBoost;
+    public ulong komboBoost;
     //Important Skill Variables
     public bool activeIdle = false;
     public bool noMatterWhat = false;
@@ -42,6 +45,8 @@ public class CharacterClass:MonoBehaviour
     public bool marketplaceGenius = false;
     public bool hardWorker = false;
     public bool deathDose = false;
+    public bool failToWin = false;
+    public bool failureGrind = false;
 
     private void Start()
     {
@@ -55,6 +60,9 @@ public class CharacterClass:MonoBehaviour
         sellingBonus = 1;
         sellingHardBonus = 1;
         potionBoost = 1;
+        potionRandomChance = -1.0f;
+        expBoost = 1;
+        komboBoost = 0;
     }
 
     //Use this to gain exp from activities
@@ -62,7 +70,7 @@ public class CharacterClass:MonoBehaviour
     {
         if (level < 20)
         {       
-            currentExp += exp;
+            currentExp += exp * expBoost;
             while(currentExp > maxExpCap && level < maxLvlCap)
             {
                 
@@ -148,6 +156,10 @@ public class CharacterClass:MonoBehaviour
             case "Skill3A-tree2": HardWorker(revert); break;
             case "Skill2B-tree2": Addict(revert); break;
             case "Skill3B-tree2": DeathDose(revert); break;
+            case "Skill2C-tree2": LuckyBastard(revert); break;
+            case "Skill3C-tree2": JustBastard(revert); break;
+            case "Skill3D-tree2": FailToWin(revert); break;
+            case "Skill4-tree2": FailureGrind(revert); break;
         }
 
     }
@@ -291,5 +303,38 @@ public class CharacterClass:MonoBehaviour
     private void DeathDose(bool revert)
     {
         deathDose = !revert;
+    }
+    private void LuckyBastard(bool revert)
+    {
+        potionRandomChance = revert ? -1.0f : 20.0f;
+    }
+    private void JustBastard(bool revert)
+    {
+        potionRandomChance = revert ? 20.0f : 101.0f;
+    }
+    private void FailToWin(bool revert)
+    {
+        failToWin = !revert;
+    }
+    public void EnableExpBoost()
+    {
+        if (failToWin)
+        {
+            if (failureGrind)
+                komboBoost += 2;
+            StartCoroutine(Failure());
+        }
+    }
+    private IEnumerator Failure()
+    {
+        expBoost = 2 + komboBoost;
+        yield return new WaitForSeconds(6f);
+        expBoost = 1;
+    }
+    private void FailureGrind(bool revert)
+    {
+        failureGrind = !revert;
+        if(revert)
+            komboBoost = 0;
     }
 }

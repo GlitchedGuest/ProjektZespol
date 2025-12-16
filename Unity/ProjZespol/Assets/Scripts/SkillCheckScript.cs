@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.LightTransport.PostProcessing;
 
 public class SkillCheckScript : MonoBehaviour
 {
@@ -110,6 +111,8 @@ public class SkillCheckScript : MonoBehaviour
             raptorCore.EnableChickenDinner(false);
             characterClass.Pedator(false); 
             characterClass.EnableGenius(true);
+            raptorCore.RandomPotionEffect();
+            characterClass.EnableExpBoost();
         }
         ClearBricks();
         this.gameObject.SetActive(false);
