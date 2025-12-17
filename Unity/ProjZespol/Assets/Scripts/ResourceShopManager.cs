@@ -63,12 +63,12 @@ public class ResourceShopManager
     public void SetCurrencyText(List<QuarkType> list)
     {
         if (list != null) {
-            if (list[0] != null) res1curr.text = list[0].ToString();
-            if (list[1] != null) res2curr.text = list[1].ToString();
-            if (list[2] != null) res3curr.text = list[2].ToString();
-            if (list[3] != null) res4curr.text = list[3].ToString();
-            if (list[4] != null) res5curr.text = list[4].ToString();
-            if (list[5] != null) res6curr.text = list[5].ToString();
+            res1curr.text = list[0].ToString();
+            res2curr.text = list[1].ToString();
+            res3curr.text = list[2].ToString();
+            res4curr.text = list[3].ToString();
+            res5curr.text = list[4].ToString();
+            res6curr.text = list[5].ToString();
 
         }
        // if (currencyLabel != null)

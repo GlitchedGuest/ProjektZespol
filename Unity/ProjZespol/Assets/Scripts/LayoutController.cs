@@ -80,6 +80,12 @@ public class LayoutController : MonoBehaviour
         levelUIManager?.Update();
         resourceShopManager?.Update();
         skillTreesUIManager?.Update();
+
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            optionsManager.EnableOptions();
+        }
+        
     }
 
     public void SetCurrencyText(List<QuarkType> lista)

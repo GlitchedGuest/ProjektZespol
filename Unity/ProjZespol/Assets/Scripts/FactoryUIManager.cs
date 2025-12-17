@@ -593,7 +593,7 @@ public class FactoryUIManager
             default: Tex = images[0]; break;
         }
 
-        currencyIcon.style.backgroundImage = new StyleBackground(Tex);
+        
         shopIcon.style.backgroundImage = new StyleBackground(Tex);
         clickerObject.sprite = Tex;
 
