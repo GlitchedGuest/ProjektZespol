@@ -6,16 +6,27 @@ using UnityEngine;
 
 public class RaptorCore : MonoBehaviour
 {
+    // Publiczne referencje do managerów - inne skrypty mogą ich używać bezpośrednio
+    public ResourceManager ResourceManager { get; private set; }
+    public SellingManager SellManager { get; private set; }
+    public SkillManager SkillManager { get; private set; }
+    [SerializeField] private Animator anim;
+    [SerializeField] private CharacterClass characterClass;
+    [SerializeField] private GameObject skillCheck;
+    [SerializeField] private IdleManager idleManager;
+
+    //Crit Generator
+    [SerializeField] private GameObject CritGenerator;
+    private CritVisualGenerator critGen;
+    [SerializeField] private AudioSource audioSource;
+    [SerializeField] private AudioSource critSource;
 
     [AutoSave] public QuarkType Currency
     {
-        get => GetResourceValue(currentResource);
+        get => ResourceManager.GetResourceValue(ResourceManager.currentResource);
         set
         {
-            if(resources.ContainsKey(currentResource))
-            {
-                resources[currentResource].value = value;
-            }
+            ResourceManager.SetResourceValueDirect(ResourceManager.currentResource, value);
         }
     }
 
@@ -24,59 +35,43 @@ public class RaptorCore : MonoBehaviour
     [AutoSave] QuarkType CMultiplier = 1;
     public QuarkType SkillMultiplier = 0;
 
-
-    //Click based
+    //Idle/Generator based
     [AutoSave] QuarkType GBasevalue = 0;
     [AutoSave] QuarkType GMultiplier = 1;
 
-
     int tickCount = 0;
-
-    [SerializeField] private Animator anim;
-    [SerializeField] private CharacterClass characterClass;
-    [SerializeField] private GameObject skillCheck;
     
-    [SerializeField] private IdleManager idleManager;
     [AutoSave] public double Gold = 0;
-    private Dictionary<string, Resource> resources = new Dictionary<string, Resource>();
 
-    [AutoSave] public QuarkType resource1Value = 0;
-    [AutoSave] public QuarkType resource2Value = 0;
-    [AutoSave] public QuarkType resource3Value = 0;
-    [AutoSave] public QuarkType resource4Value = 0;
-    [AutoSave] public QuarkType resource5Value = 0;
-    [AutoSave] public QuarkType resource6Value = 0;
+    public QuarkType potionClickBonus1 = 0;
+    public QuarkType potionClickBonus2 = 0;
 
-    public QuarkType resource1Limit = 1000;
-    public QuarkType resource2Limit = 2500;
-    public QuarkType resource3Limit = 5000;
-    public QuarkType resource4Limit = 10000;
-    public QuarkType resource5Limit = 25000;
-    public QuarkType resource6Limit = 50000;
-
-    public string currentResource = "Resource1";
     private enum ClickSource { None, Mouse, Space, Enter }
     private ClickSource activeClickSource = ClickSource.None;
     private float sourceBlockEndTime = 0f;
-    private float clickCooldown = 0.5f; // jezeli gracz klika przycisk to wyłącza inne na czas cooldownu
-    public QuarkType potionClickBonus1 = 0;
-    public QuarkType potionSellBonus1 = 1;
-    public QuarkType potionClickBonus2 = 0;
-    public QuarkType potionSellBonus2 = 1;
+    private float clickCooldown = 0.5f;
 
-    private bool skillCheckCooldown = false;
-    int skillCheckCooldownCount = 0;
     public int clickingDebuff = 0;
 
-    //Crit Generator
-    [SerializeField] private GameObject CritGenerator;
-    private CritVisualGenerator critGen;
-    [SerializeField] private AudioSource audioSource;
-    [SerializeField] private AudioSource critSource;
+
     private void Awake()
     {
+        ResourceManager = gameObject.AddComponent<ResourceManager>();
+        SellManager = gameObject.AddComponent<SellingManager>();
+        SkillManager = gameObject.AddComponent<SkillManager>();
+
+                
         critGen = CritGenerator.GetComponent<CritVisualGenerator>();
-        UpdateUI();
+    }
+
+    private void Start()
+    {
+        ResourceManager.Initialize(idleManager);
+        SellManager.Initialize(this, ResourceManager, idleManager);
+        SkillManager.Initialize(this, characterClass, idleManager, skillCheck);
+        Time.fixedDeltaTime = 0.05f; // 20 ticks a second
+        AutoSaveSystem.LoadGame();
+        LayoutController.Instance?.UpdateUI();
     }
 
     private void OnMouseDown()
@@ -87,27 +82,30 @@ public class RaptorCore : MonoBehaviour
         sourceBlockEndTime = Time.time + clickCooldown;
         PerformClick();
     }
+
     void click()
     {
         QuarkType value = 0;
         float chance = UnityEngine.Random.Range(0.00f, 100.00f);
-        if (!skillCheckCooldown && !characterClass.reactionTest) SkillCheckManager();
+        
+        SkillManager.CheckAndTriggerSkillCheck();
+        
         if (chance < characterClass.GetCriticalChance())
         {
-            if(idleManager.potions[0].isActive && idleManager.potions[0].linkedFactory.name == GetCurrentFactory().name)
-            {
+            Factory currentFactory = ResourceManager.GetCurrentFactory();
+            
+            if(idleManager.potions[0].isActive && idleManager.potions[0].linkedFactory.name == currentFactory.name)
                 value += potionClickBonus1 * characterClass.potionBoost;
-            }
-            if(idleManager.potions[3].isActive && idleManager.potions[3].linkedFactory.name == GetCurrentFactory().name)
-            {
+            if(idleManager.potions[3].isActive && idleManager.potions[3].linkedFactory.name == currentFactory.name)
                 value += potionClickBonus2 * characterClass.potionBoost;
-            }
-            value += ((CBasevalue * CMultiplier * 3) + (CBasevalue * SkillMultiplier)); //to do zmiany gdy będzie wchodzić temat balansu
+
+            value += ((CBasevalue * CMultiplier * 3) + (CBasevalue * SkillMultiplier));
 
             if (characterClass.activeIdle)
-                StartCoroutine(EnableActiveIdle());
+                StartCoroutine(SkillManager.EnableActiveIdle());
             if (characterClass.noMatterWhat)
                 characterClass.boostedChance = 0.00f;
+                
             Debug.Log("Kryt " + chance);
             Vector2 mousePos = Input.mousePosition;
             critGen.SpawnCrit(mousePos);
@@ -119,83 +117,34 @@ public class RaptorCore : MonoBehaviour
             audioSource.Stop();
             audioSource.Play();
 
-            if(idleManager.potions[0].isActive && idleManager.potions[0].linkedFactory.name == GetCurrentFactory().name)
-            {
+            Factory currentFactory = ResourceManager.GetCurrentFactory();
+            
+            if(idleManager.potions[0].isActive && idleManager.potions[0].linkedFactory.name == currentFactory.name)
                 value += potionClickBonus1 * characterClass.potionBoost;
-            }
-            if(idleManager.potions[3].isActive && idleManager.potions[3].linkedFactory.name == GetCurrentFactory().name)
-            {
+            if(idleManager.potions[3].isActive && idleManager.potions[3].linkedFactory.name == currentFactory.name)
                 value += potionClickBonus2 * characterClass.potionBoost;
-            }
             value += ((CBasevalue * CMultiplier) + (CBasevalue * SkillMultiplier));
 
             if (characterClass.noMatterWhat)
                 characterClass.boostedChance += 1.00f;
         }
         Currency += value;
-        
-    }
-
-    void SkillCheckManager()
-    {
-        Debug.Log("SKILL CHECK");
-        float chance = UnityEngine.Random.Range(0.00f, 100.00f);
-        float boostChance = 0;
-        if (characterClass.symbiosis)
-            boostChance = characterClass.GetCriticalChance();
-        if (chance < characterClass.GetSkillCheckChance() + boostChance)
-        {
-            skillCheck.SetActive(true);
-            skillCheck.GetComponent<SkillCheckScript>().StartSkillCheck();
-            skillCheckCooldown = true;
-        }      
-    }
-
-    void LoadResource(string name)
-    {
-        if (!resources.TryGetValue(name, out var res)) return;
-
-        string p = char.ToLower(name[0]) + name[1..];
-        var t = GetType();
-
-        res.BaseLimit = (QuarkType)t.GetField(p + "Limit").GetValue(this);
-        res.value = (QuarkType)t.GetField(p + "Value").GetValue(this);
-    }
-
-
-
-    void Start()
-    {
-        Time.fixedDeltaTime = 0.05f; // 20 ticks a second
-        AutoSaveSystem.LoadGame();
-        LoadResource("Resource1");
-        LoadResource("Resource2");
-        LoadResource("Resource3");
-        LoadResource("Resource4");
-        LoadResource("Resource5");
-        LoadResource("Resource6");
-        UpdateUI();
-
     }
 
     void FixedUpdate()
     {
-        Currency += (GBasevalue * GMultiplier); //.Pow(GPower);
+        Currency += (GBasevalue * GMultiplier);
 
-        if(skillCheckCooldown)
-            skillCheckCooldownCount++;
+        SkillManager.UpdateSkillCheckCooldown();
+        
         tickCount++;
+        
         if (tickCount % 600 == 0)
             if(AutoSaveSystem.AutoSave)
                 AutoSaveSystem.SaveGame();
-        if (skillCheckCooldownCount % (600 - characterClass.skillCheckReduce) == 0)//zmienic przy balansie
-        { 
-            skillCheckCooldown = false;
-            skillCheckCooldownCount = 0;
-        }
-        if (characterClass.reactionTest && !skillCheckCooldown)
-            if (tickCount % 200 == 0)
-                SkillCheckManager();
+        
+        SkillManager.CheckReactionTest(tickCount);
+        
         if (characterClass.passiveAgressive)
             if (tickCount % 300 == 0)
             {
@@ -220,8 +169,7 @@ public class RaptorCore : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.KeypadEnter))
         {
-            if (activeClickSource != ClickSource.None && activeClickSource != ClickSource.Enter && Time.time < sourceBlockEndTime)
-                return;
+            if (activeClickSource != ClickSource.None && activeClickSource != ClickSource.Enter && Time.time < sourceBlockEndTime) return;
 
             activeClickSource = ClickSource.Enter;
             sourceBlockEndTime = Time.time + clickCooldown;
@@ -229,14 +177,16 @@ public class RaptorCore : MonoBehaviour
             return;
         }
     }
+
     private void PerformClick()
     {
-        if (!CanClickCurrentResource())
+        if (!ResourceManager.CanClickCurrentResource())
         {
-            Debug.LogWarning($"Nie można klikać zasobu '{currentResource}' — fabryka nie jest odblokowana!");
+            Debug.LogWarning($"Nie można klikać zasobu '{ResourceManager.currentResource}' - fabryka nie jest odblokowana!");
             return;
         }
-        if (!skillCheck.activeSelf) //nie lubie jak to wygląda, ale czasu nie ma broski
+        
+        if (!SkillManager.IsSkillCheckActive())
         {
             click();
             anim.SetTrigger("Clicked");
@@ -244,41 +194,14 @@ public class RaptorCore : MonoBehaviour
                 characterClass.productionIdleAgressiveBonus = 0;
             if (characterClass.multitasking)
                 clickingDebuff = 2;
-            UpdateUI();
-        }
-    }
-    void UpdateUI()
-    {
-        QuarkType currentResourceAmount = GetResourceValue(currentResource);
-        LayoutController.Instance?.SetCurrencyText(currentResourceAmount.ToString());
-        LayoutController.Instance?.SetGoldText(Gold.ToString());
-    }
-    public double SellMaterials(float sellValue)
-    {
-        //TODO: adjust values for correct progression
-        switch(currentResource)
-        {
-            case "Resource1":
-                return SellResource("Resource1", sellValue, 1.0);
-            case "Resource2":
-                return SellResource("Resource2", sellValue, 2.0);
-            case "Resource3":
-                return SellResource("Resource3", sellValue, 3.0);
-            case "Resource4":
-                return SellResource("Resource4", sellValue, 4.0);
-            case "Resource5":
-                return SellResource("Resource5", sellValue, 5.0);
-            case "Resource6":
-                return SellResource("Resource6", sellValue, 6.0);
-            default:
-                return 0;
+            LayoutController.Instance?.UpdateUI();
         }
     }
 
     public void AddCurrency(QuarkType currency)
     {
         Currency += currency;
-        UpdateUI();
+        LayoutController.Instance?.UpdateUI();
     }
 
     public void SubCurrency(QuarkType currency)
@@ -290,302 +213,8 @@ public class RaptorCore : MonoBehaviour
             else
                 Currency -= currency;
         }
-        UpdateUI();
+        LayoutController.Instance?.UpdateUI();
     }
-
-    public void RegisterResource(Resource resource)
-    {
-        if (!resources.ContainsKey(resource.name))
-        {
-            resources[resource.name] = resource;
-        }
-    }
-
-    public void AddResource(string resource, QuarkType amount)
-    {
-        if (resources.ContainsKey(resource))
-        {
-            resources[resource].value += amount;
-            saveResourceValues();
-            if (resource == currentResource)
-            {
-                UpdateUI();
-            }
-        }
-    }
-    public QuarkType GetResourceValue(string resource)
-    {
-        if (resources.ContainsKey(resource))
-        {
-            return resources[resource].value;
-        }
-        return 0;
-    }
-
-    public QuarkType GetResourceValueDirect(string resourceName)
-    {
-        saveResourceValues();
-        
-        switch(resourceName)
-        {
-            case "Resource1":
-                return resource1Value;
-            case "Resource2":
-                return resource2Value;
-            case "Resource3":
-                return resource3Value;
-            case "Resource4":
-                return resource4Value;
-            case "Resource5":
-                return resource5Value;
-            case "Resource6":
-                return resource6Value;
-            default:
-                return GetResourceValue(resourceName);
-        }
-    }
-
-    public bool HasResource(string resource, QuarkType amount)
-    {
-        return GetResourceValue(resource) >= amount;
-    }
-    public bool RemoveResource(string resource, QuarkType amount)
-    {
-        if (HasResource(resource, amount))
-        {
-            resources[resource].value -= amount;
-            saveResourceValues();
-
-            if (resource == currentResource)
-            {
-                UpdateUI();
-            }
-            return true;
-        }
-        return false;
-    }
-    public void SetCurrentResource(string resource)
-    {
-        if (resources.ContainsKey(resource))
-        {
-            currentResource = resource;
-            UpdateUI();
-        }
-    }
-    public void SetResourceValueDirect(string resourceName, QuarkType value)
-    {
-        switch(resourceName)
-        {
-            case "Resource1":
-                resource1Value = value;
-                if (resources.ContainsKey("Resource1"))
-                    resources["Resource1"].value = value;
-                break;
-            case "Resource2":
-                resource2Value = value;
-                if (resources.ContainsKey("Resource2"))
-                    resources["Resource2"].value = value;
-                break;
-            case "Resource3":
-                resource3Value = value;
-                if (resources.ContainsKey("Resource3"))
-                    resources["Resource3"].value = value;
-                break;
-            case "Resource4":
-                resource4Value = value;
-                if (resources.ContainsKey("Resource4"))
-                    resources["Resource4"].value = value;
-                break;
-            case "Resource5":
-                resource5Value = value;
-                if (resources.ContainsKey("Resource5"))
-                    resources["Resource5"].value = value;
-                break;
-            case "Resource6":
-                resource6Value = value;
-                if (resources.ContainsKey("Resource6"))
-                    resources["Resource6"].value = value;
-                break;
-        }
-        
-        if (resourceName == currentResource)
-        {
-            UpdateUI();
-        }
-    }
-    public void SetLvlBoostResource(string resource, QuarkType limitvalue) {
-        if (resources.ContainsKey(resource))
-        {
-            resources[resource].LvlBoost *= limitvalue;
-        }
-    }
-
-    public QuarkType GetLimitResource(string resource)
-    {
-        if (resources.ContainsKey(resource))
-        {
-            return resources[resource].Limit;
-        }
-        return default;
-    }
-    public QuarkType GetBaseLimitResource(string resource)
-    {
-        if (resources.ContainsKey(resource))
-        {
-            return resources[resource].BaseLimit;
-        }
-        return default;
-    }
-
-    //Incirement + add in to limit
-    public void IncrementSkillBoostResourceAll(bool mode)
-    {
-        IncrementSkillBoostResource("Resource1", (GetBaseLimitResource("Resource1") /2), mode);
-        IncrementSkillBoostResource("Resource2", (GetBaseLimitResource("Resource2") / 2), mode);
-        IncrementSkillBoostResource("Resource3", (GetBaseLimitResource("Resource3") / 2), mode);
-        IncrementSkillBoostResource("Resource4", (GetBaseLimitResource("Resource4") / 2), mode);
-        IncrementSkillBoostResource("Resource5", (GetBaseLimitResource("Resource5") / 2), mode);
-        IncrementSkillBoostResource("Resource6", (GetBaseLimitResource("Resource6") / 2), mode);
-    }
-
-    //Incirement * multiply the limit
-    public void MullLimitResourceAll(QuarkType MullValue)
-    {
-        SetLvlBoostResource("Resource1", MullValue);
-        SetLvlBoostResource("Resource2", MullValue);
-        SetLvlBoostResource("Resource3", MullValue);
-        SetLvlBoostResource("Resource4", MullValue);
-        SetLvlBoostResource("Resource5", MullValue);
-        SetLvlBoostResource("Resource6", MullValue);
-    }
-
-    public void IncrementSkillBoostResource(string resource, QuarkType AddValue, bool mode)
-    {
-        if (resources.ContainsKey(resource))
-        {
-            if(mode)
-                resources[resource].SkillBoost += AddValue;
-            else
-            {
-                resources[resource].SkillBoost -= AddValue;
-                if (resources[resource].value > resources[resource].Limit)
-                    resources[resource].value = resources[resource].Limit;
-            }
-        }
-    }
-
-    public double SellResource(string resource, float sellvalue, double pricePerUnit = 1.0)
-    {
-        QuarkType currentAmount = GetResourceValue(resource);
-        var amountToSell = (currentAmount * (sellvalue / 100f)).Ceil();
-
-        if (amountToSell <= 0)
-        {
-            return 0;
-        }
-
-
-        double goldEarned = amountToSell * pricePerUnit;
-        if(idleManager.potions[2].isActive && idleManager.potions[2].linkedFactory.name == GetCurrentFactory().name)
-        {
-            goldEarned *= potionSellBonus1 * characterClass.potionBoost;
-        }
-        if(idleManager.potions[5].isActive && idleManager.potions[5].linkedFactory.name == GetCurrentFactory().name)
-        {
-            goldEarned *= potionSellBonus2 * characterClass.potionBoost;
-        }
-        Debug.Log(characterClass.sellingHardBonus);
-        Gold += Math.Floor(goldEarned * characterClass.sellingBonus * characterClass.sellingHardBonus);
-        RemoveResource(resource, amountToSell);
-        UpdateUI();
-        return goldEarned;
-    }
-
-    private bool CanClickCurrentResource()
-    {
-        if (idleManager == null) return true;
-
-        foreach (var f in idleManager.factories)
-        {
-            if (f.resource.name == currentResource)
-            {
-                return f.isUnlocked;
-            }
-        }
-
-        return true;
-    }
-    public void saveResourceValues()
-    {
-        SaveResource("Resource1");
-        SaveResource("Resource2");
-        SaveResource("Resource3");
-        SaveResource("Resource4");
-        SaveResource("Resource5");
-        SaveResource("Resource6");
-    }
-
-    void SaveResource(string name)
-    {
-        if (!resources.TryGetValue(name, out var res)) return;
-
-        string p = char.ToLower(name[0]) + name[1..];
-        var t = GetType();
-
-        t.GetField(p + "Limit")?.SetValue(this, res.Limit);
-        t.GetField(p + "Value")?.SetValue(this, res.value);
-    }
-
-    private IEnumerator EnableActiveIdle()
-    {
-        foreach (var f in idleManager.factories)
-        {
-            if (f.resource.name == currentResource)
-            {
-                f.productionMultiplier += 3;
-                f.count += 4;
-                yield return new WaitForSeconds(6f);
-                f.productionMultiplier -= 3;
-                f.count -= 4;
-                break;
-            }
-        }       
-    }
-
-    public void EnableChickenDinner(bool effect)
-    {
-        if(characterClass.chickenDinner)
-            StartCoroutine(ChickenDinnerEffect(effect));
-    }
-
-    public IEnumerator ChickenDinnerEffect(bool effect)
-    {
-        int mode = 1;
-        if (!effect)
-        {
-            mode = -1;
-            if (characterClass.alwaysWinner)
-                mode = 0;
-        }
-        SkillMultiplier += 10 * mode;
-        yield return new WaitForSeconds(6f);
-        SkillMultiplier -= 10 * mode;
-    }
-    public Factory GetCurrentFactory()
-    {
-        if (idleManager == null) return null;
-        
-        foreach (var f in idleManager.factories)
-        {
-            if (f.resource.name == currentResource)
-            {
-                return f;
-            }
-        }
-
-        return null;
-    }
-
     public void RandomPotionEffect()
     {
         var chance = UnityEngine.Random.Range(0.00f, 100.00f);
@@ -599,4 +228,5 @@ public class RaptorCore : MonoBehaviour
             idleManager.EnablePotionEffect(potion);
         }
     }
+
 }

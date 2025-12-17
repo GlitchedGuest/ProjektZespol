@@ -106,8 +106,8 @@ public class PotionUIManager
 
             if (potionUI.buyButton != null)
             {
-                QuarkType playerResourceAmount1 = raptorCore.GetResourceValueDirect(potion.resourceType1.name);
-                QuarkType playerResourceAmount2 = raptorCore.GetResourceValueDirect(potion.resourceType2.name);
+                QuarkType playerResourceAmount1 = raptorCore.ResourceManager.GetResourceValueDirect(potion.resourceType1.name);
+                QuarkType playerResourceAmount2 = raptorCore.ResourceManager.GetResourceValueDirect(potion.resourceType2.name);
                 bool canAfford = (playerResourceAmount1 >= potion.cost1) && (playerResourceAmount2 >= potion.cost2);
                 bool isNotActive = !potion.isActive;
                 potionUI.buyButton.SetEnabled((canAfford && isNotActive) || characterClass.deathDose);

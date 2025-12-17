@@ -79,7 +79,7 @@ public class CharacterClass:MonoBehaviour
                 skillPointsLimit.UpdateButton();
                 
                 //MullValueFix  please use QUARKTYPE if we want no problems in conversion if you must then use ceil function
-                Raptorcore.MullLimitResourceAll(new QuarkType(120000000, 0));
+                Raptorcore.ResourceManager.MullLimitResourceAll(new QuarkType(120000000, 0));
 
                 currentExp -= maxExpCap;
                 NewLevelCap();
@@ -223,8 +223,8 @@ public class CharacterClass:MonoBehaviour
     }
     private void PushToTheLimit(bool revert)
     {
-        if (!revert) Raptorcore.IncrementSkillBoostResourceAll(true);
-        else Raptorcore.IncrementSkillBoostResourceAll(false);
+        if (!revert) Raptorcore.ResourceManager.IncrementSkillBoostResourceAll(true);
+        else Raptorcore.ResourceManager.IncrementSkillBoostResourceAll(false);
     }
     private void ReactionTest(bool revert)
     {
