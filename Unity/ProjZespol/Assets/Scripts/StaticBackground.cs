@@ -19,7 +19,7 @@ public class StaticBackground : MonoBehaviour
 
     void Update()
     {
-        string nextFactory = raptorCore.GetCurrentFactory()?.name;
+        string nextFactory = raptorCore.ResourceManager.GetCurrentFactory()?.name;
         if(nextFactory != currentFactory)
         {
             currentFactory = nextFactory;
