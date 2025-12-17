@@ -111,7 +111,7 @@ public class SkillCheckScript : MonoBehaviour
             raptorCore.SkillManager.EnableChickenDinner(false);
             characterClass.Pedator(false); 
             characterClass.EnableGenius(true);
-            raptorCore.RandomPotionEffect();
+            raptorCore.SkillManager.RandomPotionEffect();
             characterClass.EnableExpBoost();
         }
         ClearBricks();

@@ -47,6 +47,7 @@ public class CharacterClass:MonoBehaviour
     public bool deathDose = false;
     public bool failToWin = false;
     public bool failureGrind = false;
+    public bool michealScott = false;
 
     private void Start()
     {
@@ -160,6 +161,7 @@ public class CharacterClass:MonoBehaviour
             case "Skill3C-tree2": JustBastard(revert); break;
             case "Skill3D-tree2": FailToWin(revert); break;
             case "Skill4-tree2": FailureGrind(revert); break;
+            case "Skill5-tree2": MichealScott(revert); break;
         }
 
     }
@@ -336,5 +338,9 @@ public class CharacterClass:MonoBehaviour
         failureGrind = !revert;
         if(revert)
             komboBoost = 0;
+    }
+    private void MichealScott(bool revert)
+    {
+        michealScott = !revert;
     }
 }

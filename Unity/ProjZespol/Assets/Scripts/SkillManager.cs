@@ -110,4 +110,19 @@ public class SkillManager : MonoBehaviour
     {
         return skillCheck.activeSelf;
     }
+
+    public void RandomPotionEffect()
+    {
+        var chance = UnityEngine.Random.Range(0.00f, 100.00f);
+        if (chance < characterClass.potionRandomChance)
+        {
+            var potionIndex = (int)UnityEngine.Random.Range(0f, 6f);
+            var potion = idleManager.potions[potionIndex];
+            potion.isActive = true;
+            potion.timeRemaining += potion.duration;
+            potion.linkedFactory = raptorCore.ResourceManager.GetCurrentFactory();
+            idleManager.EnablePotionEffect(potion);
+        }
+    }
+
 }

@@ -67,7 +67,7 @@ public class RaptorCore : MonoBehaviour
     private void Start()
     {
         ResourceManager.Initialize(idleManager);
-        SellManager.Initialize(this, ResourceManager, idleManager);
+        SellManager.Initialize(this, ResourceManager, idleManager, characterClass);
         SkillManager.Initialize(this, characterClass, idleManager, skillCheck);
         Time.fixedDeltaTime = 0.05f; // 20 ticks a second
         AutoSaveSystem.LoadGame();
@@ -215,18 +215,6 @@ public class RaptorCore : MonoBehaviour
         }
         LayoutController.Instance?.UpdateUI();
     }
-    public void RandomPotionEffect()
-    {
-        var chance = UnityEngine.Random.Range(0.00f, 100.00f);
-        if (chance < characterClass.potionRandomChance)
-        {
-            var potionIndex = (int)UnityEngine.Random.Range(0f, 6f);
-            var potion = idleManager.potions[potionIndex];
-            potion.isActive = true;
-            potion.timeRemaining += potion.duration;
-            potion.linkedFactory = GetCurrentFactory();
-            idleManager.EnablePotionEffect(potion);
-        }
-    }
+    
 
 }
