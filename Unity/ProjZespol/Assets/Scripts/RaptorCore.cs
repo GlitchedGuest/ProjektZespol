@@ -1,5 +1,7 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class RaptorCore : MonoBehaviour
@@ -65,7 +67,7 @@ public class RaptorCore : MonoBehaviour
     private void Start()
     {
         ResourceManager.Initialize(idleManager);
-        SellManager.Initialize(this, ResourceManager, idleManager);
+        SellManager.Initialize(this, ResourceManager, idleManager, characterClass);
         SkillManager.Initialize(this, characterClass, idleManager, skillCheck);
         Time.fixedDeltaTime = 0.05f; // 20 ticks a second
         AutoSaveSystem.LoadGame();
@@ -93,9 +95,9 @@ public class RaptorCore : MonoBehaviour
             Factory currentFactory = ResourceManager.GetCurrentFactory();
             
             if(idleManager.potions[0].isActive && idleManager.potions[0].linkedFactory.name == currentFactory.name)
-                value += potionClickBonus1;
+                value += potionClickBonus1 * characterClass.potionBoost;
             if(idleManager.potions[3].isActive && idleManager.potions[3].linkedFactory.name == currentFactory.name)
-                value += potionClickBonus2;
+                value += potionClickBonus2 * characterClass.potionBoost;
 
             value += ((CBasevalue * CMultiplier * 3) + (CBasevalue * SkillMultiplier));
 
@@ -118,9 +120,9 @@ public class RaptorCore : MonoBehaviour
             Factory currentFactory = ResourceManager.GetCurrentFactory();
             
             if(idleManager.potions[0].isActive && idleManager.potions[0].linkedFactory.name == currentFactory.name)
-                value += potionClickBonus1;
+                value += potionClickBonus1 * characterClass.potionBoost;
             if(idleManager.potions[3].isActive && idleManager.potions[3].linkedFactory.name == currentFactory.name)
-                value += potionClickBonus2;
+                value += potionClickBonus2 * characterClass.potionBoost;
             value += ((CBasevalue * CMultiplier) + (CBasevalue * SkillMultiplier));
 
             if (characterClass.noMatterWhat)
@@ -213,4 +215,6 @@ public class RaptorCore : MonoBehaviour
         }
         LayoutController.Instance?.UpdateUI();
     }
+    
+
 }

@@ -1,3 +1,6 @@
+using Mono.Cecil;
+using System;
+using UnityEditor.UIElements;
 using UnityEngine;
 
 public class SellingManager : MonoBehaviour
@@ -5,15 +8,31 @@ public class SellingManager : MonoBehaviour
     private RaptorCore raptorCore;
     private ResourceManager resourceManager;
     private IdleManager idleManager;
+    private CharacterClass characterClass;
 
     public QuarkType potionSellBonus1 = 1;
     public QuarkType potionSellBonus2 = 1;
 
-    public void Initialize(RaptorCore raptorCore, ResourceManager resManager, IdleManager idle)
+    public void Initialize(RaptorCore raptorCore, ResourceManager resManager, IdleManager idle, CharacterClass character)
     {
         this.raptorCore = raptorCore;
         resourceManager = resManager;
         idleManager = idle;
+        characterClass = character;
+    }
+
+    private void Update()
+    {
+        if (characterClass.michealScott)
+        {
+            for(int i = 1; i<=6; i++)
+            {
+                QuarkType amount = resourceManager.GetResourceValue("Resource"+i);
+                QuarkType limit = resourceManager.GetLimitResource("Resource" + i);
+                if (amount == limit)
+                    characterClass.GainExp((ulong)SellResource("Resource" + i, 100.0f, i));
+            }
+        }
     }
 
     public double SellMaterials(float sellValue)
@@ -55,14 +74,14 @@ public class SellingManager : MonoBehaviour
         
         if(idleManager.potions[2].isActive && idleManager.potions[2].linkedFactory.name == currentFactory.name)
         {
-            goldEarned *= potionSellBonus1;
+            goldEarned *= potionSellBonus1 * characterClass.potionBoost;
         }
         if(idleManager.potions[5].isActive && idleManager.potions[5].linkedFactory.name == currentFactory.name)
         {
-            goldEarned *= potionSellBonus2;
+            goldEarned *= potionSellBonus2 * characterClass.potionBoost;
         }
-        
-        raptorCore.Gold += goldEarned;
+
+        raptorCore.Gold += Math.Ceiling(goldEarned * characterClass.sellingBonus * characterClass.sellingHardBonus);
         resourceManager.RemoveResource(resource, amountToSell);
         LayoutController.Instance?.UpdateUI();
         return goldEarned;

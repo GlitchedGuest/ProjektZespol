@@ -21,13 +21,15 @@ public class PotionUIManager
     private RaptorCore raptorCore;
     private IdleManager idleManager;
     private AudioSource audioSource;
+    private CharacterClass characterClass;
 
-    public PotionUIManager(VisualElement root, RaptorCore core, IdleManager manager, AudioSource audio)
+    public PotionUIManager(VisualElement root, RaptorCore core, IdleManager manager, AudioSource audio, CharacterClass character)
     {
         ui = root;
         raptorCore = core;
         idleManager = manager;
         audioSource = audio;
+        characterClass = character;
     }
 
     public void Initialize()
@@ -35,7 +37,7 @@ public class PotionUIManager
         scrollView = ui.Q<ScrollView>("ScrollView2");
         scrollView.verticalScrollerVisibility = ScrollerVisibility.Hidden;
         scrollView.horizontalScrollerVisibility = ScrollerVisibility.Hidden;
-
+    
         InitializePotions();
     }
 
@@ -108,8 +110,8 @@ public class PotionUIManager
                 QuarkType playerResourceAmount2 = raptorCore.ResourceManager.GetResourceValueDirect(potion.resourceType2.name);
                 bool canAfford = (playerResourceAmount1 >= potion.cost1) && (playerResourceAmount2 >= potion.cost2);
                 bool isNotActive = !potion.isActive;
-                potionUI.buyButton.SetEnabled(canAfford && isNotActive);
-                if (potion.isActive)
+                potionUI.buyButton.SetEnabled((canAfford && isNotActive) || characterClass.deathDose);
+                if (potion.isActive && !characterClass.deathDose)
                 {
                     potionUI.buyButton.text = "Aktywna";
                 }

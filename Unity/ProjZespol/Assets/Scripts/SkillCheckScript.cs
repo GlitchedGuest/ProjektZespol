@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.LightTransport.PostProcessing;
 
 public class SkillCheckScript : MonoBehaviour
 {
@@ -95,6 +96,7 @@ public class SkillCheckScript : MonoBehaviour
             }      
             raptorCore.AddCurrency(value);
             raptorCore.SkillManager.EnableChickenDinner(true);
+            characterClass.EnableGenius(false);
             characterClass.Pedator(true);
         }
         else
@@ -107,7 +109,10 @@ public class SkillCheckScript : MonoBehaviour
             combovisual.UpdateCombo(kombo);
             raptorCore.SubCurrency(-value);
             raptorCore.SkillManager.EnableChickenDinner(false);
-            characterClass.Pedator(false);
+            characterClass.Pedator(false); 
+            characterClass.EnableGenius(true);
+            raptorCore.SkillManager.RandomPotionEffect();
+            characterClass.EnableExpBoost();
         }
         ClearBricks();
         this.gameObject.SetActive(false);

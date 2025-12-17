@@ -130,12 +130,12 @@ public class IdleManager : MonoBehaviour
             double production = f.GetProduction();
             if(potions[1].isActive && potions[1].linkedFactory.name == f.name)
             {
-                production *= potionFactoryBonus1;
+                production *= potionFactoryBonus1 * characterClass.potionBoost;
             }
             
             if(potions[4].isActive && potions[4].linkedFactory.name == f.name)
             {
-                production *= potionFactoryBonus2;
+                production *= potionFactoryBonus2 * characterClass.potionBoost;
             }
 
             if (f.resource != null)
@@ -428,22 +428,22 @@ public class IdleManager : MonoBehaviour
         switch (potion.effect)
         {
             case "click1":
-                raptorCore.potionClickBonus1 -= 5;
+                raptorCore.potionClickBonus1 = 0;
                 break;
             case "idle1":
-                potionFactoryBonus1 /= 2;
+                potionFactoryBonus1 = 1;
                 break;
             case "sell1":
-                raptorCore.SellManager.potionSellBonus1 /= 2;
+                raptorCore.SellManager.potionSellBonus1 = 1;
                 break;
             case "click2":
-                raptorCore.potionClickBonus2 -= 10;
+                raptorCore.potionClickBonus2 = 0;
                 break;
             case "idle2":
-                potionFactoryBonus2 /= 4;
+                potionFactoryBonus2 = 1;
                 break;
             case "sell2":
-                raptorCore.SellManager.potionSellBonus2 /= 4;
+                raptorCore.SellManager.potionSellBonus2 = 1;
                 break;
             default:
                 break;
