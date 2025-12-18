@@ -39,13 +39,13 @@ public class OptionsManager
         menu = ui.Q<VisualElement>("Menu");
         mainMenu = ui.Q<VisualElement>("Main");
         options = ui.Q<VisualElement>("Options");
-        optionBtn = ui.Q<Button>("Optionbtn");
+        //optionBtn = ui.Q<Button>("Optionbtn");
         resume = ui.Q<Button>("Resume");
         settings = ui.Q<Button>("Settings");
         exit = ui.Q<Button>("Exit");
         backSettings = ui.Q<Button>("Back");
 
-        optionBtn.clicked += EnableOptions;
+        //optionBtn.clicked += EnableOptions;
         resume.clicked += ResumeGame;
         settings.clicked += LoadSettings;
         exit.clicked += ExitGame;
@@ -55,6 +55,7 @@ public class OptionsManager
         InitializeDisplaySettings();
         InitializeSaveSettings();
     }
+
 
     private void InitializeAudioSettings()
     {
@@ -126,7 +127,7 @@ public class OptionsManager
         });
     }
 
-    private void EnableOptions()
+    public void EnableOptions()
     {
         audioSource.Play();
         menu.style.display = DisplayStyle.Flex;

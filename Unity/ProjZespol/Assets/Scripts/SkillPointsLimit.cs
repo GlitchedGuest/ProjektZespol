@@ -17,6 +17,7 @@ public class SkillPointsLimit : MonoBehaviour
         Skillbtn = ui.Q<Button>("btnSkill");
         ColorUtility.TryParseHtmlString("#C8B054", out availableColor);
         ColorUtility.TryParseHtmlString("#222222", out unavailableColor);
+        unavailableColor.a = 0f;
         critContainer = ui.Q<VisualElement>("crit-container");
     }
 

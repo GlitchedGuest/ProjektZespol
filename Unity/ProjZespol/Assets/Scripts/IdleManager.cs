@@ -158,8 +158,15 @@ public class IdleManager : MonoBehaviour
         }
 
         string currentResource = raptorCore.ResourceManager.currentResource;
-        QuarkType currentResourceAmount = raptorCore.ResourceManager.GetResourceValue(currentResource);
-        LayoutController.Instance?.SetCurrencyText(currentResourceAmount.ToString());
+        QuarkType Resource1 = raptorCore.ResourceManager.GetResourceValue("Resource1");
+        QuarkType Resource2 = raptorCore.ResourceManager.GetResourceValue("Resource2");
+        QuarkType Resource3 = raptorCore.ResourceManager.GetResourceValue("Resource3");
+        QuarkType Resource4 = raptorCore.ResourceManager.GetResourceValue("Resource4");
+        QuarkType Resource5 = raptorCore.ResourceManager.GetResourceValue("Resource5");
+        QuarkType Resource6 = raptorCore.ResourceManager.GetResourceValue("Resource6");
+        List<QuarkType> lista = new List<QuarkType>() { Resource1, Resource2, Resource3, Resource4, Resource5, Resource6 };
+        LayoutController.Instance?.SetCurrencyText(lista);
+
     }
 
     public bool UnlockFactory(int index)

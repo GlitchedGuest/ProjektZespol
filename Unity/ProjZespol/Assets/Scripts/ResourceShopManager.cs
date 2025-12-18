@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -8,7 +9,14 @@ public class ResourceShopManager
     private CharacterClass characterClass;
     private AudioSource audioSource;
 
-    private Label currencyLabel;
+    private Label res1curr;
+    private Label res2curr;
+    private Label res3curr;
+    private Label res4curr;
+    private Label res5curr;
+    private Label res6curr;
+
+
     private Label goldLabel;
     private Slider currencySlider;
     private Label sliderText;
@@ -24,7 +32,13 @@ public class ResourceShopManager
 
     public void Initialize()
     {
-        currencyLabel = ui.Q<Label>("Currency");
+        res1curr = ui.Q<Label>("res1curr");
+        res2curr = ui.Q<Label>("res2curr");
+        res3curr = ui.Q<Label>("res3curr");
+        res4curr = ui.Q<Label>("res4curr");
+        res5curr = ui.Q<Label>("res5curr");
+        res6curr = ui.Q<Label>("res6curr");
+
         goldLabel = ui.Q<Label>("Money");
         currencySlider = ui.Q<Slider>("AmoutSlider");
         sliderText = ui.Q<Label>("Napis");
@@ -46,10 +60,19 @@ public class ResourceShopManager
         audioSource.Play();
     }
 
-    public void SetCurrencyText(string value)
+    public void SetCurrencyText(List<QuarkType> list)
     {
-        if (currencyLabel != null)
-            currencyLabel.text = value;
+        if (list != null) {
+            res1curr.text = list[0].ToString();
+            res2curr.text = list[1].ToString();
+            res3curr.text = list[2].ToString();
+            res4curr.text = list[3].ToString();
+            res5curr.text = list[4].ToString();
+            res6curr.text = list[5].ToString();
+
+        }
+       // if (currencyLabel != null)
+         //   currencyLabel.text = value;
     }
 
     public void SetGoldText(string value)

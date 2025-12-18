@@ -80,11 +80,17 @@ public class LayoutController : MonoBehaviour
         levelUIManager?.Update();
         resourceShopManager?.Update();
         skillTreesUIManager?.Update();
+
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            optionsManager.EnableOptions();
+        }
+        
     }
 
-    public void SetCurrencyText(string value)
+    public void SetCurrencyText(List<QuarkType> lista)
     {
-        resourceShopManager?.SetCurrencyText(value);
+        resourceShopManager?.SetCurrencyText(lista);
     }
 
     public void SetGoldText(string value)
@@ -93,8 +99,14 @@ public class LayoutController : MonoBehaviour
     }
     public void UpdateUI()
     {
-        QuarkType currentResourceAmount = raptorCore.ResourceManager.GetResourceValue(raptorCore.ResourceManager.currentResource);
-        LayoutController.Instance?.SetCurrencyText(currentResourceAmount.ToString());
+        QuarkType Resource1 = raptorCore.ResourceManager.GetResourceValue("Resource1");
+        QuarkType Resource2 = raptorCore.ResourceManager.GetResourceValue("Resource2");
+        QuarkType Resource3 = raptorCore.ResourceManager.GetResourceValue("Resource3");
+        QuarkType Resource4 = raptorCore.ResourceManager.GetResourceValue("Resource4");
+        QuarkType Resource5 = raptorCore.ResourceManager.GetResourceValue("Resource5");
+        QuarkType Resource6 = raptorCore.ResourceManager.GetResourceValue("Resource6");
+        List<QuarkType> lista = new List<QuarkType>() { Resource1,Resource2,Resource3,Resource4,Resource5,Resource6};
+        LayoutController.Instance?.SetCurrencyText(lista);
         LayoutController.Instance?.SetGoldText(raptorCore.Gold.ToString());
     }
 }
