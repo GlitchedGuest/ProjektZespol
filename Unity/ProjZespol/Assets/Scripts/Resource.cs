@@ -23,8 +23,7 @@ public class Resource
     {
         get
         {
-            QuarkType limit = (BaseLimit * LvlBoost) + SkillBoost;
-            //Debug.Log($"{name} Limit: {limit}");
+            QuarkType limit = ((BaseLimit * LvlBoost) + SkillBoost).Ceil();
             return limit;
         }
     }

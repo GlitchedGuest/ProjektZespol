@@ -18,7 +18,7 @@ public class ResourceShopManager
 
 
     private Label goldLabel;
-    private Slider currencySlider;
+    private SliderInt currencySlider;
     private Label sliderText;
     private Button sell1;
 
@@ -40,7 +40,7 @@ public class ResourceShopManager
         res6curr = ui.Q<Label>("res6curr");
 
         goldLabel = ui.Q<Label>("Money");
-        currencySlider = ui.Q<Slider>("AmoutSlider");
+        currencySlider = ui.Q<SliderInt>("AmoutSlider");
         sliderText = ui.Q<Label>("Napis");
         sell1 = ui.Q<Button>("sell1");
 
@@ -50,12 +50,12 @@ public class ResourceShopManager
     public void Update()
     {
         if (sliderText != null)
-            sliderText.text = currencySlider.value.ToString() + "%";
+            sliderText.text = (currencySlider.value*20).ToString() + "%";
     }
 
     private void ClickSell1()
     {
-        double exp = raptorCore.SellManager.SellMaterials(currencySlider.value);
+        double exp = raptorCore.SellManager.SellMaterials(currencySlider.value * 20);
         characterClass.GainExp((ulong)exp);
         audioSource.Play();
     }
