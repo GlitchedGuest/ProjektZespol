@@ -584,9 +584,9 @@ public class FactoryUIManager
         Sprite Tex;
         switch (factory.name)
         {
-            case "F1": Tex = images[0]; break;
-            case "F2": Tex = images[1]; break;
-            case "F3": Tex = images[2]; break;
+            case "Astral Rock of Solitude": Tex = images[0]; break;
+            case "Fields of War": Tex = images[1]; break;
+            case "The Last Forest": Tex = images[2]; break;
             case "F4": Tex = images[3]; break;
             case "F5": Tex = images[4]; break;
             case "F6": Tex = images[5]; break;

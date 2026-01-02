@@ -1432,6 +1432,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2629494924822515725, guid: 74134571a0795ce4a840c2356e47dbbb, type: 3}
+      propertyPath: Gold
+      value: 10000000
+      objectReference: {fileID: 0}
+    - target: {fileID: 2629494924822515725, guid: 74134571a0795ce4a840c2356e47dbbb, type: 3}
       propertyPath: critSource
       value: 
       objectReference: {fileID: 140722061}
