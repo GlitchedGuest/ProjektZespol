@@ -29,7 +29,7 @@ public class SellingManager : MonoBehaviour
                 QuarkType amount = resourceManager.GetResourceValue("Resource"+i);
                 QuarkType limit = resourceManager.GetLimitResource("Resource" + i);
                 if (amount == limit)
-                    characterClass.GainExp((ulong)SellResource("Resource" + i, 100.0f, i));
+                    characterClass.GainExp((ulong)SellResource("Resource" + i, 100f, i));
             }
         }
     }
