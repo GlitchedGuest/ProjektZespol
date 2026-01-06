@@ -1,0 +1,39 @@
+using System;
+using UnityEngine;
+
+public static class PrestigeSystem
+{
+    private static RaptorCore _core;
+    private static bool _initialized;
+    public static void Init(RaptorCore core)
+    {
+        if (core == null)
+            throw new ArgumentNullException(nameof(core));
+
+        if (_initialized)
+            return;
+
+        _core = core;
+        _initialized = true;
+    }
+
+    public static void ExecutePrestige()
+    {
+        //Calculate Prestige
+
+        _core.OneClickPrestige += _core.characterClass.T1;
+        _core.JackPrestige += _core.characterClass.T2;
+        _core.AutoPrestige += _core.characterClass.T3;
+
+        //Great Reset
+        _core.characterClass.ResetCharacter();
+        _core.ResourceManager.ResetResources();
+        _core.idleManager.ResetFactory();
+        _core.layoutController.ClearLayoutTree();
+
+        _core.ResetCore();
+
+
+    }
+
+}

@@ -90,6 +90,8 @@ public class FactoryUIManager
         if (nextFactoryBtn != null)
             nextFactoryBtn.clicked += CycleToNextFactory;
 
+        currentFactoryIndex = 0;
+
         InitializeUnlockButtons();
         InitializeFactories();
         SwitchToFactory(currentFactoryIndex);
@@ -572,7 +574,7 @@ public class FactoryUIManager
         return factory != null && factory.isUnlocked;
     }
 
-    private void SwitchToFactory(int factoryIndex)
+    public void SwitchToFactory(int factoryIndex)
     {
         var factory = GetFactory(factoryIndex);
         if (factory == null) return;

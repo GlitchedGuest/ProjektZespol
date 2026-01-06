@@ -31,6 +31,12 @@ public class LayoutController : MonoBehaviour
     private HashSet<string> learnedJackOfAllClicks = new();
     private HashSet<string> learnedAutomatron = new();
 
+
+    public void ClearLayoutTree()
+    {
+        skillTreesUIManager.ClearTrees();
+        factoryUIManager.SwitchToFactory(0);
+    }
     void Awake()
     {
         Instance = this;
