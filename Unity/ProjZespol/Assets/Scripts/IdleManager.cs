@@ -28,12 +28,12 @@ public class IdleManager : MonoBehaviour
         if (resources == null) resources = new List<Resource>();
 
         resources.Clear();
-        resources.Add(new Resource("Blood Rock Of Night"));
-        resources.Add(new Resource("Hot Metal Of Lost World"));
-        resources.Add(new Resource("Light Crystal"));
-        resources.Add(new Resource("Killer Flower Of Earth"));
-        resources.Add(new Resource("Red Diamond Of Telor"));
-        resources.Add(new Resource("Time Remnant"));
+        resources.Add(new Resource("Resource1","Blood Rock Of Night"));
+        resources.Add(new Resource("Resource2", "Hot Metal Of Lost World"));
+        resources.Add(new Resource("Resource3", "Light Crystal"));
+        resources.Add(new Resource("Resource4", "Killer Flower Of Earth"));
+        resources.Add(new Resource("Resource5", "Red Diamond Of Telor"));
+        resources.Add(new Resource("Resource6", "Time Remnant"));
 
 
         foreach (var res in resources)

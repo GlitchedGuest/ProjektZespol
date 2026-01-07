@@ -102,7 +102,7 @@ public class PotionUIManager
             if (potionUI.effectLabel != null)
                 potionUI.effectLabel.text = potion.effectDescription;
             if (potionUI.costLabel != null)
-                potionUI.costLabel.text = $"Koszt: {potion.cost1} szt. zasobu {potion.resourceType1.name}\n\t   {potion.cost2} szt. zasobu {potion.resourceType2.name}";
+                potionUI.costLabel.text = $"Koszt: {potion.cost1} szt. zasobu {potion.resourceType1.displayName}\n\t   {potion.cost2} szt. zasobu {potion.resourceType2.displayName}";
 
             if (potionUI.buyButton != null)
             {
