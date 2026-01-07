@@ -361,11 +361,11 @@ public class FactoryUIManager
             }
 
             if (factoryUI.countLabel != null)
-                factoryUI.countLabel.text = $"Ilość: {factory.count}";
+                factoryUI.countLabel.text = $"Amount: {factory.count}";
             if (factoryUI.costLabel != null)
                 factoryUI.costLabel.text = factory.isUnlocked
-                    ? $"Koszt: {factory.currentCost}"
-                    : $"Odblokuj za: {factory.unlockCost}";
+                    ? $"Price: {factory.currentCost}"
+                    : $"Unlock for: {factory.unlockCost}";
 
             double playerGold = raptorCore.Gold;
 
@@ -384,13 +384,13 @@ public class FactoryUIManager
                 }
 
                 if (factoryUI.productionLevelLabel != null && factory.isUnlocked)
-                    factoryUI.productionLevelLabel.text = $"Poziom: {upgradeLevels.productionLevel}";
+                    factoryUI.productionLevelLabel.text = $"Level: {upgradeLevels.productionLevel}";
 
                 factoryUI.multiplierLevelLabel.style.display = DisplayStyle.None;
 
                 if (factoryUI.upgradeProductionBtn != null && factory.isUnlocked)
                 {
-                    factoryUI.upgradeProductionBtn.text = $"Zwiększ produkcję (+1) - {productionCost:F0} G";
+                    factoryUI.upgradeProductionBtn.text = $"Increase production (+1) - {productionCost:F0} G";
                     factoryUI.upgradeProductionBtn.SetEnabled(playerGold >= productionCost);
                 }
                 factoryUI.upgradeMultiplierBtn.style.display = DisplayStyle.None;
@@ -645,7 +645,7 @@ public class FactoryUIManager
             else
             {
                 button.style.display = DisplayStyle.Flex;
-                button.text = $"Odblokuj {factory.name}\n{factory.unlockCost} Gold";
+                button.text = $"Unlock {factory.name}\n{factory.unlockCost} Gold";
                 button.SetEnabled(raptorCore.Gold >= factory.unlockCost);
             }
         }

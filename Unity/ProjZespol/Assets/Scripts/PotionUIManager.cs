@@ -102,7 +102,7 @@ public class PotionUIManager
             if (potionUI.effectLabel != null)
                 potionUI.effectLabel.text = potion.effectDescription;
             if (potionUI.costLabel != null)
-                potionUI.costLabel.text = $"Koszt: {potion.cost1} szt. zasobu {potion.resourceType1.displayName}\n\t   {potion.cost2} szt. zasobu {potion.resourceType2.displayName}";
+                potionUI.costLabel.text = $"Price: {potion.cost1} {potion.resourceType1.displayName}\n\t   {potion.cost2} {potion.resourceType2.displayName}";
 
             if (potionUI.buyButton != null)
             {
@@ -113,11 +113,11 @@ public class PotionUIManager
                 potionUI.buyButton.SetEnabled((canAfford && isNotActive) || characterClass.deathDose);
                 if (potion.isActive && !characterClass.deathDose)
                 {
-                    potionUI.buyButton.text = "Aktywna";
+                    potionUI.buyButton.text = "Active";
                 }
                 else
                 {
-                    potionUI.buyButton.text = "Kup";
+                    potionUI.buyButton.text = "Buy";
                 }
             }
         }

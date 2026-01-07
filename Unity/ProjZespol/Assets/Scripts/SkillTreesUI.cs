@@ -75,12 +75,12 @@ public abstract class SkillTreeManager
         }
     }
 
-    public void RegisterTooltip(string skillId, string title, string description)
+    public void RegisterTooltip(string skillId, string title, string description, string lore)
     {
         var btn = ui.Q<Button>(skillId);
         if (btn != null)
         {
-            Tooltip.Register(btn, title, description);
+            Tooltip.Register(btn, title, description, lore);
         }
     }
 

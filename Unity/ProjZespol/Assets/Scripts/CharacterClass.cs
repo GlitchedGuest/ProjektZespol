@@ -168,7 +168,7 @@ public class CharacterClass:MonoBehaviour
 
     private void SkillBasedClicking(bool revert)
     {
-        skillCheckChance = revert ? -1.0f : 101.0f;
+        skillCheckChance = revert ? -1.0f : 10.0f;
     }
     private void CriticalMass(bool revert)
     {
