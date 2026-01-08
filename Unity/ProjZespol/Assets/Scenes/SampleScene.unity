@@ -676,6 +676,9 @@ MonoBehaviour:
   - {fileID: 2800000, guid: 0c4f7a407ef7cc2479895179a9e5977b, type: 3}
   - {fileID: 2800000, guid: 0dae48ce2b5e6144aa9b7f0aa43a5299, type: 3}
   - {fileID: 2800000, guid: c912d8547effe2942aaddb639682ebde, type: 3}
+  - {fileID: 2800000, guid: 5d0292a24724e2d4d91a2a6ec9071180, type: 3}
+  - {fileID: 2800000, guid: d4bec8ebee7fe1244885282a0945cc9d, type: 3}
+  - {fileID: 2800000, guid: bc31d3b7ec9d54e4dbbe10cf6da8b1d8, type: 3}
   raptorCore: {fileID: 186519293}
 --- !u!212 &1105491401 stripped
 SpriteRenderer:
@@ -946,12 +949,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   idleManager: {fileID: 205226413}
   uiDocument: {fileID: 1895339684}
-  unoPotionSprite: {fileID: -2991176499343437113, guid: bcdc097886ffa0f429579b2974c236f4, type: 3}
-  dosPotionSprite: {fileID: -4063282911688051274, guid: 9c81041dddc99394c8476589a62eb75a, type: 3}
-  tresPotionSprite: {fileID: -396636676558010057, guid: ebea6c9607d0be1428624b408f70d854, type: 3}
-  cuatroPotionSprite: {fileID: -1646119596323929938, guid: b661ac3e989f4b840864655b82b9fc3e, type: 3}
-  cincoPotionSprite: {fileID: 4944645665347049430, guid: c85a9276588bee7488344905abd66be1, type: 3}
-  seisPotionSprite: {fileID: 7086565518490525865, guid: 7a1342c27591d3e49a6ba6bf85ee718b, type: 3}
+  unoPotionSprite: {fileID: -5352331787568022494, guid: 5d95471a224a5084fb1a2d2287679945, type: 3}
+  dosPotionSprite: {fileID: -3907084927728041462, guid: fd0d0a91e781b684097ac81048585fc0, type: 3}
+  tresPotionSprite: {fileID: -4367071569050651343, guid: 46a537121d084634daf9e478b60463ff, type: 3}
+  cuatroPotionSprite: {fileID: 9138997647210568525, guid: 1bba60ba89e51f3499adf789f7f62a6b, type: 3}
+  cincoPotionSprite: {fileID: 2126022068723983079, guid: 330fff162abdc654e86bd8f01458e9ef, type: 3}
+  seisPotionSprite: {fileID: 1897018021606877365, guid: bd332224c0405d0468b70173098062f9, type: 3}
 --- !u!114 &1895339687
 MonoBehaviour:
   m_ObjectHideFlags: 0
