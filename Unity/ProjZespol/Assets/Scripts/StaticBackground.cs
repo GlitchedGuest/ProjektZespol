@@ -41,6 +41,15 @@ public class StaticBackground : MonoBehaviour
             case "The Last Forest":
                 rawImage.texture = backgrounds[2];
                 break;
+            case "F4":
+                rawImage.texture = backgrounds[3];
+                break;
+            case "F5":
+                rawImage.texture = backgrounds[4];
+                break;
+            case "F6":
+                rawImage.texture = backgrounds[5];
+                break;
         }
     }
 }
