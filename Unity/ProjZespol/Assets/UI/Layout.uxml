@@ -151,7 +151,7 @@
                                 </ui:VisualElement>
                             </ui:VisualElement>
                         </ui:VisualElement>
-                        <ui:Button text="F4" name="Factory4Btn" class="btncolor text mariginbottom10 navbuttonborder" style="visibility: visible; display: flex; margin-bottom: 10px; padding-top: 15px; padding-right: 20px; padding-bottom: 15px; padding-left: 20px;" />
+                        <ui:Button text="Dead Rises" name="Factory4Btn" class="btncolor text mariginbottom10 navbuttonborder" style="visibility: visible; display: flex; margin-bottom: 10px; padding-top: 15px; padding-right: 20px; padding-bottom: 15px; padding-left: 20px;" />
                         <ui:VisualElement name="Factory4Details" style="flex-grow: 0; background-color: rgb(0, 0, 50); padding-top: 15px; padding-right: 15px; padding-bottom: 15px; padding-left: 15px; border-top-width: 1px; border-right-width: 1px; border-bottom-width: 1px; border-left-width: 1px; border-left-color: rgb(0, 0, 0); border-right-color: rgb(0, 0, 0); border-top-color: rgb(0, 0, 0); border-bottom-color: rgb(0, 0, 0); border-top-left-radius: 5px; border-top-right-radius: 5px; border-bottom-right-radius: 5px; border-bottom-left-radius: 5px; display: none; margin-bottom: 10px;">
                             <ui:Label text="F3" name="Factory4Name" class="text" style="font-size: 18px; margin-bottom: 10px; -unity-text-align: upper-center; -unity-font-style: bold;" />
                             <ui:Button name="Factory4Unlock" text="Odblokuj" class="btncolor text navbuttonborder" style="padding-top: 8px; padding-right: 15px; padding-bottom: 8px; padding-left: 15px; flex-grow: 1; margin-right: 5px;" />
@@ -175,16 +175,16 @@
                             </ui:VisualElement>
                             <ui:VisualElement style="height: 2px; background-color: rgb(100, 100, 100); margin-bottom: 15px; margin-top: 5px;" />
                             <ui:VisualElement name="Factory4Upgrades" style="display: flex; flex-direction: column; margin-top: 5px;">
-                                <ui:Button name="Factory4UpgradeBtn" text="Ulepszenia" class="btncolor text navbuttonborder" style="padding-top: 10px; padding-right: 15px; padding-bottom: 10px; padding-left: 15px; margin-bottom: 10px;" />
+                                <ui:Button name="Factory4UpgradeBtn" text="Upgrades" class="btncolor text navbuttonborder" style="padding-top: 10px; padding-right: 15px; padding-bottom: 10px; padding-left: 15px; margin-bottom: 10px;" />
                                 <ui:VisualElement name="Factory4UpgradePanel" style="display: none; flex-direction: column; background-color: rgb(0, 0, 40); padding: 10px; border-top-left-radius: 5px; border-top-right-radius: 5px; border-bottom-right-radius: 5px; border-bottom-left-radius: 5px; border-top-width: 1px; border-right-width: 1px; border-bottom-width: 1px; border-left-width: 1px; border-left-color: rgb(50, 50, 100); border-right-color: rgb(50, 50, 100); border-top-color: rgb(50, 50, 100); border-bottom-color: rgb(50, 50, 100);">
                                     <ui:VisualElement style="margin-bottom: 15px;">
-                                        <ui:Label text="Poziom: 0" name="Factory4ProductionLevel" class="text" style="font-size: 14px; margin-bottom: 5px; -unity-text-align: upper-left; color: rgb(200, 200, 255);" />
-                                        <ui:Button name="Factory4UpgradeProduction" text="Zwiększ produkcję (+10%)" class="btncolor text navbuttonborder" style="padding-top: 8px; padding-right: 15px; padding-bottom: 8px; padding-left: 15px;" />
+                                        <ui:Label text="Level: 0" name="Factory4ProductionLevel" class="text" style="font-size: 14px; margin-bottom: 5px; -unity-text-align: upper-left; color: rgb(200, 200, 255);" />
+                                        <ui:Button name="Factory4UpgradeProduction" text="Increase production (+10%)" class="btncolor text navbuttonborder" style="padding-top: 8px; padding-right: 15px; padding-bottom: 8px; padding-left: 15px;" />
                                     </ui:VisualElement>
                                     <ui:VisualElement style="height: 1px; background-color: rgb(80, 80, 120); margin-bottom: 15px;" />
                                     <ui:VisualElement>
-                                        <ui:Label text="Poziom: 0" name="Factory4MultiplierLevel" class="text" style="font-size: 14px; margin-bottom: 5px; -unity-text-align: upper-left; color: rgb(200, 200, 255);" />
-                                        <ui:Button name="Factory4UpgradeMultiplier" text="Zwiększ mnożnik (+0.1x)" class="btncolor text navbuttonborder" style="padding-top: 8px; padding-right: 15px; padding-bottom: 8px; padding-left: 15px;" />
+                                        <ui:Label text="Level: 0" name="Factory4MultiplierLevel" class="text" style="font-size: 14px; margin-bottom: 5px; -unity-text-align: upper-left; color: rgb(200, 200, 255);" />
+                                        <ui:Button name="Factory4UpgradeMultiplier" text="Increase multiplier (+0.1x)" class="btncolor text navbuttonborder" style="padding-top: 8px; padding-right: 15px; padding-bottom: 8px; padding-left: 15px;" />
                                     </ui:VisualElement>
                                 </ui:VisualElement>
                             </ui:VisualElement>

@@ -247,7 +247,7 @@ public class CharacterClass:MonoBehaviour
     }
     private void OneForEveryone(bool revert)
     {
-        unskilledPredator = !revert;
+        oneForEveryone = !revert;
         if (!revert) productionIdleBonus = 5.0f;
     }
     private void WhatEyesDontSee(bool revert)

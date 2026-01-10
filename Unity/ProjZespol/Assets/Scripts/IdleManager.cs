@@ -55,11 +55,11 @@ public class IdleManager : MonoBehaviour
 
         factories.Add(new Factory(resources[2], "The Last Forest", 15, 1.15, 10, 25000));
 
-        factories.Add(new Factory(resources[3], "F4", 15, 1.15, 15, 125000));
+        factories.Add(new Factory(resources[3], "Dead Rises", 15, 1.15, 15, 125000));
 
-        factories.Add(new Factory(resources[4], "F5", 15, 1.15, 20, 625000));
+        factories.Add(new Factory(resources[4], "City of Dreams", 15, 1.15, 20, 625000));
 
-        factories.Add(new Factory(resources[5], "F6", 15, 1.15, 25, 3125000));
+        factories.Add(new Factory(resources[5], "Hell", 15, 1.15, 25, 3125000));
     }
 
     private void InitPotions()

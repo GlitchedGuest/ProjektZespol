@@ -130,16 +130,16 @@ public class SkillTreesUIManager
 
         automatronTree.InitializeSkills(skills);
 
-        automatronTree.RegisterTooltip("Skill1-tree3", "Entre-preneur", "Im więcej fabryk…", "N");
-        automatronTree.RegisterTooltip("Skill2-tree3", "Push to the limit", "Limit punktów rośnie", "N");
-        automatronTree.RegisterTooltip("Skill3A-tree3", "Reaction Test", "Skill checki mogą…", "N");
-        automatronTree.RegisterTooltip("Skill3B-tree3", "What Eyes Don't See", "Fabryki not in focus…", "N");
-        automatronTree.RegisterTooltip("Skill4A-tree3", "Unskilled Predator", "Nieudany check zwiększa idle…", "N");
-        automatronTree.RegisterTooltip("Skill4B-tree3", "Passive Agressive", "Im dłużej gracz nie kliknie…", "N");
-        automatronTree.RegisterTooltip("Skill5A-tree3", "One for Everyone", "Nieudany check buffuje wszystko", "N");
-        automatronTree.RegisterTooltip("Skill5B-tree3", "Multi-tasking", "Gracz może robić inne akcje", "N");
-        automatronTree.RegisterTooltip("Skill5C-tree3", "Christmas Bonus", "Bonus do fabryk not in focus", "N");
-        automatronTree.RegisterTooltip("Skill6-tree3", "Hungry Wolf", "Im mniej punktów tym większy bonus", "N");
+        automatronTree.RegisterTooltip("Skill1-tree3", "Entrepreneur", "The more factories you have, the greater bonus to idle is.", "\"Wakey, Wakey! Little Brother.\" ~Herald of Darkness");
+        automatronTree.RegisterTooltip("Skill2-tree3", "Push to the limit", "Increases maximum limit of all resources.", "\"I see everything, everywhere, everywhen.\" ~Champion of Light");
+        automatronTree.RegisterTooltip("Skill3A-tree3", "Reaction Test", "Skill checks can appear at random instead while clicking.", "\"He's no longer here, I am what's left.\" ~Herald of Darkness");
+        automatronTree.RegisterTooltip("Skill3B-tree3", "What Eyes Don't See", "Factories not in focus produce more resources.", "\"Hear me Lux, I'm ready.\" ~Champion of Light");
+        automatronTree.RegisterTooltip("Skill4A-tree3", "Unskilled Predator", "Failed skill check boost idle production. Effect can stack.", "\"How's your family? Little Brother.\" ~Herald of Darkness");
+        automatronTree.RegisterTooltip("Skill4B-tree3", "Passive Agressive", "The longer player does not click, the more resources factory in focus produce.", "\"In the darkness night there is light.\" ~Champion of Light");
+        automatronTree.RegisterTooltip("Skill5A-tree3", "One for Everyone", "Idle production of all factories is greatly increased", "\"Tick tock Jack!\" ~Herald of Darkness");
+        automatronTree.RegisterTooltip("Skill5B-tree3", "Multi-tasking", "Player can click but idle bonus is increasing in slower pace.", "\"Let's end it once and for all!\" ~Champion of Light");
+        automatronTree.RegisterTooltip("Skill5C-tree3", "Christmas Bonus", "Idle bonus is applied to all factories.", "\"DEVOUR DEVOUR DEVOUR!\" ~Herald of Darkness");
+        automatronTree.RegisterTooltip("Skill6-tree3", "Hungry Wolf", "The less resource factory has, more resource it's producing.", "\"Let's do it together, brother.\" ~Champion of Light");
 
         Color c = Color.yellow;
         automatronTree.DrawLine("Skill1-tree3", "Skill2-tree3", c);

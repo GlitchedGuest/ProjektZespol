@@ -40,14 +40,14 @@ public class StaticBackground : MonoBehaviour
                 break;
             case "The Last Forest":
                 rawImage.texture = backgrounds[2];
-                break;
-            case "F4":
+                break; 
+            case "Dead Rises":
                 rawImage.texture = backgrounds[3];
                 break;
-            case "F5":
+            case "City of Dreams":
                 rawImage.texture = backgrounds[4];
                 break;
-            case "F6":
+            case "Hell":
                 rawImage.texture = backgrounds[5];
                 break;
         }
