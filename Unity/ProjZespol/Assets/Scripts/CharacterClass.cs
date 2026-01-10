@@ -185,7 +185,7 @@ public class CharacterClass:MonoBehaviour
         if (revert)
             buffManager.RemoveBuff("Skill3A");
         else
-            buffManager.ApplyBuff("Skill3A", Raptorcore.SkillManager.GetActiveIdleValue());
+            if(Raptorcore.SkillManager.GetActiveIdleValue()>0) buffManager.ApplyBuff("Skill3A", Raptorcore.SkillManager.GetActiveIdleValue());
     }
 
     private void NoMatterWhat(bool revert)
@@ -201,7 +201,7 @@ public class CharacterClass:MonoBehaviour
         if (revert)
             buffManager.RemoveBuff("Skill2B");
         else
-            buffManager.ApplyBuff("Skill2B", Raptorcore.SkillMultiplier);
+            if(Raptorcore.SkillMultiplier>0) buffManager.ApplyBuff("Skill2B", Raptorcore.SkillMultiplier);
     }
     private void HungryForMore(bool revert)
     {
@@ -258,7 +258,7 @@ public class CharacterClass:MonoBehaviour
         if (revert)
             buffManager.RemoveBuff("Skill4A-tree3");
         else
-            buffManager.ApplyBuff("Skill4A-tree3", productionIdlePedatorBonus);
+           if(productionIdlePedatorBonus > 0) buffManager.ApplyBuff("Skill4A-tree3", productionIdlePedatorBonus);
     }
     public void Pedator(bool reset)
     {
@@ -307,7 +307,7 @@ public class CharacterClass:MonoBehaviour
         if (revert)
             buffManager.RemoveBuff("Skill2A-tree2");
         else
-            buffManager.ApplyBuff("Skill2A-tree2", 0);
+            if(sellingBonus > 0) buffManager.ApplyBuff("Skill2A-tree2", 0);
     }
     public void EnableGenius(bool reset)
     {
@@ -353,7 +353,7 @@ public class CharacterClass:MonoBehaviour
         if (revert)
             buffManager.RemoveBuff("Skill3D-tree2");
         else
-            buffManager.ApplyBuff("Skill3D-tree2", expBoost);
+            if(expBoost > 1) buffManager.ApplyBuff("Skill3D-tree2", expBoost);
     }
     public void EnableExpBoost()
     {
@@ -380,7 +380,7 @@ public class CharacterClass:MonoBehaviour
         if (revert)
             buffManager.RemoveBuff("Skill4-tree2");
         else
-            buffManager.ApplyBuff("Skill4-tree2", komboBoost);
+            if(komboBoost > 0) buffManager.ApplyBuff("Skill4-tree2", komboBoost);
     }
     private void MichealScott(bool revert)
     {
@@ -388,9 +388,13 @@ public class CharacterClass:MonoBehaviour
     }
     private void Update()
     {
-        if(failToWin) buffManager.ApplyBuff("Skill3D-tree2", expBoost);
-        if(failureGrind) buffManager.ApplyBuff("Skill4-tree2", komboBoost);
-        if(marketplaceGenius) buffManager.ApplyBuff("Skill2A-tree2", sellingBonus);
-        if(unskilledPredator) buffManager.ApplyBuff("Skill4A-tree3", productionIdlePedatorBonus);
+        if(failToWin && expBoost>1) buffManager.ApplyBuff("Skill3D-tree2", expBoost);
+        else buffManager.RemoveBuff("Skill3D-tree2");
+        if (failureGrind && komboBoost > 0) buffManager.ApplyBuff("Skill4-tree2", komboBoost);
+        else buffManager.RemoveBuff("Skill4-tree2");
+        if (marketplaceGenius && sellingBonus > 0) buffManager.ApplyBuff("Skill2A-tree2", sellingBonus);
+        else buffManager.RemoveBuff("Skill2A-tree2");
+        if (unskilledPredator && productionIdlePedatorBonus > 0) buffManager.ApplyBuff("Skill4A-tree3", productionIdlePedatorBonus);
+        else buffManager.RemoveBuff("Skill4A-tree3");
     }
 }

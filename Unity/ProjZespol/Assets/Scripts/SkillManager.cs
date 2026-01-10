@@ -78,11 +78,13 @@ public class SkillManager : MonoBehaviour
             {
                 f.productionMultiplier += 3;
                 f.count += 4;
-                if(characterClass.activeIdle) characterClass.buffManager.ApplyBuff("Skill3A", f.count*f.productionMultiplier);
-                yield return new WaitForSeconds(6f);
+                if (characterClass.activeIdle && (f.count * f.productionMultiplier) > 0) characterClass.buffManager.ApplyBuff("Skill3A", f.count * f.productionMultiplier);
+                else characterClass.buffManager.RemoveBuff("Skill3A");
+                    yield return new WaitForSeconds(6f);
                 f.productionMultiplier -= 3;
                 f.count -= 4;
-                if (characterClass.activeIdle) characterClass.buffManager.ApplyBuff("Skill3A", f.count * f.productionMultiplier);
+                if (characterClass.activeIdle && (f.count * f.productionMultiplier) >0) characterClass.buffManager.ApplyBuff("Skill3A", f.count * f.productionMultiplier);
+                else characterClass.buffManager.RemoveBuff("Skill3A");
                 break;
             }
         }
@@ -118,10 +120,12 @@ public class SkillManager : MonoBehaviour
                 mode = 0;
         }
         raptorCore.SkillMultiplier += 10 * mode;
-        if (characterClass.chickenDinner) characterClass.buffManager.ApplyBuff("Skill2B", raptorCore.SkillMultiplier);
-        yield return new WaitForSeconds(6f);
+        if (characterClass.chickenDinner && raptorCore.SkillMultiplier != 0) characterClass.buffManager.ApplyBuff("Skill2B", raptorCore.SkillMultiplier);
+        else characterClass.buffManager.RemoveBuff("Skill2B");
+            yield return new WaitForSeconds(6f);
         raptorCore.SkillMultiplier -= 10 * mode;
-        if (characterClass.chickenDinner) characterClass.buffManager.ApplyBuff("Skill2B", raptorCore.SkillMultiplier);
+        if (characterClass.chickenDinner && raptorCore.SkillMultiplier !=0) characterClass.buffManager.ApplyBuff("Skill2B", raptorCore.SkillMultiplier);
+        else characterClass.buffManager.RemoveBuff("Skill2B");
     }
 
     public bool IsSkillCheckActive()
