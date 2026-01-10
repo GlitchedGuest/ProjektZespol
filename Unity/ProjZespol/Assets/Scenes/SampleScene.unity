@@ -1038,16 +1038,40 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1105491401}
     - target: {fileID: 2595809473968715902, guid: fe1619c8ad742c24e8be78d6c285b517, type: 3}
+      propertyPath: deathDoseIcon
+      value: 
+      objectReference: {fileID: 2800000, guid: 168e891efaeea564c9a1211718b50937, type: 3}
+    - target: {fileID: 2595809473968715902, guid: fe1619c8ad742c24e8be78d6c285b517, type: 3}
+      propertyPath: failToWinIcon
+      value: 
+      objectReference: {fileID: 2800000, guid: bcc5d0a48ad28a541bf02ccf007bcca2, type: 3}
+    - target: {fileID: 2595809473968715902, guid: fe1619c8ad742c24e8be78d6c285b517, type: 3}
+      propertyPath: activeIdleIcon
+      value: 
+      objectReference: {fileID: 2800000, guid: 7c004d6274523494e91494cdeabb0311, type: 3}
+    - target: {fileID: 2595809473968715902, guid: fe1619c8ad742c24e8be78d6c285b517, type: 3}
       propertyPath: characterClass
       value: 
       objectReference: {fileID: 1162231167}
+    - target: {fileID: 2595809473968715902, guid: fe1619c8ad742c24e8be78d6c285b517, type: 3}
+      propertyPath: failureGrindIcon
+      value: 
+      objectReference: {fileID: 2800000, guid: d56733cecef6db04b9128639efcc56f9, type: 3}
     - target: {fileID: 2595809473968715902, guid: fe1619c8ad742c24e8be78d6c285b517, type: 3}
       propertyPath: skillPointsLimit
       value: 
       objectReference: {fileID: 1895339693}
     - target: {fileID: 2595809473968715902, guid: fe1619c8ad742c24e8be78d6c285b517, type: 3}
+      propertyPath: chickenDinnerIcon
+      value: 
+      objectReference: {fileID: 2800000, guid: 681fffdc84fdd324793e5c59b7d90ecc, type: 3}
+    - target: {fileID: 2595809473968715902, guid: fe1619c8ad742c24e8be78d6c285b517, type: 3}
       propertyPath: images.Array.size
       value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 2595809473968715902, guid: fe1619c8ad742c24e8be78d6c285b517, type: 3}
+      propertyPath: bufficons.Array.size
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 2595809473968715902, guid: fe1619c8ad742c24e8be78d6c285b517, type: 3}
       propertyPath: 'images.Array.data[0]'
@@ -1073,6 +1097,42 @@ PrefabInstance:
       propertyPath: 'images.Array.data[5]'
       value: 
       objectReference: {fileID: 4857087209879925418, guid: d861403f5cd46654c83d7f7834d3afef, type: 3}
+    - target: {fileID: 2595809473968715902, guid: fe1619c8ad742c24e8be78d6c285b517, type: 3}
+      propertyPath: marketplaceGeniusIcon
+      value: 
+      objectReference: {fileID: 2800000, guid: bb8d4281812a8c340900d58f763a6f2d, type: 3}
+    - target: {fileID: 2595809473968715902, guid: fe1619c8ad742c24e8be78d6c285b517, type: 3}
+      propertyPath: unskilledPredatorIcon
+      value: 
+      objectReference: {fileID: 2800000, guid: 08e12800489a37045b0bfb0095cc35d4, type: 3}
+    - target: {fileID: 2595809473968715902, guid: fe1619c8ad742c24e8be78d6c285b517, type: 3}
+      propertyPath: 'bufficons.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2800000, guid: 829ffbe7e408ade41bd7153c7527f343, type: 3}
+    - target: {fileID: 2595809473968715902, guid: fe1619c8ad742c24e8be78d6c285b517, type: 3}
+      propertyPath: 'bufficons.Array.data[1]'
+      value: 
+      objectReference: {fileID: 2800000, guid: 3bee56e04092ca74b8cb7fec0b03cd64, type: 3}
+    - target: {fileID: 2595809473968715902, guid: fe1619c8ad742c24e8be78d6c285b517, type: 3}
+      propertyPath: 'bufficons.Array.data[2]'
+      value: 
+      objectReference: {fileID: 2800000, guid: 5109d76c01dc2944f8e44216a1819ea6, type: 3}
+    - target: {fileID: 2595809473968715902, guid: fe1619c8ad742c24e8be78d6c285b517, type: 3}
+      propertyPath: 'bufficons.Array.data[3]'
+      value: 
+      objectReference: {fileID: 2800000, guid: ddffd3d45d9cae743b6b1e85396343ca, type: 3}
+    - target: {fileID: 2595809473968715902, guid: fe1619c8ad742c24e8be78d6c285b517, type: 3}
+      propertyPath: 'bufficons.Array.data[4]'
+      value: 
+      objectReference: {fileID: 2800000, guid: bb8d4281812a8c340900d58f763a6f2d, type: 3}
+    - target: {fileID: 2595809473968715902, guid: fe1619c8ad742c24e8be78d6c285b517, type: 3}
+      propertyPath: 'bufficons.Array.data[5]'
+      value: 
+      objectReference: {fileID: 2800000, guid: d56733cecef6db04b9128639efcc56f9, type: 3}
+    - target: {fileID: 2595809473968715902, guid: fe1619c8ad742c24e8be78d6c285b517, type: 3}
+      propertyPath: 'bufficons.Array.data[6]'
+      value: 
+      objectReference: {fileID: 2800000, guid: f587f6ab9531b1742af07a8b4942eec0, type: 3}
     - target: {fileID: 4866407436474807139, guid: fe1619c8ad742c24e8be78d6c285b517, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0

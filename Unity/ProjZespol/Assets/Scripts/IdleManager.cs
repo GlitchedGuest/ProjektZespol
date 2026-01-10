@@ -119,6 +119,7 @@ public class IdleManager : MonoBehaviour
                 {
                     p.isActive = false;
                     p.timeRemaining = 0;
+                    p.boughtCount = 0;
                     DisablePotionEffect(p);
                 }
             }
@@ -287,10 +288,12 @@ public class IdleManager : MonoBehaviour
                 {
                     return false;
                 }
+                p.boughtCount++;
                 p.isActive = true;
                 p.timeRemaining = p.duration;
                 p.linkedFactory = raptorCore.ResourceManager.GetCurrentFactory();
                 EnablePotionEffect(p);
+                FindObjectOfType<ActivePotionsUI>()?.RefreshPanel();
                 return true;
             case ("Resource2","Resource3"):
                 resource1Amount = raptorCore.ResourceManager.GetResourceValueDirect("Resource2");
@@ -304,10 +307,12 @@ public class IdleManager : MonoBehaviour
                 {
                     return false;
                 }
+                p.boughtCount++;
                 p.isActive = true;
                 p.timeRemaining = p.duration;
                 p.linkedFactory = raptorCore.ResourceManager.GetCurrentFactory();
                 EnablePotionEffect(p);
+                FindObjectOfType<ActivePotionsUI>()?.RefreshPanel();
                 return true;
             case ("Resource1","Resource3"):
                 resource1Amount = raptorCore.ResourceManager.GetResourceValueDirect("Resource1");
@@ -321,10 +326,12 @@ public class IdleManager : MonoBehaviour
                 {
                     return false;
                 }
+                p.boughtCount++;
                 p.isActive = true;
                 p.timeRemaining = p.duration;
                 p.linkedFactory = raptorCore.ResourceManager.GetCurrentFactory();
                 EnablePotionEffect(p);
+                FindObjectOfType<ActivePotionsUI>()?.RefreshPanel();
                 return true;
             case ("Resource4","Resource5"):
                 resource1Amount = raptorCore.ResourceManager.GetResourceValueDirect("Resource4");
@@ -338,10 +345,12 @@ public class IdleManager : MonoBehaviour
                 {
                     return false;
                 }
+                p.boughtCount++;
                 p.isActive = true;
                 p.timeRemaining = p.duration;
                 p.linkedFactory = raptorCore.ResourceManager.GetCurrentFactory();
                 EnablePotionEffect(p);
+                FindObjectOfType<ActivePotionsUI>()?.RefreshPanel();
                 return true;
             case ("Resource4","Resource6"):
                 resource1Amount = raptorCore.ResourceManager.GetResourceValueDirect("Resource4");
@@ -355,10 +364,12 @@ public class IdleManager : MonoBehaviour
                 {
                     return false;
                 }
+                p.boughtCount++;
                 p.isActive = true;
                 p.timeRemaining = p.duration;
                 p.linkedFactory = raptorCore.ResourceManager.GetCurrentFactory();
                 EnablePotionEffect(p);
+                FindObjectOfType<ActivePotionsUI>()?.RefreshPanel();
                 return true;
             case ("Resource5","Resource6"):
                 resource1Amount = raptorCore.ResourceManager.GetResourceValueDirect("Resource5");
@@ -372,10 +383,12 @@ public class IdleManager : MonoBehaviour
                 {
                     return false;
                 }
+                p.boughtCount++;
                 p.isActive = true;
                 p.timeRemaining = p.duration;
                 p.linkedFactory = raptorCore.ResourceManager.GetCurrentFactory();
                 EnablePotionEffect(p);
+                FindObjectOfType<ActivePotionsUI>()?.RefreshPanel();
                 return true;
             default:
                 return false;

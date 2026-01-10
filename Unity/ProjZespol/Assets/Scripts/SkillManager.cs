@@ -78,12 +78,28 @@ public class SkillManager : MonoBehaviour
             {
                 f.productionMultiplier += 3;
                 f.count += 4;
+                if(characterClass.activeIdle) characterClass.buffManager.ApplyBuff("Skill3A", f.count*f.productionMultiplier);
                 yield return new WaitForSeconds(6f);
                 f.productionMultiplier -= 3;
                 f.count -= 4;
+                if (characterClass.activeIdle) characterClass.buffManager.ApplyBuff("Skill3A", f.count * f.productionMultiplier);
                 break;
             }
         }
+    }
+    public double GetActiveIdleValue()
+    {
+        string currentResource = raptorCore.ResourceManager.currentResource;
+
+        foreach (var f in idleManager.factories)
+        {
+            if (f.resource.name == currentResource)
+            {
+               return (f.count * f.productionMultiplier);
+
+            }
+        }
+        return 0;
     }
 
     public void EnableChickenDinner(bool effect)
@@ -102,8 +118,10 @@ public class SkillManager : MonoBehaviour
                 mode = 0;
         }
         raptorCore.SkillMultiplier += 10 * mode;
+        if (characterClass.chickenDinner) characterClass.buffManager.ApplyBuff("Skill2B", raptorCore.SkillMultiplier);
         yield return new WaitForSeconds(6f);
         raptorCore.SkillMultiplier -= 10 * mode;
+        if (characterClass.chickenDinner) characterClass.buffManager.ApplyBuff("Skill2B", raptorCore.SkillMultiplier);
     }
 
     public bool IsSkillCheckActive()
