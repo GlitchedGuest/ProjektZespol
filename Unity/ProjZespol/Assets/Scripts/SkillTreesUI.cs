@@ -285,6 +285,22 @@ public class JackSkillTree : SkillTreeManager
     {
         if (!dependencies.ContainsKey(id)) return true;
 
+        if (id == "Skill2A-tree2")
+        {
+            if (learned.Contains("Skill2B-tree2") || learned.Contains("Skill2C-tree2"))
+                return false;
+        }
+        else if (id == "Skill2B-tree2")
+        {
+            if (learned.Contains("Skill2A-tree2") || learned.Contains("Skill2C-tree2"))
+                return false;
+        }
+        else if (id == "Skill2C-tree2")
+        {
+            if (learned.Contains("Skill2A-tree2") || learned.Contains("Skill2B-tree2"))
+                return false;
+        }
+
         if (id == "Skill5-tree2")
         {
             foreach (var prereq in dependencies[id])
