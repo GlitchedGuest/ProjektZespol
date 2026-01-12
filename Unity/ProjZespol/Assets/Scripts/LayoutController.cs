@@ -26,10 +26,16 @@ public class LayoutController : MonoBehaviour
     private ContentPageManager contentPageManager;
     private ResourceShopManager resourceShopManager;
     private SkillTreesUIManager skillTreesUIManager;
+    private BuffManager buffManager;
 
     private HashSet<string> learnedOneClickArmy = new();
     private HashSet<string> learnedJackOfAllClicks = new();
     private HashSet<string> learnedAutomatron = new();
+
+    [SerializeField] private Texture2D[] bufficons;
+
+
+    
 
     void Awake()
     {
@@ -41,6 +47,7 @@ public class LayoutController : MonoBehaviour
     {
         InitializeManagers();
         InitializeTooltips();
+        
     }
 
     private void InitializeManagers()
@@ -65,6 +72,9 @@ public class LayoutController : MonoBehaviour
 
         skillTreesUIManager = new SkillTreesUIManager(ui, characterClass, learnedOneClickArmy, learnedJackOfAllClicks, learnedAutomatron, skillPointsLimit);
         skillTreesUIManager.InitializeAllTrees();
+
+        buffManager = new BuffManager(ui,bufficons);
+        characterClass.buffManager = buffManager;
     }
 
     private void InitializeTooltips()
@@ -109,4 +119,6 @@ public class LayoutController : MonoBehaviour
         LayoutController.Instance?.SetCurrencyText(lista);
         LayoutController.Instance?.SetGoldText(raptorCore.Gold.ToString());
     }
+
+
 }

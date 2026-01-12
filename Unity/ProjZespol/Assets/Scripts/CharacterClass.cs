@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class CharacterClass:MonoBehaviour
 {
+    [HideInInspector]
+    public BuffManager buffManager;
     public RaptorCore Raptorcore;
     [SerializeField] private SkillPointsLimit skillPointsLimit;
     //this is class for the "rpg" character
@@ -177,7 +179,15 @@ public class CharacterClass:MonoBehaviour
     private void ActiveIdle(bool revert)
     {
         activeIdle = !revert;
+
+        if (buffManager == null) return;
+
+        if (revert)
+            buffManager.RemoveBuff("Skill3A");
+        else
+            if(Raptorcore.SkillManager.GetActiveIdleValue()>0) buffManager.ApplyBuff("Skill3A", Raptorcore.SkillManager.GetActiveIdleValue());
     }
+
     private void NoMatterWhat(bool revert)
     {
         noMatterWhat = !revert;
@@ -185,6 +195,13 @@ public class CharacterClass:MonoBehaviour
     private void ChickenDinner(bool revert)
     {
         chickenDinner = !revert;
+
+        if (buffManager == null) return;
+
+        if (revert)
+            buffManager.RemoveBuff("Skill2B");
+        else
+            if(Raptorcore.SkillMultiplier>0) buffManager.ApplyBuff("Skill2B", Raptorcore.SkillMultiplier);
     }
     private void HungryForMore(bool revert)
     {
@@ -236,6 +253,12 @@ public class CharacterClass:MonoBehaviour
     {
         unskilledPredator = !revert;
         if (!revert) productionIdlePedatorBonus = 0f;
+        if (buffManager == null) return;
+
+        if (revert)
+            buffManager.RemoveBuff("Skill4A-tree3");
+        else
+           if(productionIdlePedatorBonus > 0) buffManager.ApplyBuff("Skill4A-tree3", productionIdlePedatorBonus);
     }
     public void Pedator(bool reset)
     {
@@ -278,6 +301,13 @@ public class CharacterClass:MonoBehaviour
     private void MarketplaceGenius(bool revert)
     {
         marketplaceGenius = !revert;
+
+        if (buffManager == null) return;
+
+        if (revert)
+            buffManager.RemoveBuff("Skill2A-tree2");
+        else
+            if(sellingBonus > 0) buffManager.ApplyBuff("Skill2A-tree2", 0);
     }
     public void EnableGenius(bool reset)
     {
@@ -317,6 +347,13 @@ public class CharacterClass:MonoBehaviour
     private void FailToWin(bool revert)
     {
         failToWin = !revert;
+
+        if (buffManager == null) return;
+
+        if (revert)
+            buffManager.RemoveBuff("Skill3D-tree2");
+        else
+            if(expBoost > 1) buffManager.ApplyBuff("Skill3D-tree2", expBoost);
     }
     public void EnableExpBoost()
     {
@@ -338,9 +375,26 @@ public class CharacterClass:MonoBehaviour
         failureGrind = !revert;
         if(revert)
             komboBoost = 0;
+        if (buffManager == null) return;
+
+        if (revert)
+            buffManager.RemoveBuff("Skill4-tree2");
+        else
+            if(komboBoost > 0) buffManager.ApplyBuff("Skill4-tree2", komboBoost);
     }
     private void MichealScott(bool revert)
     {
         michealScott = !revert;
+    }
+    private void Update()
+    {
+        if(failToWin && expBoost>1) buffManager.ApplyBuff("Skill3D-tree2", expBoost);
+        else buffManager.RemoveBuff("Skill3D-tree2");
+        if (failureGrind && komboBoost > 0) buffManager.ApplyBuff("Skill4-tree2", komboBoost);
+        else buffManager.RemoveBuff("Skill4-tree2");
+        if (marketplaceGenius && sellingBonus > 0) buffManager.ApplyBuff("Skill2A-tree2", sellingBonus);
+        else buffManager.RemoveBuff("Skill2A-tree2");
+        if (unskilledPredator && productionIdlePedatorBonus > 0) buffManager.ApplyBuff("Skill4A-tree3", productionIdlePedatorBonus);
+        else buffManager.RemoveBuff("Skill4A-tree3");
     }
 }

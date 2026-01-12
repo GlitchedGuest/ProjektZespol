@@ -16,6 +16,7 @@ public class Potion
     public Factory linkedFactory; // Fabryka, na którą działa mikstura
 
     public string effectDescription;
+    public int boughtCount;
 
     public Potion(string _name, Resource _resource1, Resource _resource2, QuarkType _cost1, QuarkType _cost2, string _effect, double _duration, string _effectDescription)
     {
@@ -30,5 +31,7 @@ public class Potion
         timeRemaining = 0;
         effectDescription = _effectDescription;
         linkedFactory=null;
+        boughtCount = 0;
     }
+
 }
