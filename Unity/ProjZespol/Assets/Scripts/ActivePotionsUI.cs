@@ -211,17 +211,17 @@ public class ActivePotionsUI : MonoBehaviour
     {
         switch (potionName)
         {
-            case "Uno":
+            case "Potion of Clicking":
                 return unoPotionSprite;
-            case "Dos":
+            case "Potion of Idle":
                 return dosPotionSprite;
-            case "Tres":
+            case "Potion of Profit":
                 return tresPotionSprite;
-            case "Cuatro":
+            case "Potion of Clicking II":
                 return cuatroPotionSprite;
-            case "Cinco":
+            case "Potion of Idle II":
                 return cincoPotionSprite;
-            case "Seis":
+            case "Potion of Profit II":
                 return seisPotionSprite;
             default:
                 return null;
@@ -232,17 +232,17 @@ public class ActivePotionsUI : MonoBehaviour
     {
         switch (potionName)
         {
-            case "Uno":
+            case "Potion of Clicking":
                 return new Color(1f, 0.3f, 0.3f);
-            case "Dos":
+            case "Potion of Idle":
                 return new Color(0.3f, 0.3f, 1f);
-            case "Tres":
+            case "Potion of Profit":
                 return new Color(0.3f, 1f, 0.3f);
-            case "Cuatro":
+            case "Potion of Clicking II":
                 return new Color(1f, 0.3f, 0.3f);
-            case "Cinco":
+            case "Potion of Idle II":
                 return new Color(0.3f, 0.3f, 1f);
-            case "Seis":
+            case "Potion of Profit II":
                 return new Color(0.3f, 1f, 0.3f);
             default:
                 return new Color(0.8f, 0.3f, 0.8f);

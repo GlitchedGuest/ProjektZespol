@@ -170,7 +170,7 @@ public class CharacterClass:MonoBehaviour
 
     private void SkillBasedClicking(bool revert)
     {
-        skillCheckChance = revert ? -1.0f : 101.0f;
+        skillCheckChance = revert ? -1.0f : 10.0f;
     }
     private void CriticalMass(bool revert)
     {
@@ -270,7 +270,7 @@ public class CharacterClass:MonoBehaviour
     }
     private void OneForEveryone(bool revert)
     {
-        unskilledPredator = !revert;
+        oneForEveryone = !revert;
         if (!revert) productionIdleBonus = 5.0f;
     }
     private void WhatEyesDontSee(bool revert)
