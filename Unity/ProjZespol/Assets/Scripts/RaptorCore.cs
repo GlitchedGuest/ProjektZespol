@@ -39,6 +39,10 @@ public class RaptorCore : MonoBehaviour
     [AutoSave] public long AutoPrestige = 0;
     [AutoSave] public long JackPrestige = 0;
     [AutoSave] public long OneClickPrestige = 0;
+    
+        
+        
+    [AutoSave] public long PrestigeCount = 0;
 
     //Idle/Generator based
     [AutoSave] QuarkType GBasevalue = 0;

@@ -24,16 +24,17 @@ public static class PrestigeSystem
         _core.OneClickPrestige += _core.characterClass.T1;
         _core.JackPrestige += _core.characterClass.T2;
         _core.AutoPrestige += _core.characterClass.T3;
+        _core.PrestigeCount++;
 
         //Great Reset
         _core.characterClass.ResetCharacter();
         _core.ResourceManager.ResetResources();
         _core.idleManager.ResetFactory();
-        _core.layoutController.ClearLayoutTree();
+        _core.layoutController.ResetGui();
 
         _core.ResetCore();
 
-
+        _core.layoutController.prestigeUIManager.UpdateContentPage();
     }
 
 }

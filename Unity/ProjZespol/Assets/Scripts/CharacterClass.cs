@@ -92,6 +92,10 @@ public class CharacterClass:MonoBehaviour
                 
             }
         }
+        if (level >= 20)
+        {
+            Raptorcore.layoutController.prestigeUIManager.EnablePrestige();
+        }
 
     }
 

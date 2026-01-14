@@ -26,16 +26,20 @@ public class LayoutController : MonoBehaviour
     private ContentPageManager contentPageManager;
     private ResourceShopManager resourceShopManager;
     private SkillTreesUIManager skillTreesUIManager;
+    public  PrestigeUIManager prestigeUIManager;
+        
 
     private HashSet<string> learnedOneClickArmy = new();
     private HashSet<string> learnedJackOfAllClicks = new();
     private HashSet<string> learnedAutomatron = new();
 
 
-    public void ClearLayoutTree()
+    public void ResetGui()
     {
         skillTreesUIManager.ClearTrees();
         factoryUIManager.SwitchToFactory(0);
+        skillPointsLimit.UpdateButton();
+        UpdateUI();
     }
     void Awake()
     {
@@ -71,6 +75,10 @@ public class LayoutController : MonoBehaviour
 
         skillTreesUIManager = new SkillTreesUIManager(ui, characterClass, learnedOneClickArmy, learnedJackOfAllClicks, learnedAutomatron, skillPointsLimit);
         skillTreesUIManager.InitializeAllTrees();
+
+        prestigeUIManager = new PrestigeUIManager(ui, audioSource, raptorCore);
+        prestigeUIManager.Initialize();
+
     }
 
     private void InitializeTooltips()
