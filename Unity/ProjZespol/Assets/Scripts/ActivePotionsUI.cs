@@ -77,7 +77,7 @@ public class ActivePotionsUI : MonoBehaviour
         var potionDisplay = new VisualElement();
         potionDisplay.style.flexDirection = FlexDirection.Column;
         potionDisplay.style.alignItems = Align.Center;
-        potionDisplay.style.marginBottom = 15;
+        potionDisplay.style.marginBottom = 10;
         potionDisplay.style.paddingTop = 10;
         potionDisplay.style.backgroundColor = new Color(0.1f, 0.1f, 0.2f, 0.9f);
         potionDisplay.style.borderTopLeftRadius = 10;
@@ -101,7 +101,7 @@ public class ActivePotionsUI : MonoBehaviour
             if (p.isActive) activeCount++;
         }
         var icon = new VisualElement();
-        if (activeCount < 5)
+        if (activeCount < 4)
         {
             Sprite potionSprite = GetPotionSprite(potion.name);
 
@@ -125,7 +125,20 @@ public class ActivePotionsUI : MonoBehaviour
             icon.style.borderBottomLeftRadius = 5;
             icon.style.borderBottomRightRadius = 5;
 
+
             potionDisplay.Add(icon);
+        }
+
+        Label stackLabel = null;
+        if (potion.boughtCount > 1)
+        {
+            stackLabel = new Label($"x{potion.boughtCount}");
+            stackLabel.style.fontSize = 20;
+            stackLabel.style.unityFontStyleAndWeight = FontStyle.Bold;
+            stackLabel.style.color = Color.white;
+            stackLabel.style.unityTextAlign = TextAnchor.MiddleCenter;
+            stackLabel.style.marginBottom = 4;
+            stackLabel.name = $"PotionStack{index}";
         }
 
         var nameLabel = new Label(potion.name);
@@ -144,6 +157,10 @@ public class ActivePotionsUI : MonoBehaviour
         timerLabel.name = $"PotionTimer{index}";
 
         potionDisplay.Add(icon);
+
+        if (stackLabel != null)
+            potionDisplay.Add(stackLabel);
+
         potionDisplay.Add(nameLabel);
         potionDisplay.Add(timerLabel);
 
@@ -179,6 +196,14 @@ public class ActivePotionsUI : MonoBehaviour
                     }
                 }
             }
+            var stackLabel = activePotionsPanel.Q<Label>($"PotionStack{i}");
+            if (stackLabel != null)
+            {
+                if (potion.boughtCount > 1)
+                    stackLabel.text = $"x{potion.boughtCount}";
+                else
+                    stackLabel.style.display = DisplayStyle.None;
+            }
         }
     }
 
@@ -186,17 +211,17 @@ public class ActivePotionsUI : MonoBehaviour
     {
         switch (potionName)
         {
-            case "Uno":
+            case "Potion of Clicking":
                 return unoPotionSprite;
-            case "Dos":
+            case "Potion of Idle":
                 return dosPotionSprite;
-            case "Tres":
+            case "Potion of Profit":
                 return tresPotionSprite;
-            case "Cuatro":
+            case "Potion of Clicking II":
                 return cuatroPotionSprite;
-            case "Cinco":
+            case "Potion of Idle II":
                 return cincoPotionSprite;
-            case "Seis":
+            case "Potion of Profit II":
                 return seisPotionSprite;
             default:
                 return null;
@@ -207,17 +232,17 @@ public class ActivePotionsUI : MonoBehaviour
     {
         switch (potionName)
         {
-            case "Uno":
+            case "Potion of Clicking":
                 return new Color(1f, 0.3f, 0.3f);
-            case "Dos":
+            case "Potion of Idle":
                 return new Color(0.3f, 0.3f, 1f);
-            case "Tres":
+            case "Potion of Profit":
                 return new Color(0.3f, 1f, 0.3f);
-            case "Cuatro":
+            case "Potion of Clicking II":
                 return new Color(1f, 0.3f, 0.3f);
-            case "Cinco":
+            case "Potion of Idle II":
                 return new Color(0.3f, 0.3f, 1f);
-            case "Seis":
+            case "Potion of Profit II":
                 return new Color(0.3f, 1f, 0.3f);
             default:
                 return new Color(0.8f, 0.3f, 0.8f);

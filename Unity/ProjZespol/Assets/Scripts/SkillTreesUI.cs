@@ -79,12 +79,12 @@ public abstract class SkillTreeManager
         }
     }
 
-    public void RegisterTooltip(string skillId, string title, string description)
+    public void RegisterTooltip(string skillId, string title, string description, string lore)
     {
         var btn = ui.Q<Button>(skillId);
         if (btn != null)
         {
-            Tooltip.Register(btn, title, description);
+            Tooltip.Register(btn, title, description, lore);
         }
     }
 
@@ -288,6 +288,22 @@ public class JackSkillTree : SkillTreeManager
     protected override bool CanUnlock(string id)
     {
         if (!dependencies.ContainsKey(id)) return true;
+
+        if (id == "Skill2A-tree2")
+        {
+            if (learned.Contains("Skill2B-tree2") || learned.Contains("Skill2C-tree2"))
+                return false;
+        }
+        else if (id == "Skill2B-tree2")
+        {
+            if (learned.Contains("Skill2A-tree2") || learned.Contains("Skill2C-tree2"))
+                return false;
+        }
+        else if (id == "Skill2C-tree2")
+        {
+            if (learned.Contains("Skill2A-tree2") || learned.Contains("Skill2B-tree2"))
+                return false;
+        }
 
         if (id == "Skill5-tree2")
         {

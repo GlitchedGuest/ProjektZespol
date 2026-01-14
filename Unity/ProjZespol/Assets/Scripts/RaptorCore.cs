@@ -60,7 +60,7 @@ public class RaptorCore : MonoBehaviour
     private float sourceBlockEndTime = 0f;
     private float clickCooldown = 0.5f;
 
-    public int clickingDebuff = 0;
+    public int clickingDebuff = 1;
 
 
     private void Awake()
@@ -158,8 +158,11 @@ public class RaptorCore : MonoBehaviour
         if (characterClass.passiveAgressive)
             if (tickCount % 300 == 0)
             {
-                characterClass.productionIdleAgressiveBonus += 10 - clickingDebuff;
-                clickingDebuff = 0;
+                if (characterClass.productionIdleAgressiveBonus < 1000000)
+                {
+                    characterClass.productionIdleAgressiveBonus += 10 / clickingDebuff;
+                    clickingDebuff = 1;
+                }
             }
     }
 
@@ -200,7 +203,7 @@ public class RaptorCore : MonoBehaviour
         {
             click();
             anim.SetTrigger("Clicked");
-            if(characterClass.passiveAgressive)
+            if(characterClass.passiveAgressive && !characterClass.multitasking)
                 characterClass.productionIdleAgressiveBonus = 0;
             if (characterClass.multitasking)
                 clickingDebuff = 2;

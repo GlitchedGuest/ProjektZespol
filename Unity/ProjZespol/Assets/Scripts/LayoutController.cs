@@ -28,6 +28,7 @@ public class LayoutController : MonoBehaviour
     private SkillTreesUIManager skillTreesUIManager;
     public  PrestigeUIManager prestigeUIManager;
         
+    private BuffManager buffManager;
 
     private HashSet<string> learnedOneClickArmy = new();
     private HashSet<string> learnedJackOfAllClicks = new();
@@ -41,6 +42,11 @@ public class LayoutController : MonoBehaviour
         skillPointsLimit.UpdateButton();
         UpdateUI();
     }
+    [SerializeField] private Texture2D[] bufficons;
+
+
+    
+
     void Awake()
     {
         Instance = this;
@@ -51,6 +57,7 @@ public class LayoutController : MonoBehaviour
     {
         InitializeManagers();
         InitializeTooltips();
+        
     }
 
     private void InitializeManagers()
@@ -79,6 +86,8 @@ public class LayoutController : MonoBehaviour
         prestigeUIManager = new PrestigeUIManager(ui, audioSource, raptorCore);
         prestigeUIManager.Initialize();
 
+        buffManager = new BuffManager(ui,bufficons);
+        characterClass.buffManager = buffManager;
     }
 
     private void InitializeTooltips()
@@ -123,4 +132,6 @@ public class LayoutController : MonoBehaviour
         LayoutController.Instance?.SetCurrencyText(lista);
         LayoutController.Instance?.SetGoldText(raptorCore.Gold.ToString());
     }
+
+
 }

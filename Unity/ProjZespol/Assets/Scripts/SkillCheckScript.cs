@@ -96,6 +96,7 @@ public class SkillCheckScript : MonoBehaviour
             raptorCore.SkillManager.EnableChickenDinner(true);
             characterClass.EnableGenius(false);
             characterClass.Pedator(true);
+            characterClass.komboBoost = 0;
         }
         else
         {          
