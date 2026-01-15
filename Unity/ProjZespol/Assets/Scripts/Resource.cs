@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
+using static UnityEngine.Rendering.DebugUI;
 [Serializable]
 public class Resource
 {
@@ -32,6 +34,8 @@ public class Resource
     public QuarkType LvlBoost;
     public QuarkType SkillBoost;
 
+    public Resource() { }
+
     public Resource(string _name)
     {
         name = _name;
@@ -39,5 +43,33 @@ public class Resource
         BaseLimit = 10000;
         LvlBoost = 1;
         SkillBoost = 0;
-}
+    }
+
+    public void SerializeToStream(BinaryWriter writer)
+    {
+        writer.Write(name);
+
+        _value.SerializeToStream(writer);
+        BaseLimit.SerializeToStream(writer);
+        LvlBoost.SerializeToStream(writer);
+        SkillBoost.SerializeToStream(writer);
+    }
+
+    public void DeserializeFromStream(BinaryReader reader)
+    {
+        name = reader.ReadString();
+
+        BaseLimit = new();
+        LvlBoost = new();
+        SkillBoost = new();
+
+        BaseLimit.DeserializeFromStream(reader);
+        LvlBoost.DeserializeFromStream(reader);
+        SkillBoost.DeserializeFromStream(reader);
+
+
+        _value = new();
+        _value.DeserializeFromStream(reader);
+    }
+
 }

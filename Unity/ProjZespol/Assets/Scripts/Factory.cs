@@ -1,5 +1,6 @@
-using System;
 using NUnit.Framework;
+using System;
+using System.IO;
 
 [Serializable]
 public class Factory
@@ -22,6 +23,8 @@ public class Factory
         double multiplier = costMultiplier > 0 ? costMultiplier : 1.0;
         return Math.Ceiling(baseCost * Math.Pow(multiplier, count - 1) * 0.5);
     }
+    public Factory() { }
+
     public Factory(Resource _resource, string _name, double _baseCost, double _costMultiplier, double _baseProduction, double _unlockCost)
     {
         resource = _resource;
@@ -34,5 +37,34 @@ public class Factory
         unlockCost = _unlockCost;
         isUnlocked = _unlockCost == 0;
     }
+
+    public void SerializeToStream(BinaryWriter writer)
+    {
+        writer.Write(name);
+
+        writer.Write(baseCost);
+        writer.Write(costMultiplier);
+        writer.Write(baseProduction);
+        writer.Write(productionMultiplier);
+
+        writer.Write(isUnlocked);
+        writer.Write(unlockCost);
+        writer.Write(count);
+    }
+
+    public void DeserializeFromStream(BinaryReader reader)
+    {
+        name = reader.ReadString();
+
+        baseCost = reader.ReadDouble();
+        costMultiplier = reader.ReadDouble();
+        baseProduction = reader.ReadDouble();
+        productionMultiplier = reader.ReadDouble();
+
+        isUnlocked = reader.ReadBoolean();
+        unlockCost = reader.ReadDouble();
+        count = reader.ReadUInt64();
+    }
+
 
 }

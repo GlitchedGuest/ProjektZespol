@@ -1,8 +1,9 @@
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-public class SkillTreesUIManager
+public class SkillTreesUIManager: IBinarySaveable
 {
     private VisualElement ui;
     private CharacterClass characterClass;
@@ -17,6 +18,8 @@ public class SkillTreesUIManager
     private HashSet<string> learnedAutomatron;
 
     private SkillPointsLimit skillPointsLimit;
+
+    public int SaveKey => 005; //Saveid to keep order
 
     public SkillTreesUIManager(VisualElement ui, CharacterClass characterClass, HashSet<string> learnedOneClick, HashSet<string> learnedJack, HashSet<string> learnedAutomatron, SkillPointsLimit skillPointsLimit)
     {
@@ -152,4 +155,19 @@ public class SkillTreesUIManager
         automatronTree.DrawLine("Skill4B-tree3", "Skill5C-tree3", c);
         automatronTree.DrawLine("Skill5C-tree3", "Skill6-tree3", c);
     }
+
+    public void SerializeToStream(BinaryWriter writer)
+    {
+        oneClickArmyTree.SerializeToStream(writer);
+        jackTree.SerializeToStream(writer);
+        automatronTree.SerializeToStream(writer);
+    }
+
+    public void DeserializeFromStream(BinaryReader reader)
+    {
+        oneClickArmyTree.DeserializeFromStream(reader);
+        jackTree.DeserializeFromStream(reader);
+        automatronTree.DeserializeFromStream(reader);
+    }
+
 }

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -32,6 +33,21 @@ public class FactoryUIManager
         public int multiplierLevel = 0;
         public double baseProductionCost = 0;
         public double baseMultiplierCost = 0;
+
+        public void DeserializeFromStream(BinaryReader reader) {
+            productionLevel = reader.ReadInt32();
+            multiplierLevel = reader.ReadInt32();
+            baseProductionCost = reader.ReadDouble();
+            baseMultiplierCost = reader.ReadDouble();
+        }
+
+        public void SerializeToStream(BinaryWriter writer) {
+            writer.Write(productionLevel);
+            writer.Write(multiplierLevel);
+            writer.Write(baseProductionCost);
+            writer.Write(baseMultiplierCost);
+        }
+
     }
 
     private VisualElement ui;
@@ -335,7 +351,7 @@ public class FactoryUIManager
         LayoutController.Instance.SetGoldText(raptorCore.Gold.ToString("F0"));
     }
 
-    private void UpdateFactoryUI()
+    public void UpdateFactoryUI()
     {
         if (idleManager == null || raptorCore == null) return;
 
@@ -684,4 +700,36 @@ public class FactoryUIManager
         UpdateNavigationButtons();
         LayoutController.Instance.SetGoldText(raptorCore.Gold.ToString("F0"));
     }
+
+    public void SerializeToStream(BinaryWriter writer)
+    {
+        
+        writer.Write(factoryUpgradeLevels.Count);
+
+        foreach (var kvp in factoryUpgradeLevels)
+        {
+            writer.Write(kvp.Key); // int key
+            kvp.Value.SerializeToStream(writer); // value
+        }
+
+    }
+
+    public void DeserializeFromStream(BinaryReader reader)
+    {
+        int count = reader.ReadInt32();
+        var factoryUpgradeLevels = new Dictionary<int, FactoryUpgradeLevels>(count);
+
+        for (int i = 0; i < count; i++)
+        {
+            int key = reader.ReadInt32();
+
+            var value = new FactoryUpgradeLevels();
+            value.DeserializeFromStream(reader);
+
+            factoryUpgradeLevels[key] = value;
+        }
+        UpdateFactoryUI();
+    }
+
+
 }

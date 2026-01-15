@@ -1,9 +1,12 @@
 using System;
 using System.Collections;
+using System.IO;
 using UnityEngine;
 
-public class CharacterClass:MonoBehaviour
+public class CharacterClass : MonoBehaviour, IBinarySaveable
 {
+    public int SaveKey => 003; //Saveid to keep order
+
     public RaptorCore Raptorcore;
     [SerializeField] private SkillPointsLimit skillPointsLimit;
     //this is class for the "rpg" character
@@ -70,21 +73,21 @@ public class CharacterClass:MonoBehaviour
     public void GainExp(ulong exp)
     {
         if (level < 20)
-        {       
+        {
             currentExp += exp * expBoost;
-            while(currentExp > maxExpCap && level < maxLvlCap)
+            while (currentExp > maxExpCap && level < maxLvlCap)
             {
-                
+
                 level++;
                 skillpoints++;
                 skillPointsLimit.UpdateButton();
-                
+
                 //MullValueFix  please use QUARKTYPE if we want no problems in conversion if you must then use ceil function
                 Raptorcore.ResourceManager.MullLimitResourceAll(new QuarkType(120000000, 0));
 
                 currentExp -= maxExpCap;
                 NewLevelCap();
-                
+
             }
         }
 
@@ -106,9 +109,9 @@ public class CharacterClass:MonoBehaviour
     }
 
     //use this to display current exp
-    public ulong GetCurrentExp() {  return currentExp; }
+    public ulong GetCurrentExp() { return currentExp; }
     //use this to display how much exp need to level up
-    public ulong GetMaxExpCap() {  return maxExpCap; }
+    public ulong GetMaxExpCap() { return maxExpCap; }
     //use this to display current level
     public uint GetLevel() { return level; }
     //If you need to set character to specific level
@@ -124,7 +127,7 @@ public class CharacterClass:MonoBehaviour
         else
         {
             level = _level;
-            NewLevelCap() ;
+            NewLevelCap();
         }
     }
 
@@ -336,11 +339,109 @@ public class CharacterClass:MonoBehaviour
     private void FailureGrind(bool revert)
     {
         failureGrind = !revert;
-        if(revert)
+        if (revert)
             komboBoost = 0;
     }
     private void MichealScott(bool revert)
     {
         michealScott = !revert;
+    }
+
+    public void SerializeToStream(BinaryWriter writer)
+    {
+        // Numeric stats
+        writer.Write(skillpoints);
+        writer.Write(level);
+        writer.Write(currentExp);
+        writer.Write(maxExpCap);
+        writer.Write(maxLvlCap);
+        writer.Write(criticalChance);
+        writer.Write(boostedChance);
+        writer.Write(skillCheckChance);
+        writer.Write(skillCheckReduce);
+        writer.Write(productionIdleBonus);
+        writer.Write(productionIdlePedatorBonus);
+        writer.Write(productionIdleAgressiveBonus);
+        writer.Write(sellingBonus);
+        writer.Write(sellingHardBonus);
+        writer.Write(potionBoost);
+        writer.Write(potionRandomChance);
+        writer.Write(expBoost);
+        writer.Write(komboBoost);
+
+        // Boolean flags (packed)
+        uint skillFlags = 0;
+        skillFlags |= (activeIdle ? 1u << 0 : 0);
+        skillFlags |= (noMatterWhat ? 1u << 1 : 0);
+        skillFlags |= (chickenDinner ? 1u << 2 : 0);
+        skillFlags |= (alwaysWinner ? 1u << 3 : 0);
+        skillFlags |= (symbiosis ? 1u << 4 : 0);
+        skillFlags |= (mortalClicker ? 1u << 5 : 0);
+        skillFlags |= (championOfClicks ? 1u << 6 : 0);
+        skillFlags |= (reactionTest ? 1u << 7 : 0);
+        skillFlags |= (unskilledPredator ? 1u << 8 : 0);
+        skillFlags |= (oneForEveryone ? 1u << 9 : 0);
+        skillFlags |= (whatEyesDontSee ? 1u << 10 : 0);
+        skillFlags |= (passiveAgressive ? 1u << 11 : 0);
+        skillFlags |= (multitasking ? 1u << 12 : 0);
+        skillFlags |= (christmasBonus ? 1u << 13 : 0);
+        skillFlags |= (hungryWolf ? 1u << 14 : 0);
+        skillFlags |= (marketplaceGenius ? 1u << 15 : 0);
+        skillFlags |= (hardWorker ? 1u << 16 : 0);
+        skillFlags |= (deathDose ? 1u << 17 : 0);
+        skillFlags |= (failToWin ? 1u << 18 : 0);
+        skillFlags |= (failureGrind ? 1u << 19 : 0);
+        skillFlags |= (michealScott ? 1u << 20 : 0);
+
+        writer.Write(skillFlags);
+    } 
+
+
+public void DeserializeFromStream(BinaryReader reader)
+    {
+        skillpoints = reader.ReadUInt32();
+        level = reader.ReadUInt32();
+        currentExp = reader.ReadUInt64();
+        maxExpCap = reader.ReadUInt64();
+        maxLvlCap = reader.ReadUInt32();
+        criticalChance = reader.ReadSingle();
+        boostedChance = reader.ReadSingle();
+        skillCheckChance = reader.ReadSingle();
+        skillCheckReduce = reader.ReadInt32();
+        productionIdleBonus = reader.ReadDouble();
+        productionIdlePedatorBonus = reader.ReadDouble();
+        productionIdleAgressiveBonus = reader.ReadDouble();
+        sellingBonus = reader.ReadDouble();
+        sellingHardBonus = reader.ReadDouble();
+        potionBoost = reader.ReadDouble();
+        potionRandomChance = reader.ReadDouble();
+        expBoost = reader.ReadUInt64();
+        komboBoost = reader.ReadUInt64();
+
+        // Boolean flags
+        uint skillFlags = reader.ReadUInt32();
+        activeIdle = (skillFlags & (1u << 0)) != 0;
+        noMatterWhat = (skillFlags & (1u << 1)) != 0;
+        chickenDinner = (skillFlags & (1u << 2)) != 0;
+        alwaysWinner = (skillFlags & (1u << 3)) != 0;
+        symbiosis = (skillFlags & (1u << 4)) != 0;
+        mortalClicker = (skillFlags & (1u << 5)) != 0;
+        championOfClicks = (skillFlags & (1u << 6)) != 0;
+        reactionTest = (skillFlags & (1u << 7)) != 0;
+        unskilledPredator = (skillFlags & (1u << 8)) != 0;
+        oneForEveryone = (skillFlags & (1u << 9)) != 0;
+        whatEyesDontSee = (skillFlags & (1u << 10)) != 0;
+        passiveAgressive = (skillFlags & (1u << 11)) != 0;
+        multitasking = (skillFlags & (1u << 12)) != 0;
+        christmasBonus = (skillFlags & (1u << 13)) != 0;
+        hungryWolf = (skillFlags & (1u << 14)) != 0;
+        marketplaceGenius = (skillFlags & (1u << 15)) != 0;
+        hardWorker = (skillFlags & (1u << 16)) != 0;
+        deathDose = (skillFlags & (1u << 17)) != 0;
+        failToWin = (skillFlags & (1u << 18)) != 0;
+        failureGrind = (skillFlags & (1u << 19)) != 0;
+        michealScott = (skillFlags & (1u << 20)) != 0;
+
+        skillPointsLimit.UpdateButton();
     }
 }

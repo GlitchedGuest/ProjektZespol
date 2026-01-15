@@ -1,11 +1,15 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using Unity.VisualScripting;
 using UnityEngine;
 
-public class RaptorCore : MonoBehaviour
+public class RaptorCore : MonoBehaviour, IBinarySaveable
 {
+    public int SaveKey => 002; //Saveid to keep order
+
+
     // Publiczne referencje do managerów - inne skrypty mogą ich używać bezpośrednio
     public ResourceManager ResourceManager { get; private set; }
     public SellingManager SellManager { get; private set; }
@@ -21,7 +25,7 @@ public class RaptorCore : MonoBehaviour
     [SerializeField] private AudioSource audioSource;
     [SerializeField] private AudioSource critSource;
 
-    [AutoSave] public QuarkType Currency
+    public QuarkType Currency
     {
         get => ResourceManager.GetResourceValue(ResourceManager.currentResource);
         set
@@ -31,17 +35,17 @@ public class RaptorCore : MonoBehaviour
     }
 
     //Click based
-    [AutoSave] QuarkType CBasevalue = 1;
-    [AutoSave] QuarkType CMultiplier = 1;
+    QuarkType CBasevalue = 1;
+    QuarkType CMultiplier = 1;
     public QuarkType SkillMultiplier = 0;
 
     //Idle/Generator based
-    [AutoSave] QuarkType GBasevalue = 0;
-    [AutoSave] QuarkType GMultiplier = 1;
+    QuarkType GBasevalue = 0;
+    QuarkType GMultiplier = 1;
 
     int tickCount = 0;
     
-    [AutoSave] public double Gold = 0;
+    public double Gold = 0;
 
     public QuarkType potionClickBonus1 = 0;
     public QuarkType potionClickBonus2 = 0;
@@ -215,6 +219,30 @@ public class RaptorCore : MonoBehaviour
         }
         LayoutController.Instance?.UpdateUI();
     }
-    
 
+    public void SerializeToStream(BinaryWriter writer)
+    {
+        CBasevalue.SerializeToStream(writer);
+        CMultiplier.SerializeToStream(writer);
+        SkillMultiplier.SerializeToStream(writer);
+
+        // Idle / generator based
+        GBasevalue.SerializeToStream(writer);
+        GMultiplier.SerializeToStream(writer);
+
+        // Currency
+        writer.Write(Gold);
+    }
+
+    public void DeserializeFromStream(BinaryReader reader)
+    {
+        CBasevalue.DeserializeFromStream(reader);
+        CMultiplier.DeserializeFromStream(reader);
+        SkillMultiplier.DeserializeFromStream(reader);
+
+        GBasevalue.DeserializeFromStream(reader);
+        GMultiplier.DeserializeFromStream(reader);
+
+        Gold = reader.ReadDouble();
+    }
 }
