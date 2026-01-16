@@ -74,6 +74,7 @@ public class PrestigeUIManager
         BarTexture.style.unityBackgroundImageTintColor = Color.white;
     }
 
+
     public void Trigger(ClickEvent evt)
     {
         audioSource.Play();
@@ -86,9 +87,13 @@ public class PrestigeUIManager
         PrestigeRoot.style.display = DisplayStyle.None;
     }
     public void PrestigeTrigger() {
-        DisablePrestige();
-        PrestigeSystem.ExecutePrestige();
-        Hide();
+        if (PrestigeSystem.CheckPrestige(5.0e9f)) 
+        {
+            DisablePrestige();
+            PrestigeSystem.ExecutePrestige();
+            Hide();
+        }
+        
     }
 
 

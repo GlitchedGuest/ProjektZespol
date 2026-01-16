@@ -15,6 +15,11 @@ public static class PrestigeSystem
 
         _core = core;
         _initialized = true;
+    }   
+
+    public static bool CheckPrestige(double val)
+    {
+        return _core.Gold >= val;
     }
 
     public static void ExecutePrestige()
