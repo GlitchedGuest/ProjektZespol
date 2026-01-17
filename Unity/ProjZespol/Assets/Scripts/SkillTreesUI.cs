@@ -44,6 +44,10 @@ public abstract class SkillTreeManager
         this.skillPointsLimit = skillPointsLimit;
     }
 
+    public void ClearTree() {
+        learned = new();
+    }
+
     private void InitializeLineLayer(VisualElement layer)
     {
         layer.pickingMode = PickingMode.Ignore;

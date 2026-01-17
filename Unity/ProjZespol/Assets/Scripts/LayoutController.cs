@@ -30,12 +30,22 @@ public class LayoutController : MonoBehaviour, IBinarySaveable
     private ContentPageManager contentPageManager;
     private ResourceShopManager resourceShopManager;
     private SkillTreesUIManager skillTreesUIManager;
+    public  PrestigeUIManager prestigeUIManager;
+        
     private BuffManager buffManager;
 
     private HashSet<string> learnedOneClickArmy = new();
     private HashSet<string> learnedJackOfAllClicks = new();
     private HashSet<string> learnedAutomatron = new();
 
+
+    public void ResetGui()
+    {
+        skillTreesUIManager.ClearTrees();
+        factoryUIManager.ResetFactoryGUI();
+        skillPointsLimit.UpdateButton();
+        UpdateUI();
+    }
     [SerializeField] private Texture2D[] bufficons;
 
 
@@ -76,6 +86,9 @@ public class LayoutController : MonoBehaviour, IBinarySaveable
 
         skillTreesUIManager = new SkillTreesUIManager(ui, characterClass, learnedOneClickArmy, learnedJackOfAllClicks, learnedAutomatron, skillPointsLimit);
         skillTreesUIManager.InitializeAllTrees();
+
+        prestigeUIManager = new PrestigeUIManager(ui, audioSource, raptorCore);
+        prestigeUIManager.Initialize();
 
         buffManager = new BuffManager(ui,bufficons);
         characterClass.buffManager = buffManager;

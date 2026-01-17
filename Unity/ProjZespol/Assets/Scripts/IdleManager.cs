@@ -537,4 +537,8 @@ public class IdleManager : MonoBehaviour, IBinarySaveable
         LayoutController.Instance?.factoryUIManager.UpdateFactoryUI();
     }
 
+    internal void ResetFactory()
+    {
+        InitFactories();
+    }
 }

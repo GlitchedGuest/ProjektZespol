@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using Unity.VisualScripting;
 using UnityEngine;
+using static UnityEngine.Rendering.DebugUI;
 
 public class RaptorCore : MonoBehaviour, IBinarySaveable
 {
@@ -15,9 +16,9 @@ public class RaptorCore : MonoBehaviour, IBinarySaveable
     public SellingManager SellManager { get; private set; }
     public SkillManager SkillManager { get; private set; }
     [SerializeField] private Animator anim;
-    [SerializeField] private CharacterClass characterClass;
+    [SerializeField] public CharacterClass characterClass;
     [SerializeField] private GameObject skillCheck;
-    [SerializeField] private IdleManager idleManager;
+    [SerializeField] public IdleManager idleManager;
 
     //Crit Generator
     [SerializeField] private GameObject CritGenerator;
@@ -26,6 +27,7 @@ public class RaptorCore : MonoBehaviour, IBinarySaveable
     [SerializeField] private AudioSource critSource;
 
     public QuarkType Currency
+    [SerializeField] public LayoutController layoutController;
     {
         get => ResourceManager.GetResourceValue(ResourceManager.currentResource);
         set
@@ -38,6 +40,14 @@ public class RaptorCore : MonoBehaviour, IBinarySaveable
     QuarkType CBasevalue = 1;
     QuarkType CMultiplier = 1;
     public QuarkType SkillMultiplier = 0;
+
+    [AutoSave] public long AutoPrestige = 0;
+    [AutoSave] public long JackPrestige = 0;
+    [AutoSave] public long OneClickPrestige = 0;
+    
+        
+        
+    [AutoSave] public long PrestigeCount = 0;
 
     //Idle/Generator based
     QuarkType GBasevalue = 0;
@@ -60,6 +70,7 @@ public class RaptorCore : MonoBehaviour, IBinarySaveable
 
     private void Awake()
     {
+        PrestigeSystem.Init(this);
         ResourceManager = gameObject.AddComponent<ResourceManager>();
         SellManager = gameObject.AddComponent<SellingManager>();
         SkillManager = gameObject.AddComponent<SkillManager>();
@@ -132,12 +143,12 @@ public class RaptorCore : MonoBehaviour, IBinarySaveable
             if (characterClass.noMatterWhat)
                 characterClass.boostedChance += 1.00f;
         }
-        Currency += value;
+        Currency += value * Math.Floor(Math.Log(OneClickPrestige+2, 2));
     }
 
     void FixedUpdate()
     {
-        Currency += (GBasevalue * GMultiplier);
+        Currency += (GBasevalue * GMultiplier) * Math.Floor(Math.Log(AutoPrestige+2, 2));
 
         SkillManager.UpdateSkillCheckCooldown();
         
@@ -247,5 +258,25 @@ public class RaptorCore : MonoBehaviour, IBinarySaveable
         GMultiplier.DeserializeFromStream(reader);
 
         Gold = reader.ReadDouble();
+    internal void ResetCore()
+    {
+        CBasevalue = 1;
+        CMultiplier = 1;
+        SkillMultiplier = 0;
+        GBasevalue = 0;
+        GMultiplier = 1;
+
+        tickCount = 0;
+
+        Gold = 0;
+
+        potionClickBonus1 = 0;
+        potionClickBonus2 = 0;
+
+        activeClickSource = ClickSource.None;
+        sourceBlockEndTime = 0f;
+        clickCooldown = 0.5f;
+        clickingDebuff = 1;
+
     }
 }

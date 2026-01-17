@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.IO;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class CharacterClass : MonoBehaviour, IBinarySaveable
 {
@@ -54,6 +55,10 @@ public class CharacterClass : MonoBehaviour, IBinarySaveable
     public bool failureGrind = false;
     public bool michealScott = false;
 
+    public int T1 = 0;
+    public int T2 = 0;
+    public int T3 = 0;
+
     private void Start()
     {
         criticalChance = 15.5f;
@@ -91,6 +96,10 @@ public class CharacterClass : MonoBehaviour, IBinarySaveable
                 NewLevelCap();
 
             }
+        }
+        if (level >= 20)
+        {
+            Raptorcore.layoutController.prestigeUIManager.EnablePrestige();
         }
 
     }
@@ -133,8 +142,20 @@ public class CharacterClass : MonoBehaviour, IBinarySaveable
         }
     }
 
+    private void UpdateTreeCounter(string id, bool revert)
+    {
+        int delta = revert ? -1 : 1;
+
+        if (id.Contains("-tree3")) T3 += delta;
+        else if (id.Contains("-tree2")) T2 += delta;
+        else T1 += delta;
+    }
+
     public void ApplySkillChanges(string id, bool revert)
     {
+        UpdateTreeCounter(id, revert);
+
+
         switch (id)
         {
             case "Skill1": SkillBasedClicking(revert); break;
@@ -486,6 +507,56 @@ public void DeserializeFromStream(BinaryReader reader)
         michealScott = (skillFlags & (1u << 20)) != 0;
 
         skillPointsLimit.UpdateButton();
+    public void ResetCharacter()
+    {
+        activeIdle = false;
+        noMatterWhat = false;
+        chickenDinner = false;
+        alwaysWinner = false;
+        symbiosis = false;
+        mortalClicker = false;
+        championOfClicks = false;
+        reactionTest = false;
+        unskilledPredator = false;
+        oneForEveryone = false;
+        whatEyesDontSee = false;
+        passiveAgressive = false;
+        multitasking = false;
+        christmasBonus = false;
+        hungryWolf = false;
+        marketplaceGenius = false;
+        hardWorker = false;
+        deathDose = false;
+        failToWin = false;
+        failureGrind = false;
+        michealScott = false;
+
+        skillpoints = 0;
+        level = 1;
+        currentExp = 0;
+        maxExpCap = 100;
+        maxLvlCap = 20;
+
+        criticalChance = 15.5f;
+        boostedChance = 0.00f;
+        skillCheckChance = -1.0f;
+        skillCheckReduce = 0;
+        productionIdleBonus = 0;
+        productionIdlePedatorBonus = 0;
+        productionIdleAgressiveBonus = 0;
+        sellingBonus = 1;
+        sellingHardBonus = 1;
+        potionBoost = 1;
+        potionRandomChance = -1.0f;
+        expBoost = 1;
+        komboBoost = 0;
+
+
+        T1 = 0;
+        T2 = 0;
+        T3 = 0;
+}
+
     private void Update()
     {
         if(failToWin && expBoost>1) buffManager.ApplyBuff("Skill3D-tree2", expBoost);

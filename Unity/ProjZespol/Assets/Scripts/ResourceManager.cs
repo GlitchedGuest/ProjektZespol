@@ -1,7 +1,8 @@
-using Mono.Cecil;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
+using static UnityEngine.Rendering.DebugUI;
 
 public class ResourceManager : MonoBehaviour, IBinarySaveable
 {
@@ -15,12 +16,12 @@ public class ResourceManager : MonoBehaviour, IBinarySaveable
     public QuarkType resource5Value = 0;
     public QuarkType resource6Value = 0;
 
-    public QuarkType resource1Limit = 1000;
-    public QuarkType resource2Limit = 2500;
-    public QuarkType resource3Limit = 5000;
-    public QuarkType resource4Limit = 10000;
-    public QuarkType resource5Limit = 25000;
-    public QuarkType resource6Limit = 50000;
+    [AutoSave] public QuarkType resource1Limit = 1000;
+    [AutoSave] public QuarkType resource2Limit = 2500;
+    [AutoSave] public QuarkType resource3Limit = 5000;
+    [AutoSave] public QuarkType resource4Limit = 10000;
+    [AutoSave] public QuarkType resource5Limit = 25000;
+    [AutoSave] public QuarkType resource6Limit = 50000;
 
     public string currentResource = "Resource1";
 
@@ -325,5 +326,30 @@ public class ResourceManager : MonoBehaviour, IBinarySaveable
 
         currentResource = reader.ReadString();
         LoadAllResources();
+    internal void ResetResources()
+    {
+        resource1Value = 0;
+        resource2Value = 0;
+        resource3Value = 0;
+        resource4Value = 0;
+        resource5Value = 0;
+        resource6Value = 0;
+
+        resource1Limit = 1000;
+        resource2Limit = 2500;
+        resource3Limit = 5000;
+        resource4Limit = 10000;
+        resource5Limit = 25000;
+        resource6Limit = 50000;
+
+        currentResource = "Resource1";
+        resources["Resource1"].value = 0;
+        resources["Resource2"].value = 0;
+        resources["Resource3"].value = 0;
+        resources["Resource4"].value = 0;
+        resources["Resource5"].value = 0;
+        resources["Resource6"].value = 0;
+
+        LayoutController.Instance?.UpdateUI();
     }
 }

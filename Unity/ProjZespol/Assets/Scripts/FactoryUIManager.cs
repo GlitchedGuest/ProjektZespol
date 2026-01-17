@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using UnityEditor.PackageManager.Requests;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -105,6 +106,8 @@ public class FactoryUIManager
             prevFactoryBtn.clicked += CycleToPreviousFactory;
         if (nextFactoryBtn != null)
             nextFactoryBtn.clicked += CycleToNextFactory;
+
+        currentFactoryIndex = 0;
 
         InitializeUnlockButtons();
         InitializeFactories();
@@ -732,4 +735,9 @@ public class FactoryUIManager
     }
 
 
+    public void ResetFactoryGUI()
+    {
+        currentFactoryIndex = 0;
+        SwitchToFactory(0);
+    }
 }
