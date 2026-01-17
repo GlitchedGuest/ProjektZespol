@@ -247,7 +247,7 @@ public class RaptorCore : MonoBehaviour
         activeClickSource = ClickSource.None;
         sourceBlockEndTime = 0f;
         clickCooldown = 0.5f;
-        clickingDebuff = 0;
+        clickingDebuff = 1;
 
     }
 }
