@@ -54,10 +54,10 @@ public class PrestigeUIManager
     public void UpdateContentPage()
     {
         contentPage.Q<VisualElement>("PrestigeCount").Q<Label>("Num").text = rp.PrestigeCount.ToString();
-        contentPage.Q<VisualElement>("OneClick").Q<Label>("Num").text = rp.AutoPrestige.ToString();
-        contentPage.Q<VisualElement>("Auto").Q<Label>("Num").text = rp.JackPrestige.ToString();
-        contentPage.Q<VisualElement>("Jack").Q<Label>("Num").text = rp.OneClickPrestige.ToString();
-        
+        contentPage.Q<VisualElement>("OneClick").Q<Label>("Num").text = rp.OneClickPrestige.ToString();
+        contentPage.Q<VisualElement>("Auto").Q<Label>("Num").text = rp.AutoPrestige.ToString();
+        contentPage.Q<VisualElement>("Jack").Q<Label>("Num").text = rp.JackPrestige.ToString();
+
         if (rp.PrestigeCount != 0) PrestigeButtonMenu.style.display = DisplayStyle.Flex;
 
     }
