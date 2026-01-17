@@ -992,6 +992,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   characterClass: {fileID: 1162231167}
+--- !u!114 &1895339694 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2595809473968715902, guid: fe1619c8ad742c24e8be78d6c285b517, type: 3}
+  m_PrefabInstance: {fileID: 385972646393195079}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1895339682}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9387312fc2ab3244e9056cceaff6c71e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &2037142311 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2796310969368875986, guid: 70a5672d9d0f58249b6e0cc4fe72adf4, type: 3}
@@ -1496,7 +1507,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2629494924822515725, guid: 74134571a0795ce4a840c2356e47dbbb, type: 3}
       propertyPath: Gold
-      value: 10000000
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2629494924822515725, guid: 74134571a0795ce4a840c2356e47dbbb, type: 3}
       propertyPath: critSource
@@ -1519,9 +1530,17 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1895339682}
     - target: {fileID: 2629494924822515725, guid: 74134571a0795ce4a840c2356e47dbbb, type: 3}
+      propertyPath: PrestigeCount
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2629494924822515725, guid: 74134571a0795ce4a840c2356e47dbbb, type: 3}
       propertyPath: characterClass
       value: 
       objectReference: {fileID: 1162231167}
+    - target: {fileID: 2629494924822515725, guid: 74134571a0795ce4a840c2356e47dbbb, type: 3}
+      propertyPath: layoutController
+      value: 
+      objectReference: {fileID: 1895339694}
     - target: {fileID: 3072934719231244098, guid: 74134571a0795ce4a840c2356e47dbbb, type: 3}
       propertyPath: m_Sprite
       value: 

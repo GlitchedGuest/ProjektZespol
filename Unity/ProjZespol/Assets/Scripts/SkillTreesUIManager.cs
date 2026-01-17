@@ -29,6 +29,12 @@ public class SkillTreesUIManager
         this.skillPointsLimit = skillPointsLimit;
     }
 
+    public void ClearTrees() {
+        oneClickArmyTree.ClearTree();
+        jackTree.ClearTree();
+        automatronTree.ClearTree();
+    }
+
     public void InitializeAllTrees()
     {
         InitializeOneClickArmyTree();

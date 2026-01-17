@@ -490,4 +490,8 @@ public class IdleManager : MonoBehaviour
         return true;
     }
 
+    internal void ResetFactory()
+    {
+        InitFactories();
+    }
 }
