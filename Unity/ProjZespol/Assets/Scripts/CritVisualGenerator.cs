@@ -17,7 +17,7 @@ public class CritVisualGenerator : MonoBehaviour
 
     public void SpawnCrit(Vector2 mouseScreenPos)
     {
-        var crit = new Label("KRYT!");
+        var crit = new Label("CRITICAL!");
 
 
         mouseScreenPos.y = Screen.height - mouseScreenPos.y-30;

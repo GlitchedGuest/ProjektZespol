@@ -68,12 +68,12 @@ public static class Tooltip
         Frame.visible = false;
     }
 
-    public static void Register(VisualElement element, string Title, string Content)
+    public static void Register(VisualElement element, string Title, string Content, string lore)
     {
         
         element.RegisterCallback<PointerEnterEvent>(evt =>
         {
-            Show(Title,Content, evt.position);
+            Show(Title,Content, evt.position, lore);
         });
 
         element.RegisterCallback<PointerMoveEvent>(evt =>

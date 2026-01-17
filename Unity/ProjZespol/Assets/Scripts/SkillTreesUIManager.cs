@@ -55,16 +55,16 @@ public class SkillTreesUIManager {
 
         oneClickArmyTree.InitializeSkills(skills);
 
-        oneClickArmyTree.RegisterTooltip("Skill1", "Skill Based Clicking", "Umożliwia pojawienie się skill checków(nie udany kosztuje gracza zwolnieniem idle produkcji)");
-        oneClickArmyTree.RegisterTooltip("Skill2A", "Critical Mass", "Zwiększa szanse na kliki krytyczne");
-        oneClickArmyTree.RegisterTooltip("Skill2B", "Chicken Dinner", "Udany skill check zwiększa ilość zbieranych punktów na chwilę(nie udany zmniejsza)");
-        oneClickArmyTree.RegisterTooltip("Skill3A", "Active Idle", "Każdy klik krytyczny chwilowo zwiększa idle produkcje");
-        oneClickArmyTree.RegisterTooltip("Skill3B", "Hungry For More", "Skill checki częściej się pojawiają");
-        oneClickArmyTree.RegisterTooltip("Skill4A", "No Matter What", "Stakuje szanse na klik krytyczny(każde kliknięcie niekrytyczne zwiększa szanse na krytyczne)");
-        oneClickArmyTree.RegisterTooltip("Skill4B", "Always Winner", "Skill checki nie mają negatywnych skutków po przegraniu");
-        oneClickArmyTree.RegisterTooltip("Skill5", "Symbiosis", "Częstotliwość skill checka jest zależna od ilości klików krytycznych(im częściej są tym częściej skill checki)");
-        oneClickArmyTree.RegisterTooltip("Skill6A", "Mortal Clicker", "Każdy kolejny skill check łączy się w kombos...");
-        oneClickArmyTree.RegisterTooltip("Skill6B", "Champion Of Clicks", "Po trzech udanych skill checkach z rzędu...");
+        oneClickArmyTree.RegisterTooltip("Skill1", "Skill Based Clicking", "Randomly while clicking skill check will appear. Successful skill check will increase resources. Failed will decrease it.", "\"Work for more work. Right?\" ~Doctor");
+        oneClickArmyTree.RegisterTooltip("Skill2A", "Critical Mass", "Increases chance for critical click to 30%.", "\"This will be monumental!\" ~Doctor");
+        oneClickArmyTree.RegisterTooltip("Skill2B", "Chicken Dinner", "Successful skill check will temporally increase resources per click. Failed will decrease.", "\"You're a madman. You know that!\" ~Clair");
+        oneClickArmyTree.RegisterTooltip("Skill3A", "Active Idle", "Every critical click will temporally increase idle production.", "\"Time isn't linear. It's a ball of wibbly wobbly stuff.\" ~Doctor");
+        oneClickArmyTree.RegisterTooltip("Skill3B", "Hungry For More", "Skill checks will appear more often.", "I don't care. ~Doctor");
+        oneClickArmyTree.RegisterTooltip("Skill4A", "No Matter What", "Every non critical click will increase chance for next critical click.", "\"You promised me all time and space not the end of the world!\" ~Clair");
+        oneClickArmyTree.RegisterTooltip("Skill4B", "Always Winner", "Skill checks have no negative effects when failed.", "\"I won't lose.\" ~Doctor");
+        oneClickArmyTree.RegisterTooltip("Skill5", "Symbiosis", "Increases chance for skill check.", "\"You and me the time lords victorious\" ~Doctor");
+        oneClickArmyTree.RegisterTooltip("Skill6A", "Mortal Clicker", "Every successful skill check will increase resource per click. Buff is reseted when skill check is failed.", "\"I'm sorry.\" ~Doctor");
+        oneClickArmyTree.RegisterTooltip("Skill6B", "Champion Of Clicks", "After 3 successful skill checks chance for critical click will be temporally increased to 100%.", "\"The mass of Temporal Generator is critical i can sto...\" ~Doctor");
 
         Color c = Color.yellow;
         oneClickArmyTree.DrawLine("Skill1", "Skill2A", c);
@@ -92,16 +92,16 @@ public class SkillTreesUIManager {
 
         jackTree.InitializeSkills(skills);
 
-        jackTree.RegisterTooltip("Skill1-tree2", "Shark", "Można sprzedawać po wyższych cenach…");
-        jackTree.RegisterTooltip("Skill2A-tree2", "Market-place Genius", "Udany skill check…");
-        jackTree.RegisterTooltip("Skill2B-tree2", "Addict", "Potki mają zwiększoną skuteczność");
-        jackTree.RegisterTooltip("Skill2C-tree2", "Lucky Bastard", "Nieudany skill check daje potkę");
-        jackTree.RegisterTooltip("Skill3A-tree2", "Hard Worker", "Im więcej udanych…");
-        jackTree.RegisterTooltip("Skill3B-tree2", "Death Dose", "Efekty potek się stakują");
-        jackTree.RegisterTooltip("Skill3C-tree2", "Just Bastard", "Nieudany skill check = potka");
-        jackTree.RegisterTooltip("Skill3D-tree2", "Fail To Win", "Nieudany skill check zwiększa exp");
-        jackTree.RegisterTooltip("Skill4-tree2", "Failure Grind", "Im więcej nieudanych…");
-        jackTree.RegisterTooltip("Skill5-tree2", "Micheal Scott", "Automatyczna sprzedaż…");
+        jackTree.RegisterTooltip("Skill1-tree2", "Shark", "Increaces selling prices for resources.", "\"I am Night Warrior of magic.\" ~Gunther Terran");
+        jackTree.RegisterTooltip("Skill2A-tree2", "Market-place Genius", "Successful skill check increases temporally selling prices for resources.", "\"I hear his voice. It's beautiful.\" ~Daniel");
+        jackTree.RegisterTooltip("Skill2B-tree2", "Addict", "Potions are more efficient.", "\"Whole council has rotten to the core.\" ~Gunther Terran");
+        jackTree.RegisterTooltip("Skill2C-tree2", "Lucky Bastard", "Failed skill check has a chance to give random potion effect.", "\"We won't be slaves to them.\" ~Daniel");
+        jackTree.RegisterTooltip("Skill3A-tree2", "Hard Worker", "Every skill check will increase selling price in shop. Failed skill check will reset it.", "\"Create the barriers, we can't let them pass through.\" ~Gunther Terran");
+        jackTree.RegisterTooltip("Skill3B-tree2", "Death Dose", "Potions effect can be stacked", "\"They're weak, break their minds, then theirs bodies.\" ~Daniel");
+        jackTree.RegisterTooltip("Skill3C-tree2", "Just Bastard", "Failed skill check guarantee random potion.", "\"Losing this war doesn't matter, losing our existance does.\" ~Gunther Terran");
+        jackTree.RegisterTooltip("Skill3D-tree2", "Fail To Win", "Failed skill check gives temporally boost to experience.", "\"GUNHTER SHOW YOURSELF YOU COWARD!\" ~Daniel");
+        jackTree.RegisterTooltip("Skill4-tree2", "Failure Grind", "Every failed skill check increases experience boost. Failed skill check reset boost.", "\"There is only one solution.\" ~Gunther Terran");
+        jackTree.RegisterTooltip("Skill5-tree2", "Micheal Scott", "Resource will be automatically sold when it reach its limit.", "\"Avekna Ur Trakta\" ~Gunther Terran");
 
         Color c = Color.yellow;
         jackTree.DrawLine("Skill1-tree2", "Skill2A-tree2", c);
@@ -130,16 +130,16 @@ public class SkillTreesUIManager {
 
         automatronTree.InitializeSkills(skills);
 
-        automatronTree.RegisterTooltip("Skill1-tree3", "Entre-preneur", "Im więcej fabryk…");
-        automatronTree.RegisterTooltip("Skill2-tree3", "Push to the limit", "Limit punktów rośnie");
-        automatronTree.RegisterTooltip("Skill3A-tree3", "Reaction Test", "Skill checki mogą…");
-        automatronTree.RegisterTooltip("Skill3B-tree3", "What Eyes Don't See", "Fabryki not in focus…");
-        automatronTree.RegisterTooltip("Skill4A-tree3", "Unskilled Predator", "Nieudany check zwiększa idle…");
-        automatronTree.RegisterTooltip("Skill4B-tree3", "Passive Agressive", "Im dłużej gracz nie kliknie…");
-        automatronTree.RegisterTooltip("Skill5A-tree3", "One for Everyone", "Nieudany check buffuje wszystko");
-        automatronTree.RegisterTooltip("Skill5B-tree3", "Multi-tasking", "Gracz może robić inne akcje");
-        automatronTree.RegisterTooltip("Skill5C-tree3", "Christmas Bonus", "Bonus do fabryk not in focus");
-        automatronTree.RegisterTooltip("Skill6-tree3", "Hungry Wolf", "Im mniej punktów tym większy bonus");
+        automatronTree.RegisterTooltip("Skill1-tree3", "Entrepreneur", "The more factories you have, the greater bonus to idle is.", "\"Wakey, Wakey! Little Brother.\" ~Herald of Darkness");
+        automatronTree.RegisterTooltip("Skill2-tree3", "Push to the limit", "Increases maximum limit of all resources.", "\"I see everything, everywhere, everywhen.\" ~Champion of Light");
+        automatronTree.RegisterTooltip("Skill3A-tree3", "Reaction Test", "Skill checks can appear at random instead while clicking.", "\"He's no longer here, I am what's left.\" ~Herald of Darkness");
+        automatronTree.RegisterTooltip("Skill3B-tree3", "What Eyes Don't See", "Factories not in focus produce more resources.", "\"Hear me Lux, I'm ready.\" ~Champion of Light");
+        automatronTree.RegisterTooltip("Skill4A-tree3", "Unskilled Predator", "Failed skill check boost idle production. Effect can stack.", "\"How's your family? Little Brother.\" ~Herald of Darkness");
+        automatronTree.RegisterTooltip("Skill4B-tree3", "Passive Agressive", "The longer player does not click, the more resources factory in focus produce.", "\"In the darkness night there is light.\" ~Champion of Light");
+        automatronTree.RegisterTooltip("Skill5A-tree3", "One for Everyone", "Idle production of all factories is greatly increased", "\"Tick tock Jack!\" ~Herald of Darkness");
+        automatronTree.RegisterTooltip("Skill5B-tree3", "Multi-tasking", "Player can click but idle bonus is increasing in slower pace.", "\"Let's end it once and for all!\" ~Champion of Light");
+        automatronTree.RegisterTooltip("Skill5C-tree3", "Christmas Bonus", "Idle bonus is applied to all factories.", "\"DEVOUR DEVOUR DEVOUR!\" ~Herald of Darkness");
+        automatronTree.RegisterTooltip("Skill6-tree3", "Hungry Wolf", "The less resource factory has, more resource it's producing.", "\"Let's do it together, brother.\" ~Champion of Light");
 
         Color c = Color.yellow;
         automatronTree.DrawLine("Skill1-tree3", "Skill2-tree3", c);

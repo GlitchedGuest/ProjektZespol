@@ -78,12 +78,30 @@ public class SkillManager : MonoBehaviour
             {
                 f.productionMultiplier += 3;
                 f.count += 4;
-                yield return new WaitForSeconds(6f);
+                if (characterClass.activeIdle && (f.count * f.productionMultiplier) > 0) characterClass.buffManager.ApplyBuff("Skill3A", f.count * f.productionMultiplier);
+                else characterClass.buffManager.RemoveBuff("Skill3A");
+                    yield return new WaitForSeconds(6f);
                 f.productionMultiplier -= 3;
                 f.count -= 4;
+                if (characterClass.activeIdle && (f.count * f.productionMultiplier) >0) characterClass.buffManager.ApplyBuff("Skill3A", f.count * f.productionMultiplier);
+                else characterClass.buffManager.RemoveBuff("Skill3A");
                 break;
             }
         }
+    }
+    public double GetActiveIdleValue()
+    {
+        string currentResource = raptorCore.ResourceManager.currentResource;
+
+        foreach (var f in idleManager.factories)
+        {
+            if (f.resource.name == currentResource)
+            {
+               return (f.count * f.productionMultiplier);
+
+            }
+        }
+        return 0;
     }
 
     public void EnableChickenDinner(bool effect)
@@ -102,8 +120,12 @@ public class SkillManager : MonoBehaviour
                 mode = 0;
         }
         raptorCore.SkillMultiplier += 10 * mode;
-        yield return new WaitForSeconds(6f);
+        if (characterClass.chickenDinner && raptorCore.SkillMultiplier != 0) characterClass.buffManager.ApplyBuff("Skill2B", raptorCore.SkillMultiplier);
+        else characterClass.buffManager.RemoveBuff("Skill2B");
+            yield return new WaitForSeconds(6f);
         raptorCore.SkillMultiplier -= 10 * mode;
+        if (characterClass.chickenDinner && raptorCore.SkillMultiplier !=0) characterClass.buffManager.ApplyBuff("Skill2B", raptorCore.SkillMultiplier);
+        else characterClass.buffManager.RemoveBuff("Skill2B");
     }
 
     public bool IsSkillCheckActive()

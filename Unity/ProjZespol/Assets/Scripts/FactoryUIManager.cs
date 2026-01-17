@@ -377,11 +377,11 @@ public class FactoryUIManager
             }
 
             if (factoryUI.countLabel != null)
-                factoryUI.countLabel.text = $"Ilość: {factory.count}";
+                factoryUI.countLabel.text = $"Amount: {factory.count}";
             if (factoryUI.costLabel != null)
                 factoryUI.costLabel.text = factory.isUnlocked
-                    ? $"Koszt: {factory.currentCost}"
-                    : $"Odblokuj za: {factory.unlockCost}";
+                    ? $"Price: {factory.currentCost}"
+                    : $"Unlock for: {factory.unlockCost}";
 
             double playerGold = raptorCore.Gold;
 
@@ -400,13 +400,13 @@ public class FactoryUIManager
                 }
 
                 if (factoryUI.productionLevelLabel != null && factory.isUnlocked)
-                    factoryUI.productionLevelLabel.text = $"Poziom: {upgradeLevels.productionLevel}";
+                    factoryUI.productionLevelLabel.text = $"Level: {upgradeLevels.productionLevel}";
 
                 factoryUI.multiplierLevelLabel.style.display = DisplayStyle.None;
 
                 if (factoryUI.upgradeProductionBtn != null && factory.isUnlocked)
                 {
-                    factoryUI.upgradeProductionBtn.text = $"Zwiększ produkcję (+1) - {productionCost:F0} G";
+                    factoryUI.upgradeProductionBtn.text = $"Increase production (+1) - {productionCost:F0} G";
                     factoryUI.upgradeProductionBtn.SetEnabled(playerGold >= productionCost);
                 }
                 factoryUI.upgradeMultiplierBtn.style.display = DisplayStyle.None;
@@ -600,12 +600,12 @@ public class FactoryUIManager
         Sprite Tex;
         switch (factory.name)
         {
-            case "F1": Tex = images[0]; break;
-            case "F2": Tex = images[1]; break;
-            case "F3": Tex = images[2]; break;
-            case "F4": Tex = images[3]; break;
-            case "F5": Tex = images[4]; break;
-            case "F6": Tex = images[5]; break;
+            case "Astral Rock of Solitude": Tex = images[0]; break;
+            case "Fields of War": Tex = images[1]; break;
+            case "The Last Forest": Tex = images[2]; break;
+            case "Dead Rises": Tex = images[3]; break;
+            case "City of Dreams": Tex = images[4]; break;
+            case "Hell": Tex = images[5]; break;
             default: Tex = images[0]; break;
         }
 
@@ -661,7 +661,7 @@ public class FactoryUIManager
             else
             {
                 button.style.display = DisplayStyle.Flex;
-                button.text = $"Odblokuj {factory.name}\n{factory.unlockCost} Gold";
+                button.text = $"Unlock {factory.name}\n{factory.unlockCost} Gold";
                 button.SetEnabled(raptorCore.Gold >= factory.unlockCost);
             }
         }

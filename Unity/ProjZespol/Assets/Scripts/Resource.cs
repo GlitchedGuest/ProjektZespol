@@ -8,6 +8,8 @@ public class Resource
 {
     public string name;
 
+    public string displayName;
+
     private QuarkType _value;
     public QuarkType value {
         get => _value;
@@ -35,10 +37,10 @@ public class Resource
     public QuarkType SkillBoost;
 
     public Resource() { }
-
-    public Resource(string _name)
+    public Resource(string _name, string _displayName)
     {
         name = _name;
+        displayName = _displayName;
         _value = 0;
         BaseLimit = 10000;
         LvlBoost = 1;

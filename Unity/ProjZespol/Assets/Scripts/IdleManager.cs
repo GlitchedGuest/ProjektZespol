@@ -33,12 +33,12 @@ public class IdleManager : MonoBehaviour, IBinarySaveable
         if (resources == null) resources = new List<Resource>();
 
         resources.Clear();
-        resources.Add(new Resource("Resource1"));
-        resources.Add(new Resource("Resource2"));
-        resources.Add(new Resource("Resource3"));
-        resources.Add(new Resource("Resource4"));
-        resources.Add(new Resource("Resource5"));
-        resources.Add(new Resource("Resource6"));
+        resources.Add(new Resource("Resource1","Blood Rock Of Night"));
+        resources.Add(new Resource("Resource2", "Hot Metal Of Lost World"));
+        resources.Add(new Resource("Resource3", "Light Crystal"));
+        resources.Add(new Resource("Resource4", "Killer Flower Of Earth"));
+        resources.Add(new Resource("Resource5", "Red Diamond Of Telor"));
+        resources.Add(new Resource("Resource6", "Time Remnant"));
 
 
         foreach (var res in resources)
@@ -53,17 +53,17 @@ public class IdleManager : MonoBehaviour, IBinarySaveable
         factories.Clear();
 
         //TODO: Adjust factory parameters as needed
-        factories.Add(new Factory(resources[0], "F1", 15, 1.15, 1, 0));
+        factories.Add(new Factory(resources[0], "Astral Rock of Solitude", 15, 1.15, 1, 0));
 
-        factories.Add(new Factory(resources[1], "F2", 15, 1.15, 5, 5000));
+        factories.Add(new Factory(resources[1], "Fields of War", 15, 1.15, 5, 5000));
 
-        factories.Add(new Factory(resources[2], "F3", 15, 1.15, 10, 25000));
+        factories.Add(new Factory(resources[2], "The Last Forest", 15, 1.15, 10, 25000));
 
-        factories.Add(new Factory(resources[3], "F4", 15, 1.15, 15, 125000));
+        factories.Add(new Factory(resources[3], "Dead Rises", 15, 1.15, 15, 125000));
 
-        factories.Add(new Factory(resources[4], "F5", 15, 1.15, 20, 625000));
+        factories.Add(new Factory(resources[4], "City of Dreams", 15, 1.15, 20, 625000));
 
-        factories.Add(new Factory(resources[5], "F6", 15, 1.15, 25, 3125000));
+        factories.Add(new Factory(resources[5], "Hell", 15, 1.15, 25, 3125000));
     }
 
     private void InitPotions()
@@ -72,12 +72,12 @@ public class IdleManager : MonoBehaviour, IBinarySaveable
 
         potions.Clear();
 
-        potions.Add(new Potion("Uno", resources[0], resources[1], 1, 1,"click1", 20, "Zwiększa ilość zasobów za kliknięcie o 5 przez 20 sekund."));
-        potions.Add(new Potion("Dos", resources[1], resources[2], 1, 1,"idle1", 20, "Zwiększa produkcję zasobów z fabryk o 100% przez 20 sekund."));
-        potions.Add(new Potion("Tres", resources[0], resources[2], 1, 1,"sell1", 20, "Zwiększa wartość sprzedaży zasobów o 100% przez 20 sekund."));
-        potions.Add(new Potion("Cuatro", resources[3], resources[4], 1, 1,"click2", 40, "Zwiększa ilość zasobów za kliknięcie o 10 przez 40 sekund."));
-        potions.Add(new Potion("Cinco", resources[4], resources[5], 1, 1,"idle2", 40, "Zwiększa produkcję zasobów z fabryk o 200% przez 40 sekund."));
-        potions.Add(new Potion("Seis", resources[3], resources[5], 1, 1,"sell2", 40, "Zwiększa wartość sprzedaży zasobów o 200% przez 40 sekund."));
+        potions.Add(new Potion("Potion of Clicking", resources[0], resources[1], 1, 1,"click1", 20, "Increases amount of resources per click by 5 for 20 seconds."));
+        potions.Add(new Potion("Potion of Idle", resources[1], resources[2], 1, 1,"idle1", 20, "Increases factory production by 100% for 20 seconds."));
+        potions.Add(new Potion("Potion of Profit", resources[0], resources[2], 1, 1,"sell1", 20, "Increases selling prices by 100% for 20 seconds."));
+        potions.Add(new Potion("Potion of Clicking II", resources[3], resources[4], 1, 1,"click2", 40, "Increases amount of resources per click by 10 for 40 seconds."));
+        potions.Add(new Potion("Potion of Idle II", resources[4], resources[5], 1, 1,"idle2", 40, "Increases factory production by 200% for 40 seconds."));
+        potions.Add(new Potion("Potion of Profit II", resources[3], resources[5], 1, 1,"sell2", 40, "Increases selling prices by 200% for 40 seconds."));
         
     }
     private void OnEnable()
@@ -123,6 +123,7 @@ public class IdleManager : MonoBehaviour, IBinarySaveable
                 {
                     p.isActive = false;
                     p.timeRemaining = 0;
+                    p.boughtCount = 0;
                     DisablePotionEffect(p);
                 }
             }
@@ -291,10 +292,12 @@ public class IdleManager : MonoBehaviour, IBinarySaveable
                 {
                     return false;
                 }
+                p.boughtCount++;
                 p.isActive = true;
                 p.timeRemaining = p.duration;
                 p.linkedFactory = raptorCore.ResourceManager.GetCurrentFactory();
                 EnablePotionEffect(p);
+                FindObjectOfType<ActivePotionsUI>()?.RefreshPanel();
                 return true;
             case ("Resource2","Resource3"):
                 resource1Amount = raptorCore.ResourceManager.GetResourceValueDirect("Resource2");
@@ -308,10 +311,12 @@ public class IdleManager : MonoBehaviour, IBinarySaveable
                 {
                     return false;
                 }
+                p.boughtCount++;
                 p.isActive = true;
                 p.timeRemaining = p.duration;
                 p.linkedFactory = raptorCore.ResourceManager.GetCurrentFactory();
                 EnablePotionEffect(p);
+                FindObjectOfType<ActivePotionsUI>()?.RefreshPanel();
                 return true;
             case ("Resource1","Resource3"):
                 resource1Amount = raptorCore.ResourceManager.GetResourceValueDirect("Resource1");
@@ -325,10 +330,12 @@ public class IdleManager : MonoBehaviour, IBinarySaveable
                 {
                     return false;
                 }
+                p.boughtCount++;
                 p.isActive = true;
                 p.timeRemaining = p.duration;
                 p.linkedFactory = raptorCore.ResourceManager.GetCurrentFactory();
                 EnablePotionEffect(p);
+                FindObjectOfType<ActivePotionsUI>()?.RefreshPanel();
                 return true;
             case ("Resource4","Resource5"):
                 resource1Amount = raptorCore.ResourceManager.GetResourceValueDirect("Resource4");
@@ -342,10 +349,12 @@ public class IdleManager : MonoBehaviour, IBinarySaveable
                 {
                     return false;
                 }
+                p.boughtCount++;
                 p.isActive = true;
                 p.timeRemaining = p.duration;
                 p.linkedFactory = raptorCore.ResourceManager.GetCurrentFactory();
                 EnablePotionEffect(p);
+                FindObjectOfType<ActivePotionsUI>()?.RefreshPanel();
                 return true;
             case ("Resource4","Resource6"):
                 resource1Amount = raptorCore.ResourceManager.GetResourceValueDirect("Resource4");
@@ -359,10 +368,12 @@ public class IdleManager : MonoBehaviour, IBinarySaveable
                 {
                     return false;
                 }
+                p.boughtCount++;
                 p.isActive = true;
                 p.timeRemaining = p.duration;
                 p.linkedFactory = raptorCore.ResourceManager.GetCurrentFactory();
                 EnablePotionEffect(p);
+                FindObjectOfType<ActivePotionsUI>()?.RefreshPanel();
                 return true;
             case ("Resource5","Resource6"):
                 resource1Amount = raptorCore.ResourceManager.GetResourceValueDirect("Resource5");
@@ -376,10 +387,12 @@ public class IdleManager : MonoBehaviour, IBinarySaveable
                 {
                     return false;
                 }
+                p.boughtCount++;
                 p.isActive = true;
                 p.timeRemaining = p.duration;
                 p.linkedFactory = raptorCore.ResourceManager.GetCurrentFactory();
                 EnablePotionEffect(p);
+                FindObjectOfType<ActivePotionsUI>()?.RefreshPanel();
                 return true;
             default:
                 return false;

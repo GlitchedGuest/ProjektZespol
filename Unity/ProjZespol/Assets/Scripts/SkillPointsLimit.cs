@@ -23,7 +23,7 @@ public class SkillPointsLimit : MonoBehaviour
 
     public void UpdateButton()
     {
-        Skillbtn.text = "SkillPoints:\r\n" + characterClass.skillpoints;
+        Skillbtn.text = "Skill Points:\r\n" + characterClass.skillpoints;
         if (characterClass.skillpoints > 0)
         {
             Skillbtn.style.backgroundColor = availableColor;

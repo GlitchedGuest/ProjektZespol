@@ -32,14 +32,23 @@ public class StaticBackground : MonoBehaviour
         if (string.IsNullOrEmpty(currentFactory)) return;
         switch (currentFactory)
         {
-            case "F1":
+            case "Astral Rock of Solitude":
                 rawImage.texture = backgrounds[0];
                 break;
-            case "F2":
+            case "Fields of War":
                 rawImage.texture = backgrounds[1];
                 break;
-            case "F3":
+            case "The Last Forest":
                 rawImage.texture = backgrounds[2];
+                break; 
+            case "Dead Rises":
+                rawImage.texture = backgrounds[3];
+                break;
+            case "City of Dreams":
+                rawImage.texture = backgrounds[4];
+                break;
+            case "Hell":
+                rawImage.texture = backgrounds[5];
                 break;
         }
     }
