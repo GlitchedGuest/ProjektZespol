@@ -38,7 +38,7 @@ public class LayoutController : MonoBehaviour
     public void ResetGui()
     {
         skillTreesUIManager.ClearTrees();
-        factoryUIManager.SwitchToFactory(0);
+        factoryUIManager.ResetFactoryGUI();
         skillPointsLimit.UpdateButton();
         UpdateUI();
     }

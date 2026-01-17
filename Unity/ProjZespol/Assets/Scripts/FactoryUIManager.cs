@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using UnityEditor.PackageManager.Requests;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -574,7 +575,7 @@ public class FactoryUIManager
         return factory != null && factory.isUnlocked;
     }
 
-    public void SwitchToFactory(int factoryIndex)
+    private void SwitchToFactory(int factoryIndex)
     {
         var factory = GetFactory(factoryIndex);
         if (factory == null) return;
@@ -685,5 +686,11 @@ public class FactoryUIManager
         UpdateUnlockButtons();
         UpdateNavigationButtons();
         LayoutController.Instance.SetGoldText(raptorCore.Gold.ToString("F0"));
+    }
+
+    public void ResetFactoryGUI()
+    {
+        currentFactoryIndex = 0;
+        SwitchToFactory(0);
     }
 }
