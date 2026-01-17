@@ -169,7 +169,7 @@ public abstract class SkillTreeManager
     public void DeserializeFromStream(BinaryReader reader)
     {
         int count = reader.ReadInt32();
-        var learned = new HashSet<string>();
+        learned = new HashSet<string>();
         for (int i = 0; i < count; i++)
         {
             learned.Add(reader.ReadString());

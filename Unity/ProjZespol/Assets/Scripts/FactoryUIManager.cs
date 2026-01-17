@@ -717,7 +717,7 @@ public class FactoryUIManager
     public void DeserializeFromStream(BinaryReader reader)
     {
         int count = reader.ReadInt32();
-        var factoryUpgradeLevels = new Dictionary<int, FactoryUpgradeLevels>(count);
+        factoryUpgradeLevels = new Dictionary<int, FactoryUpgradeLevels>(count);
 
         for (int i = 0; i < count; i++)
         {

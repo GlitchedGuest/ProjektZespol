@@ -117,10 +117,12 @@ public class LayoutController : MonoBehaviour, IBinarySaveable
     public void SerializeToStream(BinaryWriter writer)
     {
         factoryUIManager.SerializeToStream(writer);
+        skillTreesUIManager.SerializeToStream(writer);
     }
 
     public void DeserializeFromStream(BinaryReader reader)
     {
         factoryUIManager.DeserializeFromStream(reader);
+        skillTreesUIManager.DeserializeFromStream(reader);
     }
 }

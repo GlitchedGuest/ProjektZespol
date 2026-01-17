@@ -3,8 +3,7 @@ using System.IO;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-public class SkillTreesUIManager: IBinarySaveable
-{
+public class SkillTreesUIManager {
     private VisualElement ui;
     private CharacterClass characterClass;
     public VisualTreeAsset tooltipAsset;
@@ -18,8 +17,6 @@ public class SkillTreesUIManager: IBinarySaveable
     private HashSet<string> learnedAutomatron;
 
     private SkillPointsLimit skillPointsLimit;
-
-    public int SaveKey => 005; //Saveid to keep order
 
     public SkillTreesUIManager(VisualElement ui, CharacterClass characterClass, HashSet<string> learnedOneClick, HashSet<string> learnedJack, HashSet<string> learnedAutomatron, SkillPointsLimit skillPointsLimit)
     {
