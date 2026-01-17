@@ -690,7 +690,20 @@ public class FactoryUIManager
 
     public void ResetFactoryGUI()
     {
+        for (int i = 0; i < factoryUpgradeLevels.Count; i++)
+        {
+            var factory = GetFactory(i);
+            factoryUpgradeLevels[i] = new FactoryUpgradeLevels
+            {
+                productionLevel = 0,
+                multiplierLevel = 0,
+                baseProductionCost = 100,
+                baseMultiplierCost = 200
+            };
+        }
+
         currentFactoryIndex = 0;
         SwitchToFactory(0);
+        UpdateFactoryUI();
     }
 }
