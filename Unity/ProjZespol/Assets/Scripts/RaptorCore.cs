@@ -25,9 +25,7 @@ public class RaptorCore : MonoBehaviour, IBinarySaveable
     private CritVisualGenerator critGen;
     [SerializeField] private AudioSource audioSource;
     [SerializeField] private AudioSource critSource;
-
     public QuarkType Currency
-    [SerializeField] public LayoutController layoutController;
     {
         get => ResourceManager.GetResourceValue(ResourceManager.currentResource);
         set
@@ -41,13 +39,11 @@ public class RaptorCore : MonoBehaviour, IBinarySaveable
     QuarkType CMultiplier = 1;
     public QuarkType SkillMultiplier = 0;
 
-    [AutoSave] public long AutoPrestige = 0;
-    [AutoSave] public long JackPrestige = 0;
-    [AutoSave] public long OneClickPrestige = 0;
+    public long AutoPrestige = 0;
+    public long JackPrestige = 0;
+    public long OneClickPrestige = 0;
     
-        
-        
-    [AutoSave] public long PrestigeCount = 0;
+    public long PrestigeCount = 0;
 
     //Idle/Generator based
     QuarkType GBasevalue = 0;
@@ -244,6 +240,12 @@ public class RaptorCore : MonoBehaviour, IBinarySaveable
         GBasevalue.SerializeToStream(writer);
         GMultiplier.SerializeToStream(writer);
 
+        writer.Write(AutoPrestige);
+        writer.Write(JackPrestige);
+        writer.Write(OneClickPrestige);
+
+        writer.Write(PrestigeCount);
+
         // Currency
         writer.Write(Gold);
     }
@@ -257,7 +259,14 @@ public class RaptorCore : MonoBehaviour, IBinarySaveable
         GBasevalue.DeserializeFromStream(reader);
         GMultiplier.DeserializeFromStream(reader);
 
+        AutoPrestige = reader.ReadInt64();
+        JackPrestige = reader.ReadInt64();
+        OneClickPrestige = reader.ReadInt64();
+
+        PrestigeCount = reader.ReadInt64();
+
         Gold = reader.ReadDouble();
+    }
     internal void ResetCore()
     {
         CBasevalue = 1;

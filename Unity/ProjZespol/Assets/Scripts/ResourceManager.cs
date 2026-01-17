@@ -16,12 +16,12 @@ public class ResourceManager : MonoBehaviour, IBinarySaveable
     public QuarkType resource5Value = 0;
     public QuarkType resource6Value = 0;
 
-    [AutoSave] public QuarkType resource1Limit = 1000;
-    [AutoSave] public QuarkType resource2Limit = 2500;
-    [AutoSave] public QuarkType resource3Limit = 5000;
-    [AutoSave] public QuarkType resource4Limit = 10000;
-    [AutoSave] public QuarkType resource5Limit = 25000;
-    [AutoSave] public QuarkType resource6Limit = 50000;
+    public QuarkType resource1Limit = 1000;
+    public QuarkType resource2Limit = 2500;
+    public QuarkType resource3Limit = 5000;
+    public QuarkType resource4Limit = 10000;
+    public QuarkType resource5Limit = 25000;
+    public QuarkType resource6Limit = 50000;
 
     public string currentResource = "Resource1";
 
@@ -326,6 +326,7 @@ public class ResourceManager : MonoBehaviour, IBinarySaveable
 
         currentResource = reader.ReadString();
         LoadAllResources();
+    }
     internal void ResetResources()
     {
         resource1Value = 0;

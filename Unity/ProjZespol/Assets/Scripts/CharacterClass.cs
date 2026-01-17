@@ -99,7 +99,7 @@ public class CharacterClass : MonoBehaviour, IBinarySaveable
         }
         if (level >= 20)
         {
-            Raptorcore.layoutController.prestigeUIManager.EnablePrestige();
+            LayoutController.Instance?.prestigeUIManager.EnablePrestige();
         }
 
     }
@@ -458,10 +458,10 @@ public class CharacterClass : MonoBehaviour, IBinarySaveable
         skillFlags |= (michealScott ? 1u << 20 : 0);
 
         writer.Write(skillFlags);
-    } 
+    }
 
 
-public void DeserializeFromStream(BinaryReader reader)
+    public void DeserializeFromStream(BinaryReader reader)
     {
         skillpoints = reader.ReadUInt32();
         level = reader.ReadUInt32();
@@ -507,6 +507,7 @@ public void DeserializeFromStream(BinaryReader reader)
         michealScott = (skillFlags & (1u << 20)) != 0;
 
         skillPointsLimit.UpdateButton();
+    }
     public void ResetCharacter()
     {
         activeIdle = false;
@@ -555,7 +556,7 @@ public void DeserializeFromStream(BinaryReader reader)
         T1 = 0;
         T2 = 0;
         T3 = 0;
-}
+    }
 
     private void Update()
     {
