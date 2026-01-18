@@ -3,7 +3,7 @@ using UnityEngine;
 using System.IO;
 
 
-public class QuarkType: IComparable<QuarkType>, IEquatable<QuarkType>, IBinarySaveable
+public class QuarkType: IComparable<QuarkType>, IEquatable<QuarkType>
 {
     public long Mantissa;
     public long Exponent;

@@ -1,11 +1,15 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-public class LayoutController : MonoBehaviour
+public class LayoutController : MonoBehaviour, IBinarySaveable
 {
     public static LayoutController Instance { get; private set; }
+
+    public int SaveKey => 006;
+
     public VisualTreeAsset tooltipAsset;
 
     [SerializeField] private SpriteRenderer clickerObject;
@@ -19,7 +23,7 @@ public class LayoutController : MonoBehaviour
     public Sprite[] images;
     public VisualElement ui;
 
-    private FactoryUIManager factoryUIManager;
+    public FactoryUIManager factoryUIManager;
     private PotionUIManager potionUIManager;
     private OptionsManager optionsManager;
     private LevelUIManager levelUIManager;
@@ -133,5 +137,16 @@ public class LayoutController : MonoBehaviour
         LayoutController.Instance?.SetGoldText(raptorCore.Gold.ToString());
     }
 
+    public void SerializeToStream(BinaryWriter writer)
+    {
+        factoryUIManager.SerializeToStream(writer);
+        skillTreesUIManager.SerializeToStream(writer);
+    }
+
+    public void DeserializeFromStream(BinaryReader reader)
+    {
+        factoryUIManager.DeserializeFromStream(reader);
+        skillTreesUIManager.DeserializeFromStream(reader);
+    }
 
 }

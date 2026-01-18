@@ -35,11 +35,11 @@ public static class PrestigeSystem
         _core.characterClass.ResetCharacter();
         _core.ResourceManager.ResetResources();
         _core.idleManager.ResetFactory();
-        _core.layoutController.ResetGui();
+        LayoutController.Instance?.ResetGui();
 
         _core.ResetCore();
 
-        _core.layoutController.prestigeUIManager.UpdateContentPage();
+        LayoutController.Instance?.prestigeUIManager.UpdateContentPage();
     }
 
 }

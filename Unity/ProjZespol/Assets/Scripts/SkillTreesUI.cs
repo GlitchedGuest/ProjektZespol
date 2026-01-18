@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -159,6 +160,26 @@ public abstract class SkillTreeManager
         foreach (var id in buttons.Keys)
             UpdateVisual(id);
     }
+
+    public void SerializeToStream(BinaryWriter writer)
+    {
+        writer.Write(learned.Count);
+        foreach (var item in learned)
+        {
+            writer.Write(item);
+        }
+    }
+
+    public void DeserializeFromStream(BinaryReader reader)
+    {
+        int count = reader.ReadInt32();
+        learned = new HashSet<string>();
+        for (int i = 0; i < count; i++)
+        {
+            learned.Add(reader.ReadString());
+        }
+        UpdateAll();
+    }
 }
 #endregion
 #region OneClickArmySkillTree
@@ -248,6 +269,8 @@ public class OneClickArmySkillTree : SkillTreeManager
             btn.style.backgroundColor = lockedColor;
         }
     }
+
+
 }
 #endregion
 #region JackOfAllClicksSkillTree

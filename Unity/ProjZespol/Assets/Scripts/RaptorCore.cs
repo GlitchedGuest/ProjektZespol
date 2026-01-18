@@ -1,12 +1,16 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using Unity.VisualScripting;
 using UnityEngine;
 using static UnityEngine.Rendering.DebugUI;
 
-public class RaptorCore : MonoBehaviour
+public class RaptorCore : MonoBehaviour, IBinarySaveable
 {
+    public int SaveKey => 002; //Saveid to keep order
+
+
     // Publiczne referencje do managerów - inne skrypty mogą ich używać bezpośrednio
     public ResourceManager ResourceManager { get; private set; }
     public SellingManager SellManager { get; private set; }
@@ -21,8 +25,7 @@ public class RaptorCore : MonoBehaviour
     private CritVisualGenerator critGen;
     [SerializeField] private AudioSource audioSource;
     [SerializeField] private AudioSource critSource;
-    [SerializeField] public LayoutController layoutController;
-    [AutoSave] public QuarkType Currency
+    public QuarkType Currency
     {
         get => ResourceManager.GetResourceValue(ResourceManager.currentResource);
         set
@@ -32,25 +35,23 @@ public class RaptorCore : MonoBehaviour
     }
 
     //Click based
-    [AutoSave] QuarkType CBasevalue = 1;
-    [AutoSave] QuarkType CMultiplier = 1;
+    QuarkType CBasevalue = 1;
+    QuarkType CMultiplier = 1;
     public QuarkType SkillMultiplier = 0;
 
-    [AutoSave] public long AutoPrestige = 0;
-    [AutoSave] public long JackPrestige = 0;
-    [AutoSave] public long OneClickPrestige = 0;
+    public long AutoPrestige = 0;
+    public long JackPrestige = 0;
+    public long OneClickPrestige = 0;
     
-        
-        
-    [AutoSave] public long PrestigeCount = 0;
+    public long PrestigeCount = 0;
 
     //Idle/Generator based
-    [AutoSave] QuarkType GBasevalue = 0;
-    [AutoSave] QuarkType GMultiplier = 1;
+    QuarkType GBasevalue = 0;
+    QuarkType GMultiplier = 1;
 
     int tickCount = 0;
     
-    [AutoSave] public double Gold = 0;
+    public double Gold = 0;
 
     public QuarkType potionClickBonus1 = 0;
     public QuarkType potionClickBonus2 = 0;
@@ -229,6 +230,43 @@ public class RaptorCore : MonoBehaviour
         LayoutController.Instance?.UpdateUI();
     }
 
+    public void SerializeToStream(BinaryWriter writer)
+    {
+        CBasevalue.SerializeToStream(writer);
+        CMultiplier.SerializeToStream(writer);
+        SkillMultiplier.SerializeToStream(writer);
+
+        // Idle / generator based
+        GBasevalue.SerializeToStream(writer);
+        GMultiplier.SerializeToStream(writer);
+
+        writer.Write(AutoPrestige);
+        writer.Write(JackPrestige);
+        writer.Write(OneClickPrestige);
+
+        writer.Write(PrestigeCount);
+
+        // Currency
+        writer.Write(Gold);
+    }
+
+    public void DeserializeFromStream(BinaryReader reader)
+    {
+        CBasevalue.DeserializeFromStream(reader);
+        CMultiplier.DeserializeFromStream(reader);
+        SkillMultiplier.DeserializeFromStream(reader);
+
+        GBasevalue.DeserializeFromStream(reader);
+        GMultiplier.DeserializeFromStream(reader);
+
+        AutoPrestige = reader.ReadInt64();
+        JackPrestige = reader.ReadInt64();
+        OneClickPrestige = reader.ReadInt64();
+
+        PrestigeCount = reader.ReadInt64();
+
+        Gold = reader.ReadDouble();
+    }
     internal void ResetCore()
     {
         CBasevalue = 1;
