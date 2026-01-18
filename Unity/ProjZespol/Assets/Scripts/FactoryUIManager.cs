@@ -706,7 +706,7 @@ public class FactoryUIManager
 
     public void SerializeToStream(BinaryWriter writer)
     {
-        
+        writer.Write(currentFactoryIndex);
         writer.Write(factoryUpgradeLevels.Count);
 
         foreach (var kvp in factoryUpgradeLevels)
@@ -719,6 +719,7 @@ public class FactoryUIManager
 
     public void DeserializeFromStream(BinaryReader reader)
     {
+        currentFactoryIndex = reader.ReadInt32();
         int count = reader.ReadInt32();
         factoryUpgradeLevels = new Dictionary<int, FactoryUpgradeLevels>(count);
 
@@ -731,6 +732,7 @@ public class FactoryUIManager
 
             factoryUpgradeLevels[key] = value;
         }
+        SwitchToFactory(currentFactoryIndex);
         UpdateFactoryUI();
     }
 
