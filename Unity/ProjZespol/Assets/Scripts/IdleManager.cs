@@ -1,10 +1,14 @@
+using Mono.Cecil;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 
-public class IdleManager : MonoBehaviour
+public class IdleManager : MonoBehaviour, IBinarySaveable
 {
+    public int SaveKey => 004; //Saveid to keep order
+
     [SerializeField] private RaptorCore raptorCore;
     [SerializeField] private CharacterClass characterClass;
     [SerializeField] private float tickInterval = 1f;
@@ -14,6 +18,7 @@ public class IdleManager : MonoBehaviour
     [NonSerialized]public List<Potion> potions;
     public QuarkType potionFactoryBonus1 = 1;
     public QuarkType potionFactoryBonus2 = 1;
+
     private void Start()
     {
         if (raptorCore == null)
@@ -22,7 +27,7 @@ public class IdleManager : MonoBehaviour
         InitFactories();
         InitPotions();
     }
-
+    
     private void InitResources()
     {
         if (resources == null) resources = new List<Resource>();
@@ -45,7 +50,6 @@ public class IdleManager : MonoBehaviour
     private void InitFactories()
     {
         if (factories == null) factories = new List<Factory>();
-
         factories.Clear();
 
         //TODO: Adjust factory parameters as needed
@@ -490,4 +494,51 @@ public class IdleManager : MonoBehaviour
         return true;
     }
 
+    public void SerializeToStream(BinaryWriter writer)
+    {
+        writer.Write(factories.Count);
+        foreach (var factory in factories)
+        {
+            factory.SerializeToStream(writer);
+        }
+
+    }
+
+    public void DeserializeFromStream(BinaryReader reader)
+    {
+        if (factories == null) factories = new List<Factory>();
+
+        var TMPfactories = new List<Factory>();
+
+        int count = reader.ReadInt32();
+        for (int i = 0; i < count; i++)
+        {
+            var tmpFactory = new Factory();
+            tmpFactory.DeserializeFromStream(reader);
+            TMPfactories.Add(tmpFactory);
+        }
+
+        foreach (var tmp in TMPfactories)
+        {
+            var existing = factories.Find(f => f.name == tmp.name);
+            if (existing != null)
+            {
+                existing.baseCost = tmp.baseCost;
+                existing.costMultiplier = tmp.costMultiplier;
+                existing.baseProduction = tmp.baseProduction;
+                existing.productionMultiplier = tmp.productionMultiplier;
+                existing.isUnlocked = tmp.isUnlocked;
+                existing.unlockCost = tmp.unlockCost;
+                existing.count = tmp.count;
+
+            }
+        }
+
+        LayoutController.Instance?.factoryUIManager.UpdateFactoryUI();
+    }
+
+    internal void ResetFactory()
+    {
+        InitFactories();
+    }
 }

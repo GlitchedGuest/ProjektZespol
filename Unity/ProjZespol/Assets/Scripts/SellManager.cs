@@ -67,7 +67,7 @@ public class SellingManager : MonoBehaviour
             return 0;
         }
 
-        double goldEarned = amountToSell * pricePerUnit;
+        double goldEarned = (amountToSell * pricePerUnit).Pow(Math.Log(raptorCore.JackPrestige+5, 5)).Ceil();
         
         Factory currentFactory = raptorCore.ResourceManager.GetCurrentFactory();
         

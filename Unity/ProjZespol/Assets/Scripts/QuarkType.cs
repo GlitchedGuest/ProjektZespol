@@ -3,7 +3,7 @@ using UnityEngine;
 using System.IO;
 
 
-public class QuarkType: IComparable<QuarkType>, IEquatable<QuarkType>, IBinarySaveable
+public class QuarkType: IComparable<QuarkType>, IEquatable<QuarkType>
 {
     public long Mantissa;
     public long Exponent;
@@ -356,27 +356,6 @@ public class QuarkType: IComparable<QuarkType>, IEquatable<QuarkType>, IBinarySa
         Exponent = reader.ReadInt64();
     }
 
-    [Obsolete("Floor is depricated and not valid")]
-    public QuarkType Floor()
-    {
-        if (Mantissa == 0) return new QuarkType(0, 0);
-
-        long absMant = Math.Abs(Mantissa);
-
-        if (Exponent < 0)
-        {
-            return new QuarkType(0, 0);
-        }
-
-        long scale = NormalizeDivisor;
-        for (long i = 0; i < Exponent; i++)
-            scale *= 10;
-
-        long newMantissa = (Mantissa / scale) * scale;
-
-        return new QuarkType(newMantissa, Exponent);
-    }
-
     public QuarkType Ceil()
     {
         if (Mantissa == 0) return new QuarkType(0, 0);
@@ -411,5 +390,60 @@ public class QuarkType: IComparable<QuarkType>, IEquatable<QuarkType>, IBinarySa
         return new QuarkType(newMantissa, 0);
     }
 
+    public QuarkType Pow(double power)
+    {
+        if (Mantissa == 0)
+            return new QuarkType(0, 0);
 
+        double mantissaDouble = Mantissa / (double)NormalizeDivisor;
+
+        double result = Math.Pow(mantissaDouble, power);
+
+        double newExponentDouble = Exponent * power;
+
+        long newExponent = (long)Math.Floor(newExponentDouble);
+        double fractionalExponent = newExponentDouble - newExponent;
+
+        result *= Math.Pow(10, fractionalExponent);
+
+        long newMantissa = (long)(result * NormalizeDivisor);
+
+        return new QuarkType(newMantissa, newExponent);
+    }
+
+
+
+    public QuarkType Floor()
+    {
+        if (Mantissa == 0) return new QuarkType(0, 0);
+
+        const int NormalizeDivisorPower = 8;
+        if (Exponent >= NormalizeDivisorPower)
+            return new QuarkType(Mantissa, Exponent);
+
+        long divisor = NormalizeDivisor;
+
+        if (Exponent > 0)
+        {
+            for (long i = 0; i < Exponent; i++) divisor /= 10;
+        }
+        else if (Exponent < 0)
+        {
+            long magnitude = Math.Abs(Exponent);
+            for (long i = 0; i < magnitude; i++)
+            {
+                if (long.MaxValue / 10 < divisor)
+                    return IsNegative ? new QuarkType(-NormalizeDivisor, 0) : new QuarkType(0, 0);
+                divisor *= 10;
+            }
+        }
+
+        long truncatedPart = Mantissa / divisor;
+        long remainder = Mantissa % divisor;
+
+        if (remainder != 0 && IsNegative) truncatedPart -= 1;
+
+        long newMantissa = truncatedPart * NormalizeDivisor;
+        return new QuarkType(newMantissa, 0);
+    }
 }

@@ -1,9 +1,9 @@
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-public class SkillTreesUIManager
-{
+public class SkillTreesUIManager {
     private VisualElement ui;
     private CharacterClass characterClass;
     public VisualTreeAsset tooltipAsset;
@@ -27,6 +27,12 @@ public class SkillTreesUIManager
         this.learnedJack = learnedJack;
         this.learnedAutomatron = learnedAutomatron;
         this.skillPointsLimit = skillPointsLimit;
+    }
+
+    public void ClearTrees() {
+        oneClickArmyTree.ClearTree();
+        jackTree.ClearTree();
+        automatronTree.ClearTree();
     }
 
     public void InitializeAllTrees()
@@ -152,4 +158,19 @@ public class SkillTreesUIManager
         automatronTree.DrawLine("Skill4B-tree3", "Skill5C-tree3", c);
         automatronTree.DrawLine("Skill5C-tree3", "Skill6-tree3", c);
     }
+
+    public void SerializeToStream(BinaryWriter writer)
+    {
+        oneClickArmyTree.SerializeToStream(writer);
+        jackTree.SerializeToStream(writer);
+        automatronTree.SerializeToStream(writer);
+    }
+
+    public void DeserializeFromStream(BinaryReader reader)
+    {
+        oneClickArmyTree.DeserializeFromStream(reader);
+        jackTree.DeserializeFromStream(reader);
+        automatronTree.DeserializeFromStream(reader);
+    }
+
 }

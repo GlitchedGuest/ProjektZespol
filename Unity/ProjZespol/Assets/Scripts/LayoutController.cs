@@ -1,11 +1,15 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-public class LayoutController : MonoBehaviour
+public class LayoutController : MonoBehaviour, IBinarySaveable
 {
     public static LayoutController Instance { get; private set; }
+
+    public int SaveKey => 006;
+
     public VisualTreeAsset tooltipAsset;
 
     [SerializeField] private SpriteRenderer clickerObject;
@@ -19,19 +23,29 @@ public class LayoutController : MonoBehaviour
     public Sprite[] images;
     public VisualElement ui;
 
-    private FactoryUIManager factoryUIManager;
+    public FactoryUIManager factoryUIManager;
     private PotionUIManager potionUIManager;
     private OptionsManager optionsManager;
     private LevelUIManager levelUIManager;
     private ContentPageManager contentPageManager;
     private ResourceShopManager resourceShopManager;
     private SkillTreesUIManager skillTreesUIManager;
+    public  PrestigeUIManager prestigeUIManager;
+        
     private BuffManager buffManager;
 
     private HashSet<string> learnedOneClickArmy = new();
     private HashSet<string> learnedJackOfAllClicks = new();
     private HashSet<string> learnedAutomatron = new();
 
+
+    public void ResetGui()
+    {
+        skillTreesUIManager.ClearTrees();
+        factoryUIManager.ResetFactoryGUI();
+        skillPointsLimit.UpdateButton();
+        UpdateUI();
+    }
     [SerializeField] private Texture2D[] bufficons;
 
 
@@ -72,6 +86,9 @@ public class LayoutController : MonoBehaviour
 
         skillTreesUIManager = new SkillTreesUIManager(ui, characterClass, learnedOneClickArmy, learnedJackOfAllClicks, learnedAutomatron, skillPointsLimit);
         skillTreesUIManager.InitializeAllTrees();
+
+        prestigeUIManager = new PrestigeUIManager(ui, audioSource, raptorCore);
+        prestigeUIManager.Initialize();
 
         buffManager = new BuffManager(ui,bufficons);
         characterClass.buffManager = buffManager;
@@ -120,5 +137,16 @@ public class LayoutController : MonoBehaviour
         LayoutController.Instance?.SetGoldText(raptorCore.Gold.ToString());
     }
 
+    public void SerializeToStream(BinaryWriter writer)
+    {
+        factoryUIManager.SerializeToStream(writer);
+        skillTreesUIManager.SerializeToStream(writer);
+    }
+
+    public void DeserializeFromStream(BinaryReader reader)
+    {
+        factoryUIManager.DeserializeFromStream(reader);
+        skillTreesUIManager.DeserializeFromStream(reader);
+    }
 
 }

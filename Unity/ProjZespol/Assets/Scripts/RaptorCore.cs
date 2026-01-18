@@ -1,27 +1,31 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using Unity.VisualScripting;
 using UnityEngine;
+using static UnityEngine.Rendering.DebugUI;
 
-public class RaptorCore : MonoBehaviour
+public class RaptorCore : MonoBehaviour, IBinarySaveable
 {
+    public int SaveKey => 002; //Saveid to keep order
+
+
     // Publiczne referencje do managerów - inne skrypty mogą ich używać bezpośrednio
     public ResourceManager ResourceManager { get; private set; }
     public SellingManager SellManager { get; private set; }
     public SkillManager SkillManager { get; private set; }
     [SerializeField] private Animator anim;
-    [SerializeField] private CharacterClass characterClass;
+    [SerializeField] public CharacterClass characterClass;
     [SerializeField] private GameObject skillCheck;
-    [SerializeField] private IdleManager idleManager;
+    [SerializeField] public IdleManager idleManager;
 
     //Crit Generator
     [SerializeField] private GameObject CritGenerator;
     private CritVisualGenerator critGen;
     [SerializeField] private AudioSource audioSource;
     [SerializeField] private AudioSource critSource;
-
-    [AutoSave] public QuarkType Currency
+    public QuarkType Currency
     {
         get => ResourceManager.GetResourceValue(ResourceManager.currentResource);
         set
@@ -31,17 +35,23 @@ public class RaptorCore : MonoBehaviour
     }
 
     //Click based
-    [AutoSave] QuarkType CBasevalue = 1;
-    [AutoSave] QuarkType CMultiplier = 1;
+    QuarkType CBasevalue = 1;
+    QuarkType CMultiplier = 1;
     public QuarkType SkillMultiplier = 0;
 
+    public long AutoPrestige = 0;
+    public long JackPrestige = 0;
+    public long OneClickPrestige = 0;
+    
+    public long PrestigeCount = 0;
+
     //Idle/Generator based
-    [AutoSave] QuarkType GBasevalue = 0;
-    [AutoSave] QuarkType GMultiplier = 1;
+    QuarkType GBasevalue = 0;
+    QuarkType GMultiplier = 1;
 
     int tickCount = 0;
     
-    [AutoSave] public double Gold = 0;
+    public double Gold = 0;
 
     public QuarkType potionClickBonus1 = 0;
     public QuarkType potionClickBonus2 = 0;
@@ -56,6 +66,7 @@ public class RaptorCore : MonoBehaviour
 
     private void Awake()
     {
+        PrestigeSystem.Init(this);
         ResourceManager = gameObject.AddComponent<ResourceManager>();
         SellManager = gameObject.AddComponent<SellingManager>();
         SkillManager = gameObject.AddComponent<SkillManager>();
@@ -128,12 +139,12 @@ public class RaptorCore : MonoBehaviour
             if (characterClass.noMatterWhat)
                 characterClass.boostedChance += 1.00f;
         }
-        Currency += value;
+        Currency += value * Math.Floor(Math.Log(OneClickPrestige+2, 2));
     }
 
     void FixedUpdate()
     {
-        Currency += (GBasevalue * GMultiplier);
+        Currency += (GBasevalue * GMultiplier) * Math.Floor(Math.Log(AutoPrestige+2, 2));
 
         SkillManager.UpdateSkillCheckCooldown();
         
@@ -218,6 +229,63 @@ public class RaptorCore : MonoBehaviour
         }
         LayoutController.Instance?.UpdateUI();
     }
-    
 
+    public void SerializeToStream(BinaryWriter writer)
+    {
+        CBasevalue.SerializeToStream(writer);
+        CMultiplier.SerializeToStream(writer);
+        SkillMultiplier.SerializeToStream(writer);
+
+        // Idle / generator based
+        GBasevalue.SerializeToStream(writer);
+        GMultiplier.SerializeToStream(writer);
+
+        writer.Write(AutoPrestige);
+        writer.Write(JackPrestige);
+        writer.Write(OneClickPrestige);
+
+        writer.Write(PrestigeCount);
+
+        // Currency
+        writer.Write(Gold);
+    }
+
+    public void DeserializeFromStream(BinaryReader reader)
+    {
+        CBasevalue.DeserializeFromStream(reader);
+        CMultiplier.DeserializeFromStream(reader);
+        SkillMultiplier.DeserializeFromStream(reader);
+
+        GBasevalue.DeserializeFromStream(reader);
+        GMultiplier.DeserializeFromStream(reader);
+
+        AutoPrestige = reader.ReadInt64();
+        JackPrestige = reader.ReadInt64();
+        OneClickPrestige = reader.ReadInt64();
+
+        PrestigeCount = reader.ReadInt64();
+
+        Gold = reader.ReadDouble();
+    }
+    internal void ResetCore()
+    {
+        CBasevalue = 1;
+        CMultiplier = 1;
+        SkillMultiplier = 0;
+        GBasevalue = 0;
+        GMultiplier = 1;
+
+        tickCount = 0;
+
+        Gold = 0;
+
+        potionClickBonus1 = 0;
+        potionClickBonus2 = 0;
+
+        activeClickSource = ClickSource.None;
+        sourceBlockEndTime = 0f;
+        clickCooldown = 0.5f;
+        clickingDebuff = 1;
+
+    }
 }
