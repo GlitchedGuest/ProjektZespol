@@ -103,7 +103,7 @@ public class SkillTreesUIManager {
         jackTree.RegisterTooltip("Skill2B-tree2", "Addict", "Potions are more efficient.", "\"Whole council has rotten to the core.\" ~Gunther Terran");
         jackTree.RegisterTooltip("Skill2C-tree2", "Lucky Bastard", "Failed skill check has a chance to give random potion effect.", "\"We won't be slaves to them.\" ~Daniel");
         jackTree.RegisterTooltip("Skill3A-tree2", "Hard Worker", "Every skill check will increase selling price in shop. Failed skill check will reset it.", "\"Create the barriers, we can't let them pass through.\" ~Gunther Terran");
-        jackTree.RegisterTooltip("Skill3B-tree2", "Death Dose", "Potions effect can be stacked", "\"They're weak, break their minds, then theirs bodies.\" ~Daniel");
+        jackTree.RegisterTooltip("Skill3B-tree2", "Death Dose", "Potions effect can be stacked to maximum 5 at once", "\"They're weak, break their minds, then theirs bodies.\" ~Daniel");
         jackTree.RegisterTooltip("Skill3C-tree2", "Just Bastard", "Failed skill check guarantee random potion.", "\"Losing this war doesn't matter, losing our existance does.\" ~Gunther Terran");
         jackTree.RegisterTooltip("Skill3D-tree2", "Fail To Win", "Failed skill check gives temporally boost to experience.", "\"GUNHTER SHOW YOURSELF YOU COWARD!\" ~Daniel");
         jackTree.RegisterTooltip("Skill4-tree2", "Failure Grind", "Every failed skill check increases experience boost. Failed skill check reset boost.", "\"There is only one solution.\" ~Gunther Terran");
