@@ -71,12 +71,12 @@ public class IdleManager : MonoBehaviour, IBinarySaveable
 
         potions.Clear();
 
-        potions.Add(new Potion("Potion of Clicking", resources[0], resources[1], 1, 1,"click1", 20, "Increases amount of resources per click by 5 for 20 seconds."));
-        potions.Add(new Potion("Potion of Idle", resources[1], resources[2], 1, 1,"idle1", 20, "Increases factory production by 100% for 20 seconds."));
-        potions.Add(new Potion("Potion of Profit", resources[0], resources[2], 1, 1,"sell1", 20, "Increases selling prices by 100% for 20 seconds."));
-        potions.Add(new Potion("Potion of Clicking II", resources[3], resources[4], 1, 1,"click2", 40, "Increases amount of resources per click by 10 for 40 seconds."));
-        potions.Add(new Potion("Potion of Idle II", resources[4], resources[5], 1, 1,"idle2", 40, "Increases factory production by 200% for 40 seconds."));
-        potions.Add(new Potion("Potion of Profit II", resources[3], resources[5], 1, 1,"sell2", 40, "Increases selling prices by 200% for 40 seconds."));
+        potions.Add(new Potion("Potion of Clicking", resources[0], resources[1], 100, 100,"click1", 30, "Increases amount of resources per click by 5 for 30 seconds."));
+        potions.Add(new Potion("Potion of Idle", resources[1], resources[2], 500, 500,"idle1", 30, "Increases factory production by 20% for 30 seconds."));
+        potions.Add(new Potion("Potion of Profit", resources[0], resources[2], 1000, 1000,"sell1", 30, "Increases selling prices by 20% for 30 seconds."));
+        potions.Add(new Potion("Potion of Clicking II", resources[3], resources[4], 1000, 1000,"click2", 15, "Increases amount of resources per click by 10 for 15 seconds."));
+        potions.Add(new Potion("Potion of Idle II", resources[4], resources[5], 5000, 5000,"idle2", 15, "Increases factory production by 40% for 15 seconds."));
+        potions.Add(new Potion("Potion of Profit II", resources[3], resources[5], 10000, 10000,"sell2", 15, "Increases selling prices by 40% for 15 seconds."));
         
     }
     private void OnEnable()
@@ -134,12 +134,12 @@ public class IdleManager : MonoBehaviour, IBinarySaveable
             double production = f.GetProduction();
             if(potions[1].isActive && potions[1].linkedFactory.name == f.name)
             {
-                production *= potionFactoryBonus1 * characterClass.potionBoost;
+                Math.Ceiling(production *= potionFactoryBonus1 * characterClass.potionBoost);
             }
             
             if(potions[4].isActive && potions[4].linkedFactory.name == f.name)
             {
-                production *= potionFactoryBonus2 * characterClass.potionBoost;
+                Math.Ceiling(production *= potionFactoryBonus2 * characterClass.potionBoost);
             }
 
             if (f.resource != null)
@@ -411,13 +411,13 @@ public class IdleManager : MonoBehaviour, IBinarySaveable
             case "idle1":
                 if(potion.linkedFactory.name == raptorCore.ResourceManager.GetCurrentFactory().name)
                 {
-                    potionFactoryBonus1 *= 2;
+                    potionFactoryBonus1 *= 1.2;
                 }
                 break;
             case "sell1":
                 if(potion.linkedFactory.name == raptorCore.ResourceManager.GetCurrentFactory().name)
                 {
-                    raptorCore.SellManager.potionSellBonus1 *= 2;
+                    raptorCore.SellManager.potionSellBonus1 *= 1.2;
                 }
                 break;
 
@@ -430,13 +430,13 @@ public class IdleManager : MonoBehaviour, IBinarySaveable
             case "idle2":
                 if(potion.linkedFactory.name == raptorCore.ResourceManager.GetCurrentFactory().name)
                 {
-                    potionFactoryBonus2 *= 4;
+                    potionFactoryBonus2 *= 1.4;
                 }
                 break;
             case "sell2":
                 if(potion.linkedFactory.name == raptorCore.ResourceManager.GetCurrentFactory().name)
                 {
-                    raptorCore.SellManager.potionSellBonus2 *= 4;
+                    raptorCore.SellManager.potionSellBonus2 *= 1.4;
                 }
                 break;
             default:

@@ -494,7 +494,7 @@
                 <ui:Button text="yes" name="Confirm" class="btncolor color text navbuttonborder btnNewStyle" style="margin-bottom: 5%; width: 40%; height: 90%; margin-left: 5%; margin-right: 5%; margin-top: 0%; font-size: 50px; -unity-font-style: normal;" />
                 <ui:Button text="no" name="Cancel" class="btncolor color text navbuttonborder btnNewStyle" style="margin-bottom: 5%; width: 40%; height: 90%; margin-right: 5%; margin-left: 5%; font-size: 50px; -unity-font-style: normal;" />
             </ui:VisualElement>
-            <ui:Label text="Price: 5,000,000,000" style="-unity-text-align: upper-center; color: rgba(255, 255, 255, 0.96); font-size: 45px;" />
+            <ui:Label text="Price: 10,000,000,000" style="-unity-text-align: upper-center; color: rgba(255, 255, 255, 0.96); font-size: 45px;" />
         </ui:VisualElement>
     </ui:VisualElement>
 </ui:UXML>
