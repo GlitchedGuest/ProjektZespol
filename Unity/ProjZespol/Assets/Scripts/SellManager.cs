@@ -73,11 +73,11 @@ public class SellingManager : MonoBehaviour
         
         if(idleManager.potions[2].isActive && idleManager.potions[2].linkedFactory.name == currentFactory.name)
         {
-            goldEarned *= potionSellBonus1 * characterClass.potionBoost;
+            Math.Ceiling(goldEarned *= potionSellBonus1 * characterClass.potionBoost);
         }
         if(idleManager.potions[5].isActive && idleManager.potions[5].linkedFactory.name == currentFactory.name)
         {
-            goldEarned *= potionSellBonus2 * characterClass.potionBoost;
+            Math.Ceiling(goldEarned *= potionSellBonus2 * characterClass.potionBoost);
         }
 
         raptorCore.Gold += Math.Ceiling(goldEarned * characterClass.sellingBonus * characterClass.sellingHardBonus);

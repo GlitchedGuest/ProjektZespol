@@ -87,7 +87,7 @@ public class PrestigeUIManager
         PrestigeRoot.style.display = DisplayStyle.None;
     }
     public void PrestigeTrigger() {
-        if (PrestigeSystem.CheckPrestige(5.0e9f)) 
+        if (PrestigeSystem.CheckPrestige(1.0e10f)) 
         {
             DisablePrestige();
             PrestigeSystem.ExecutePrestige();
