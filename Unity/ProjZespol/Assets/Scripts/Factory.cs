@@ -16,6 +16,16 @@ public class Factory
     public double unlockCost;
     public ulong count;
     public double currentCost => Math.Ceiling(baseCost * Math.Pow(costMultiplier, count));
+
+    public double costOverEstimate(int amount){
+        double r = costMultiplier;
+
+        double exact = baseCost * Math.Pow(r, count)
+                       * (Math.Pow(r, amount) - 1)
+                       / (r - 1);
+
+        return exact + amount; 
+    }
     public double GetProduction() => baseProduction * count * productionMultiplier;
     public double GetSellValue()
     {

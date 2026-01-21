@@ -435,8 +435,8 @@ public class FactoryUIManager
                     if (btn != null) btn.style.display = DisplayStyle.Flex;
 
                 UpdateButton(factoryUI.buyButtons[0], playerGold >= factory.currentCost);
-                UpdateButton(factoryUI.buyButtons[1], playerGold >= factory.currentCost * 5);
-                UpdateButton(factoryUI.buyButtons[2], playerGold >= factory.currentCost * 25);
+                UpdateButton(factoryUI.buyButtons[1], playerGold >= factory.costOverEstimate(5));
+                UpdateButton(factoryUI.buyButtons[2], playerGold >= factory.costOverEstimate(25));
                 UpdateButton(factoryUI.buyButtons[3], playerGold >= factory.currentCost);
                 UpdateButton(factoryUI.sellButtons[0], factory.count >= 1);
                 UpdateButton(factoryUI.sellButtons[1], factory.count >= 5);
