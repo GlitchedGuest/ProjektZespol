@@ -71,12 +71,12 @@ public class IdleManager : MonoBehaviour, IBinarySaveable
 
         potions.Clear();
 
-        potions.Add(new Potion("Potion of Clicking", resources[0], resources[1], 100, 100,"click1", 20, "Increases amount of resources per click by 5 for 20 seconds."));
-        potions.Add(new Potion("Potion of Idle", resources[1], resources[2], 500, 500,"idle1", 20, "Increases factory production by 20% for 20 seconds."));
-        potions.Add(new Potion("Potion of Profit", resources[0], resources[2], 1000, 1000,"sell1", 20, "Increases selling prices by 20% for 20 seconds."));
-        potions.Add(new Potion("Potion of Clicking II", resources[3], resources[4], 1000, 1000,"click2", 10, "Increases amount of resources per click by 10 for 10 seconds."));
-        potions.Add(new Potion("Potion of Idle II", resources[4], resources[5], 5000, 5000,"idle2", 10, "Increases factory production by 40% for 10 seconds."));
-        potions.Add(new Potion("Potion of Profit II", resources[3], resources[5], 10000, 10000,"sell2", 10, "Increases selling prices by 40% for 10 seconds."));
+        potions.Add(new Potion("Potion of Clicking", resources[0], resources[1], 100, 100,"click1", 30, "Increases amount of resources per click by 5 for 30 seconds."));
+        potions.Add(new Potion("Potion of Idle", resources[1], resources[2], 500, 500,"idle1", 30, "Increases factory production by 20% for 30 seconds."));
+        potions.Add(new Potion("Potion of Profit", resources[0], resources[2], 1000, 1000,"sell1", 30, "Increases selling prices by 20% for 30 seconds."));
+        potions.Add(new Potion("Potion of Clicking II", resources[3], resources[4], 1000, 1000,"click2", 15, "Increases amount of resources per click by 10 for 15 seconds."));
+        potions.Add(new Potion("Potion of Idle II", resources[4], resources[5], 5000, 5000,"idle2", 15, "Increases factory production by 40% for 15 seconds."));
+        potions.Add(new Potion("Potion of Profit II", resources[3], resources[5], 10000, 10000,"sell2", 15, "Increases selling prices by 40% for 15 seconds."));
         
     }
     private void OnEnable()
