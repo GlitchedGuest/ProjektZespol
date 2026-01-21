@@ -265,6 +265,8 @@ public class RaptorCore : MonoBehaviour, IBinarySaveable
 
         PrestigeCount = reader.ReadInt64();
 
+        LayoutController.Instance?.prestigeUIManager.UpdateContentPage();
+
         Gold = reader.ReadDouble();
     }
     internal void ResetCore()
